@@ -1,4 +1,4 @@
-import BicicletasPage from './pages/admin/bicicletas/BicicletasPage.jsx'
+import BicicletasPage from './pages/administrador/bicicletas/BicicletasPage.js'
 
 function App() {
   return <BicicletasPage />;
