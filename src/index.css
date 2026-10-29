@@ -26,6 +26,9 @@
   --paleta-fondo: #F0FFE3;
   --paleta-verde: #5FD34A;
   --paleta-blanco: #FFFFFF;
+  --paleta-amarillo: #FDE68A;
+  --paleta-verde-claro: #9FC795;
+  --paleta-menta: #D1FAE5;
 }
 
 
@@ -66,8 +69,15 @@
   --color-error-fondo: #FDECEE;
   --color-error-borde: #B00020;
 
-  /* Sidebar del administrador */
-  --color-sidebar-item: var(--paleta-verde-oscuro);    /* fondo de ítems y línea del pie */
+  /* Sidebar del administrador: fondo al pasar el mouse y línea del pie */
+  --color-sidebar-item: rgba(255, 255, 255, 0.1);
+
+  /* Etiquetas (componente Etiqueta): mismos colores en ambos temas */
+  --color-etiqueta-amarilla: var(--paleta-amarillo);
+  --color-etiqueta-verde: var(--paleta-verde-claro);
+  --color-etiqueta-menta: var(--paleta-menta);
+  --color-etiqueta-texto: var(--paleta-negro);
+  --color-etiqueta-borde: rgba(5, 6, 7, 0.15);
 
   /* Mapa (Leaflet): filtro aplicado a los tiles */
   --filtro-mapa: grayscale(1);
@@ -116,6 +126,8 @@
    --------------------------------------------------------------------- */
 :root {
   --fuente: 'Inter', system-ui, sans-serif;
+  --fuente-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --alto-control-s: 2.25rem;        /* 36px: botones pequeños */
 
   /* Tamaños de texto */
   --texto-xs: 0.75rem;    /* 12px */
@@ -195,6 +207,10 @@
   }
 }
 
+@keyframes pulso {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
 
 /* ---------------------------------------------------------------------
    6. CLASES BASE REUTILIZABLES
@@ -203,6 +219,29 @@
    (posición, anchos, distribución).
    --------------------------------------------------------------------- */
 @layer primitivos {
+
+  .boton--s {
+    min-width: 0;
+    height: var(--alto-control-s);
+    padding: 0 var(--espacio-4);
+  }
+
+  /* Punto verde que parpadea lentamente */
+  .punto-vivo {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    background: var(--color-primario);
+    border-radius: var(--radio-circulo);
+    animation: pulso 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .punto-vivo {
+      animation: none;
+    }
+  }
 
   /* ----- Botones ----- */
   .boton {

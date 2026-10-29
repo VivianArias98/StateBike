@@ -1,0 +1,25 @@
+.raiz {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--espacio-1) var(--espacio-2);
+    color: var(--color-etiqueta-texto);
+    border: 1px solid var(--color-etiqueta-borde);
+    border-radius: var(--radio-s);
+    font-size: var(--texto-xs);
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  
+  /* Para agregar un color nuevo: token en index.css + una clase aquí */
+  .amarilla {
+    background: var(--color-etiqueta-amarilla);
+  }
+  
+  .verde {
+    background: var(--color-etiqueta-verde);
+  }
+  
+  .menta {
+    background: var(--color-etiqueta-menta);
+  }

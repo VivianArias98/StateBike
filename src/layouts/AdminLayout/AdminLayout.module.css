@@ -7,8 +7,13 @@
 }
 
 .sidebar {
-  background: var(--color-superficie-inversa);
-  color: var(--color-texto-inverso);
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+}
+
+.subtitulo {
+  font-size: var(--texto-xs);
+  opacity: 0.7;
 }
 
 .cabecera {
@@ -52,14 +57,23 @@
 }
 
 .item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   height: var(--alto-control);
   padding: 0 var(--espacio-3);
   text-align: left;
-  background: var(--color-sidebar-item);
-  color: var(--color-texto-inverso);
+  background: transparent;
+  color: var(--color-secundario-texto);
   border: none;
+  border-radius: var(--radio-m);
   font-size: var(--texto-s);
   cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.item:hover {
+  background: var(--color-sidebar-item);
 }
 
 .item:focus-visible,
@@ -68,10 +82,16 @@
   outline-color: var(--color-primario);
 }
 
-.itemActivo {
+.itemActivo,
+.itemActivo:hover {
   background: var(--color-primario);
   color: var(--color-primario-texto);
   font-weight: 600;
+}
+
+/* Sobre el ítem activo (verde) el punto debe verse oscuro */
+.itemActivo :global(.punto-vivo) {
+  background: var(--color-primario-texto);
 }
 
 .pie {
@@ -107,8 +127,9 @@
   }
 
   .cabecera {
-    padding: 0 0 0 var(--espacio-3);
-    margin-bottom: var(--espacio-7);
+    padding: 0 var(--espacio-3) var(--espacio-4);
+    margin-bottom: var(--espacio-5);
+    border-bottom: 1px solid var(--color-sidebar-item);
   }
 
   .titulo {

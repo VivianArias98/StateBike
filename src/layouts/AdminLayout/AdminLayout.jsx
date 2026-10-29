@@ -2,11 +2,11 @@ import { useState } from 'react';
 import styles from './AdminLayout.module.css';
 
 const MENU = [
-  'Panel de control',
-  'Estaciones',
-  'Bicicletas',
-  'Planes y tarifas',
-  'Incidencias',
+  { nombre: 'Panel de control' },
+  { nombre: 'Estaciones' },
+  { nombre: 'Bicicletas' },
+  { nombre: 'Planes y tarifas' },
+  { nombre: 'Incidencias', },
 ];
 
 // Layout compartido del panel de administración.
@@ -18,7 +18,10 @@ function AdminLayout({ itemActivo, children }) {
     <div className={styles.raiz}>
       <aside className={styles.sidebar}>
         <div className={styles.cabecera}>
-          <p className={styles.titulo}>Panel Admin</p>
+          <div>
+            <p className={styles.titulo}>Panel Admin</p>
+            <p className={styles.subtitulo}>Gestión Central StationBike</p>
+          </div>
 
           <button
             type="button"
@@ -37,16 +40,17 @@ function AdminLayout({ itemActivo, children }) {
           className={menuAbierto ? `${styles.panel} ${styles.panelAbierto}` : styles.panel}
         >
           <nav className={styles.menu}>
-            {MENU.map((item) => {
-              const activo = item === itemActivo;
+          {MENU.map(({ nombre, conPunto }) => {
+              const activo = nombre === itemActivo;
               return (
                 <button
-                  key={item}
+                  key={nombre}
                   type="button"
                   className={activo ? `${styles.item} ${styles.itemActivo}` : styles.item}
                   aria-current={activo ? 'page' : undefined}
                 >
-                  {item}
+                  {nombre}
+                  {conPunto && <span className="punto-vivo" aria-hidden="true" />}
                 </button>
               );
             })}
