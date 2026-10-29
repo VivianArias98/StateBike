@@ -43,4 +43,4 @@ export function nombreRepetido(nombre, estaciones, idIgnorado = null) {
     (estacion) =>
       estacion.id !== idIgnorado && estacion.nombre.trim().toLowerCase() === buscado
   );
-}
+}

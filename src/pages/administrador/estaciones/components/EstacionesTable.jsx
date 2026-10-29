@@ -1,9 +1,9 @@
 import EstadoBadge from './EstadoBadge';
-import './EstacionesTable.css';
+import styles from './EstacionesTable.module.css';
 
 function EstacionesTable({ estaciones, onEditar, onInactivar }) {
   return (
-    <div className="tabla-estaciones">
+    <div className={`tabla ${styles.raiz}`}>
       <table>
         <thead>
           <tr>
@@ -25,7 +25,7 @@ function EstacionesTable({ estaciones, onEditar, onInactivar }) {
                   <EstadoBadge estado={estacion.estado} />
                 </td>
                 <td>
-                  <div className="tabla-estaciones__acciones">
+                  <div className={styles.acciones}>
                     <button
                       type="button"
                       className="boton"
@@ -53,4 +53,4 @@ function EstacionesTable({ estaciones, onEditar, onInactivar }) {
   );
 }
 
-export default EstacionesTable;
+export default EstacionesTable;

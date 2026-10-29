@@ -1,8 +1,8 @@
-import './PlanesTable.css';
+import styles from './PlanesTable.module.css';
 
 function PlanesTable({ planes }) {
   return (
-    <div className="tabla-planes">
+    <div className={`tabla ${styles.raiz}`}>
       <table>
         <thead>
           <tr>
@@ -19,7 +19,7 @@ function PlanesTable({ planes }) {
               <td>{plan.costo}</td>
               <td>{plan.tiempo}</td>
               <td>
-                <button type="button" className="tabla-planes__editar">
+                <button type="button" className={`boton boton--secundario ${styles.editar}`}>
                   Editar
                 </button>
               </td>

@@ -1,11 +1,11 @@
-import './VisitanteLayout.css';
+import styles from './VisitanteLayout.module.css';
 
 function VisitanteLayout({ children }) {
   return (
-    <div className="visitante">
-      <main className="visitante__main">{children}</main>
+    <div className={styles.raiz}>
+      <main className={styles.principal}>{children}</main>
 
-      <footer className="visitante__footer">
+      <footer className={styles.pie}>
         <span>StationBike</span>
         <span>Tunja</span>
       </footer>
@@ -13,4 +13,4 @@ function VisitanteLayout({ children }) {
   );
 }
 
-export default VisitanteLayout;
+export default VisitanteLayout;

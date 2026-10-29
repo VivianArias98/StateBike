@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import './Aviso.css';
+import styles from './Aviso.module.css';
 
 // Mensaje flotante que se cierra solo
 function Aviso({ mensaje, onCerrar }) {
@@ -13,10 +13,10 @@ function Aviso({ mensaje, onCerrar }) {
   if (!mensaje) return null;
 
   return (
-    <div className="aviso" role="status">
+    <div className={styles.raiz} role="status">
       {mensaje}
     </div>
   );
 }
 
-export default Aviso;
+export default Aviso;

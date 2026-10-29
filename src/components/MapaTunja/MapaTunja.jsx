@@ -2,18 +2,19 @@ import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents } from 'react-le
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { TUNJA_CENTRO, TUNJA_LIMITES } from './limitesTunja.js';
-import './MapaTunja.css';
+// Importar los estilos de Leaflet ANTES del módulo propio (el módulo debe ganar)
+import styles from './MapaTunja.module.css';
 
 // Iconos propios
 const iconoPunto = L.divIcon({
-  className: 'mapa-tunja__punto',
+  className: styles.punto,
   iconSize: [22, 22],
   iconAnchor: [11, 11],
 });
 
 function crearIconoEstacion(bicicletas) {
   return L.divIcon({
-    className: 'mapa-tunja__estacion',
+    className: styles.estacion,
     html: String(Number(bicicletas) || 0),
     iconSize: [36, 36],
     iconAnchor: [18, 18],
@@ -45,17 +46,17 @@ function MapaTunja({
   const seleccionable = typeof onSeleccionar === 'function';
 
   return (
-    <section className="mapa-tunja">
-      <h2 className="mapa-tunja__titulo">{titulo}</h2>
+    <section className={`tarjeta ${styles.raiz}`}>
+      <h2 className={styles.titulo}>{titulo}</h2>
 
-      <div className="mapa-tunja__contenedor">
+      <div className={styles.contenedor}>
         <MapContainer
           center={TUNJA_CENTRO}
           zoom={14}
           minZoom={13}
           maxBounds={TUNJA_LIMITES}
           maxBoundsViscosity={1}
-          className="mapa-tunja__mapa"
+          className={styles.mapa}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -75,7 +76,7 @@ function MapaTunja({
                 permanent
                 direction="bottom"
                 offset={[0, 14]}
-                className="mapa-tunja__etiqueta"
+                className={styles.etiqueta}
               >
                 {estacion.nombre}
               </Tooltip>
@@ -97,12 +98,12 @@ function MapaTunja({
           )}
         </MapContainer>
 
-        {ayuda && <span className="mapa-tunja__ayuda">{ayuda}</span>}
+        {ayuda && <span className={styles.ayuda}>{ayuda}</span>}
       </div>
 
-      {nota && <p className="mapa-tunja__nota">{nota}</p>}
+      {nota && <p className={styles.nota}>{nota}</p>}
     </section>
   );
 }
 
-export default MapaTunja;
+export default MapaTunja;

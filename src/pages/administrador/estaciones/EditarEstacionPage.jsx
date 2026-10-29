@@ -3,7 +3,7 @@ import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
 import EstacionForm from './components/EstacionForm.jsx';
 import { validarEstacion, nombreRepetido, MENSAJES } from './validaciones.js';
-import './EstacionFormPage.css';
+import styles from './EstacionFormPage.module.css';
 
 // Props:
 // - estacion: la estación que se edita (ya cargada)
@@ -60,9 +60,9 @@ function EditarEstacionPage({ estacion, estaciones, onGuardar, onCancelar }) {
 
   return (
     <AdminLayout itemActivo="Estaciones">
-      <h1 className="estacion-pagina__titulo">Editar estación</h1>
+      <h1 className="titulo-pagina">Editar estación</h1>
 
-      <div className="estacion-pagina__contenido">
+      <div className={styles.contenido}>
         <EstacionForm
           modo="editar"
           valores={valores}
@@ -85,4 +85,4 @@ function EditarEstacionPage({ estacion, estaciones, onGuardar, onCancelar }) {
   );
 }
 
-export default EditarEstacionPage;
+export default EditarEstacionPage;

@@ -1,7 +1,7 @@
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import PlanesTable from './components/PlanesTable.jsx';
 import PlanForm from './components/PlanForm.jsx';
-import './PlanesTarifasPage.css';
+import styles from './PlanesTarifasPage.module.css';
 
 // Datos de ejemplo (solo maquetación)
 const PLANES = [
@@ -14,9 +14,9 @@ const PLANES = [
 function PlanesTarifasPage() {
   return (
     <AdminLayout itemActivo="Planes y tarifas">
-      <h1 className="planes__titulo">Planes y tarifas</h1>
+      <h1 className="titulo-pagina">Planes y tarifas</h1>
 
-      <div className="planes__contenido">
+      <div className={styles.contenido}>
         <PlanesTable planes={PLANES} />
         <PlanForm />
       </div>

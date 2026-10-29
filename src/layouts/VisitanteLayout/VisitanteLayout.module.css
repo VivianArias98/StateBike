@@ -1,0 +1,27 @@
+.raiz {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.principal {
+  flex: 1;
+  display: flex;
+  padding: var(--espacio-4);
+}
+
+.pie {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  font-size: var(--texto-xs);
+}
+
+@media (min-width: 768px) {
+  .principal {
+    padding: var(--espacio-7);
+  }
+}

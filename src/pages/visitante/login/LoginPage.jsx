@@ -1,12 +1,12 @@
 import VisitanteLayout from '../../../layouts/VisitanteLayout/VisitanteLayout.jsx';
 import LoginBienvenida from './components/LoginBienvenida.jsx';
 import LoginForm from './components/LoginForm.jsx';
-import './LoginPage.css';
+import styles from './LoginPage.module.css';
 
 function LoginPage() {
   return (
     <VisitanteLayout>
-      <div className="login__tarjeta">
+      <div className={styles.tarjeta}>
         <LoginBienvenida />
         <LoginForm />
       </div>
@@ -14,4 +14,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default LoginPage;

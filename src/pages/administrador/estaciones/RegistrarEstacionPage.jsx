@@ -4,7 +4,7 @@ import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import EstacionForm from './components/EstacionForm.jsx';
 import { validarEstacion, nombreRepetido, MENSAJES } from './validaciones.js';
-import './EstacionFormPage.css';
+import styles from './EstacionFormPage.module.css';
 
 const FORMULARIO_VACIO = { nombre: '', direccion: '', capacidad: '' };
 
@@ -61,9 +61,9 @@ function RegistrarEstacionPage({ estaciones, onGuardar, onCancelar }) {
 
   return (
     <AdminLayout itemActivo="Estaciones">
-      <h1 className="estacion-pagina__titulo">Registrar estación</h1>
+      <h1 className="titulo-pagina">Registrar estación</h1>
 
-      <div className="estacion-pagina__contenido">
+      <div className={styles.contenido}>
         <EstacionForm
           modo="registrar"
           valores={valores}
@@ -87,4 +87,4 @@ function RegistrarEstacionPage({ estaciones, onGuardar, onCancelar }) {
   );
 }
 
-export default RegistrarEstacionPage;
+export default RegistrarEstacionPage;

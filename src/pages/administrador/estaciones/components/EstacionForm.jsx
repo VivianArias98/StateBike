@@ -1,22 +1,23 @@
-import './EstacionForm.css';
+import styles from './EstacionForm.module.css';
 
 function EstacionForm({ modo, valores, idTexto, onCambio, onSubmit, onCancelar, error }) {
   const editando = modo === 'editar';
 
   return (
-    <form className="estacion-form" onSubmit={onSubmit} noValidate>
-      <h2 className="estacion-form__titulo">Datos de la estación</h2>
+    <form className={`tarjeta ${styles.raiz}`} onSubmit={onSubmit} noValidate>
+      <h2 className={styles.titulo}>Datos de la estación</h2>
 
       {editando && (
-        <div className="estacion-form__campo">
+        <div className="campo">
           <label htmlFor="estacion-id">Identificador de la estación</label>
-          <input id="estacion-id" type="text" value={idTexto} disabled />
+          <input className="input" id="estacion-id" type="text" value={idTexto} disabled />
         </div>
       )}
 
-      <div className="estacion-form__campo">
+      <div className="campo">
         <label htmlFor="estacion-nombre">Nombre de la estación</label>
         <input
+          className="input"
           id="estacion-nombre"
           type="text"
           placeholder="Nombre de la estación"
@@ -25,9 +26,10 @@ function EstacionForm({ modo, valores, idTexto, onCambio, onSubmit, onCancelar, 
         />
       </div>
 
-      <div className="estacion-form__campo">
+      <div className="campo">
         <label htmlFor="estacion-direccion">Dirección de la estación</label>
         <input
+          className="input"
           id="estacion-direccion"
           type="text"
           placeholder="Carrera o calle y número"
@@ -36,11 +38,12 @@ function EstacionForm({ modo, valores, idTexto, onCambio, onSubmit, onCancelar, 
         />
       </div>
 
-      <div className="estacion-form__campo">
+      <div className="campo">
         <label htmlFor="estacion-capacidad">
           {editando ? 'Número de anclajes' : 'Capacidad máxima de puestos'}
         </label>
         <input
+          className="input"
           id="estacion-capacidad"
           type="number"
           min="1"
@@ -52,16 +55,16 @@ function EstacionForm({ modo, valores, idTexto, onCambio, onSubmit, onCancelar, 
       </div>
 
       {error && (
-        <p className="estacion-form__error" role="alert">
+        <p className="mensaje-error" role="alert">
           {error}
         </p>
       )}
 
-      <div className="estacion-form__acciones">
+      <div className={styles.acciones}>
         <button type="submit" className="boton boton--primario">
           {editando ? 'ACTUALIZAR DATOS' : 'GUARDAR ESTACIÓN'}
         </button>
-        <button type="button" className="estacion-form__cancelar" onClick={onCancelar}>
+        <button type="button" className={`enlace ${styles.cancelar}`} onClick={onCancelar}>
           Cancelar
         </button>
       </div>
@@ -69,4 +72,4 @@ function EstacionForm({ modo, valores, idTexto, onCambio, onSubmit, onCancelar, 
   );
 }
 
-export default EstacionForm;
+export default EstacionForm;
