@@ -1,0 +1,128 @@
+/* Usar con: className={styles.raiz}. El fondo lo pone RegistroPage.module.css. */
+.raiz {
+  box-sizing: border-box;
+  padding: var(--espacio-5);
+  color: var(--color-texto-inverso);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-1);
+  font-size: var(--texto-2xl);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.subtitulo {
+  margin-bottom: var(--espacio-5);
+  font-size: var(--texto-xs);
+  opacity: 0.8;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  margin-bottom: var(--espacio-3);
+}
+
+.etiqueta {
+  font-size: var(--texto-xs);
+  font-weight: 400;
+}
+
+/* Campos en verde oscuro, con borde fino */
+.entrada {
+  height: var(--alto-control);
+  background: color-mix(in srgb, var(--color-secundario) 70%, black);
+  color: var(--color-texto-inverso);
+  border: 1px solid color-mix(in srgb, var(--color-texto-inverso) 20%, transparent);
+  font-size: var(--texto-xs);
+}
+
+.entrada::placeholder {
+  color: color-mix(in srgb, var(--color-texto-inverso) 45%, transparent);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.conOjo {
+  padding-right: var(--espacio-7);
+}
+
+.ojo {
+  position: absolute;
+  right: var(--espacio-3);
+  display: grid;
+  place-items: center;
+  padding: var(--espacio-1);
+  background: none;
+  border: none;
+  border-radius: var(--radio-xs);
+  color: inherit;
+  cursor: pointer;
+}
+
+.ojo svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+}
+
+.ojo:focus-visible {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 2px;
+}
+
+/* Checkbox en verde oscuro, no blanco */
+.terminos {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-4);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.terminos input[type="checkbox"] {
+  appearance: none;
+  flex-shrink: 0;
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+  margin-top: 1px;
+  background: var(--color-secundario);
+  border: 1px solid color-mix(in srgb, var(--color-texto-inverso) 40%, transparent);
+  border-radius: var(--radio-xs);
+  cursor: pointer;
+}
+
+.terminos input[type="checkbox"]:checked {
+  background: var(--color-primario);
+  border-color: var(--color-primario);
+}
+
+.terminos input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 2px;
+}
+
+.accion {
+  margin-top: var(--espacio-2);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.alterno {
+  margin-top: var(--espacio-4);
+  text-align: center;
+  font-size: var(--texto-xs);
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-7);
+  }
+}

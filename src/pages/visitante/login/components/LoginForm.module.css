@@ -1,0 +1,97 @@
+/* Usar con: className={styles.raiz}. Solo borde, sin relleno. */
+.raiz {
+  box-sizing: border-box;
+  height: 100%;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-2);
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.subtitulo {
+  margin-bottom: var(--espacio-6);
+  font-size: var(--texto-s);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-4);
+}
+
+.etiqueta {
+  font-size: var(--texto-s);
+  font-weight: 400;
+}
+
+.entrada {
+  background: var(--color-input-fondo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.conOjo {
+  padding-right: var(--espacio-7);
+}
+
+.ojo {
+  position: absolute;
+  right: var(--espacio-3);
+  display: grid;
+  place-items: center;
+  padding: var(--espacio-1);
+  background: none;
+  border: none;
+  border-radius: var(--radio-xs);
+  color: inherit;
+  cursor: pointer;
+}
+
+.ojo svg {
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+}
+
+.ojo:focus-visible {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 2px;
+}
+
+.accion {
+  margin-top: var(--espacio-6);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.enlaceDerecha {
+  display: block;
+  margin-top: var(--espacio-4);
+  text-align: right;
+  font-size: var(--texto-s);
+}
+
+.alterno {
+  margin-top: var(--espacio-5);
+  text-align: center;
+  font-size: var(--texto-s);
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-7);
+  }
+}

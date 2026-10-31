@@ -1,0 +1,90 @@
+.raiz {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-fondo-pagina);
+}
+
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3) var(--espacio-5);
+  min-height: 3.25rem;
+  padding: var(--espacio-3) var(--espacio-5);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-s);
+}
+
+.izquierda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-5);
+}
+
+.marca {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.navegacion,
+.derecha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-4);
+}
+
+.enlace {
+  padding-bottom: var(--espacio-1);
+  border-bottom: 2px solid transparent;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+.enlaceActivo {
+  border-bottom-color: var(--color-primario);
+  opacity: 1;
+}
+
+.principal {
+  flex: 1;
+  display: flex;
+  padding: var(--espacio-4);
+}
+
+/* Fondo verde claro: login, registro y planes */
+.principalClaro {
+  background: var(--color-fondo-pagina);
+}
+
+/* Fondo blanco: inicio y mapa */
+.principalBlanco {
+  background: var(--color-superficie);
+}
+
+.pie {
+  display: flex;
+  align-items: center;
+  padding: var(--espacio-3) var(--espacio-5);
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  font-size: var(--texto-xs);
+}
+
+@media (min-width: 768px) {
+  .principal {
+    padding: var(--espacio-5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .principal {
+    padding: var(--espacio-5) var(--espacio-3);
+  }
+}
