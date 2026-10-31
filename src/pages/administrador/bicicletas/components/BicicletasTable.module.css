@@ -1,0 +1,3 @@
+/* Se usa junto a la clase global "tabla": aquí solo los anchos de columna */
+.raiz th:nth-child(1) { width: 28%; }
+.raiz th:nth-child(2) { width: 36%; }

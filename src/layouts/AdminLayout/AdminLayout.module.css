@@ -1,0 +1,157 @@
+/* Base = celular: barra superior con botón de menú.
+   Desde 1024px el sidebar queda fijo a la izquierda. */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+}
+
+.subtitulo {
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--espacio-3) var(--espacio-4);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.botonMenu {
+  min-width: var(--alto-control);
+  height: var(--alto-control);
+  background: none;
+  color: inherit;
+  border: 1px solid var(--color-sidebar-item);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-l);
+  cursor: pointer;
+}
+
+/* Menú plegado en celular; se abre con la clase panelAbierto */
+.panel {
+  display: none;
+  flex-direction: column;
+  padding: 0 var(--espacio-4) var(--espacio-4);
+}
+
+.panelAbierto {
+  display: flex;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--alto-control);
+  padding: 0 var(--espacio-3);
+  text-align: left;
+  background: transparent;
+  color: var(--color-secundario-texto);
+  border: none;
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.item:hover {
+  background: var(--color-sidebar-item);
+}
+
+.item:focus-visible,
+.salir:focus-visible,
+.botonMenu:focus-visible {
+  outline-color: var(--color-primario);
+}
+
+.itemActivo,
+.itemActivo:hover {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  font-weight: 600;
+}
+
+/* Sobre el ítem activo (verde) el punto debe verse oscuro */
+.itemActivo :global(.punto-vivo) {
+  background: var(--color-primario-texto);
+}
+
+.pie {
+  margin-top: var(--espacio-5);
+  padding-top: var(--espacio-4);
+  border-top: 1px solid var(--color-sidebar-item);
+}
+
+/* Se usa junto a la clase global "enlace" */
+.salir {
+  padding-left: var(--espacio-3);
+  font-size: var(--texto-s);
+  font-weight: 400;
+}
+
+.contenido {
+  flex: 1;
+  min-width: 0; /* permite que las tablas hagan scroll en vez de ensanchar la página */
+  padding: var(--espacio-4);
+}
+
+@media (min-width: 1024px) {
+  .raiz {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    width: var(--ancho-sidebar);
+    flex-shrink: 0;
+    padding: var(--espacio-8) var(--espacio-4) var(--espacio-5);
+  }
+
+  .cabecera {
+    padding: 0 var(--espacio-3) var(--espacio-4);
+    margin-bottom: var(--espacio-5);
+    border-bottom: 1px solid var(--color-sidebar-item);
+  }
+
+  .titulo {
+    font-size: var(--texto-2xl);
+  }
+
+  .botonMenu {
+    display: none;
+  }
+
+  .panel {
+    display: flex;
+    flex: 1;
+    padding: 0;
+  }
+
+  .pie {
+    margin-top: auto;
+    padding-top: var(--espacio-5);
+  }
+
+  .contenido {
+    padding: var(--espacio-7);
+  }
+}

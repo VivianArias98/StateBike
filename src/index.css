@@ -1,46 +1,440 @@
+/* =====================================================================
+   index.css: ÚNICO archivo global de estilos del proyecto.
+
+   Aquí viven:
+   1. La paleta (valores crudos). Solo se usa dentro de este archivo.
+   2. Los tokens semánticos (--color-*) del tema claro y del tema oscuro.
+   3. Tokens de tipografía, espacios, radios y tamaños.
+   4. El reset y las clases base reutilizables (.boton, .input, .tarjeta...).
+
+   Los componentes NUNCA escriben colores: usan var(--color-...).
+   Para activar el tema oscuro basta con: <html data-tema="oscuro">
+   ===================================================================== */
+
+/* Orden de las capas. Todo lo que esté fuera de una capa (los
+   .module.css de cada componente) siempre gana sobre estas capas,
+   sin importar el orden de importación. */
+@layer reset, primitivos;
+
+
+/* ---------------------------------------------------------------------
+   1. PALETA (no usar fuera de este archivo)
+   --------------------------------------------------------------------- */
 :root {
-  --negro: #050607;
-  --verde-oscuro: #153019;
-  --fondo: #F0FFE3;
-  --verde: #5FD34A;
-  --blanco: #FFFFFF;
+  --paleta-negro: #050607;
+  --paleta-verde-oscuro: #153019;
+  --paleta-fondo: #F0FFE3;
+  --paleta-verde: #5FD34A;
+  --paleta-blanco: #FFFFFF;
+  --paleta-amarillo: #FDE68A;
+  --paleta-verde-claro: #9FC795;
+  --paleta-menta: #D1FAE5;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+
+/* ---------------------------------------------------------------------
+   2. TOKENS SEMÁNTICOS: TEMA CLARO (por defecto)
+   El nombre describe el USO de la color, no la color.
+   --------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  /* Fondos */
+  --color-fondo-pagina: var(--paleta-fondo);
+  --color-superficie: var(--paleta-blanco);            /* tarjetas, formularios, mapa */
+  --color-superficie-inversa: var(--paleta-negro);     /* encabezado de tablas, avisos, sidebar */
+
+  /* Texto */
+  --color-texto: var(--paleta-negro);
+  --color-texto-inverso: var(--paleta-blanco);         /* texto sobre superficie-inversa */
+  --color-placeholder: rgba(5, 6, 7, 0.6);
+
+  /* Bordes y foco */
+  --color-borde: var(--paleta-negro);
+  --color-foco: var(--paleta-verde-oscuro);
+
+  /* Botones y acentos */
+  --color-primario: var(--paleta-verde);
+  --color-primario-texto: var(--paleta-negro);
+  --color-secundario: var(--paleta-verde-oscuro);
+  --color-secundario-texto: var(--paleta-blanco);
+
+  /* Campos de formulario */
+  --color-input-fondo: var(--paleta-blanco);
+  --color-deshabilitado-fondo: var(--paleta-fondo);
+  --color-deshabilitado-texto: var(--paleta-verde-oscuro);
+
+  /* Errores */
+  --color-error-texto: #B00020;
+  --color-error-fondo: #FDECEE;
+  --color-error-borde: #B00020;
+
+  /* Sidebar del administrador: fondo al pasar el mouse y línea del pie */
+  --color-sidebar-item: rgba(255, 255, 255, 0.1);
+
+  /* Etiquetas (componente Etiqueta): mismos colores en ambos temas */
+  --color-etiqueta-amarilla: var(--paleta-amarillo);
+  --color-etiqueta-verde: var(--paleta-verde-claro);
+  --color-etiqueta-menta: var(--paleta-menta);
+  --color-etiqueta-texto: var(--paleta-negro);
+  --color-etiqueta-borde: rgba(5, 6, 7, 0.15);
+
+  /* Mapa (Leaflet): filtro aplicado a los tiles */
+  --filtro-mapa: grayscale(1);
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--fondo);
-  color: var(--negro);
+
+/* ---------------------------------------------------------------------
+   3. TEMA OSCURO: solo redefine tokens. Los valores son un punto de
+   partida: se ajustan aquí y se actualizan todas las pantallas.
+   --------------------------------------------------------------------- */
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+
+  --color-fondo-pagina: var(--paleta-negro);
+  --color-superficie: var(--paleta-verde-oscuro);
+  --color-superficie-inversa: var(--paleta-verde-oscuro);
+
+  --color-texto: var(--paleta-blanco);
+  --color-texto-inverso: var(--paleta-blanco);
+  --color-placeholder: rgba(255, 255, 255, 0.6);
+
+  --color-borde: rgba(255, 255, 255, 0.4);
+  --color-foco: var(--paleta-verde);
+
+  --color-primario: var(--paleta-verde);
+  --color-primario-texto: var(--paleta-negro);
+  --color-secundario: var(--paleta-verde-oscuro);
+  --color-secundario-texto: var(--paleta-blanco);
+
+  --color-input-fondo: var(--paleta-negro);
+  --color-deshabilitado-fondo: rgba(255, 255, 255, 0.08);
+  --color-deshabilitado-texto: rgba(255, 255, 255, 0.5);
+
+  --color-error-texto: #FFB4B4;
+  --color-error-fondo: rgba(255, 107, 107, 0.12);
+  --color-error-borde: #FF6B6B;
+
+  --color-sidebar-item: rgba(255, 255, 255, 0.1);
+
+  --filtro-mapa: grayscale(1) invert(1);
 }
 
-button,input {
-  font-family: inherit;
+
+/* ---------------------------------------------------------------------
+   4. TOKENS QUE NO SON COLOR (iguales en ambos temas)
+   --------------------------------------------------------------------- */
+:root {
+  --fuente: 'Inter', system-ui, sans-serif;
+  --fuente-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --alto-control-s: 2.25rem;        /* 36px: botones pequeños */
+
+  /* Tamaños de texto */
+  --texto-xs: 0.75rem;    /* 12px */
+  --texto-s: 0.875rem;    /* 14px */
+  --texto-m: 1rem;        /* 16px */
+  --texto-l: 1.125rem;    /* 18px */
+  --texto-xl: 1.25rem;    /* 20px */
+  --texto-2xl: 1.5rem;    /* 24px */
+  --texto-3xl: 1.75rem;   /* 28px */
+  --texto-4xl: 2rem;      /* 32px */
+
+  /* Espacios (padding, margin, gap) */
+  --espacio-1: 0.25rem;   /* 4px */
+  --espacio-2: 0.5rem;    /* 8px */
+  --espacio-3: 0.75rem;   /* 12px */
+  --espacio-4: 1rem;      /* 16px */
+  --espacio-5: 1.5rem;    /* 24px */
+  --espacio-6: 2rem;      /* 32px */
+  --espacio-7: 2.5rem;    /* 40px */
+  --espacio-8: 3rem;      /* 48px */
+
+  /* Radios */
+  --radio-xs: 0.25rem;    /* 4px  (checkbox) */
+  --radio-s: 0.5rem;      /* 8px  (insignias) */
+  --radio-m: 0.75rem;     /* 12px (botones, campos) */
+  --radio-l: 1rem;        /* 16px (tarjetas, tablas) */
+  --radio-circulo: 50%;
+
+  /* Tamaños fijos */
+  --alto-control: 2.75rem;          /* 44px: botones y campos (mínimo táctil) */
+  --alto-fila: 3.5rem;              /* 56px: filas de tabla */
+  --ancho-sidebar: 15rem;           /* 240px */
+  --ancho-panel-lateral: 22rem;     /* 352px: formulario junto a la tabla */
 }
 
-.boton {
-  min-width: 96px;
-  height: 48px;
-  padding: 0 24px;
-  background: transparent;
-  color: var(--negro);
-  border: 1px solid var(--verde-oscuro);
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
+/* Breakpoints (var() no funciona dentro de @media, se escriben tal cual):
+   - base: celular
+   - @media (min-width: 768px): tablet
+   - @media (min-width: 1024px): escritorio */
+
+
+/* ---------------------------------------------------------------------
+   5. RESET
+   --------------------------------------------------------------------- */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--fuente);
+    font-size: var(--texto-m);
+    line-height: 1.5;
+    background: var(--color-fondo-pagina);
+    color: var(--color-texto);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-foco);
+    outline-offset: 2px;
+  }
 }
 
-.boton--primario {
-  background: var(--verde);
-  border-color: var(--negro);
+@keyframes pulso {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
 }
 
-.boton:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+/* ---------------------------------------------------------------------
+   6. CLASES BASE REUTILIZABLES
+   Se usan como texto normal en el JSX: className="boton boton--primario".
+   Los .module.css de cada componente solo agregan lo propio
+   (posición, anchos, distribución).
+   --------------------------------------------------------------------- */
+@layer primitivos {
+
+  .boton--s {
+    min-width: 0;
+    height: var(--alto-control-s);
+    padding: 0 var(--espacio-4);
+  }
+
+  /* Punto verde que parpadea lentamente */
+  .punto-vivo {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    background: var(--color-primario);
+    border-radius: var(--radio-circulo);
+    animation: pulso 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .punto-vivo {
+      animation: none;
+    }
+  }
+
+  /* ----- Botones ----- */
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6rem;
+    height: var(--alto-control);
+    padding: 0 var(--espacio-5);
+    background: transparent;
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-m);
+    font-size: var(--texto-s);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .boton--primario {
+    background: var(--color-primario);
+    color: var(--color-primario-texto);
+  }
+
+  .boton--secundario {
+    background: var(--color-secundario);
+    color: var(--color-secundario-texto);
+    border-color: var(--color-secundario);
+  }
+
+  .boton--bloque {
+    width: 100%;
+  }
+
+  .boton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Botón con aspecto de enlace (Cancelar, Cerrar sesión, Crear cuenta...) */
+  .enlace {
+    padding: 0;
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /* ----- Formularios ----- */
+  .campo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+  }
+
+  .campo label {
+    font-size: var(--texto-s);
+    font-weight: 600;
+  }
+
+  .input {
+    width: 100%;
+    height: var(--alto-control);
+    padding: 0 var(--espacio-3);
+    background: var(--color-input-fondo);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-m);
+    font-size: var(--texto-s);
+  }
+
+  .input::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  .input:disabled {
+    background: var(--color-deshabilitado-fondo);
+    color: var(--color-deshabilitado-texto);
+    cursor: not-allowed;
+  }
+
+  .mensaje-error {
+    padding: var(--espacio-3) var(--espacio-4);
+    background: var(--color-error-fondo);
+    color: var(--color-error-texto);
+    border: 1px solid var(--color-error-borde);
+    border-radius: var(--radio-m);
+    font-size: var(--texto-s);
+    font-weight: 600;
+  }
+
+  /* ----- Contenedores ----- */
+  .tarjeta {
+    padding: var(--espacio-5);
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-l);
+  }
+
+  .titulo-pagina {
+    padding-bottom: var(--espacio-4);
+    margin-bottom: var(--espacio-5);
+    border-bottom: 1px solid var(--color-borde);
+    font-size: var(--texto-2xl);
+    font-weight: 700;
+  }
+
+  /* Tabla: poner la clase en el div que envuelve a <table>.
+     En pantallas pequeñas la tabla se desplaza horizontalmente.
+     Los anchos de columnas se definen en el .module.css de cada tabla. */
+  .tabla {
+    overflow-x: auto;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-l);
+  }
+
+  .tabla table {
+    width: 100%;
+    min-width: 36rem;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .tabla thead {
+    background: var(--color-superficie-inversa);
+    color: var(--color-texto-inverso);
+  }
+
+  .tabla th {
+    height: var(--alto-fila);
+    padding: 0 var(--espacio-4);
+    text-align: left;
+    font-size: var(--texto-s);
+    font-weight: 600;
+  }
+
+  .tabla td {
+    height: var(--alto-fila);
+    padding: var(--espacio-2) var(--espacio-4);
+    border-top: 1px solid var(--color-borde);
+    font-size: var(--texto-s);
+  }
+
+  /* ----- Insignias de estado ----- */
+  .insignia {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacio-2);
+    height: 2rem;
+    padding: 0 var(--espacio-3);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-s);
+    font-size: var(--texto-s);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .insignia--activa {
+    background: var(--color-primario);
+    color: var(--color-primario-texto);
+  }
+
+  .insignia--neutra {
+    background: var(--color-superficie);
+  }
+
+  .insignia--inactiva {
+    border-style: dashed;
+  }
+
+  /* ----- Paneles oscuros fijos (bienvenida de login/registro) -----
+     Dentro de este contexto los hijos ya reciben colores legibles
+     sobre fondo oscuro, en tema claro y en tema oscuro.
+     El fondo (background) lo pone el módulo del componente. */
+  .contexto-oscuro {
+    --color-texto: var(--paleta-blanco);
+    --color-borde: var(--paleta-blanco);
+    --color-foco: var(--paleta-verde);
+    --color-input-fondo: var(--paleta-negro);
+    --color-placeholder: rgba(255, 255, 255, 0.8);
+
+    color: var(--color-texto);
+  }
+
+  @media (min-width: 768px) {
+    .titulo-pagina {
+      padding-bottom: var(--espacio-5);
+      margin-bottom: var(--espacio-6);
+      font-size: var(--texto-4xl);
+    }
+  }
 }

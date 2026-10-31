@@ -1,0 +1,15 @@
+/* Base = celular: bienvenida y formulario apilados */
+.tarjeta {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+
+@media (min-width: 768px) {
+  .tarjeta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-7);
+    padding: 0 var(--espacio-4);
+  }
+}

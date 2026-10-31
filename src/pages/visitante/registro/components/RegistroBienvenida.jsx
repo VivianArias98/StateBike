@@ -1,24 +1,24 @@
-import './RegistroBienvenida.css';
+import styles from './RegistroBienvenida.module.css';
 
 function RegistroBienvenida() {
   return (
-    <aside className="registro-bienvenida">
-      <h2 className="registro-bienvenida__titulo">Muévete por Tunja en bicicleta.</h2>
-      <p className="registro-bienvenida__texto">
+    <aside className={styles.raiz}>
+      <h2 className={styles.titulo}>Muévete por Tunja en bicicleta.</h2>
+      <p className={styles.texto}>
         Crea tu cuenta, compra un plan y desbloquea una bicicleta con tu tarjeta NFC
       </p>
 
-      <ol className="registro-bienvenida__pasos">
-        <li className="registro-bienvenida__paso">
-          <span className="registro-bienvenida__numero">1.</span>
+      <ol className={styles.pasos}>
+        <li className={styles.paso}>
+          <span className={styles.numero}>1.</span>
           Crea tu cuenta
         </li>
-        <li className="registro-bienvenida__paso">
-          <span className="registro-bienvenida__numero">2.</span>
+        <li className={styles.paso}>
+          <span className={styles.numero}>2.</span>
           Un administrador vincula tu tarjeta NFC
         </li>
-        <li className="registro-bienvenida__paso">
-          <span className="registro-bienvenida__numero">3.</span>
+        <li className={styles.paso}>
+          <span className={styles.numero}>3.</span>
           Compra un plan y empieza a pedalear
         </li>
       </ol>
@@ -26,4 +26,4 @@ function RegistroBienvenida() {
   );
 }
 
-export default RegistroBienvenida;
+export default RegistroBienvenida;

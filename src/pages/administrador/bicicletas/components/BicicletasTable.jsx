@@ -1,9 +1,9 @@
 import BicicletaEstadoBadge from './BicicletaEstadoBadge.jsx';
-import './BicicletasTable.css';
+import styles from './BicicletasTable.module.css';
 
 function BicicletasTable({ bicicletas }) {
   return (
-    <div className="tabla-bicicletas">
+    <div className={`tabla ${styles.raiz}`}>
       <table>
         <thead>
           <tr>

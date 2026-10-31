@@ -1,0 +1,23 @@
+/* Se usa junto a la clase global "contexto-oscuro" (texto blanco) */
+.raiz {
+  padding: var(--espacio-5);
+  background: var(--color-secundario);
+  border-radius: var(--radio-l);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-5);
+  font-size: var(--texto-3xl);
+  font-weight: 600;
+}
+
+.texto {
+  font-size: var(--texto-m);
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-7);
+  }
+}

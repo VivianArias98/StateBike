@@ -1,0 +1,22 @@
+/* Base = celular: buscador y botón apilados */
+.barra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  margin-bottom: var(--espacio-6);
+}
+
+@media (min-width: 768px) {
+  .barra {
+    flex-direction: row;
+    gap: var(--espacio-5);
+  }
+
+  .buscador {
+    flex: 1;
+  }
+
+  .registrar {
+    width: 15rem;
+  }
+}

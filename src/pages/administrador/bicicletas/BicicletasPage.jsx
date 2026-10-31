@@ -1,7 +1,7 @@
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import BicicletasTable from './components/BicicletasTable.jsx';
 import BicicletaForm from './components/BicicletaForm.jsx';
-import './BicicletasPage.css';
+import styles from './BicicletasPage.module.css';
 
 // Datos de ejemplo (solo maquetación)
 const BICICLETAS = [
@@ -15,19 +15,19 @@ const BICICLETAS = [
 function BicicletasPage() {
   return (
     <AdminLayout itemActivo="Bicicletas">
-      <h1 className="bicicletas__titulo">Bicicletas</h1>
+      <h1 className="titulo-pagina">Bicicletas</h1>
 
-      <div className="bicicletas__contenido">
+      <div className={styles.contenido}>
         <input
           type="text"
-          className="bicicletas__buscador"
+          className={`input ${styles.buscador}`}
           placeholder="Buscar por código"
           aria-label="Buscar por código"
         />
-        <div className="bicicletas__tabla">
+        <div className={styles.tabla}>
           <BicicletasTable bicicletas={BICICLETAS} />
         </div>
-        <div className="bicicletas__formulario">
+        <div className={styles.formulario}>
           <BicicletaForm />
         </div>
       </div>

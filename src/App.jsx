@@ -1,10 +1,10 @@
-import EstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
+//import EstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
+import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 //import BicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
-
 //Sin router por ahora: App muestra una sola pantalla.
 //Para probar otra, cambiar temporalmente lo que devuelve (<BicicletasPage />, etc.)
 function App() {
-  return <EstacionesPage />;
+  return <PanelControlPage />;
 }
 
 export default App;

@@ -5,7 +5,7 @@ import EstacionesTable from './components/EstacionesTable.jsx';
 import RegistrarEstacionPage from './RegistrarEstacionPage.jsx';
 import EditarEstacionPage from './EditarEstacionPage.jsx';
 import { ESTACIONES_INICIALES } from './estacionesMock.js';
-import './EstacionesPage.css';
+import styles from './EstacionesPage.module.css';
 
 function EstacionesPage() {
   const [estaciones, setEstaciones] = useState(ESTACIONES_INICIALES);
@@ -103,12 +103,12 @@ function EstacionesPage() {
 
   return (
     <AdminLayout itemActivo="Estaciones">
-      <h1 className="estaciones__titulo">Estaciones</h1>
+      <h1 className="titulo-pagina">Estaciones</h1>
 
-      <div className="estaciones__barra">
+      <div className={styles.barra}>
         <input
           type="text"
-          className="estaciones__buscador"
+          className={`input ${styles.buscador}`}
           placeholder="Buscar por nombre"
           aria-label="Buscar por nombre"
           value={busqueda}
@@ -116,7 +116,7 @@ function EstacionesPage() {
         />
         <button
           type="button"
-          className="boton boton--primario estaciones__registrar"
+          className={`boton boton--primario ${styles.registrar}`}
           onClick={handleRegistrar}
         >
           Registrar estación
@@ -138,4 +138,4 @@ function EstacionesPage() {
   );
 }
 
-export default EstacionesPage;
+export default EstacionesPage;

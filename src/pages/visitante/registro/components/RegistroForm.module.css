@@ -1,0 +1,79 @@
+/* Va dentro de un panel "contexto-oscuro": los colores ya vienen resueltos */
+.raiz {
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-2);
+  font-size: var(--texto-2xl);
+  font-weight: 600;
+}
+
+.subtitulo {
+  margin-bottom: var(--espacio-5);
+  font-size: var(--texto-xs);
+}
+
+.campo {
+  margin-bottom: var(--espacio-4);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Deja espacio a la derecha para el botón del ojo */
+.conOjo {
+  padding-right: var(--espacio-7);
+}
+
+.ojo {
+  position: absolute;
+  right: var(--espacio-3);
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: var(--texto-s);
+  cursor: pointer;
+}
+
+.terminos {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin: var(--espacio-5) 0 var(--espacio-4);
+  font-size: var(--texto-xs);
+  cursor: pointer;
+}
+
+.terminos input {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  background: var(--color-input-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-xs);
+  cursor: pointer;
+}
+
+.terminos input:checked {
+  background: var(--color-primario);
+  border-color: var(--color-primario);
+}
+
+.accion {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.alterno {
+  margin-top: var(--espacio-5);
+  text-align: center;
+  font-size: var(--texto-xs);
+}

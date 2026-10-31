@@ -1,0 +1,41 @@
+/* Se usa junto a la clase global "contexto-oscuro" (texto y bordes claros) */
+.raiz {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+    padding: var(--espacio-4) var(--espacio-5);
+    background: var(--color-superficie-inversa);
+    border-radius: var(--radio-l);
+  }
+  
+  .titulo {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-3);
+    font-size: var(--texto-3xl);
+    font-weight: 700;
+  }
+  
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-3);
+  }
+  
+  .actualizado {
+    font-size: var(--texto-xs);
+    opacity: 0.7;
+  }
+  
+  .modo {
+    color: var(--color-primario);
+  }
+  
+  @media (min-width: 768px) {
+    .titulo {
+      font-size: var(--texto-4xl);
+    }
+  }

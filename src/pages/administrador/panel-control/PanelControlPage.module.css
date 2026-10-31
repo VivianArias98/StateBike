@@ -1,0 +1,49 @@
+/* Base = celular: todo en una columna */
+.raiz {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-5);
+  }
+  
+  .indicadores {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espacio-4);
+  }
+  
+  .detalle {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espacio-5);
+    align-items: start;
+  }
+  
+  .pie {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    padding-top: var(--espacio-4);
+    border-top: 1px solid var(--color-borde);
+    font-size: var(--texto-xs);
+  }
+  
+  @media (min-width: 768px) {
+    .indicadores {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  
+    .pie {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .indicadores {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  
+    .detalle {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }

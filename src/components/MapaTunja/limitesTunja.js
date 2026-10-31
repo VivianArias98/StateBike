@@ -10,4 +10,4 @@ export const TUNJA_LIMITES = [
 export function estaDentroDeTunja(lat, lng) {
   const [[surLat, oesteLng], [norteLat, esteLng]] = TUNJA_LIMITES;
   return lat >= surLat && lat <= norteLat && lng >= oesteLng && lng <= esteLng;
-}
+}

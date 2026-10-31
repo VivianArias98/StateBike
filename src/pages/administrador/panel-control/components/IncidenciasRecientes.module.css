@@ -1,0 +1,51 @@
+/* Se usa junto a la clase global "tarjeta" */
+.raiz {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-5);
+  }
+  
+  .cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+  }
+  
+  .titulo {
+    font-size: var(--texto-l);
+    font-weight: 600;
+  }
+  
+  /* Se usa junto a la clase global "tabla": la tabla es más angosta que las demás */
+  .tabla table {
+    min-width: 20rem;
+  }
+  
+  .tabla th:nth-child(1) { width: 45%; }
+  .tabla th:nth-child(2) { width: 25%; }
+  
+  .detalle {
+    font-family: var(--fuente-mono);
+  }
+  
+  .pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+    padding-top: var(--espacio-4);
+    border-top: 1px solid var(--color-borde);
+    font-size: var(--texto-xs);
+  }
+  
+  .nota {
+    opacity: 0.7;
+  }
+  
+  .enlace {
+    font-size: var(--texto-xs);
+    text-decoration: none;
+  }
