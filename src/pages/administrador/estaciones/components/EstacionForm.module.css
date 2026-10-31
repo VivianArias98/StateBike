@@ -1,0 +1,31 @@
+/* Se usa junto a la clase global "tarjeta" */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.titulo {
+  margin-bottom: var(--espacio-2);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-5);
+  margin-top: var(--espacio-2);
+}
+
+.cancelar {
+  font-size: var(--texto-s);
+  font-weight: 400;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-6);
+  }
+}

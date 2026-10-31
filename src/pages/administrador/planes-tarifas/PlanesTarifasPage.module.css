@@ -1,0 +1,13 @@
+/* Base = celular: una columna. Desde 1024px: tabla + formulario lateral */
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-5);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
+  }
+}

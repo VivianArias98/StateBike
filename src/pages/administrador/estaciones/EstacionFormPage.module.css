@@ -1,0 +1,14 @@
+/* Compartido por RegistrarEstacionPage y EditarEstacionPage.
+   Base = celular: formulario y mapa uno debajo del otro. */
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-6);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+}

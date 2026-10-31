@@ -1,0 +1,38 @@
+/* Se usa junto a la clase global "tarjeta" */
+.raiz {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--espacio-3);
+  }
+  
+  .superior {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+  }
+  
+  .titulo {
+    font-size: var(--texto-s);
+    font-weight: 600;
+  }
+  
+  .inferior {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+  }
+  
+  .valor {
+    font-size: var(--texto-4xl);
+    font-weight: 700;
+    line-height: 1;
+  }
+  
+  .enlace {
+    font-size: var(--texto-xs);
+    font-weight: 400;
+    text-decoration: none;
+  }

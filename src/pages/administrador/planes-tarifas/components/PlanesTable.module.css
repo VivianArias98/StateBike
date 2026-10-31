@@ -1,0 +1,13 @@
+/* Se usa junto a la clase global "tabla": aquí solo anchos de columna */
+.raiz th {
+  white-space: nowrap;
+}
+
+.raiz th:nth-child(1) { width: 22%; }
+.raiz th:nth-child(2) { width: 25%; }
+.raiz th:nth-child(3) { width: 33%; }
+
+.editar {
+  min-width: 0;
+  padding: 0 var(--espacio-4);
+}

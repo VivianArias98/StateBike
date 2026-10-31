@@ -1,0 +1,34 @@
+/* Base = celular: una columna. Desde 1024px: tabla + formulario lateral */
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'buscador'
+    'tabla'
+    'formulario';
+  gap: var(--espacio-5);
+  align-items: start;
+}
+
+.buscador {
+  grid-area: buscador;
+}
+
+.tabla {
+  grid-area: tabla;
+}
+
+.formulario {
+  grid-area: formulario;
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
+    grid-template-areas:
+      'buscador .'
+      'tabla formulario';
+    column-gap: var(--espacio-5);
+    row-gap: var(--espacio-6);
+  }
+}
