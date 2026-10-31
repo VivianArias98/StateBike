@@ -6,12 +6,14 @@ import styles from './RegistroPage.module.css';
 function RegistroPage() {
   return (
     <VisitanteLayout>
-      <div className={`contexto-oscuro ${styles.tarjeta}`}>
-        <RegistroBienvenida />
-        <RegistroForm />
+      <div className={styles.pagina}>
+        <div className={`contexto-oscuro ${styles.tarjeta}`}>
+          <RegistroBienvenida />
+          <RegistroForm />
+        </div>
       </div>
     </VisitanteLayout>
   );
 }
 
-export default RegistroPage;
+export default RegistroPage;

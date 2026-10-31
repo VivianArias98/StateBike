@@ -6,12 +6,14 @@ import styles from './LoginPage.module.css';
 function LoginPage() {
   return (
     <VisitanteLayout>
-      <div className={styles.tarjeta}>
-        <LoginBienvenida />
-        <LoginForm />
+      <div className={styles.pagina}>
+        <div className={styles.tarjeta}>
+          <LoginBienvenida />
+          <LoginForm />
+        </div>
       </div>
     </VisitanteLayout>
   );
 }
 
-export default LoginPage;
+export default LoginPage;

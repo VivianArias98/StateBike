@@ -1,0 +1,62 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  min-height: 15rem;
+  padding: var(--espacio-5);
+  color: var(--color-texto);
+  background: transparent;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.destacado {
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  border-color: var(--color-secundario);
+}
+
+.etiqueta {
+  align-self: flex-start;
+  padding: var(--espacio-1) var(--espacio-3);
+  border: 1px solid var(--color-primario);
+  border-radius: var(--radio-s);
+  color: var(--color-primario);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.destacado .etiqueta {
+  background: var(--color-secundario);
+}
+
+.nombre {
+  font-size: var(--texto-m);
+  font-weight: 600;
+}
+
+.costo {
+  margin-bottom: var(--espacio-4);
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.separador {
+  height: 1px;
+  margin-top: auto;
+  background: currentColor;
+  opacity: 0.2;
+}
+
+.referencia {
+  margin-top: var(--espacio-3);
+  font-size: var(--texto-xs);
+  opacity: 0.8;
+}
+
+.minutos {
+  font-size: var(--texto-m);
+  font-weight: 600;
+}

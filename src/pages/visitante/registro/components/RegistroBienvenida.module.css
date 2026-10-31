@@ -1,50 +1,59 @@
+/* Usar con: className={styles.raiz}
+   El fondo oscuro lo pone RegistroPage.module.css. */
 .raiz {
+  box-sizing: border-box;
   padding: var(--espacio-5);
+  color: var(--color-texto-inverso);
 }
 
 .titulo {
-  margin-bottom: var(--espacio-5);
-  font-size: var(--texto-3xl);
-  font-weight: 600;
+  margin-bottom: var(--espacio-4);
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .texto {
+  margin-bottom: var(--espacio-5);
   font-size: var(--texto-m);
   line-height: 1.5;
+  opacity: 0.85;
+}
+
+.separador {
+  height: 1px;
+  margin-bottom: var(--espacio-5);
+  background: var(--color-borde);
 }
 
 .pasos {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-5);
-  margin-top: var(--espacio-6);
-  padding-top: var(--espacio-6);
+  display: grid;
+  gap: var(--espacio-4);
+  margin: 0;
+  padding: 0;
   list-style: none;
-  border-top: 1px solid var(--color-borde);
 }
 
 .paso {
   display: flex;
   align-items: center;
-  gap: var(--espacio-4);
-  font-size: var(--texto-s);
+  gap: var(--espacio-3);
+  font-size: var(--texto-m);
 }
 
 .numero {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.625rem;
-  height: 1.625rem;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-s);
+  width: var(--espacio-6);
+  height: var(--espacio-6);
+  border: 1px solid currentColor;
+  border-radius: var(--radio-circulo);
   font-size: var(--texto-xs);
-  font-weight: 700;
 }
 
 @media (min-width: 768px) {
   .raiz {
-    padding: var(--espacio-7) var(--espacio-4);
+    padding: var(--espacio-7);
   }
 }
