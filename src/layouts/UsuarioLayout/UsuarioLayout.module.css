@@ -1,0 +1,22 @@
+.raiz {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* Los puntos parpadeantes de las pantallas de usuario usan el color de acento */
+    --color-punto: var(--color-acento);
+  }
+  
+  .contenido {
+    flex: 1;
+    width: 100%;
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding: var(--espacio-5) var(--espacio-4);
+  }
+  
+  @media (min-width: 1024px) {
+    .contenido {
+      padding: var(--espacio-6) var(--espacio-7);
+    }
+  }

@@ -1,0 +1,61 @@
+/* Se usa junto a la clase global "tarjeta" */
+.raiz {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+  }
+  
+  .cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+    padding-bottom: var(--espacio-3);
+    border-bottom: 1px solid var(--color-borde);
+  }
+  
+  .titulo {
+    font-size: var(--texto-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  
+  .tiempo {
+    font-size: var(--texto-5xl);
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .separador {
+    margin: 0 var(--espacio-2);
+  }
+  
+  .plan {
+    font-size: var(--texto-xs);
+  }
+  
+  .resumen {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--espacio-3);
+  }
+  
+  .restante {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--texto-xs);
+  }
+  
+  .uso {
+    max-width: 14rem;
+    padding: var(--espacio-2) var(--espacio-3);
+    background: var(--color-etiqueta-menta);
+    color: var(--color-etiqueta-texto);
+    border: 1px solid var(--color-etiqueta-borde);
+    border-radius: var(--radio-s);
+    font-size: var(--texto-xs);
+    font-weight: 600;
+  }

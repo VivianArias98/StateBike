@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, Tooltip, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { TUNJA_CENTRO, TUNJA_LIMITES } from './limitesTunja.js';
@@ -10,6 +10,12 @@ const iconoPunto = L.divIcon({
   className: styles.punto,
   iconSize: [22, 22],
   iconAnchor: [11, 11],
+});
+
+const iconoActual = L.divIcon({
+  className: styles.actual,
+  iconSize: [26, 26],
+  iconAnchor: [13, 13],
 });
 
 function crearIconoEstacion(bicicletas) {
@@ -35,19 +41,26 @@ function CapturaClics({ onSeleccionar }) {
 // - estaciones: estaciones de referencia [{ id, nombre, lat, lng, bicicletas }]
 // - punto: ubicación elegida { lat, lng } o null
 // - onSeleccionar: si se pasa, el mapa es clicable y el punto se puede arrastrar
+// - ruta: recorrido [[lat, lng], ...] que se dibuja como una línea (opcional)
+// - ubicacionActual: { lat, lng } o null (opcional)
+// - leyendas: avisos sobre el mapa [{ id, contenido }] (opcional)
+// - titulo: si se pasa null, no se muestra el título
 function MapaTunja({
   titulo = 'Ubicación en Tunja',
   estaciones = [],
   punto = null,
+  ruta = [],
+  ubicacionActual = null,
   onSeleccionar,
   ayuda,
+  leyendas = [],
   nota,
 }) {
   const seleccionable = typeof onSeleccionar === 'function';
 
   return (
     <section className={`tarjeta ${styles.raiz}`}>
-      <h2 className={styles.titulo}>{titulo}</h2>
+      {titulo && <h2 className={styles.titulo}>{titulo}</h2>}
 
       <div className={styles.contenedor}>
         <MapContainer
@@ -64,6 +77,18 @@ function MapaTunja({
           />
 
           {seleccionable && <CapturaClics onSeleccionar={onSeleccionar} />}
+
+          {ruta.length > 1 && (
+            <Polyline positions={ruta} pathOptions={{ className: styles.ruta, interactive: false }} />
+          )}
+
+          {ubicacionActual && (
+            <Marker
+              position={[ubicacionActual.lat, ubicacionActual.lng]}
+              icon={iconoActual}
+              interactive={false}
+            />
+          )}
 
           {estaciones.map((estacion) => (
             <Marker
@@ -99,6 +124,17 @@ function MapaTunja({
         </MapContainer>
 
         {ayuda && <span className={styles.ayuda}>{ayuda}</span>}
+
+        {leyendas.length > 0 && (
+          <div className={styles.leyendas}>
+            {leyendas.map((leyenda) => (
+              <p key={leyenda.id} className={styles.leyenda}>
+                {leyenda.contenido}
+              </p>
+            ))}
+          </div>
+        )}
+        
       </div>
 
       {nota && <p className={styles.nota}>{nota}</p>}
@@ -106,4 +142,4 @@ function MapaTunja({
   );
 }
 
-export default MapaTunja;
+export default MapaTunja;

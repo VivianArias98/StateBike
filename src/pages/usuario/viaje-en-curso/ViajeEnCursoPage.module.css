@@ -1,0 +1,80 @@
+/* Base = celular: todo en una columna */
+.raiz {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-5);
+  }
+  
+  .tituloFila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-3);
+  }
+  
+  .titulo {
+    font-size: var(--texto-3xl);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  
+  .subtitulo {
+    margin-top: var(--espacio-2);
+    font-size: var(--texto-s);
+    opacity: 0.7;
+  }
+  
+  .contenido {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espacio-5);
+    align-items: start;
+  }
+  
+  /* El mapa lee esta variable para definir su altura */
+  .mapa {
+    --alto-mapa: 20rem;
+  }
+  
+  .lateral {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+  }
+  
+  .devolver {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+  }
+  
+  .accion {
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  
+  .ayuda {
+    text-align: center;
+    font-size: var(--texto-xs);
+    opacity: 0.7;
+  }
+  
+  @media (min-width: 768px) {
+    .titulo {
+      font-size: var(--texto-4xl);
+    }
+  
+    .mapa {
+      --alto-mapa: 28rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .contenido {
+      grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
+    }
+  
+    .mapa {
+      --alto-mapa: 34rem;
+    }
+  }

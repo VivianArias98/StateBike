@@ -1,0 +1,17 @@
+.raiz {
+    background: var(--color-superficie-inversa);
+    font-size: var(--texto-xs);
+  }
+  
+  .contenido {
+    width: 100%;
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding: var(--espacio-4);
+  }
+  
+  @media (min-width: 1024px) {
+    .contenido {
+      padding: var(--espacio-4) var(--espacio-7);
+    }
+  }
