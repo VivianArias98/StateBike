@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import NavbarUsuario from './components/NavbarUsuario.jsx';
-import PieUsuario from './components/PieUsuario.jsx';
+import Footer from './components/Footer.jsx';
 import styles from './UsuarioLayout.module.css';
 
 //Datos de ejemplo (vendrán de la sesión del usuario)
@@ -21,7 +21,7 @@ function UsuarioLayout({ itemActivo, children }) {
         onAlternarMenu={() => setMenuAbierto(!menuAbierto)}
       />
       <main className={styles.contenido}>{children}</main>
-      <PieUsuario />
+      <Footer />
     </div>
   );
 }

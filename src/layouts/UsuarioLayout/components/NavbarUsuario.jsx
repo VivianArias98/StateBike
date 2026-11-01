@@ -1,7 +1,7 @@
 import { IconoBicicleta, IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
 import styles from './NavbarUsuario.module.css';
 
-const ENLACES = ['Mapa', 'Historial', 'Mi Perfil'];
+const ENLACES = ['Viajes', 'Historial', 'Mi Perfil', 'Mi Plan', 'Mi Billetera', 'Reportar Incidencia'];
 
 //Barra de navegación del rol usuario. El estado del menú vive en el layout.
 function NavbarUsuario({
