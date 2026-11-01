@@ -1,0 +1,37 @@
+/* FiltroFechas.module.css – base: celular */
+
+/* El div raiz usa clase global .tarjeta; aquí solo definimos la distribución */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.acciones {
+  display: flex;
+  gap: var(--espacio-3);
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .campos {
+    flex-direction: row;
+    flex: 1;
+    gap: var(--espacio-5);
+  }
+
+  .campos > * {
+    flex: 1;
+  }
+}
