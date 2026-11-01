@@ -1,7 +1,7 @@
-import styles from './PieUsuario.module.css';
+import styles from './Footer.module.css';
 
 // Pie de página compartido del rol usuario
-function PieUsuario() {
+function Footer() {
   return (
     <footer className={`contexto-oscuro ${styles.raiz}`}>
       <div className={styles.contenido}>
@@ -11,4 +11,4 @@ function PieUsuario() {
   );
 }
 
-export default PieUsuario;
+export default Footer;
