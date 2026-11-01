@@ -1,0 +1,64 @@
+/* ResumenViajePage.module.css – base: celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+/* ── Encabezado ─────────────────────────────────────── */
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.modulo {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto);
+  opacity: 0.6;
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+/* ── Contenido principal ────────────────────────────── */
+/* En celular: una columna (mapa arriba, especificación abajo).
+   En escritorio: dos columnas, mapa a la izquierda. */
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+@media (min-width: 768px) {
+  .titulo {
+    font-size: var(--texto-4xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--espacio-6);
+  }
+
+  /* El mapa ocupa el espacio restante */
+  .contenido > *:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* La especificación tiene un ancho fijo (panel lateral) */
+  .contenido > *:last-child {
+    width: var(--ancho-panel-lateral);
+    flex-shrink: 0;
+  }
+}

@@ -1,5 +1,9 @@
-/* Se usa junto a la clase global "contexto-oscuro" (texto blanco) */
+/* Usar con: className={`contexto-oscuro ${styles.raiz}`} */
 .raiz {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
   padding: var(--espacio-5);
   background: var(--color-secundario);
   border-radius: var(--radio-l);
@@ -7,13 +11,15 @@
 
 .titulo {
   margin-bottom: var(--espacio-5);
-  font-size: var(--texto-3xl);
-  font-weight: 600;
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .texto {
   font-size: var(--texto-m);
   line-height: 1.5;
+  opacity: 0.85;
 }
 
 @media (min-width: 768px) {

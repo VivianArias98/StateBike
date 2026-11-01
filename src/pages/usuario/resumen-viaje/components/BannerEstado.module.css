@@ -1,0 +1,70 @@
+/* BannerEstado.module.css – base: celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-l);
+}
+
+.mensaje {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  font-size: var(--texto-m);
+  font-weight: 600;
+  flex: 1;
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid var(--color-primario-texto);
+  border-radius: var(--radio-circulo);
+  font-size: var(--texto-m);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ref {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  border-radius: var(--radio-m);
+  min-width: 8rem;
+}
+
+.refEtiqueta {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+.refCodigo {
+  font-size: var(--texto-l);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ref {
+    align-items: flex-end;
+    text-align: right;
+    flex-shrink: 0;
+  }
+}

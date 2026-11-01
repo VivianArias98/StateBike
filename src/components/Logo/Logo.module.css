@@ -1,0 +1,7 @@
+/* El SVG hereda color del contexto (currentColor).
+   En .contexto-oscuro → blanco; en fondo claro → negro.
+   display: block evita el espacio base que SVG/inline-block generan debajo. */
+.raiz {
+  display: block;
+  flex-shrink: 0;
+}

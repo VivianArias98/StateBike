@@ -9,6 +9,7 @@
     font-weight: 600;
     line-height: 1.2;
     white-space: nowrap;
+    gap: var(--espacio-1);
   }
   
   /* Para agregar un color nuevo: token en index.css + una clase aquí */

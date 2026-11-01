@@ -1,0 +1,19 @@
+.pista {
+    height: 0.625rem;
+    overflow: hidden;
+    background: var(--color-pista);
+    border-radius: var(--radio-xs);
+  }
+  
+  .relleno {
+    height: 100%;
+    background: var(--color-acento);
+    border-radius: var(--radio-xs);
+    transition: width 0.5s ease;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .relleno {
+      transition: none;
+    }
+  }

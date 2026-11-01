@@ -15,10 +15,10 @@
   position: relative;
 }
 
-/* Sin altura definida el mapa no se ve */
+/* La altura se puede definir desde cada pantalla con --alto-mapa */
 .mapa {
   width: 100%;
-  height: 17.5rem;
+  height: var(--alto-mapa, 17.5rem);
 }
 
 /* Mapa en escala de grises (el filtro cambia con el tema: --filtro-mapa) */
@@ -87,6 +87,60 @@
 
 @media (min-width: 768px) {
   .mapa {
-    height: 22.5rem;
+    height: var(--alto-mapa, 22.5rem);
   }
+}
+
+/* Recorrido del viaje (línea) */
+.ruta {
+  fill: none;
+  stroke: var(--color-acento);
+  stroke-width: 5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-opacity: 1;
+}
+
+/* Ubicación actual: punto con halo */
+.actual {
+  background: var(--color-acento);
+  border: 3px solid var(--color-borde);
+  border-radius: var(--radio-circulo);
+  animation: halo 2s ease-out infinite;
+}
+
+@keyframes halo {
+  0% { box-shadow: 0 0 0 0 var(--color-acento); }
+  100% { box-shadow: 0 0 0 1rem transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actual {
+    animation: none;
+  }
+}
+
+/* Avisos sobre el mapa. Quedan por encima de los créditos de Leaflet (abajo a la derecha) */
+.leyendas {
+  position: absolute;
+  left: var(--espacio-3);
+  right: var(--espacio-3);
+  bottom: var(--espacio-6);
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  pointer-events: none;
+}
+
+.leyenda {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-l);
+  font-size: var(--texto-xs);
 }

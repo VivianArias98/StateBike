@@ -1,16 +1,46 @@
-/* Se usa junto a la clase global "contexto-oscuro".
-   Base = celular: bienvenida y formulario apilados. */
-.tarjeta {
+.pagina {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Base = celular: bienvenida y formulario apilados */
+.tarjeta {
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-height: 560px;
+  margin: 0 auto;
   background: var(--color-secundario);
   border-radius: var(--radio-l);
+  box-shadow: var(--sombra-tarjeta);
+  overflow: hidden;
+}
+
+.tarjeta > :first-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-texto-inverso) 15%, transparent);
 }
 
 @media (min-width: 768px) {
   .tarjeta {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0 var(--espacio-4);
+    width: 92%;
+    min-height: 680px;
+  }
+
+  .tarjeta > :first-child {
+    border-bottom: none;
+    border-right: 1px solid color-mix(in srgb, var(--color-texto-inverso) 15%, transparent);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tarjeta {
+    width: 80%;
+    max-width: 1280px;
+    min-height: 740px;
   }
 }

@@ -1,0 +1,65 @@
+/* MapaResumen.module.css – base: celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-superficie-inversa);
+  border-radius: var(--radio-l);
+  overflow: hidden;
+}
+
+/* Encabezado sobre el mapa */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-xs);
+  flex-wrap: wrap;
+}
+
+.ciudad {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.coordenadas {
+  opacity: 0.6;
+}
+
+/* Zona del mapa: la altura la define --alto-mapa */
+.mapa {
+  --alto-mapa: 22rem;
+  flex: 1;
+}
+
+/* Pie debajo del mapa */
+.pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-xs);
+  flex-wrap: wrap;
+}
+
+/* Punto verde del tramo en la leyenda */
+.puntoOrigen {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-acento);
+  border-radius: var(--radio-circulo);
+  margin-right: var(--espacio-2);
+  vertical-align: middle;
+}
+
+@media (min-width: 1024px) {
+  .mapa {
+    --alto-mapa: 28rem;
+  }
+}

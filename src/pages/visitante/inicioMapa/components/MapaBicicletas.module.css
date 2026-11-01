@@ -1,0 +1,83 @@
+/* Panel del mapa: fondo blanco, borde verde y trama suave tipo plano */
+.contenedor {
+  position: relative;
+  height: 26rem;
+  overflow: hidden;
+  background-color: var(--color-superficie);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-borde) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-borde) 6%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border: 1px solid var(--color-primario);
+  border-radius: var(--radio-l);
+}
+
+.lienzo {
+  position: absolute;
+  inset: 0;
+}
+
+/* Pin: círculo blanco con borde oscuro y número */
+.pin {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-circulo);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.pin:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.pin:focus-visible {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 3px;
+}
+
+/* Pin seleccionado: verde sólido */
+.pinActivo {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-color: var(--color-primario);
+}
+
+/* Leyenda inferior: píldora oscura */
+.leyenda {
+  position: absolute;
+  left: var(--espacio-3);
+  bottom: var(--espacio-3);
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-xs);
+}
+
+.indicador {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+  background: var(--color-primario);
+  border-radius: var(--radio-circulo);
+}
+
+@media (min-width: 1024px) {
+  .contenedor {
+    height: 34rem;
+  }
+}
