@@ -1,0 +1,91 @@
+/* EspecificacionServicio.module.css – base: celular */
+
+/* El contenedor usa clase global .tarjeta */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.titulo {
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-texto);
+  opacity: 0.7;
+}
+
+/* Lista de definición (dl) */
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--espacio-4);
+  padding: var(--espacio-3) 0;
+  border-bottom: 1px solid var(--color-borde);
+  font-size: var(--texto-s);
+}
+
+.fila:last-child {
+  border-bottom: none;
+}
+
+.etiqueta {
+  color: var(--color-texto);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.valor {
+  text-align: right;
+  font-size: var(--texto-s);
+}
+
+.valorDestacado {
+  font-weight: 700;
+}
+
+/* Fila especial: bicicleta asegurada (fondo oscuro) */
+.filaBici {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.filaBiciEtiqueta {
+  opacity: 0.8;
+}
+
+.filaBiciValor {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: 700;
+}
+
+/* Acciones */
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+/* El botón de historial usa estilo base (.boton) sin variante de color */
+.botonHistorial {
+  border-color: var(--color-borde);
+  font-weight: 600;
+}
