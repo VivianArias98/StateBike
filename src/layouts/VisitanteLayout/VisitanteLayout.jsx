@@ -1,4 +1,6 @@
+
 import styles from './VisitanteLayout.module.css';
+import Logo from '../../components/Logo/Logo.jsx';
 
 const ENLACES = [
   { nombre: 'Estaciones', ruta: '/' },
@@ -8,24 +10,38 @@ const ENLACES = [
 function VisitanteLayout({ children, itemActivo, fondo = 'claro' }) {
   const conNavegacion = Boolean(itemActivo);
 
-  const claseFondo = fondo === 'blanco' ? styles.principalBlanco : styles.principalClaro;
+  const claseFondo =
+    fondo === 'blanco'
+      ? styles.principalBlanco
+      : styles.principalClaro;
 
   return (
     <div className={styles.raiz}>
       <header className={styles.encabezado}>
         <div className={styles.izquierda}>
-          <span className={styles.marca}>StationBike</span>
+          <a href="/" className={styles.marca}>
+            <Logo
+              altura="1rem"
+              soloIcono
+              variante="oscuro"
+            />
+
+            <span>StationBike</span>
+          </a>
 
           {conNavegacion && (
             <nav className={styles.navegacion} aria-label="Principal">
               {ENLACES.map((enlace) => {
                 const activo = enlace.nombre === itemActivo;
+
                 return (
                   <a
                     key={enlace.nombre}
                     href={enlace.ruta}
                     aria-current={activo ? 'page' : undefined}
-                    className={`${styles.enlace} ${activo ? styles.enlaceActivo : ''}`}
+                    className={`${styles.enlace} ${
+                      activo ? styles.enlaceActivo : ''
+                    }`}
                   >
                     {enlace.nombre}
                   </a>
@@ -37,15 +53,20 @@ function VisitanteLayout({ children, itemActivo, fondo = 'claro' }) {
 
         {conNavegacion && (
           <div className={styles.derecha}>
-            <a href="/login" className={styles.enlace}>Iniciar sesión</a>
-            <a href="/registro" className="boton boton--primario boton--s">
-              Registrarse
+            <a href="/login" className={styles.enlaceLogin}>
+              Iniciar sesión
+            </a>
+
+            <a href="/registro" className={styles.botonRegistro}>
+              REGISTRARSE
             </a>
           </div>
         )}
       </header>
 
-      <main className={`${styles.principal} ${claseFondo}`}>{children}</main>
+      <main className={`${styles.principal} ${claseFondo}`}>
+        {children}
+      </main>
 
       <footer className={styles.pie}>
         <span>StationBike</span>

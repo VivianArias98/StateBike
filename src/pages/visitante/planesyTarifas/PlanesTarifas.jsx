@@ -38,10 +38,11 @@ function PlanesTarifas() {
 
   return (
     <VisitanteLayout itemActivo="Planes y tarifas">
-      <div className={styles.pagina}>
-
+      <div className={styles.raiz}>
         <header>
-          <h1 className={styles.titulo}>Planes y tarifas</h1>
+          <h1 className={`titulo-pagina ${styles.titulo}`}>
+            Planes y tarifas
+          </h1>
 
           <p className={styles.subtitulo}>
             Valores en pesos colombianos (COP). Compáralos y elige el que más te convenga.
@@ -51,8 +52,9 @@ function PlanesTarifas() {
         <div className={styles.barraAlterna}>
           <button
             type="button"
-            className={`boton boton--s ${styles.alternar}`}
+            className={`boton boton--primario boton--s ${styles.alternar}`}
             onClick={() => setMostrarVacio((valor) => !valor)}
+            aria-pressed={mostrarVacio}
           >
             <IconoAlternar />
             <span>Alternar:</span>
@@ -62,9 +64,12 @@ function PlanesTarifas() {
           </button>
         </div>
 
-        <section className={styles.grilla}>
+        <section
+          className={styles.grilla}
+          aria-label="Planes y tarifas disponibles"
+        >
           {planes.length === 0 ? (
-            <p className={styles.vacio}>
+            <p className={styles.vacio} role="status">
               Aún no hay planes disponibles. Vuelve pronto.
             </p>
           ) : (
@@ -75,7 +80,6 @@ function PlanesTarifas() {
         </section>
 
         <BannerAcceso />
-
       </div>
     </VisitanteLayout>
   );

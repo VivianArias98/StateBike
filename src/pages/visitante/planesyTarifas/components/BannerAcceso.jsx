@@ -2,17 +2,34 @@ import styles from './BannerAcceso.module.css';
 
 function BannerAcceso() {
   return (
-    <section className={styles.raiz}>
+    <section
+      className={styles.raiz}
+      aria-labelledby="titulo-banner-acceso"
+    >
       <div>
-        <h2 className={styles.titulo}>¿Quieres adquirir un plan?</h2>
+        <h2
+          id="titulo-banner-acceso"
+          className={styles.titulo}
+        >
+          ¿Quieres adquirir un plan?
+        </h2>
+
         <p className={styles.texto}>
-          Para adquirir un plan debes registrarte e iniciar sesión
+          Para adquirir un plan debes registrarte e iniciar sesión.
         </p>
       </div>
 
       <div className={styles.acciones}>
-        <a href="/login" className="boton boton--s">Iniciar sesión</a>
-        <a href="/registro" className="boton boton--primario boton--s">Registrarse</a>
+        <a href="/login" className="boton boton--s">
+          Iniciar sesión
+        </a>
+
+        <a
+          href="/registro"
+          className="boton boton--primario boton--s"
+        >
+          Registrarse
+        </a>
       </div>
     </section>
   );
