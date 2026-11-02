@@ -2,10 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--espacio-2);
-  min-height: 15rem;
   padding: var(--espacio-5);
   color: var(--color-texto);
-  background: transparent;
+  background: var(--color-superficie);
   border: 1px solid var(--color-borde);
   border-radius: var(--radio-l);
 }
@@ -28,7 +27,8 @@
 }
 
 .destacado .etiqueta {
-  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  border-color: var(--color-secundario-texto);
 }
 
 .nombre {
@@ -46,14 +46,21 @@
 .separador {
   height: 1px;
   margin-top: auto;
-  background: currentColor;
-  opacity: 0.2;
+  background: var(--color-borde);
+}
+
+.destacado .separador {
+  background: var(--color-secundario-texto);
 }
 
 .referencia {
   margin-top: var(--espacio-3);
   font-size: var(--texto-xs);
-  opacity: 0.8;
+  color: var(--color-texto);
+}
+
+.destacado .referencia {
+  color: var(--color-secundario-texto);
 }
 
 .minutos {

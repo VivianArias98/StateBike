@@ -17,7 +17,7 @@ import styles from './Logo.module.css';
  */
 function Logo({ altura = '2.5rem', soloIcono = false, variante = 'claro' }) {
   const colorSecundario = variante === 'oscuro' ? '#FFFFFF' : '#050607';
-  const viewBox = soloIcono ? '0 0 140 100' : '0 0 262 148';
+  const viewBox = soloIcono ? '0 0 190 100' : '0 0 262 148';
 
   return (
     <svg

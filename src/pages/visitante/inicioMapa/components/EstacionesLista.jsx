@@ -17,11 +17,21 @@ function IconoBuscar() {
   );
 }
 
-function EstacionesLista({ estaciones, busqueda, onBuscar, seleccionadaId, onSeleccionar }) {
+function EstacionesLista({
+  estaciones,
+  busqueda,
+  onBuscar,
+  seleccionadaId,
+  onSeleccionar,
+}) {
   return (
-    <section className={styles.raiz}>
+    <section
+      className={styles.raiz}
+      aria-label="Listado de estaciones"
+    >
       <div className={styles.buscador}>
         <IconoBuscar />
+
         <input
           type="search"
           className={styles.inputBuscar}
@@ -44,14 +54,22 @@ function EstacionesLista({ estaciones, busqueda, onBuscar, seleccionadaId, onSel
                 className={`${styles.tarjeta} ${activa ? styles.activa : ''}`}
                 onClick={() => onSeleccionar(estacion.id)}
               >
-                <span className={styles.nombre}>{estacion.nombre}</span>
-                <span className={styles.zona}>{estacion.zona}</span>
+                <span className={styles.nombre}>
+                  {estacion.nombre}
+                </span>
+
+                <span className={styles.zona}>
+                  {estacion.zona}
+                </span>
 
                 <span className={styles.estado}>
                   <span className={styles.pastilla}>
                     {estacion.bicicletas} bicicletas disponibles
                   </span>
-                  <span>{estacion.anclajes} anclajes libres</span>
+
+                  <span>
+                    {estacion.anclajes} anclajes libres
+                  </span>
                 </span>
               </button>
             </li>
@@ -59,7 +77,9 @@ function EstacionesLista({ estaciones, busqueda, onBuscar, seleccionadaId, onSel
         })}
 
         {estaciones.length === 0 && (
-          <li className={styles.vacio}>No encontramos estaciones con ese nombre.</li>
+          <li className={styles.vacio} role="status">
+            No encontramos estaciones con ese nombre.
+          </li>
         )}
       </ul>
     </section>
