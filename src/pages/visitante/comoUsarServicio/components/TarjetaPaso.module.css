@@ -1,0 +1,71 @@
+/* Paso: tarjeta blanca; chip con el verde de la app; icono negro. */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde-suave);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.numero {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+}
+
+.etiqueta {
+  height: auto;
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-fondo-pagina);
+  color: var(--color-secundario);
+  border-color: var(--color-borde-suave);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.icono {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-s);
+}
+
+.icono svg {
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+}
+
+.titulo {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.texto {
+  flex: 1;
+  font-size: var(--texto-s);
+  line-height: 1.5;
+}
+
+.fase {
+  padding-top: var(--espacio-3);
+  border-top: 1px solid var(--color-borde-suave);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-secundario);
+}

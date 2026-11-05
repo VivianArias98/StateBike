@@ -12,9 +12,96 @@
   width: 100%;
   min-height: var(--alto-control);
   padding: 0 var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+}
+
+.atajo {
+  flex-shrink: 0;
+  padding: var(--espacio-1) var(--espacio-2);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-s);
+}
+
+/* Resumen: tres cifras de la red en tarjetas blancas */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espacio-2);
+  list-style: none;
+}
+
+.resumenItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
   background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-m);
+}
+
+.resumenValor {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.resumenEtiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  opacity: 0.75;
+}
+
+/* Tarjeta NFC al final de la lista */
+.nfc {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+}
+
+.nfcIcono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-s);
+}
+
+.nfcIcono svg {
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+}
+
+.nfcTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.nfcTitulo {
+  font-size: var(--texto-s);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.nfcDescripcion {
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  opacity: 0.8;
 }
 
 .buscador svg {
@@ -58,9 +145,9 @@
   gap: var(--espacio-2);
   width: 100%;
   padding: var(--espacio-4);
-  background: var(--color-fondo-pagina);
+  background: var(--color-superficie);
   color: var(--color-texto);
-  border: 2px solid var(--color-fondo-pagina);
+  border: 2px solid var(--color-borde-suave);
   border-radius: var(--radio-l);
   text-align: left;
   cursor: pointer;
@@ -78,6 +165,43 @@
 
 .activa {
   border-color: var(--color-primario);
+  background: var(--color-fondo-pagina);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  width: 100%;
+}
+
+.iconoEstacion {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-s);
+}
+
+.iconoEstacion svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+}
+
+.anclajes {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+}
+
+.anclajes svg,
+.pastilla svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
 }
 
 .nombre {
@@ -106,10 +230,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--espacio-1);
   padding: var(--espacio-1) var(--espacio-3);
   background: var(--color-primario);
   color: var(--color-primario-texto);
-  border-radius: var(--radio-s);
+  border-radius: var(--radio-pastilla);
   font-size: var(--texto-xs);
   font-weight: 700;
   white-space: nowrap;
@@ -128,5 +253,9 @@
 @media (min-width: 768px) {
   .tarjeta {
     padding: var(--espacio-4);
+  }
+
+  .resumenValor {
+    font-size: var(--texto-3xl);
   }
 }

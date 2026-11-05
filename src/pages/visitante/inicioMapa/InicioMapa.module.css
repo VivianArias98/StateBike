@@ -37,3 +37,70 @@
     --alto-mapa: 37.5rem;
   }
 }
+/* Columna del mapa: mapa y panel de la estación seleccionada */
+.columnaMapa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  min-width: 0;
+}
+
+.panelEstacion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.infoEstacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.codigoEstacion {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  opacity: 0.7;
+}
+
+.nombreEstacion {
+  font-size: var(--texto-m);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.metaEstacion {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  opacity: 0.8;
+}
+
+.botonLlegar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  border-radius: var(--radio-pastilla);
+  text-decoration: none;
+}
+
+.botonLlegar svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+}
+
+@media (min-width: 768px) {
+  .panelEstacion {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio-4) var(--espacio-5);
+  }
+}

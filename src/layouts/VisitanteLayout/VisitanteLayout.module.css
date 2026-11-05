@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
-/* CONTENEDOR PRINCIPAL */
+/* Marco del visitante: la página ocupa al menos toda la altura de la ventana
+   y el footer queda abajo aunque el contenido sea corto. */
 .raiz {
+  --fuente-titulo: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --fuente-texto: 'Inter', system-ui, sans-serif;
+  --fuente-mono: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--fuente-texto);
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -8,132 +14,11 @@
   background: var(--color-fondo-pagina);
 }
 
-/* BARRA SUPERIOR */
-.encabezado {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 3.625rem;
-  padding: 0 3rem;
-  background: #050706;
-  color: #ffffff;
-  border-bottom: 1px solid #263326;
-  font-size: var(--texto-s);
-  flex-shrink: 0;
-}
-
-/* LADO IZQUIERDO */
-.izquierda {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  min-width: 0;
-}
-
-/* MARCA Y LOGO */
-.marca {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding-right: 1.25rem;
-  border-right: 1px solid #253025;
-  color: #ffffff;
-  font-size: 1.05rem;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* Control del tamaño del SVG del logo */
-.marca svg {
-  display: block;
-  width: auto;
-  height: 1rem;
-  max-width: 2rem;
-  flex-shrink: 0;
-  overflow: visible;
-}
-
-/* NAVEGACIÓN */
-.navegacion {
-  display: flex;
-  align-items: center;
-  height: 3.625rem;
-  gap: 1.25rem;
-}
-
-.enlace {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 0 0.2rem;
-  border-bottom: 3px solid transparent;
-  color: #d0d0d0;
-  text-decoration: none;
-  opacity: 0.9;
-  white-space: nowrap;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.enlace:hover,
-.enlaceLogin:hover {
-  color: #ffffff;
-}
-
-/* ENLACE ACTIVO */
-.enlaceActivo {
-  color: #ffffff;
-  font-weight: 600;
-  border-bottom-color: #55d83e;
-  opacity: 1;
-}
-
-/* LADO DERECHO */
-.derecha {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-shrink: 0;
-}
-
-.enlaceLogin {
-  color: #eeeeee;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.2s ease;
-}
-
-/* BOTÓN REGISTRARSE */
-.botonRegistro {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 7.5rem;
-  height: 1.9rem;
-  padding: 0 1.25rem;
-  border-radius: 999px;
-  background: #55d83e;
-  color: #071006;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.botonRegistro:hover {
-  background: #6bea50;
-  transform: translateY(-1px);
-}
-
-/* CONTENIDO PRINCIPAL */
+/* Contenido principal. Base = celular */
 .principal {
   flex: 1;
   display: flex;
-  padding: var(--espacio-4) 2.5rem;
+  padding: var(--espacio-4);
 }
 
 .principalClaro {
@@ -144,68 +29,21 @@
   background: var(--color-superficie);
 }
 
-/* PIE DE PÁGINA */
-.pie {
-  display: flex;
-  align-items: center;
-  padding: var(--espacio-3) var(--espacio-5);
-  background: var(--color-secundario);
-  color: var(--color-secundario-texto);
-  font-size: var(--texto-xs);
-}
-
-/* TABLET */
-@media (max-width: 767px) {
-  .encabezado {
-    padding: 0.75rem 1rem;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .izquierda {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .marca {
-    padding-right: 0.75rem;
-  }
-
-  .navegacion {
-    height: 2.5rem;
-    gap: 0.75rem;
-  }
-
-  .derecha {
-    gap: 0.75rem;
-  }
-
+@media (min-width: 768px) {
   .principal {
-    padding: var(--espacio-4);
+    padding: var(--espacio-5);
   }
 }
 
-/* MÓVIL PEQUEÑO */
-@media (max-width: 480px) {
-  .encabezado {
-    justify-content: center;
-  }
-
-  .izquierda,
-  .derecha {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .navegacion {
-    gap: 0.6rem;
-  }
-
-  .enlace {
-    font-size: var(--texto-xs);
-  }
-
+@media (min-width: 1024px) {
   .principal {
-    padding: var(--espacio-3);
+    padding: var(--espacio-6) var(--espacio-5);
   }
+}
+
+/* Títulos con la fuente del mockup (solo dentro de las pantallas del visitante) */
+.raiz h1,
+.raiz h2,
+.raiz h3 {
+  font-family: var(--fuente-titulo);
 }

@@ -81,7 +81,7 @@ function RegistroForm() {
       </div>
 
       <label className={styles.terminos}>
-        <input type="checkbox" />
+        <input type="checkbox" className={styles.casilla} />
         Acepto los términos y condiciones y el tratamiento de mis datos personales
       </label>
 

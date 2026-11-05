@@ -1,0 +1,41 @@
+.raiz {
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde-suave);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-5) var(--espacio-4);
+  text-align: center;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-circulo);
+  font-size: var(--texto-l);
+  font-weight: 700;
+}
+
+.nombre {
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+
+.cita {
+  font-size: var(--texto-xs);
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.rol {
+  background: var(--color-fondo-pagina);
+  color: var(--color-secundario);
+  border-color: var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}

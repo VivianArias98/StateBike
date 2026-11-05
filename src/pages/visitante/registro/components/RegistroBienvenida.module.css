@@ -23,7 +23,7 @@
 .separador {
   height: 1px;
   margin-bottom: var(--espacio-5);
-  background: var(--color-borde);
+  background: var(--color-borde-suave);
 }
 
 .pasos {

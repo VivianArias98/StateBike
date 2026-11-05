@@ -1,0 +1,44 @@
+/* Pregunta: tarjeta blanca; icono dentro de una caja verde clara. */
+.raiz {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-4);
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde-suave);
+}
+
+.icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-fondo-pagina);
+  color: var(--color-secundario);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-s);
+}
+
+.icono svg {
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.pregunta {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.respuesta {
+  font-size: var(--texto-s);
+  line-height: 1.5;
+  opacity: 0.85;
+}

@@ -1,0 +1,176 @@
+/* Navbar del visitante. Base = celular: barra con logo y botón Menú,
+   el panel (enlaces y botones) se despliega al pulsar. */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  min-height: 4rem;
+  padding: var(--espacio-2) var(--espacio-4);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.botonMenu {
+  gap: var(--espacio-2);
+  border-radius: var(--radio-m);
+}
+
+.botonMenu svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+}
+
+/* Panel oculto en celular hasta que se abre el menú */
+.panel {
+  display: none;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4) var(--espacio-4);
+  border-top: 1px solid var(--color-borde-suave);
+}
+
+.panelAbierto {
+  display: flex;
+}
+
+.navegacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+/* Enlace normal: texto claro. Activo: píldora verde oscuro con letra verde */
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: var(--espacio-2) var(--espacio-4);
+  border-radius: var(--radio-m);
+  color: var(--color-texto-inverso);
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.enlace:hover {
+  opacity: 1;
+}
+
+.enlaceActivo {
+  background: var(--color-secundario);
+  color: var(--color-primario);
+  font-weight: 600;
+  opacity: 1;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.acciones > * {
+  flex: 1 1 auto;
+}
+
+.pastilla {
+  border-radius: var(--radio-m);
+  text-decoration: none;
+  color: var(--color-texto-inverso);
+}
+
+.registrarse {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-color: var(--color-primario);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Icono de la persona (cuenta) a la derecha */
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-circulo);
+  background: var(--color-secundario);
+  color: var(--color-primario);
+}
+
+.avatar svg {
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+}
+
+/* Escritorio: todo en una sola fila. Entre 768 y 1023px se usa el menú plegable */
+@media (min-width: 1024px) {
+  .raiz {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--espacio-6);
+  }
+
+  .barra {
+    padding: 0;
+  }
+
+  .botonMenu {
+    display: none;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    gap: var(--espacio-5);
+    margin-left: var(--espacio-6);
+    padding: 0;
+    border-top: none;
+  }
+
+  .navegacion {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--espacio-2);
+  }
+
+  .enlace {
+    height: 2.5rem;
+    padding: 0 var(--espacio-4);
+    font-size: var(--texto-s);
+    white-space: nowrap;
+  }
+
+  .acciones {
+    flex-wrap: nowrap;
+    gap: var(--espacio-3);
+  }
+
+  .acciones > * {
+    flex: 0 0 auto;
+  }
+
+  .pastilla {
+    height: 2.5rem;
+  }
+}

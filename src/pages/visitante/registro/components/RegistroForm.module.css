@@ -30,17 +30,17 @@
   font-weight: 400;
 }
 
-/* Campos en verde oscuro, con borde fino */
+/* Campos verde oscuro, un poco más oscuros que la tarjeta */
 .entrada {
   height: var(--alto-control);
-  background: color-mix(in srgb, var(--color-secundario) 70%, black);
+  background: var(--color-campo-oscuro);
   color: var(--color-texto-inverso);
-  border: 1px solid color-mix(in srgb, var(--color-texto-inverso) 20%, transparent);
+  border: 1px solid var(--color-borde-suave);
   font-size: var(--texto-xs);
 }
 
 .entrada::placeholder {
-  color: color-mix(in srgb, var(--color-texto-inverso) 45%, transparent);
+  color: var(--color-placeholder);
 }
 
 .control {
@@ -76,34 +76,34 @@
   outline-offset: 2px;
 }
 
-/* Checkbox en verde oscuro, no blanco */
 .terminos {
   display: flex;
   align-items: flex-start;
   gap: var(--espacio-2);
   margin-bottom: var(--espacio-4);
-  font-size: 0.6875rem;
+  font-size: var(--texto-xs);
   line-height: 1.4;
 }
 
-.terminos input[type="checkbox"] {
+/* Casilla verde oscuro, no blanca */
+.casilla {
   appearance: none;
   flex-shrink: 0;
   width: var(--espacio-4);
   height: var(--espacio-4);
-  margin-top: 1px;
-  background: var(--color-secundario);
-  border: 1px solid color-mix(in srgb, var(--color-texto-inverso) 40%, transparent);
+  margin-top: 0.125rem;
+  background: var(--color-campo-oscuro);
+  border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-xs);
   cursor: pointer;
 }
 
-.terminos input[type="checkbox"]:checked {
+.casilla:checked {
   background: var(--color-primario);
   border-color: var(--color-primario);
 }
 
-.terminos input[type="checkbox"]:focus-visible {
+.casilla:focus-visible {
   outline: 2px solid var(--color-foco);
   outline-offset: 2px;
 }
