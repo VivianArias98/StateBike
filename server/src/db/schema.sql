@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS perfiles (
     CHECK (rol IN ('USUARIO', 'ADMINISTRADOR')),
   fecha_nacimiento TEXT,
   telefono TEXT,
+  ultimo_acceso TEXT,
   creado TEXT NOT NULL DEFAULT (datetime('now'))
 );

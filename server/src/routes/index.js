@@ -1,9 +1,11 @@
 import { Router } from "express";
 import health from "./health.routes.js";
+import auth from "./auth.routes.js";
 
 const router = Router();
 
 router.use(health);
-//Aquí se irán montando: /auth, /estaciones, /bicicletas, /planes...
+router.use("/auth", auth);
+// Aquí se irán montando: /estaciones, /bicicletas, /planes...
 
 export default router;

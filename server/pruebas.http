@@ -1,0 +1,36 @@
+# Pruebas de la API. Antes de usar:
+# 1) Crea .vscode/settings.json con rest-client.environmentVariables > local
+#    (adminCorreo, adminClave, usuarioCorreo, usuarioClave). Ese archivo no se versiona.
+# 2) Elige el entorno "local" (Rest Client: Switch Environment).
+
+@host = http://localhost:4000/api
+
+### 1. Registro
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Laura Gómez Rojas",
+  "fechaNacimiento": "2001-05-14",
+  "correo": "{{usuarioCorreo}}",
+  "contrasena": "{{usuarioClave}}",
+  "confirmacion": "{{usuarioClave}}",
+  "aceptaTerminos": true
+}
+
+### 2. Login
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{ "correo": "{{usuarioCorreo}}", "contrasena": "{{usuarioClave}}" }
+
+### 3. Perfil con el token
+GET {{host}}/auth/me
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 4. Login del administrador (el del seed)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{ "correo": "{{adminCorreo}}", "contrasena": "{{adminClave}}" }
