@@ -44,11 +44,13 @@ function formatearTiempo(totalSegundos) {
   return `${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
 }
 
-function ViajeEnCursoPage() {
+// onDevolver({ viaje, segundos }): lo llama la página que controla el flujo de devolución.
+// segundosIniciales: permite conservar el cronómetro si el usuario vuelve desde la confirmación.
+function ViajeEnCursoPage({ onDevolver, segundosIniciales = VIAJE.segundosIniciales }) {
   const [viaje] = useState(VIAJE);
   const [estaciones] = useState(ESTACIONES);
   const [ruta] = useState(RUTA);
-  const [segundos, setSegundos] = useState(VIAJE.segundosIniciales);
+  const [segundos, setSegundos] = useState(segundosIniciales);
 
   // Cronómetro en vivo: suma un segundo cada segundo
   useEffect(() => {
@@ -85,11 +87,11 @@ function ViajeEnCursoPage() {
     },
   ];
 
-  //Pendiente: lógica para devolver la bicicleta
-  const devolverBicicleta = () => {};
+  // Al devolver, la página del flujo recibe el viaje y el tiempo usado
+  const devolverBicicleta = () => onDevolver?.({ viaje, segundos });
 
   return (
-    <UsuarioLayout itemActivo="Mapa">
+    <UsuarioLayout itemActivo="Viajes">
       <div className={styles.raiz}>
         <header>
           <div className={styles.tituloFila}>
