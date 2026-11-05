@@ -107,7 +107,7 @@ export function modificar(id, datos = {}) {
 export function inactivar(id) {
   const estacion = obtener(id);
   if (estacion.estado === "INACTIVE") throw new AppError(409, "estacion_inactiva");
-  if (estacion.bicicletas > 0) throw new AppError(409, "estacion_con_bicicletas");
+  if (estacion.anclajesOcupados > 0) throw new AppError(409, "estacion_con_bicicletas");
 
   repositorio.cambiarEstado(id, "INACTIVE");
   return { mensaje: MENSAJES.estacion_inactivada, estacion: repositorio.buscarPorId(id) };

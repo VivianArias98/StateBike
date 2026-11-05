@@ -24,4 +24,11 @@ export const MENSAJES = {
     sin_estaciones_registradas: "No hay estaciones registradas",
     sin_estaciones_disponibles: "No hay estaciones disponibles",
     estaciones_sin_coincidencias: "No se encontraron estaciones con ese nombre",
+     // Bicicletas (HU_14, HU_20)
+    codigo_bicicleta_duplicado: "El código de la bicicleta ya se encuentra registrado",
+    estacion_sin_anclajes_libres: "La estación no tiene anclajes libres",
+    bicicleta_registrada: "REGISTRO DE BICICLETA EXITOSO",
+    bicicleta_en_uso: "La bicicleta está en uso",
+    bicicleta_actualizada: "BICICLETA ACTUALIZADA CORRECTAMENTE",
+    bicicleta_inactivada: "BICICLETA INACTIVADA CORRECTAMENTE",
   };

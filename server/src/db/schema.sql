@@ -30,3 +30,12 @@ CREATE TABLE IF NOT EXISTS anclajes (
     CHECK (estado IN ('LIBRE', 'OCUPADO')),
   UNIQUE (estacion_id, numero)
 );
+
+CREATE TABLE IF NOT EXISTS bicicletas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  codigo TEXT NOT NULL UNIQUE COLLATE NOCASE,
+  estado TEXT NOT NULL DEFAULT 'DISPONIBLE'
+    CHECK (estado IN ('DISPONIBLE', 'EN_USO', 'MANTENIMIENTO', 'INACTIVA')),
+  anclaje_id INTEGER UNIQUE REFERENCES anclajes(id),  -- NULL si está en uso o inactiva
+  creado TEXT NOT NULL DEFAULT (datetime('now'))
+);
