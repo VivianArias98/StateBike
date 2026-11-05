@@ -1,0 +1,84 @@
+# Pruebas de la API. Antes de usar:
+# 1) Crea .vscode/settings.json con rest-client.environmentVariables > local
+#    (adminCorreo, adminClave, usuarioCorreo, usuarioClave). Ese archivo no se versiona.
+# 2) Elige el entorno "local" (Rest Client: Switch Environment).
+
+# Las respuestas con "# @name" quedan guardadas hasta que se vuelva a ejecutar esa petición.
+# Para cambiar de administrador a usuario, ejecuta primero el login que quieras usar.
+
+@host = http://localhost:4000/api
+
+### 1. Registro
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Laura Gómez Rojas",
+  "fechaNacimiento": "2001-05-14",
+  "correo": "{{usuarioCorreo}}",
+  "contrasena": "{{usuarioClave}}",
+  "confirmacion": "{{usuarioClave}}",
+  "aceptaTerminos": true
+}
+
+### 2. Login
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{ "correo": "{{usuarioCorreo}}", "contrasena": "{{usuarioClave}}" }
+
+### 3. Perfil con el token
+GET {{host}}/auth/me
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 4. Login del administrador (el del seed)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{ "correo": "{{adminCorreo}}", "contrasena": "{{adminClave}}" }
+
+### 5. Login admin (guarda el token)
+# @name adminLogin
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{ "correo": "{{adminCorreo}}", "contrasena": "{{adminClave}}" }
+
+### 6. Estaciones públicas (sin sesión)
+GET {{host}}/estaciones
+
+### 7. Registrar estación
+POST {{host}}/admin/estaciones
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "nombre": "Estación centro",
+  "direccion": "Cra 20#11-15",
+  "capacidad": 12,
+  "lat": 5.5353,
+  "lng": -73.3678
+}
+
+### 8. Listar como administrador
+GET {{host}}/admin/estaciones
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 9. Modificar estación 1
+PUT {{host}}/admin/estaciones/1
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "nombre": "Estación centro", "direccion": "Cra 20#11-20", "lat": 5.536, "lng": -73.368 }
+
+### 10. Inactivar estación 1
+PATCH {{host}}/admin/estaciones/1/inactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 11. Estaciones públicas con búsqueda
+GET {{host}}/estaciones?q=centro
+
+### 12. Ruta de admin con token de USUARIO (debe dar 403)
+GET {{host}}/admin/estaciones
+Authorization: Bearer {{login.response.body.acceso}}

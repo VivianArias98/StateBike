@@ -1,0 +1,27 @@
+//Códigos de error → texto de la interfaz (HU_7, HU_8, HU_22)
+export const MENSAJES = {
+    campos_vacios: "Hay campos obligatorios vacíos",
+    correo_invalido: "Correo inválido",
+    contrasena_debil: "La contraseña no cumple los requisitos",
+    contrasenas_no_coinciden: "Las contraseñas no coinciden",
+    menor_de_edad: "Debe ser mayor de edad para registrarse",
+    terminos_no_aceptados: "Debe aceptar los términos y condiciones para registrarse",
+    correo_ya_registrado: "El correo ya se encuentra registrado",
+    credenciales_invalidas: "Correo o contraseña incorrectos",
+    usuario_inactivo: "La cuenta se encuentra inactiva. Contacte al administrador",
+    sin_permisos: "No tiene permisos para acceder a esta sección",
+    cuenta_creada: "CUENTA CREADA CON ÉXITO",
+      // Estaciones (HU_9, HU_11, HU_12, HU_13)
+    campos_obligatorios_vacios: "Campos obligatorios vacíos",
+    descripcion_invalida: "Descripción inválida (nombre máx 70, dirección máx 70)",
+    numero_invalido: "Número inválido",
+    ubicacion_invalida: "Ubicación Inválida",
+    nombre_estacion_duplicado: "El nombre de la estación ya se encuentra registrado",
+    estacion_registrada: "Estación registrada con éxito",
+    estacion_modificada: "Estación modificada con éxito",
+    estacion_inactivada: "La estación ha sido inactivada de forma correcta",
+    estacion_con_bicicletas: "La estación tiene bicicletas asignadas, reubíquelas antes de inactivar",
+    sin_estaciones_registradas: "No hay estaciones registradas",
+    sin_estaciones_disponibles: "No hay estaciones disponibles",
+    estaciones_sin_coincidencias: "No se encontraron estaciones con ese nombre",
+  };
