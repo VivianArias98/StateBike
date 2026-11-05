@@ -1,0 +1,232 @@
+/* Base = celular: todo en una columna. Desde 768px y 1024px se agregan columnas. */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  width: 100%;
+  max-width: var(--ancho-maximo);
+  margin: 0 auto;
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-2);
+  padding-bottom: var(--espacio-4);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.subtitulo {
+  font-size: var(--texto-s);
+  opacity: 0.8;
+}
+
+/* Bloque principal oscuro: la clase global contexto-oscuro pone el texto claro */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+  min-height: 16rem;
+  padding: var(--espacio-5);
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  border-radius: var(--radio-l);
+}
+
+.heroTexto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+}
+
+.heroTitulo {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.heroDescripcion {
+  max-width: 36rem;
+  font-size: var(--texto-s);
+  opacity: 0.85;
+}
+
+.heroMarca {
+  align-self: flex-end;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}
+
+.dosColumnas,
+.valores,
+.equipo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+
+.valores {
+  gap: var(--espacio-3);
+}
+
+.tituloSeccion {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+}
+
+.equipoBloque {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.equipoBloque .subtitulo {
+  margin-bottom: var(--espacio-3);
+}
+
+.cita {
+  padding: var(--espacio-6) var(--espacio-4);
+  text-align: center;
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  background: var(--color-superficie);
+}
+
+.contacto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.contactoTexto {
+  margin-top: var(--espacio-3);
+  font-size: var(--texto-m);
+  font-weight: 600;
+}
+
+.correo {
+  text-decoration: underline;
+}
+
+.nota {
+  margin-top: var(--espacio-2);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}
+
+@media (min-width: 768px) {
+  .titulo {
+    font-size: var(--texto-4xl);
+  }
+
+  .heroTitulo {
+    font-size: var(--texto-3xl);
+  }
+
+  .dosColumnas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .valores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .equipo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero {
+    padding: var(--espacio-7);
+  }
+
+  .contacto {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio-5) var(--espacio-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .valores {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .equipo {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .heroTitulo {
+    font-size: var(--texto-4xl);
+  }
+}
+
+/* Chips y botones con los colores y la forma del mockup */
+.chipProyecto {
+  height: auto;
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-borde-suave);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.canal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-texto);
+}
+
+.canalIcono {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-xs);
+}
+
+.canalIcono svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.botonVerde {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--alto-control);
+  padding: 0 var(--espacio-5);
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+}

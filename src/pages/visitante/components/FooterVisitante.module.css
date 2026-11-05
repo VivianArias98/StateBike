@@ -1,0 +1,19 @@
+.raiz {
+  display: flex;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-xs);
+}
+
+.marca {
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-3) var(--espacio-5);
+  }
+}

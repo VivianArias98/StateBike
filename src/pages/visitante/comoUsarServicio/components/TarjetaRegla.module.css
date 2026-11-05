@@ -1,0 +1,93 @@
+/* Tarjeta de regla: blanca, chip según el tono y el icono arriba a la derecha. */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  box-shadow: var(--sombra-tarjeta);
+  border: 1px solid var(--color-borde-suave);
+}
+
+.cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.chipOscuro,
+.chipVerde,
+.chipAlerta {
+  height: auto;
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.chipOscuro {
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-color: var(--color-superficie-inversa);
+}
+
+.chipVerde {
+  background: var(--color-fondo-pagina);
+  color: var(--color-secundario);
+  border-color: var(--color-borde-suave);
+}
+
+.chipAlerta {
+  background: var(--color-error-fondo);
+  color: var(--color-error-texto);
+  border-color: var(--color-error-borde);
+}
+
+.icono {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--color-secundario);
+}
+
+.iconoAlerta {
+  color: var(--color-error-texto);
+}
+
+.icono svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+}
+
+.codigo {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}
+
+.titulo {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.texto {
+  flex: 1;
+  font-size: var(--texto-s);
+  line-height: 1.5;
+}
+
+.dato {
+  padding-top: var(--espacio-3);
+  border-top: 1px solid var(--color-borde-suave);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-secundario);
+  font-weight: 700;
+}
+
+.datoAlerta {
+  color: var(--color-error-texto);
+}

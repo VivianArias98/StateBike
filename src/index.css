@@ -90,6 +90,11 @@
    
      /* Fondo de las barras de progreso */
      --color-pista: rgba(5, 6, 7, 0.12);
+
+     /* Visitante: campos oscuros y bordes suaves sobre paneles oscuros.
+        Son tokens nuevos: no los usa el administrador. */
+     --color-campo-oscuro: color-mix(in srgb, var(--paleta-verde-oscuro) 40%, var(--paleta-negro));
+     --color-borde-suave: rgba(5, 6, 7, 0.15);
    
      /* Mapa (Leaflet): filtro aplicado a los tiles */
      --filtro-mapa: grayscale(1);
@@ -131,6 +136,9 @@
      --color-sidebar-item: rgba(255, 255, 255, 0.1);
    
      --color-pista: rgba(255, 255, 255, 0.15);
+
+     --color-campo-oscuro: color-mix(in srgb, var(--paleta-verde-oscuro) 40%, var(--paleta-negro));
+     --color-borde-suave: rgba(255, 255, 255, 0.2);
    
      --filtro-mapa: grayscale(1) invert(1);
    }
@@ -171,6 +179,7 @@
      --radio-m: 0.75rem;     /* 12px (botones, campos) */
      --radio-l: 1rem;        /* 16px (tarjetas, tablas) */
      --radio-circulo: 50%;   /* solo para círculos perfectos */
+  --radio-pastilla: 1.5rem; /* botones y chips redondeados tipo píldora */
    
      /* Tamaños fijos */
      --alto-control: 2.75rem;          /* 44px: botones y campos (mínimo táctil) */
@@ -459,6 +468,7 @@
        --color-foco: var(--paleta-verde);
        --color-input-fondo: var(--paleta-negro);
        --color-placeholder: rgba(255, 255, 255, 0.8);
+     --color-borde-suave: rgba(255, 255, 255, 0.2);
    
        color: var(--color-texto);
      }

@@ -1,0 +1,43 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4);
+}
+
+.codigo {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.icono {
+  display: inline-flex;
+  color: var(--color-primario);
+}
+
+.icono svg {
+  width: var(--espacio-5);
+  height: var(--espacio-5);
+}
+
+.texto {
+  flex: 1;
+  font-size: var(--texto-s);
+  line-height: 1.5;
+}
+
+.etiqueta {
+  align-self: flex-end;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}

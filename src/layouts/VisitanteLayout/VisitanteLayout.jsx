@@ -1,76 +1,34 @@
+import { useState } from 'react';
 
+import NavbarVisitante from '../../pages/visitante/components/NavbarVisitante.jsx';
+import FooterVisitante from '../../pages/visitante/components/FooterVisitante.jsx';
 import styles from './VisitanteLayout.module.css';
-import Logo from '../../components/Logo/Logo.jsx';
 
-const ENLACES = [
-  { nombre: 'Estaciones', ruta: '/' },
-  { nombre: 'Planes y tarifas', ruta: '/planes' },
-];
-
-function VisitanteLayout({ children, itemActivo, fondo = 'claro' }) {
-  const conNavegacion = Boolean(itemActivo);
+// Marco de todas las pantallas del visitante: navbar arriba, contenido y footer.
+// Props:
+//   itemActivo → nombre del enlace del navbar que se marca como activo
+//   fondo      → 'claro' (verde, por defecto) | 'blanco' (pantalla del mapa)
+function VisitanteLayout({ children, itemActivo, fondo = 'claro', conUsuario = false }) {
+  // El estado del menú móvil vive aquí, no en la pantalla
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const claseFondo =
-    fondo === 'blanco'
-      ? styles.principalBlanco
-      : styles.principalClaro;
+    fondo === 'blanco' ? styles.principalBlanco : styles.principalClaro;
 
   return (
     <div className={styles.raiz}>
-      <header className={styles.encabezado}>
-        <div className={styles.izquierda}>
-          <a href="/" className={styles.marca}>
-            <Logo
-              altura="1rem"
-              soloIcono
-              variante="oscuro"
-            />
-
-            <span>StationBike</span>
-          </a>
-
-          {conNavegacion && (
-            <nav className={styles.navegacion} aria-label="Principal">
-              {ENLACES.map((enlace) => {
-                const activo = enlace.nombre === itemActivo;
-
-                return (
-                  <a
-                    key={enlace.nombre}
-                    href={enlace.ruta}
-                    aria-current={activo ? 'page' : undefined}
-                    className={`${styles.enlace} ${
-                      activo ? styles.enlaceActivo : ''
-                    }`}
-                  >
-                    {enlace.nombre}
-                  </a>
-                );
-              })}
-            </nav>
-          )}
-        </div>
-
-        {conNavegacion && (
-          <div className={styles.derecha}>
-            <a href="/login" className={styles.enlaceLogin}>
-              Iniciar sesión
-            </a>
-
-            <a href="/registro" className={styles.botonRegistro}>
-              REGISTRARSE
-            </a>
-          </div>
-        )}
-      </header>
+      <NavbarVisitante
+        itemActivo={itemActivo}
+        conUsuario={conUsuario}
+        menuAbierto={menuAbierto}
+        onAlternarMenu={() => setMenuAbierto((valor) => !valor)}
+      />
 
       <main className={`${styles.principal} ${claseFondo}`}>
         {children}
       </main>
 
-      <footer className={styles.pie}>
-        <span>StationBike</span>
-      </footer>
+      <FooterVisitante />
     </div>
   );
 }

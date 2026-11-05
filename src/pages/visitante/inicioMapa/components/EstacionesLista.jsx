@@ -1,3 +1,4 @@
+import { Icono } from '../../components/IconosVisitante.jsx';
 import styles from './EstacionesLista.module.css';
 
 function IconoBuscar() {
@@ -19,6 +20,7 @@ function IconoBuscar() {
 
 function EstacionesLista({
   estaciones,
+  resumen = [],
   busqueda,
   onBuscar,
   seleccionadaId,
@@ -40,7 +42,20 @@ function EstacionesLista({
           value={busqueda}
           onChange={(evento) => onBuscar(evento.target.value)}
         />
+
+        <span className={styles.atajo} aria-hidden="true">CMD+K</span>
       </div>
+
+      {resumen.length > 0 && (
+        <ul className={styles.resumen} aria-label="Resumen de la red">
+          {resumen.map((item) => (
+            <li key={item.etiqueta} className={styles.resumenItem}>
+              <span className={styles.resumenValor}>{item.valor}</span>
+              <span className={styles.resumenEtiqueta}>{item.etiqueta}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <ul className={styles.lista}>
         {estaciones.map((estacion) => {
@@ -54,8 +69,14 @@ function EstacionesLista({
                 className={`${styles.tarjeta} ${activa ? styles.activa : ''}`}
                 onClick={() => onSeleccionar(estacion.id)}
               >
-                <span className={styles.nombre}>
-                  {estacion.nombre}
+                <span className={styles.cabecera}>
+                  <span className={styles.nombre}>
+                    {estacion.nombre}
+                  </span>
+
+                  <span className={styles.iconoEstacion} aria-hidden="true">
+                    <Icono nombre="pin" />
+                  </span>
                 </span>
 
                 <span className={styles.zona}>
@@ -64,10 +85,12 @@ function EstacionesLista({
 
                 <span className={styles.estado}>
                   <span className={styles.pastilla}>
+                    <Icono nombre="bici" />
                     {estacion.bicicletas} bicicletas disponibles
                   </span>
 
-                  <span>
+                  <span className={styles.anclajes}>
+                    <Icono nombre="candado" />
                     {estacion.anclajes} anclajes libres
                   </span>
                 </span>
@@ -82,6 +105,18 @@ function EstacionesLista({
           </li>
         )}
       </ul>
+
+      <div className={styles.nfc}>
+        <span className={styles.nfcIcono} aria-hidden="true">
+          <Icono nombre="nfc" />
+        </span>
+        <div className={styles.nfcTexto}>
+          <span className={styles.nfcTitulo}>¿Usas tarjeta física NFC?</span>
+          <span className={styles.nfcDescripcion}>
+            Acércala al tótem de cualquier estación para liberar tu bici.
+          </span>
+        </div>
+      </div>
     </section>
   );
 }

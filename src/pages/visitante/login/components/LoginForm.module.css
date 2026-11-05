@@ -80,7 +80,7 @@
 .enlaceDerecha {
   display: block;
   margin-top: var(--espacio-4);
-  text-align: right;
+  text-align: center;
   font-size: var(--texto-s);
 }
 

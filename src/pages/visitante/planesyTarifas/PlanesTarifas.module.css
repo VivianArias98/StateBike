@@ -1,29 +1,71 @@
+/* Base = celular: una columna. 768px: dos columnas. 1024px: cuatro planes. */
 .raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
   width: 100%;
   max-width: var(--ancho-maximo);
   margin: 0 auto;
+}
+
+.encabezado {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-5);
+  gap: var(--espacio-4);
+}
+
+.encabezadoTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-secundario);
+}
+
+.punto {
+  width: var(--espacio-2);
+  height: var(--espacio-2);
+  background: var(--color-primario);
+  border-radius: var(--radio-circulo);
 }
 
 .titulo {
   margin: 0;
+  font-size: var(--texto-3xl);
+  line-height: 1.1;
 }
 
 .subtitulo {
-  margin-top: var(--espacio-2);
+  max-width: 40rem;
   font-size: var(--texto-s);
+  line-height: 1.5;
   color: var(--color-texto);
+  opacity: 0.8;
 }
 
-.barraAlterna {
-  display: flex;
-  justify-content: flex-end;
-}
-
+/* Botón de alternar: píldora blanca con icono de intercambio */
 .alternar {
+  display: inline-flex;
+  align-items: center;
   gap: var(--espacio-2);
+  align-self: flex-start;
+  height: var(--alto-control);
+  padding: 0 var(--espacio-4);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-s);
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .alternar svg {
@@ -32,19 +74,16 @@
   flex-shrink: 0;
 }
 
-.enlaceAlterno {
-  text-decoration: underline;
-}
-
 .grilla {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-4);
+  gap: var(--espacio-5);
 }
 
 .vacio {
   grid-column: 1 / -1;
   padding: var(--espacio-6);
+  background: var(--color-superficie);
   border: 1px dashed var(--color-borde);
   border-radius: var(--radio-l);
   text-align: center;
@@ -52,9 +91,72 @@
   color: var(--color-texto);
 }
 
+.beneficios {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-3);
+}
+
+/* Franja inferior: aprobación y versión de tarifas */
+.franja {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.aprobacion {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+}
+
+.aprobacion svg {
+  width: var(--espacio-4);
+  height: var(--espacio-4);
+  flex-shrink: 0;
+  color: var(--color-secundario);
+}
+
+.version {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.redActiva {
+  color: var(--color-secundario);
+}
+
 @media (min-width: 768px) {
+  .encabezado {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .titulo {
+    font-size: var(--texto-4xl);
+  }
+
   .grilla {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .beneficios {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .franja {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio-4) var(--espacio-5);
   }
 }
 
