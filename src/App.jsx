@@ -1,11 +1,11 @@
 import React from 'react';
 import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
-import BilleteraPage from './pages/usuario/billetera/BilleteraPage';
+import ViajePage from './pages/usuario/viaje/ViajePage';
 
 function App() {
   return (
     <UsuarioLayout>
-      <BilleteraPage />
+      <ViajePage />
     </UsuarioLayout>
   );
 }
