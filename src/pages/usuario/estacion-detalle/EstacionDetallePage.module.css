@@ -1,0 +1,79 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.saludo {
+  margin-bottom: var(--espacio-5);
+}
+
+.migas {
+  font-size: var(--texto-xs);
+  color: var(--color-placeholder);
+  font-weight: 700;
+}
+
+.encabezadoTitulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--espacio-1);
+}
+
+.subtitulo {
+  color: var(--color-placeholder);
+  font-size: var(--texto-s);
+  margin-top: var(--espacio-1);
+}
+
+.metricasGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-4);
+  margin-bottom: var(--espacio-5);
+}
+
+.metricaValor {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.subtituloMetrica {
+  color: var(--color-placeholder);
+  font-size: var(--texto-xs);
+  margin-top: var(--espacio-1);
+}
+
+.principalGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-5);
+  margin-bottom: var(--espacio-5);
+}
+
+.columnaMapa {
+  --alto-mapa: 20rem;
+  width: 100%;
+}
+
+.accionesGrupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+@media (min-width: 768px) {
+  .metricasGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .accionesGrupo {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1024px) {
+  .principalGrid {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
