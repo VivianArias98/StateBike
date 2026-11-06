@@ -1,0 +1,87 @@
+/* TarjetaNfcPerfil.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+/* Tarjeta física: panel oscuro (contexto-oscuro pone los textos claros) */
+.tarjetaFisica {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  padding: var(--espacio-5);
+  background: var(--color-superficie-inversa);
+  border-radius: var(--radio-l);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+}
+
+.filaSuperior,
+.filaInferior {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-acento);
+}
+
+.etiquetaNumero {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.numero {
+  font-size: var(--texto-l);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.filaInferior {
+  padding-top: var(--espacio-3);
+  border-top: 1px solid var(--color-borde-suave);
+  text-transform: uppercase;
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.iconoAviso {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-exito);
+  font-size: var(--texto-l);
+}

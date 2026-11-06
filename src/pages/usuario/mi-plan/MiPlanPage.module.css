@@ -1,0 +1,68 @@
+/* MiPlanPage.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.registro {
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+}
+
+.registro strong {
+  color: var(--color-error-texto);
+}
+
+.pasos {
+  padding: var(--espacio-4);
+}
+
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.cabeceraSeccion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.textoSeccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.tituloSeccion {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+}
+
+.descripcionSeccion {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.nota {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  font-size: var(--texto-s);
+}
+
+@media (min-width: 768px) {
+  .tituloSeccion {
+    font-size: var(--texto-3xl);
+  }
+}

@@ -1,4 +1,4 @@
-/* HistorialPage.module.css – base: celular */
+/* HistorialPage.module.css: base = celular */
 
 .raiz {
   display: flex;
@@ -6,64 +6,26 @@
   gap: var(--espacio-5);
 }
 
-/* ── Encabezado ─────────────────────────────────────── */
-.encabezado {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-2);
-}
-
-.modulo {
-  font-size: var(--texto-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-texto);
-  opacity: 0.6;
-}
-
-.titulo {
-  display: flex;
-  align-items: center;
+.metricas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--espacio-3);
-  font-size: var(--texto-3xl);
-  font-weight: 700;
-  color: var(--color-texto);
 }
 
-/* ── Resumen de resultados ──────────────────────────── */
-.resumen {
+.descargas {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
-}
-
-.resumenTexto {
-  font-size: var(--texto-s);
-  color: var(--color-texto);
-}
-
-.periodo {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--espacio-1) var(--espacio-3);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-s);
-  font-size: var(--texto-xs);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--color-texto);
+  gap: var(--espacio-3);
 }
 
 @media (min-width: 768px) {
-  .titulo {
-    font-size: var(--texto-4xl);
+  .metricas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-4);
   }
 
-  .resumen {
+  .descargas {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
   }
 }

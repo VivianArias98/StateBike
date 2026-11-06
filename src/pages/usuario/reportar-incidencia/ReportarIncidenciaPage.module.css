@@ -1,0 +1,92 @@
+/* ReportarIncidenciaPage.module.css: base = celular, formulario de una columna */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  max-width: 48rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+}
+
+.tituloSeccion {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.requerido {
+  color: var(--color-error-texto);
+}
+
+.opcional {
+  font-weight: 400;
+  color: var(--color-texto-suave);
+  text-transform: none;
+}
+
+.ayuda {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.select {
+  width: 100%;
+}
+
+.nota {
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.cabeceraDescripcion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.contador {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 10rem;
+  height: auto;
+  resize: vertical;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+@media (min-width: 768px) {
+  .acciones {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}

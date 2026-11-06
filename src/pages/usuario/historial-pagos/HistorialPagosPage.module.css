@@ -1,0 +1,54 @@
+/* HistorialPagosPage.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-3);
+}
+
+.pie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.resumen {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.descargas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+@media (min-width: 768px) {
+  .metricas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-4);
+  }
+
+  .pie {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .descargas {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1024px) {
+  .metricas {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,49 @@
+/* PanelNfc.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  height: 100%;
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.lector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-6) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-l);
+  text-align: center;
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 6rem;
+  height: 6rem;
+  border-radius: var(--radio-l);
+  background: var(--color-superficie-inversa);
+  color: var(--color-acento);
+  font-size: 2.75rem;
+}
+
+.numero {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+  font-family: var(--fuente-mono);
+}
+
+.ayuda {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}

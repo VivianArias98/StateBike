@@ -1,0 +1,172 @@
+/* PasoActivacion.module.css: base = celular, todo en una columna */
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.exito {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  background: var(--color-acento-suave);
+  border-color: var(--color-acento);
+}
+
+.iconoExito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  font-size: var(--texto-2xl);
+}
+
+.textoExito {
+  flex: 1;
+  min-width: 0;
+}
+
+.titulo {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+}
+
+.texto {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.columnas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.iconoBici {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radio-s);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  font-size: var(--texto-l);
+}
+
+.tituloSeccion {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.referencia {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-superficie-inversa);
+  color: var(--color-acento);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.valorPagado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cifra {
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+  font-family: var(--fuente-mono);
+  color: var(--color-exito);
+}
+
+.pasos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  display: flex;
+  gap: var(--espacio-3);
+}
+
+.numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  font-weight: 700;
+  font-size: var(--texto-s);
+}
+
+.pasoTitulo {
+  font-weight: 600;
+}
+
+.consejo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+}
+
+@media (min-width: 1024px) {
+  .columnas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}

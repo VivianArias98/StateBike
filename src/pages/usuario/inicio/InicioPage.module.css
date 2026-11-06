@@ -1,0 +1,89 @@
+/* InicioPage.module.css: base = celular, todo en una columna */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-3);
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-5);
+  align-items: start;
+}
+
+/* El mapa lee esta variable para definir su altura */
+.mapa {
+  --alto-mapa: 22rem;
+  min-width: 0;
+}
+
+.lateral {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+}
+
+.cabeceraLista {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.tituloLista {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.conteo {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.accion {
+  font-weight: 700;
+}
+
+.ayuda {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+@media (min-width: 768px) {
+  .metricas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-4);
+  }
+
+  .mapa {
+    --alto-mapa: 28rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
+  }
+
+  .mapa {
+    --alto-mapa: 34rem;
+  }
+}

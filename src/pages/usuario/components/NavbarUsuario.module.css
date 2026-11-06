@@ -3,7 +3,7 @@
   background: var(--color-superficie-inversa);
 }
 
-/* Base = celular: marca + botón de menú; el resto queda plegado */
+/* Base = celular: logo + botón de menú; el resto queda plegado */
 .barra {
   display: flex;
   flex-wrap: wrap;
@@ -19,38 +19,6 @@
 .marca {
   display: flex;
   align-items: center;
-  gap: var(--espacio-3);
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  background: var(--color-acento);
-  color: var(--color-acento-texto);
-  border-radius: var(--radio-m);
-  font-size: var(--texto-2xl);
-}
-
-.nombre {
-  font-size: var(--texto-xl);
-  font-weight: 700;
-}
-
-.nombreAcento {
-  color: var(--color-acento);
-}
-
-.ciudad {
-  padding: var(--espacio-1) var(--espacio-3);
-  color: var(--color-acento);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-l);
-  font-size: var(--texto-xs);
-  font-weight: 600;
-  letter-spacing: 0.04em;
 }
 
 .botonMenu {
@@ -68,6 +36,7 @@
   flex-direction: column;
   gap: var(--espacio-4);
   width: 100%;
+  min-width: 0;
   padding-bottom: var(--espacio-3);
 }
 
@@ -106,27 +75,42 @@
   font-weight: 700;
 }
 
+.derecha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.nfc {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  align-self: flex-start;
+  height: var(--alto-control-s);
+  padding: 0 var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.nfcId {
+  color: var(--color-acento);
+}
+
 .perfil {
   display: flex;
   align-items: center;
   gap: var(--espacio-3);
 }
 
-.nombreUsuario {
-  font-size: var(--texto-s);
-  font-weight: 700;
-}
-
-.plan {
-  color: var(--color-acento);
-  font-size: var(--texto-xs);
-}
-
 .avatar {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 2.5rem;
   height: 2.5rem;
   color: var(--color-acento);
@@ -135,10 +119,22 @@
   font-size: var(--texto-xl);
 }
 
-.indicador {
-  position: absolute;
-  top: 0;
-  right: 0;
+.datos {
+  display: flex;
+  flex-direction: column;
+}
+
+.nombreUsuario {
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+
+.subtitulo {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-acento);
 }
 
 @media (min-width: 1024px) {
@@ -156,8 +152,10 @@
     display: flex;
     flex: 1;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: var(--espacio-3) var(--espacio-5);
     width: auto;
     padding-bottom: 0;
   }
@@ -168,7 +166,9 @@
     gap: var(--espacio-1);
   }
 
-  .datos {
-    text-align: right;
+  .derecha {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--espacio-4);
   }
 }

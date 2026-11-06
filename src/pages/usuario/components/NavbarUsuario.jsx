@@ -1,28 +1,18 @@
-import { IconoBicicleta, IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
+import Logo from '../../../components/Logo/Logo.jsx';
+import { IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
 import styles from './NavbarUsuario.module.css';
 
-const ENLACES = ['Viajes', 'Historial', 'Mi Perfil', 'Mi Plan', 'Mi Billetera', 'Reportar Incidencia'];
+// Enlaces en el orden del diseño. itemActivo debe coincidir con uno de estos textos.
+const ENLACES = ['Mi perfil', 'Mi plan', 'Mi billetera', 'Historial', 'Reportar incidencia', 'Viajes'];
 
-//Barra de navegación del rol usuario. El estado del menú vive en el layout.
-function NavbarUsuario({
-  itemActivo,
-  nombre,
-  plan,
-  ciudad = 'TUNJA',
-  menuAbierto,
-  onAlternarMenu,
-}) {
+// Barra de navegación del rol usuario. El logo viene de src/components/Logo.
+// El estado del menú (plegado en celular) vive en UsuarioLayout.
+function NavbarUsuario({ itemActivo, nombre, subtitulo, nfc, menuAbierto, onAlternarMenu }) {
   return (
     <header className={`contexto-oscuro ${styles.raiz}`}>
       <div className={styles.barra}>
         <div className={styles.marca}>
-          <span className={styles.logo}>
-            <IconoBicicleta />
-          </span>
-          <span className={styles.nombre}>
-            Station<span className={styles.nombreAcento}>Bike</span>
-          </span>
-          <span className={styles.ciudad}>{ciudad}</span>
+          <Logo altura="3rem" variante="oscuro" />
         </div>
 
         <button
@@ -33,7 +23,7 @@ function NavbarUsuario({
           aria-controls="usuario-menu"
           onClick={onAlternarMenu}
         >
-          ☰
+          {menuAbierto ? '✕' : '☰'}
         </button>
 
         <div
@@ -41,7 +31,7 @@ function NavbarUsuario({
           className={menuAbierto ? `${styles.panel} ${styles.panelAbierto}` : styles.panel}
         >
           {/* Cuando exista React Router, estos botones pasan a ser <NavLink> */}
-          <nav className={styles.menu}>
+          <nav className={styles.menu} aria-label="Navegación principal">
             {ENLACES.map((enlace) => {
               const activo = enlace === itemActivo;
               return (
@@ -57,15 +47,21 @@ function NavbarUsuario({
             })}
           </nav>
 
-          <div className={styles.perfil}>
-            <div className={styles.datos}>
-              <p className={styles.nombreUsuario}>{nombre}</p>
-              <p className={styles.plan}>{plan}</p>
+          <div className={styles.derecha}>
+            <p className={styles.nfc}>
+              <span className="punto-vivo" aria-hidden="true" />
+              NFC: ACTIVO · <span className={styles.nfcId}>#{nfc}</span>
+            </p>
+
+            <div className={styles.perfil}>
+              <span className={styles.avatar} aria-hidden="true">
+                <IconoUsuario />
+              </span>
+              <div className={styles.datos}>
+                <p className={styles.nombreUsuario}>{nombre}</p>
+                <p className={styles.subtitulo}>{subtitulo}</p>
+              </div>
             </div>
-            <span className={styles.avatar}>
-              <IconoUsuario />
-              <span className={`punto-vivo ${styles.indicador}`} aria-hidden="true" />
-            </span>
           </div>
         </div>
       </div>

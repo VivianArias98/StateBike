@@ -1,0 +1,63 @@
+/* RejillaAnclajes.module.css: base = celular, 4 columnas */
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anclaje {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: var(--espacio-2);
+  color: var(--color-texto);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+  cursor: pointer;
+}
+
+.anclaje:disabled {
+  cursor: not-allowed;
+}
+
+.conBicicleta {
+  background: var(--color-acento);
+  border-color: var(--color-acento);
+  color: var(--color-acento-texto);
+}
+
+.libre {
+  opacity: 0.55;
+}
+
+.activo {
+  box-shadow: 0 0 0 0.125rem var(--color-texto);
+}
+
+.numero {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.estado {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .rejilla {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}

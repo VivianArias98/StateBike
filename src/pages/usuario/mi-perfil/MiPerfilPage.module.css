@@ -1,0 +1,64 @@
+/* MiPerfilPage.module.css: base = celular, todo en una columna */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.idPerfil {
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+
+.aviso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  border-left: 2px solid var(--color-acento);
+}
+
+.iconoAviso {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  font-size: var(--texto-l);
+}
+
+.textoAviso {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--texto-s);
+}
+
+.ayuda {
+  margin-left: auto;
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}

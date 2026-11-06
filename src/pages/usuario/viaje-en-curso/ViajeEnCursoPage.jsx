@@ -89,7 +89,7 @@ function ViajeEnCursoPage() {
   const devolverBicicleta = () => {};
 
   return (
-    <UsuarioLayout itemActivo="Mapa">
+    <UsuarioLayout itemActivo="Viajes">
       <div className={styles.raiz}>
         <header>
           <div className={styles.tituloFila}>
@@ -145,6 +145,9 @@ function ViajeEnCursoPage() {
                 onClick={devolverBicicleta}
               >
                 DEVOLVER BICICLETA
+              </button>
+              <button type="button" className={`boton boton--bloque ${styles.accion}`}>
+                REPORTAR INCIDENCIA
               </button>
               <p className={styles.ayuda}>
                 Acérquese al tótem de una estación libre e inserte la bicicleta para finalizar.

@@ -1,0 +1,27 @@
+/* SelectorHistorial.module.css: pastilla oscura con la opción activa en lima */
+
+.raiz {
+  display: inline-flex;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1);
+  background: var(--color-superficie-inversa);
+  border-radius: var(--radio-pastilla);
+}
+
+.opcion {
+  height: var(--alto-control-s);
+  padding: 0 var(--espacio-4);
+  background: transparent;
+  color: var(--color-texto-inverso);
+  border: none;
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-s);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.opcionActiva,
+.opcionActiva:hover {
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+}
