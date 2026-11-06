@@ -1,16 +1,8 @@
 import React from 'react';
-
-// Importa correctamente la ruta de AdquirirPlanPage
-import AdquirirPlanPage from './pages/usuario/viaje-en-curso/ViajeEnCursoPage';
-
-
+import EstacionesPage from './EstacionesPage/EstacionesPage.jsx';
 
 function App() {
-  return (
-    <div className="app-container">
-      <AdquirirPlanPage />
-    </div>
-  );
+  return <EstacionesPage />;
 }
 
 export default App;
