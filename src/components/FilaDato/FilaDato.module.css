@@ -1,0 +1,27 @@
+/* FilaDato.module.css */
+.raiz {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) 0;
+  border-top: 1px solid var(--color-borde);
+  font-size: var(--texto-s);
+}
+
+.etiqueta {
+  opacity: 0.7;
+}
+
+.valor {
+  font-weight: 600;
+  text-align: right;
+}
+
+.positivo {
+  font-weight: 700;
+}
+
+.negativo {
+  color: var(--color-error-texto);
+  font-weight: 700;
+}
