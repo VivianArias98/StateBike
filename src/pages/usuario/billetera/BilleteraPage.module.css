@@ -1,0 +1,12 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cargando {
+  padding: var(--espacio-6);
+  text-align: center;
+  font-size: var(--texto-m);
+  color: var(--color-placeholder);
+}
