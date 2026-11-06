@@ -1,20 +1,25 @@
-/* TablaViajes.module.css – base: celular */
+/* TablaViajes.module.css: base = celular. La tabla usa la clase global .tabla (scroll horizontal) */
 
-/* El div raiz ya usa la clase global .tabla; aquí solo definimos los anchos de columna */
 .raiz {
-  margin-top: var(--espacio-5);
+  width: 100%;
 }
 
 /* Ancho de las columnas */
 .colFecha    { width: 22%; }
-.colOrigen   { width: 30%; }
-.colDestino  { width: 30%; }
-.colDuracion { width: 18%; text-align: right; }
+.colOrigen   { width: 26%; }
+.colDestino  { width: 26%; }
+.colDuracion { width: 12%; text-align: right; }
+.colRuta     { width: 14%; }
 
 /* La columna de duración se alinea a la derecha */
 .duracion {
   text-align: right;
   font-weight: 700;
+}
+
+.enlaceRuta {
+  font-size: var(--texto-s);
+  white-space: nowrap;
 }
 
 /* Punto parpadeante junto a la fecha */
@@ -25,10 +30,8 @@
 
 /* Estado vacío */
 .vacio {
-  margin-top: var(--espacio-5);
   font-size: var(--texto-s);
-  color: var(--color-texto);
-  opacity: 0.6;
+  color: var(--color-texto-suave);
   text-align: center;
   padding: var(--espacio-8) 0;
 }

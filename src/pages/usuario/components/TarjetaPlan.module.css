@@ -1,0 +1,109 @@
+/* TarjetaPlan.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  height: 100%;
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+.destacada {
+  border: 2px solid var(--color-acento);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.identificacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.codigo {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.04em;
+  color: var(--color-texto-suave);
+}
+
+.insignia {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.vigencia {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.nombre {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.descripcion {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.precio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--espacio-2);
+}
+
+.cifra {
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.unidad {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.caracteristicas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--texto-s);
+}
+
+.caracteristicas li {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.check {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-exito);
+}
+
+.accion {
+  margin-top: auto;
+}

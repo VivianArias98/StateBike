@@ -1,0 +1,172 @@
+/* PlanActivo.module.css: base = celular, todo en una columna */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.resumen,
+.dosColumnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+
+.bloque,
+.subpanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  min-width: 0;
+  padding: var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.filaEtiqueta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.etiqueta,
+.etiquetaCelda {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.nombrePlan {
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+}
+
+.cifra {
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+  font-family: var(--fuente-mono);
+}
+
+.unidad {
+  font-size: var(--texto-s);
+  font-family: var(--fuente);
+}
+
+.texto,
+.ayuda,
+.detalleCelda {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.alDia {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: 600;
+}
+
+.check {
+  display: inline-flex;
+  color: var(--color-exito);
+}
+
+.celdas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-2);
+}
+
+.celda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-s);
+}
+
+.celdaDestacada {
+  background: var(--color-acento-suave);
+  border-color: var(--color-acento);
+}
+
+.valorCelda {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.leyendaBarra {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+}
+
+.uid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
+  background: var(--color-superficie);
+  border-radius: var(--radio-s);
+}
+
+.uidTitulo {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-l);
+}
+
+.sensor {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-s);
+}
+
+.cancelar {
+  color: var(--color-error-texto);
+  border-color: var(--color-error-borde);
+}
+
+@media (min-width: 768px) {
+  .celdas {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .resumen,
+  .dosColumnas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,17 @@
+/* AdquirirPlanPage.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.nfc {
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}

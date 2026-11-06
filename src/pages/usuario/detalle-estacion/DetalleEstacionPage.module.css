@@ -1,0 +1,110 @@
+/* DetalleEstacionPage.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.direccion {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-3);
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-5);
+  align-items: start;
+}
+
+.columnaMapa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+}
+
+/* El mapa lee esta variable para definir su altura */
+.mapa {
+  --alto-mapa: 20rem;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+.cabeceraPanel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.textoCabecera {
+  min-width: 0;
+}
+
+.tituloPanel {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.textoPanel {
+  margin-top: var(--espacio-1);
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.resumenBicicleta {
+  font-size: var(--texto-s);
+}
+
+@media (min-width: 768px) {
+  .metricas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-4);
+  }
+
+  .mapa {
+    --alto-mapa: 26rem;
+  }
+
+  .acciones {
+    flex-direction: row;
+  }
+
+  .acciones > * {
+    flex: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contenido {
+    grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
+  }
+
+  .mapa {
+    --alto-mapa: 30rem;
+  }
+}

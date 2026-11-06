@@ -1,12 +1,12 @@
 import styles from './TablaViajes.module.css';
 
 // Componente de presentación: solo dibuja la tabla de viajes recibidos por props.
-// La lógica de filtrado y selección vive en HistorialPage.
+// La lógica de filtrado vive en HistorialPage.
 function TablaViajes({ viajes }) {
   if (viajes.length === 0) {
     return (
       <p className={styles.vacio}>
-        No se encontraron viajes para el período seleccionado.
+        No hay registros para el rango seleccionado.
       </p>
     );
   }
@@ -20,6 +20,7 @@ function TablaViajes({ viajes }) {
             <th className={styles.colOrigen}>Origen</th>
             <th className={styles.colDestino}>Destino</th>
             <th className={styles.colDuracion}>Duración</th>
+            <th className={styles.colRuta}>Detalle / ruta</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +33,12 @@ function TablaViajes({ viajes }) {
               <td>{viaje.origen}</td>
               <td>{viaje.destino}</td>
               <td className={styles.duracion}>{viaje.duracion} min</td>
+              <td>
+                {/* Pendiente: abrir el recorrido del viaje en el mapa */}
+                <button type="button" className={`enlace ${styles.enlaceRuta}`}>
+                  Ver ruta / mapa →
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

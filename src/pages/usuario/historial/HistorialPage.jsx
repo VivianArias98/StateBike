@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import FiltroFechas from './components/FiltroFechas.jsx';
+import { IconoBicicleta, IconoCalendario, IconoDescarga, IconoReloj } from '../../../components/Iconos/Iconos.jsx';
+import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
+import SelectorHistorial from '../components/SelectorHistorial.jsx';
+import FiltroFechas from '../components/FiltroFechas.jsx';
+import MetricaUsuario from '../components/MetricaUsuario.jsx';
 import TablaViajes from './components/TablaViajes.jsx';
 import styles from './HistorialPage.module.css';
 
@@ -58,7 +62,7 @@ function formatearFechaCorta(fechaIso) {
 function HistorialPage() {
   const [desde, setDesde] = useState('2026-10-01');
   const [hasta, setHasta] = useState('2026-10-15');
-  // viajesFiltrados: resultado de la última consulta; null = sin consultar aún
+  // viajesFiltrados: resultado de la última consulta
   const [viajesFiltrados, setViajesFiltrados] = useState(VIAJES_MOCK);
   const [periodoMostrado, setPeriodoMostrado] = useState({ desde: '2026-10-01', hasta: '2026-10-15' });
 
@@ -80,22 +84,26 @@ function HistorialPage() {
   // Métricas derivadas del conjunto filtrado
   const totalRecorridos = viajesFiltrados.length;
   const tiempoTotal = viajesFiltrados.reduce((suma, v) => suma + v.duracion, 0);
+  const periodoTexto =
+    periodoMostrado.desde && periodoMostrado.hasta
+      ? `${formatearFechaCorta(periodoMostrado.desde)} – ${formatearFechaCorta(periodoMostrado.hasta)}`
+      : 'Sin rango de fechas';
 
   return (
     <UsuarioLayout itemActivo="Historial">
       <div className={styles.raiz}>
+        <EncabezadoPagina
+          etiqueta="Módulo de usuario / Movilidad"
+          titulo="Historial de Viajes"
+          subtitulo="Consulta de recorridos realizados, tiempos acumulados y detalle de estaciones en Tunja Bici."
+          acciones={
+            /* Cuando exista React Router, este cambio navega a /usuario/historial-pagos */
+            <SelectorHistorial activo="viajes" onCambiar={() => {}} />
+          }
+        />
 
-        {/* Encabezado de módulo */}
-        <header className={styles.encabezado}>
-          <p className={styles.modulo}>Módulo de usuario / Movilidad</p>
-          <h1 className={styles.titulo}>
-            <span className="punto-vivo" aria-hidden="true" />
-            Historial de Viajes
-          </h1>
-        </header>
-
-        {/* Filtro de fechas */}
         <FiltroFechas
+          idPrefijo="viajes"
           desde={desde}
           hasta={hasta}
           onDesde={setDesde}
@@ -104,27 +112,38 @@ function HistorialPage() {
           onLimpiar={handleLimpiar}
         />
 
-        {/* Resumen del período */}
-        <div className={styles.resumen}>
-          <p className={styles.resumenTexto}>
-            Total recorridos: <strong>{totalRecorridos}</strong>
-            {' · '}
-            Tiempo total acumulado:{' '}
-            <strong>
-              {tiempoTotal} min ({formatearTiempoTotal(tiempoTotal)})
-            </strong>
-          </p>
-
-          {periodoMostrado.desde && periodoMostrado.hasta && (
-            <p className={styles.periodo}>
-              Período: {formatearFechaCorta(periodoMostrado.desde)} – {formatearFechaCorta(periodoMostrado.hasta)}
-            </p>
-          )}
+        <div className={styles.metricas}>
+          <MetricaUsuario
+            etiqueta="Total recorridos"
+            valor={totalRecorridos}
+            detalle="viajes registrados"
+            icono={<IconoBicicleta />}
+          />
+          <MetricaUsuario
+            etiqueta="Tiempo total acumulado"
+            valor={`${tiempoTotal} min`}
+            detalle={formatearTiempoTotal(tiempoTotal)}
+            icono={<IconoReloj />}
+          />
+          <MetricaUsuario
+            etiqueta="Periodo consultado"
+            valor={periodoTexto}
+            detalle="Rango de fechas activo"
+            icono={<IconoCalendario />}
+          />
         </div>
 
-        {/* Tabla de viajes */}
         <TablaViajes viajes={viajesFiltrados} />
 
+        {/* Pendiente: descarga de reportes (PDF y CSV) desde el backend */}
+        <div className={styles.descargas}>
+          <button type="button" className="boton">
+            <IconoDescarga /> Descargar reporte PDF
+          </button>
+          <button type="button" className="boton">
+            Descargar CSV
+          </button>
+        </div>
       </div>
     </UsuarioLayout>
   );

@@ -1,16 +1,22 @@
-/* FiltroFechas.module.css – base: celular */
+/* FiltroFechas.module.css: base = celular. Es un panel oscuro (contexto-oscuro) */
 
-/* El div raiz usa clase global .tarjeta; aquí solo definimos la distribución */
 .raiz {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  background: var(--color-superficie-inversa);
+  border-radius: var(--radio-l);
 }
 
 .campos {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-4);
+}
+
+.input {
+  width: 100%;
 }
 
 .acciones {

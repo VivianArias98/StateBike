@@ -48,7 +48,7 @@ function ResumenViajePage() {
   const liberarBicicleta = () => {};
 
   return (
-    <UsuarioLayout itemActivo="Historial">
+    <UsuarioLayout itemActivo="Viajes">
       <div className={styles.raiz}>
 
         {/* Encabezado del módulo */}

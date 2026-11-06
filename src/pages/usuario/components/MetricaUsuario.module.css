@@ -1,0 +1,58 @@
+/* MetricaUsuario.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radio-s);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  font-size: var(--texto-l);
+}
+
+.valor {
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.detalle {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-5);
+  }
+
+  .valor {
+    font-size: var(--texto-4xl);
+  }
+}

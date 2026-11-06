@@ -1,0 +1,25 @@
+/* TablaPagos.module.css: base = celular. La tabla usa la clase global .tabla (scroll horizontal) */
+
+.raiz {
+  width: 100%;
+}
+
+.colFecha    { width: 18%; }
+.colConcepto { width: 34%; }
+.colTipo     { width: 18%; }
+.colMonto    { width: 16%; text-align: right; }
+.colEstado   { width: 14%; }
+
+.monto {
+  text-align: right;
+  font-family: var(--fuente-mono);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vacio {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+  text-align: center;
+  padding: var(--espacio-8) 0;
+}

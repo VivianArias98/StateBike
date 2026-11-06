@@ -1,0 +1,78 @@
+/* BannerSinPlan.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  border-left: 2px solid var(--color-acento);
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radio-m);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  font-size: var(--texto-xl);
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.etiquetaFila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.descripcion {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.accion {
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .icono {
+    align-self: flex-start;
+  }
+
+  .texto {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .accion {
+    flex-shrink: 0;
+  }
+}
