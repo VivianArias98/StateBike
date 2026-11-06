@@ -145,3 +145,49 @@ Authorization: Bearer {{adminLogin.response.body.acceso}}
 ### 22. Inactivar bicicleta 1
 PATCH {{host}}/admin/bicicletas/{{bici1.response.body.bicicleta.id}}/inactivar
 Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+# Id del plan de prueba 
+@planId = 5
+
+### 23. Planes públicos (sin sesión)
+GET {{host}}/planes
+
+### 24. Planes como administrador
+GET {{host}}/admin/planes
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 25. Registrar plan
+POST {{host}}/admin/planes
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "nombre": "Plan Test",
+  "costoBase": 90000,
+  "vigenciaDias": 0,
+  "viajesPorDia": 4,
+  "tiempoViajeMin": 45,
+  "valorMinutoExceso": 0
+}
+
+### 26. Modificar plan
+PUT {{host}}/admin/planes/{{planId}}
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "nombre": "Plan Trimestral",
+  "costoBase": 85000,
+  "vigenciaDias": 90,
+  "viajesPorDia": 4,
+  "tiempoViajeMin": 45,
+  "valorMinutoExceso": 0
+}
+
+### 27. Inactivar plan
+PATCH {{host}}/admin/planes/{{planId}}/inactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 28. Activar plan
+PATCH {{host}}/admin/planes/{{planId}}/activar
+Authorization: Bearer {{adminLogin.response.body.acceso}}

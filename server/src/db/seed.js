@@ -11,6 +11,25 @@ if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_NOMBRE) {
 
 aplicarEsquema();
 
+//Catálogo inicial (HU_15, criterio 7). INSERT OR IGNORE: no pisa planes ya editados
+const VALOR_MINUTO_EXCESO = 100;
+const PLANES_INICIALES = [
+  { nombre: "Plan Diario", costo: 4000, vigencia: 1, viajes: 2, minutos: 30 },
+  { nombre: "Plan Mensual", costo: 32000, vigencia: 30, viajes: 4, minutos: 45 },
+  { nombre: "Plan Semestral", costo: 150000, vigencia: 180, viajes: 4, minutos: 45 },
+  { nombre: "Plan Anual", costo: 240000, vigencia: 365, viajes: 4, minutos: 60 },
+];
+
+const insertarPlan = db.prepare(
+  `INSERT OR IGNORE INTO planes
+     (nombre, costo_base, vigencia_dias, viajes_por_dia, tiempo_viaje_min, valor_minuto_exceso)
+   VALUES (?, ?, ?, ?, ?, ?)`
+);
+for (const plan of PLANES_INICIALES) {
+  insertarPlan.run(plan.nombre, plan.costo, plan.vigencia, plan.viajes, plan.minutos, VALOR_MINUTO_EXCESO);
+}
+console.log("Catálogo inicial de planes listo.");
+
 let usuarioId;
 
 try {
