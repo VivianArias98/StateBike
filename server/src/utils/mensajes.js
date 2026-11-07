@@ -58,4 +58,13 @@ export const MENSAJES = {
       // Historial (HU_5)
     fecha_invalida_rango: "La fecha final no puede ser anterior a la inicial",
     sin_registros_rango: "No hay registros para el rango seleccionado",
+      // Billetera (HU_23, HU_24, HU_25)
+    recarga_exitosa: "RECARGA EXITOSA",
+    cobro_pagado: "COBRO PENDIENTE PAGADO CORRECTAMENTE",
+    monto_invalido: "Monto inválido",
+    monto_fuera_rango: "El monto debe estar entre $100 y $500.000",
+    recarga_supera_maximo: "La recarga supera el saldo máximo permitido de $2.000.000",
+    sin_cobros_pendientes: "No tiene cobros pendientes",
+    saldo_insuficiente: "Saldo insuficiente. Le faltan $X. Recargue su saldo",
+    sin_movimientos: "No hay movimientos registrados",
     };

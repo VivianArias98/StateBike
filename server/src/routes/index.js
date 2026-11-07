@@ -10,6 +10,7 @@ import interno from "./interno.routes.js";
 import tarjetas from "./tarjetas.routes.js";
 import adminTarjetas from "./admin.tarjetas.routes.js";
 import historial from "./historial.routes.js";
+import billetera from "./billetera.routes.js";
 
 const router = Router();
 
@@ -23,6 +24,7 @@ router.use("/planes", planes);
 router.use("/tarjeta", tarjetas);
 router.use("/admin/tarjetas", adminTarjetas);
 router.use("/historial", historial);
+router.use("/billetera", billetera);
 
 router.use("/interno", interno);
 
