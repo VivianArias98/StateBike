@@ -47,4 +47,15 @@ export const MENSAJES = {
     desvincular_con_viaje: "No se puede desvincular con un viaje en curso",
     bloquear_con_viaje: "No puede bloquear la tarjeta con un viaje en curso",
     sin_tarjeta: "No tiene una tarjeta NFC vinculada",
+      // Adquirir y cancelar plan (HU_2, HU_17)
+    plan_adquirido: "PLAN ADQUIRIDO CON ÉXITO",
+    plan_cancelado: "PLAN CANCELADO CORRECTAMENTE",
+    ya_tiene_plan: "Ya tiene un plan activo",
+    sin_tarjeta_activa: "Debe tener una tarjeta NFC activa para adquirir un plan",
+    cancelar_con_viaje: "No puede cancelar con un viaje en curso",
+    sin_plan_activo: "No tiene un plan activo",
+    plan_vencido: "Su plan ha vencido",
+      // Historial (HU_5)
+    fecha_invalida_rango: "La fecha final no puede ser anterior a la inicial",
+    sin_registros_rango: "No hay registros para el rango seleccionado",
     };
