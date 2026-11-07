@@ -1,19 +1,19 @@
 import { db } from "../config/db.js";
+import { escaparLike } from "../utils/sql.js";
 
 const rellenar = (numero, largo) => String(numero).padStart(largo, "0");
 
-//Escapa los comodines de LIKE para que el texto buscado sea literal
-const escaparLike = (texto) => texto.replace(/[\\%_]/g, "\\$&");
-
-//La estación con sus conteos, con los nombres de campo que usa el front.
-//Hasta tener bicicletas (HU_14), "bicicletas" = anclajes OCUPADO.
+//eLa estación con sus conteos, con los nombres de campo que usa el front:
+//bicicletas = disponibles para retiro; anclajesOcupados incluye las que están en mantenimiento
 const SELECCION = `
   SELECT e.id, e.nombre, e.direccion, e.estado, e.lat, e.lng,
          e.capacidad_maxima AS anclajes,
-         COALESCE(SUM(a.estado = 'OCUPADO'), 0) AS bicicletas,
-         COALESCE(SUM(a.estado = 'LIBRE'), 0) AS anclajesLibres
+         COALESCE(SUM(a.estado = 'OCUPADO'), 0) AS anclajesOcupados,
+         COALESCE(SUM(a.estado = 'LIBRE'), 0) AS anclajesLibres,
+         COALESCE(SUM(b.estado = 'DISPONIBLE'), 0) AS bicicletas
   FROM estaciones e
-  LEFT JOIN anclajes a ON a.estacion_id = e.id`;
+  LEFT JOIN anclajes a ON a.estacion_id = e.id
+  LEFT JOIN bicicletas b ON b.anclaje_id = a.id`;
 
 export function listar({ soloActivas = false, busqueda = "" } = {}) {
   const condiciones = [];

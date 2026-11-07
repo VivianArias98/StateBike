@@ -30,3 +30,26 @@ CREATE TABLE IF NOT EXISTS anclajes (
     CHECK (estado IN ('LIBRE', 'OCUPADO')),
   UNIQUE (estacion_id, numero)
 );
+
+CREATE TABLE IF NOT EXISTS bicicletas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  codigo TEXT NOT NULL UNIQUE COLLATE NOCASE,
+  estado TEXT NOT NULL DEFAULT 'DISPONIBLE'
+    CHECK (estado IN ('DISPONIBLE', 'EN_USO', 'MANTENIMIENTO', 'INACTIVA')),
+  anclaje_id INTEGER UNIQUE REFERENCES anclajes(id),  -- NULL si está en uso o inactiva
+  creado TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS planes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre TEXT NOT NULL UNIQUE COLLATE NOCASE,
+  costo_base INTEGER NOT NULL CHECK (costo_base >= 100),
+  vigencia_dias INTEGER NOT NULL CHECK (vigencia_dias > 0),
+  viajes_por_dia INTEGER NOT NULL CHECK (viajes_por_dia > 0),
+  tiempo_viaje_min INTEGER NOT NULL CHECK (tiempo_viaje_min > 0),
+  valor_minuto_exceso INTEGER NOT NULL
+    CHECK (valor_minuto_exceso = 0 OR valor_minuto_exceso >= 100),
+  estado TEXT NOT NULL DEFAULT 'ACTIVO'
+    CHECK (estado IN ('ACTIVO', 'INACTIVO')),
+  creado TEXT NOT NULL DEFAULT (datetime('now'))
+);

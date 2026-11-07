@@ -6,6 +6,9 @@
 # Las respuestas con "# @name" quedan guardadas hasta que se vuelva a ejecutar esa petición.
 # Para cambiar de administrador a usuario, ejecuta primero el login que quieras usar.
 
+# Las respuestas con "# @name" se reemplazan cada vez que se ejecuta la petición.
+# Si repites un registro, la segunda respuesta (409) borra el id guardado.
+
 @host = http://localhost:4000/api
 
 ### 1. Registro
@@ -82,3 +85,109 @@ GET {{host}}/estaciones?q=centro
 ### 12. Ruta de admin con token de USUARIO (debe dar 403)
 GET {{host}}/admin/estaciones
 Authorization: Bearer {{login.response.body.acceso}}
+
+### 13. Crear estación de prueba (2 anclajes)
+# @name estacion
+POST {{host}}/admin/estaciones
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "nombre": "Estación Plaza", "direccion": "Cra 9 #19-00", "capacidad": 2, "lat": 5.5345, "lng": -73.3675 }
+
+### 14. Registrar bicicleta 1
+# @name bici1
+POST {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "codigo": "BIC-0001", "estacionId": {{estacion.response.body.estacion.id}} }
+
+### 15. Registrar bicicleta 2
+POST {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "codigo": "BIC-0002", "estacionId": {{estacion.response.body.estacion.id}} }
+
+### 16. Registrar bicicleta 3 (sin anclajes libres)
+POST {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "codigo": "BIC-0003", "estacionId": {{estacion.response.body.estacion.id}} }
+
+### 17. Código repetido
+POST {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "codigo": "bic-0001", "estacionId": {{estacion.response.body.estacion.id}} }
+
+### 18. Listar y buscar
+GET {{host}}/admin/bicicletas?q=0001
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 19. Enviar bicicleta 1 a mantenimiento
+PUT {{host}}/admin/bicicletas/{{bici1.response.body.bicicleta.id}}
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "estado": "MANTENIMIENTO" }
+
+### 20. Estaciones: cupos actualizados
+GET {{host}}/admin/estaciones
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 21. Intentar inactivar la estación (tiene bicicletas)
+PATCH {{host}}/admin/estaciones/{{estacion.response.body.estacion.id}}/inactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 22. Inactivar bicicleta 1
+PATCH {{host}}/admin/bicicletas/{{bici1.response.body.bicicleta.id}}/inactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+# Id del plan de prueba 
+@planId = 5
+
+### 23. Planes públicos (sin sesión)
+GET {{host}}/planes
+
+### 24. Planes como administrador
+GET {{host}}/admin/planes
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 25. Registrar plan
+POST {{host}}/admin/planes
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "nombre": "Plan Test",
+  "costoBase": 90000,
+  "vigenciaDias": 0,
+  "viajesPorDia": 4,
+  "tiempoViajeMin": 45,
+  "valorMinutoExceso": 0
+}
+
+### 26. Modificar plan
+PUT {{host}}/admin/planes/{{planId}}
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "nombre": "Plan Trimestral",
+  "costoBase": 85000,
+  "vigenciaDias": 90,
+  "viajesPorDia": 4,
+  "tiempoViajeMin": 45,
+  "valorMinutoExceso": 0
+}
+
+### 27. Inactivar plan
+PATCH {{host}}/admin/planes/{{planId}}/inactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 28. Activar plan
+PATCH {{host}}/admin/planes/{{planId}}/activar
+Authorization: Bearer {{adminLogin.response.body.acceso}}

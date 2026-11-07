@@ -1,15 +1,24 @@
-import React from 'react';
-
-// Importa correctamente la ruta de AdquirirPlanPage
-import AdquirirPlanPage from './pages/usuario/mi-billetera/MiBilleteraPage';
-
-
+import React, { useState } from 'react';
+import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
+import BilleteraPage from './pages/usuario/billetera/BilleteraPage';
 
 function App() {
+  const [vista, setVista] = useState('inicio');
+  const [estacionSeleccionada, setEstacionSeleccionada] = useState(null);
+
+  const irADetalle = (estacion) => {
+    setEstacionSeleccionada(estacion);
+    setVista('detalle');
+  };
+
+  const irAInicio = () => {
+    setVista('inicio');
+  };
+
   return (
-    <div className="app-container">
-      <AdquirirPlanPage />
-    </div>
+    <UsuarioLayout>
+      <BilleteraPage />
+    </UsuarioLayout>
   );
 }
 

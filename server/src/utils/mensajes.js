@@ -24,4 +24,17 @@ export const MENSAJES = {
     sin_estaciones_registradas: "No hay estaciones registradas",
     sin_estaciones_disponibles: "No hay estaciones disponibles",
     estaciones_sin_coincidencias: "No se encontraron estaciones con ese nombre",
+     // Bicicletas (HU_14, HU_20)
+    codigo_bicicleta_duplicado: "El código de la bicicleta ya se encuentra registrado",
+    estacion_sin_anclajes_libres: "La estación no tiene anclajes libres",
+    bicicleta_registrada: "REGISTRO DE BICICLETA EXITOSO",
+    bicicleta_en_uso: "La bicicleta está en uso",
+    bicicleta_actualizada: "BICICLETA ACTUALIZADA CORRECTAMENTE",
+    bicicleta_inactivada: "BICICLETA INACTIVADA CORRECTAMENTE",
+      // Planes y tarifas (HU_10, HU_15)
+    costo_invalido: "Error: Verifique que el costo base sea un entero mínimo de $100 y el valor por minuto de exceso sea $0 o mínimo $100",
+    numeros_plan_invalidos: "Error: La vigencia, los viajes por día y el tiempo por viaje deben ser números enteros mayores a cero",
+    nombre_plan_duplicado: "El nombre del plan ya se encuentra registrado",
+    plan_guardado: "Plan guardado y actualizado correctamente",
+    sin_planes_disponibles: "No hay planes disponibles por el momento",
   };
