@@ -6,6 +6,7 @@ import adminEstaciones from "./admin.estaciones.routes.js";
 import adminBicicletas from "./admin.bicicletas.routes.js";
 import planes from "./planes.routes.js";
 import adminPlanes from "./admin.planes.routes.js";
+import interno from "./interno.routes.js";
 
 const router = Router();
 
@@ -16,6 +17,8 @@ router.use("/admin/estaciones", adminEstaciones);
 router.use("/admin/bicicletas", adminBicicletas);
 router.use("/admin/planes", adminPlanes);
 router.use("/planes", planes);
+
+router.use("/interno", interno);
 
 
 export default router;

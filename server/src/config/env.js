@@ -12,4 +12,5 @@ function requerida(nombre) {
     dbArchivo: process.env.DB_FILE ?? "./server/data/stationbike.db",
     tunjaApi: process.env.TUNJA_API ?? "https://nfc.multimediaudeb.com/api/v1",
     tunjaClave: requerida("TUNJA_CLAVE"),
+    claveInterna: requerida("CLAVE_INTERNA"),
   };
