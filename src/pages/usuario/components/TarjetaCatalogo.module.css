@@ -1,0 +1,150 @@
+/* TarjetaCatalogo.module.css: base = celular */
+
+.raiz {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  height: 100%;
+  min-width: 0;
+  padding: var(--espacio-5);
+}
+
+/* Plan seleccionado o recomendado: contorno lima */
+.destacada {
+  border: 2px solid var(--color-acento);
+}
+
+/* Pastilla centrada sobre el borde superior */
+.etiqueta {
+  position: absolute;
+  top: calc(var(--espacio-3) * -1);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--espacio-1) var(--espacio-4);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.encabezado {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.vigencia {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.nombre {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.descripcion {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+/* Bloque del precio en verde claro */
+.precioBloque {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+}
+
+.precio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--espacio-2);
+}
+
+.cifra {
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.unidad {
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.detallePrecio {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.caracteristicas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--texto-s);
+}
+
+.caracteristicas li {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.check {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-exito);
+}
+
+/* Acción: lima (primario), verde claro (suave) o bloqueada (actual) */
+.primario {
+  margin-top: auto;
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  font-weight: 700;
+}
+
+.suave {
+  margin-top: auto;
+  background: var(--color-acento-suave);
+  color: var(--color-texto);
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.actual {
+  margin-top: auto;
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto-suave);
+  border-color: var(--color-borde-suave);
+  font-weight: 700;
+}

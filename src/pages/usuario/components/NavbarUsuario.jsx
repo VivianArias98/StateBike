@@ -12,7 +12,7 @@ function NavbarUsuario({ itemActivo, nombre, subtitulo, nfc, menuAbierto, onAlte
     <header className={`contexto-oscuro ${styles.raiz}`}>
       <div className={styles.barra}>
         <div className={styles.marca}>
-          <Logo altura="3rem" variante="oscuro" />
+          <Logo altura="3.75rem" variante="oscuro" />
         </div>
 
         <button

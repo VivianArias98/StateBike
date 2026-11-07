@@ -1,33 +1,42 @@
+import { IconoBicicleta, IconoDesbloqueo } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './EspecificacionServicio.module.css';
 
-// Tabla de especificación del servicio. Solo dibuja, no guarda estado.
-// filas: [{ etiqueta, valor, destacado }]
-// filaBicicleta: { icono, valor } — fila especial con fondo oscuro
+// Tarjeta "Especificación del servicio" con sus botones debajo.
+// filas: [{ etiqueta, valor, destacado, grande }]
+// filaBicicleta: texto del anclaje asegurado
 function EspecificacionServicio({ filas, filaBicicleta, onVerHistorial, onLiberarBicicleta }) {
   return (
-    <section className={`tarjeta ${styles.raiz}`}>
-      <h2 className={styles.titulo}>Especificación del servicio</h2>
+    <div className={styles.raiz}>
+      <section className={`tarjeta ${styles.tarjeta}`}>
+        <h2 className={styles.cabecera}>ESPECIFICACIÓN DEL SERVICIO</h2>
 
-      <dl className={styles.lista}>
-        {filas.map((fila) => (
-          <div key={fila.etiqueta} className={styles.fila}>
-            <dt className={styles.etiqueta}>{fila.etiqueta}</dt>
-            <dd className={fila.destacado ? `${styles.valor} ${styles.valorDestacado}` : styles.valor}>
-              {fila.valor}
-            </dd>
+        <dl className={styles.lista}>
+          {filas.map((fila) => (
+            <div key={fila.etiqueta} className={styles.fila}>
+              <dt className={styles.etiqueta}>{fila.etiqueta}</dt>
+              <dd
+                className={[
+                  styles.valor,
+                  fila.destacado && styles.valorDestacado,
+                  fila.grande && styles.valorGrande,
+                ].filter(Boolean).join(' ')}
+              >
+                {fila.valor}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        {filaBicicleta && (
+          <div className={styles.pie}>
+            <span>Bicicleta asegurada</span>
+            <span className={styles.pieValor}>
+              <IconoDesbloqueo />
+              {filaBicicleta}
+            </span>
           </div>
-        ))}
-      </dl>
-
-      {filaBicicleta && (
-        <div className={styles.filaBici}>
-          <span className={styles.filaBiciEtiqueta}>Bicicleta asegurada</span>
-          <span className={styles.filaBiciValor}>
-            <span aria-hidden="true">🔗</span>
-            {filaBicicleta}
-          </span>
-        </div>
-      )}
+        )}
+      </section>
 
       <div className={styles.acciones}>
         <button
@@ -39,13 +48,13 @@ function EspecificacionServicio({ filas, filaBicicleta, onVerHistorial, onLibera
         </button>
         <button
           type="button"
-          className="boton boton--acento boton--bloque"
+          className={`boton boton--acento boton--bloque ${styles.botonLiberar}`}
           onClick={onLiberarBicicleta}
         >
-          LIBERAR OTRA BICICLETA 🚲
+          LIBERAR OTRA BICICLETA <IconoBicicleta />
         </button>
       </div>
-    </section>
+    </div>
   );
 }
 

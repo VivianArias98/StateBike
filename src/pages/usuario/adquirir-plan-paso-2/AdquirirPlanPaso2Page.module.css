@@ -1,0 +1,7 @@
+/* AdquirirPlanPaso2Page.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}

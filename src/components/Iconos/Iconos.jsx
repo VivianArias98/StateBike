@@ -162,3 +162,104 @@ function Icono({ children }) {
       </Icono>
     );
   }
+
+  // Iconos añadidos para los mockups de usuario (segunda tanda)
+  export function IconoCampana() {
+    return (
+      <Icono>
+        <path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z" />
+        <path d="M10 20.5a2 2 0 0 0 4 0" />
+      </Icono>
+    );
+  }
+
+  export function IconoMapa() {
+    return (
+      <Icono>
+        <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z" />
+        <path d="M9 4v14M15 6v14" />
+      </Icono>
+    );
+  }
+
+  export function IconoRayo() {
+    return (
+      <Icono>
+        <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+      </Icono>
+    );
+  }
+
+  export function IconoAyuda() {
+    return (
+      <Icono>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14" />
+        <circle cx="12" cy="17.2" r=".6" />
+      </Icono>
+    );
+  }
+
+  export function IconoMedalla() {
+    return (
+      <Icono>
+        <circle cx="12" cy="9" r="5.5" />
+        <path d="M8.5 13.5 7 21l5-2.5 5 2.5-1.5-7.5" />
+      </Icono>
+    );
+  }
+
+  export function IconoDesbloqueo() {
+    return (
+      <Icono>
+        <rect x="5" y="11" width="14" height="10" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 7.8-1.2" />
+      </Icono>
+    );
+  }
+
+  export function IconoRecibo() {
+    return (
+      <Icono>
+        <path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" />
+        <path d="M9 8h6M9 12h6" />
+      </Icono>
+    );
+  }
+
+  export function IconoAnclaje() {
+    return (
+      <Icono>
+        <rect x="4" y="4" width="6" height="6" rx="1" />
+        <rect x="14" y="4" width="6" height="6" rx="1" />
+        <rect x="4" y="14" width="6" height="6" rx="1" />
+        <rect x="14" y="14" width="6" height="6" rx="1" />
+      </Icono>
+    );
+  }
+
+  export function IconoBuscar() {
+    return (
+      <Icono>
+        <circle cx="11" cy="11" r="6.5" />
+        <path d="M16 16l4.5 4.5" />
+      </Icono>
+    );
+  }
+
+  export function IconoCerrar() {
+    return (
+      <Icono>
+        <path d="M6 6l12 12M18 6 6 18" />
+      </Icono>
+    );
+  }
+
+  export function IconoDocumento() {
+    return (
+      <Icono>
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+        <path d="M14 3v5h5" />
+      </Icono>
+    );
+  }

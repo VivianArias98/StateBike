@@ -1,4 +1,4 @@
-/* ReportarIncidenciaPage.module.css: base = celular, formulario de una columna */
+/* ReportarIncidenciaPage.module.css: base = celular, formulario de una columna a todo el ancho */
 
 .raiz {
   display: flex;
@@ -9,10 +9,8 @@
 .formulario {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-5);
-  max-width: 48rem;
+  gap: var(--espacio-4);
   width: 100%;
-  margin: 0 auto;
 }
 
 .seccion {
@@ -37,7 +35,6 @@
 .opcional {
   font-weight: 400;
   color: var(--color-texto-suave);
-  text-transform: none;
 }
 
 .ayuda {
@@ -51,10 +48,11 @@
 
 .nota {
   padding: var(--espacio-4);
-  background: var(--color-acento-suave);
+  background: var(--color-fondo-pagina);
   border-radius: var(--radio-m);
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
+  line-height: 1.6;
   color: var(--color-texto-suave);
 }
 
@@ -84,7 +82,23 @@
   gap: var(--espacio-3);
 }
 
+.boton {
+  text-transform: uppercase;
+  font-family: var(--fuente-mono);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
 @media (min-width: 768px) {
+  .seccion {
+    padding: var(--espacio-6);
+  }
+
+  .formulario {
+    max-width: 82rem;
+    margin-inline: auto;
+  }
+
   .acciones {
     flex-direction: row;
     justify-content: flex-end;

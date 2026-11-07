@@ -1,46 +1,42 @@
-/* EspecificacionServicio.module.css – base: celular */
-
-/* El contenedor usa clase global .tarjeta */
+/* Base = celular */
 .raiz {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
+  gap: var(--espacio-3);
 }
 
-.titulo {
-  font-size: var(--texto-xs);
+/* La tarjeta se usa con la clase global "tarjeta": se quita el padding para que el encabezado y el pie lleguen a los bordes */
+.tarjeta {
+  padding: 0;
+  overflow: hidden;
+}
+
+.cabecera {
+  padding: var(--espacio-4);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-s);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-texto);
-  opacity: 0.7;
+  letter-spacing: 0.06em;
 }
 
-/* Lista de definición (dl) */
 .lista {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .fila {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: var(--espacio-4);
-  padding: var(--espacio-3) 0;
-  border-bottom: 1px solid var(--color-borde);
-  font-size: var(--texto-s);
-}
-
-.fila:last-child {
-  border-bottom: none;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  border-bottom: 1px solid var(--color-borde-suave);
 }
 
 .etiqueta {
-  color: var(--color-texto);
-  opacity: 0.7;
-  flex-shrink: 0;
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
 }
 
 .valor {
@@ -52,40 +48,53 @@
   font-weight: 700;
 }
 
-/* Fila especial: bicicleta asegurada (fondo oscuro) */
-.filaBici {
+.valorGrande {
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+}
+
+/* Pie oscuro: bicicleta asegurada */
+.pie {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: var(--espacio-3);
-  padding: var(--espacio-3) var(--espacio-4);
+  padding: var(--espacio-4);
   background: var(--color-superficie-inversa);
   color: var(--color-texto-inverso);
-  border-radius: var(--radio-m);
   font-size: var(--texto-s);
-  font-weight: 600;
 }
 
-.filaBiciEtiqueta {
-  opacity: 0.8;
-}
-
-.filaBiciValor {
-  display: flex;
+.pieValor {
+  display: inline-flex;
   align-items: center;
   gap: var(--espacio-2);
+  font-size: var(--texto-l);
   font-weight: 700;
 }
 
-/* Acciones */
 .acciones {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-3);
 }
 
-/* El botón de historial usa estilo base (.boton) sin variante de color */
+/* Ver detalle: verde claro, como pide el mockup */
 .botonHistorial {
-  border-color: var(--color-borde);
+  background: var(--color-acento-suave);
+  border-color: var(--color-acento-suave);
   font-weight: 600;
+}
+
+.botonLiberar {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Texto e ícono centrados con separación */
+.botonLiberar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
 }

@@ -10,9 +10,31 @@
 
 .cabecera {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--espacio-3);
+}
+
+.izquierda {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  min-width: 0;
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-s);
+  background: var(--color-fondo-pagina);
+  color: var(--color-exito);
+  font-size: var(--texto-l);
 }
 
 .titulo {
@@ -50,6 +72,29 @@
   color: var(--color-acento);
 }
 
+/* Estado "Activa" sobre la tarjeta negra: contorno y texto lima */
+.activa {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  height: 2rem;
+  padding: 0 var(--espacio-3);
+  border: 1px solid var(--color-acento);
+  border-radius: var(--radio-s);
+  color: var(--color-acento);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.punto {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+  background: var(--color-acento);
+  border-radius: var(--radio-circulo);
+}
+
 .etiquetaNumero {
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -68,20 +113,41 @@
   text-transform: uppercase;
 }
 
+/* Aviso de bloqueo: caja con borde y fondo de la interfaz, candado a la izquierda */
 .aviso {
   display: flex;
   align-items: flex-start;
   gap: var(--espacio-3);
   padding: var(--espacio-4);
-  background: var(--color-acento-suave);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-m);
   font-size: var(--texto-s);
-  color: var(--color-texto-suave);
+  line-height: 1.5;
 }
 
 .iconoAviso {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento-suave);
   color: var(--color-exito);
-  font-size: var(--texto-l);
+  font-size: var(--texto-m);
+}
+
+/* Botón de bloqueo: fondo verde de la interfaz, al pie de la tarjeta */
+.bloquear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  margin-top: auto;
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  color: var(--color-texto);
+  font-weight: 700;
 }

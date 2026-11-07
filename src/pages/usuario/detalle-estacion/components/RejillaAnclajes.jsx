@@ -1,3 +1,4 @@
+import { IconoCheck } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './RejillaAnclajes.module.css';
 
 // Cuadrícula de anclajes. Solo se pueden elegir los que tienen bicicleta; los libres quedan deshabilitados.
@@ -13,7 +14,7 @@ function RejillaAnclajes({ anclajes, seleccionado, onSeleccionar }) {
         ].join(' ');
 
         return (
-          <li key={anclaje.numero}>
+          <li key={anclaje.numero} className={styles.celda}>
             <button
               type="button"
               className={clases}
@@ -21,6 +22,11 @@ function RejillaAnclajes({ anclajes, seleccionado, onSeleccionar }) {
               aria-pressed={activo}
               onClick={() => onSeleccionar(anclaje.numero)}
             >
+              {activo && (
+                <span className={styles.marca} aria-hidden="true">
+                  <IconoCheck />
+                </span>
+              )}
               <span className={styles.numero}>{String(anclaje.numero).padStart(2, '0')}</span>
               <span className={styles.estado}>{anclaje.tieneBicicleta ? 'Bici' : 'Libre'}</span>
             </button>

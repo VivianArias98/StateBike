@@ -1,0 +1,46 @@
+/* PasosDesbloqueo.module.css: base = celular, una columna */
+
+.lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-3);
+}
+
+.paso {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  min-height: var(--alto-control);
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+}
+
+.numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  font-weight: 700;
+}
+
+.titulo {
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Paso en curso: borde oscuro para distinguirlo de los pendientes */
+.activo {
+  border-color: var(--color-borde);
+}

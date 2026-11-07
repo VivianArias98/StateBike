@@ -1,0 +1,89 @@
+/* Mi billetera. Base = celular; 768px y 1024px amplían */
+.raiz { display: flex; flex-direction: column; gap: var(--espacio-5); }
+
+.cabecera { display: flex; flex-direction: column; gap: var(--espacio-4); }
+.modulo { font-family: var(--fuente-mono); font-size: var(--texto-xs); font-weight: 700; color: var(--color-exito); margin: 0; }
+.cuenta { font-weight: 400; color: var(--color-texto-suave); }
+.titulo { font-size: var(--texto-xl); font-weight: 800; line-height: 1.1; margin: var(--espacio-2) 0 0; }
+.subtitulo { font-size: var(--texto-s); color: var(--color-texto-suave); margin: var(--espacio-2) 0 0; }
+.estadoHabilitado {
+  display: flex; gap: var(--espacio-3); align-items: center; padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-secundario); border: 1px solid var(--color-secundario); border-radius: var(--radio-l);
+  color: var(--color-secundario-texto);
+}
+.iconoEstado {
+  width: var(--alto-control); height: var(--alto-control); display: grid; place-items: center; flex-shrink: 0;
+  border-radius: var(--radio-m); background: var(--color-acento); color: var(--color-acento-texto);
+}
+.estadoTitulo { font-weight: 700; margin: 0; }
+.estadoTexto { font-size: var(--texto-xs); color: inherit; margin: 0; }
+
+.principales { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--espacio-4); }
+.tarjetaSaldo, .tarjetaCobro {
+  display: flex; flex-direction: column; gap: var(--espacio-3); padding: var(--espacio-5);
+  background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio-l);
+}
+.tarjetaCobro { background: var(--color-superficie); border-color: var(--color-error-borde); color: var(--color-texto); }
+.tarjetaCobro .etiquetaAlerta,
+.tarjetaCobro .montoAlerta,
+.tarjetaCobro .moneda { color: inherit; }
+.filaSuperior { display: flex; justify-content: space-between; align-items: center; gap: var(--espacio-2); flex-wrap: wrap; }
+.etiqueta { font-family: var(--fuente-mono); font-size: var(--texto-xs); color: var(--color-texto-suave); margin: 0; }
+.etiquetaAlerta { font-family: var(--fuente-mono); font-size: var(--texto-xs); font-weight: 700; color: var(--color-error-texto); margin: 0; }
+.chip {
+  font-family: var(--fuente-mono); font-size: var(--texto-xs); padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-pastilla); background: var(--color-fondo-pagina); border: 1px solid var(--color-borde);
+}
+.chipOscuro {
+  font-family: var(--fuente-mono); font-size: var(--texto-xs); padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-pastilla); background: var(--color-superficie-inversa); color: var(--color-acento);
+}
+.monto { font-size: var(--texto-xl); font-weight: 800; margin: 0; }
+.montoAlerta { font-size: var(--texto-xl); font-weight: 800; color: var(--color-error-texto); margin: 0; }
+.moneda { font-size: var(--texto-s); font-weight: 600; color: var(--color-texto-suave); }
+.descripcion { font-size: var(--texto-s); background: var(--color-fondo-pagina); padding: var(--espacio-3); border-radius: var(--radio-m); margin: 0; }
+.concepto { background: var(--color-fondo-pagina); color: var(--color-texto); padding: var(--espacio-3); border-radius: var(--radio-m); }
+.concepto .etiqueta { color: inherit; }
+.textoConcepto { font-size: var(--texto-s); margin: var(--espacio-1) 0 0; }
+.botonOscuro { background: var(--color-superficie-inversa); color: var(--color-texto-inverso); }
+.botonAlerta { background: var(--color-superficie); color: var(--color-error-texto); border: 1px solid var(--color-error-borde); }
+
+.pequenas { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--espacio-3); }
+.pequena {
+  display: flex; gap: var(--espacio-3); align-items: center; padding: var(--espacio-4);
+  background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio-l);
+}
+.iconoPequeno {
+  flex-shrink: 0; width: var(--alto-control); height: var(--alto-control); display: grid; place-items: center;
+  border-radius: var(--radio-m); background: var(--color-acento-suave); color: var(--color-exito);
+}
+.valorPequeno { font-weight: 700; margin: var(--espacio-1) 0 0; }
+.detalle { font-size: var(--texto-xs); color: var(--color-exito); margin: 0; }
+
+.movimientos {
+  display: flex; flex-direction: column; gap: var(--espacio-4); padding: var(--espacio-4);
+  background: var(--color-superficie); border: 1px solid var(--color-borde); border-radius: var(--radio-l);
+}
+.cabeceraMovimientos { display: flex; flex-direction: column; gap: var(--espacio-3); padding: var(--espacio-4); background: var(--color-fondo-pagina); border-radius: var(--radio-m); }
+.tituloMovimientos { font-size: var(--texto-l); font-weight: 800; margin: 0; }
+.subtituloMovimientos { font-size: var(--texto-xs); color: var(--color-texto-suave); margin: var(--espacio-1) 0 0; }
+.tablaWrap { width: 100%; }
+.conceptoTabla { font-weight: 700; margin: 0; }
+.derecha { text-align: right; }
+.tipoRecarga { font-family: var(--fuente-mono); font-size: var(--texto-xs); font-weight: 700; padding: var(--espacio-1) var(--espacio-2); border-radius: var(--radio-pastilla); background: var(--color-acento-suave); color: var(--color-exito); }
+.tipoCobro { font-family: var(--fuente-mono); font-size: var(--texto-xs); font-weight: 700; padding: var(--espacio-1) var(--espacio-2); border-radius: var(--radio-pastilla); background: var(--color-error-fondo); color: var(--color-error-texto); }
+.montoPositivo { color: var(--color-exito); font-weight: 700; }
+.montoNegativo { color: var(--color-error-texto); font-weight: 700; }
+.verMas { display: flex; justify-content: center; }
+.botonVerde { background: var(--color-fondo-pagina); color: var(--color-texto); border-color: var(--color-borde); font-weight: 700; }
+
+@media (min-width: 768px) {
+  .cabecera { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+  .estadoHabilitado { min-width: 16rem; }
+  .principales { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pequenas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cabeceraMovimientos { flex-direction: row; justify-content: space-between; align-items: center; }
+}
+@media (min-width: 1024px) {
+  .movimientos { padding: var(--espacio-6); }
+}

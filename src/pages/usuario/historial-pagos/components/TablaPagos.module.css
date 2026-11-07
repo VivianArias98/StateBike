@@ -4,11 +4,26 @@
   width: 100%;
 }
 
-.colFecha    { width: 18%; }
-.colConcepto { width: 34%; }
+.colFecha    { width: 19%; }
+.colConcepto { width: 33%; }
 .colTipo     { width: 18%; }
 .colMonto    { width: 16%; text-align: right; }
-.colEstado   { width: 14%; }
+.colEstado   { width: 14%; text-align: center; }
+
+.punto {
+  margin-right: var(--espacio-2);
+  vertical-align: middle;
+}
+
+.fecha {
+  display: inline-block;
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-fondo-pagina);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  white-space: nowrap;
+}
 
 .monto {
   text-align: right;

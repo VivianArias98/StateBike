@@ -1,6 +1,6 @@
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import Etiqueta from '../../../components/Etiqueta/Etiqueta.jsx';
-import { IconoInfo } from '../../../components/Iconos/Iconos.jsx';
+import { IconoFlecha, IconoInfo } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import FormularioDatos from './components/FormularioDatos.jsx';
 import TarjetaNfcPerfil from './components/TarjetaNfcPerfil.jsx';
@@ -33,7 +33,12 @@ function MiPerfilPage() {
             </>
           }
           subtitulo="Gestión centralizada de credenciales, datos de identidad y acceso NFC a estaciones"
-          acciones={<span className={styles.idPerfil}>ID: {PERFIL.id}</span>}
+          acciones={
+            <span className={styles.idPerfil}>
+              <span className={styles.punto} aria-hidden="true" />
+              ID: {PERFIL.id}
+            </span>
+          }
         />
 
         <section className={`tarjeta ${styles.aviso}`} aria-label="Estado de la identidad">
@@ -45,7 +50,7 @@ function MiPerfilPage() {
             actualizar tu clave, usa una combinación alfanumérica segura.
           </p>
           <button type="button" className={`boton boton--s ${styles.ayuda}`} onClick={abrirAyuda}>
-            Centro de ayuda →
+            Centro de ayuda <IconoFlecha />
           </button>
         </section>
 

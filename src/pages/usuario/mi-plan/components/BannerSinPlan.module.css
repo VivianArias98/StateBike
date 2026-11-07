@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: var(--espacio-4);
   padding: var(--espacio-5);
-  border-left: 2px solid var(--color-acento);
+  border-left: 0.375rem solid var(--color-acento);
 }
 
 .icono {
@@ -39,6 +39,23 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-texto-suave);
+}
+
+/* Pastilla "Conectado": verde claro, totalmente redondeada */
+.conectado {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  height: 1.75rem;
+  padding: 0 var(--espacio-3);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .titulo {

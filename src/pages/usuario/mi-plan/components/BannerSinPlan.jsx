@@ -12,7 +12,10 @@ function BannerSinPlan({ nfc, onAdquirir }) {
       <div className={styles.texto}>
         <div className={styles.etiquetaFila}>
           <p className={styles.etiqueta}>Estado del sistema // Acceso vehicular</p>
-          <span className="insignia insignia--activa">Conectado</span>
+          <span className={styles.conectado}>
+            <span className="punto-vivo" aria-hidden="true" />
+            Conectado
+          </span>
         </div>
         <h2 id="sin-plan-titulo" className={styles.titulo}>
           No tienes ningún plan activo actualmente

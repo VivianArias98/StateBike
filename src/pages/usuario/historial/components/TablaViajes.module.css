@@ -7,28 +7,37 @@
 /* Ancho de las columnas */
 .colFecha    { width: 22%; }
 .colOrigen   { width: 26%; }
-.colDestino  { width: 26%; }
-.colDuracion { width: 12%; text-align: right; }
-.colRuta     { width: 14%; }
+.colDestino  { width: 24%; }
+.colDuracion { width: 13%; text-align: center; }
+.colRuta     { width: 15%; }
 
-/* La columna de duración se alinea a la derecha */
-.duracion {
-  text-align: right;
-  font-weight: 700;
-}
-
-.enlaceRuta {
-  font-size: var(--texto-s);
-  white-space: nowrap;
-}
-
-/* Punto parpadeante junto a la fecha */
 .punto {
   margin-right: var(--espacio-2);
   vertical-align: middle;
 }
 
-/* Estado vacío */
+.origen {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: 700;
+}
+
+.pin {
+  display: inline-flex;
+  color: var(--color-exito);
+}
+
+.destino {
+  color: var(--color-texto-suave);
+}
+
+.enlaceRuta {
+  font-size: var(--texto-s);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .vacio {
   font-size: var(--texto-s);
   color: var(--color-texto-suave);

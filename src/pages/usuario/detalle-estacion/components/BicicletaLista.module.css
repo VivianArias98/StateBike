@@ -1,0 +1,46 @@
+/* BicicletaLista.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--color-secundario-texto);
+  background: var(--color-secundario);
+  border-radius: var(--radio-circulo);
+  font-size: var(--texto-m);
+}
+
+.texto {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--texto-s);
+}
+
+.bateria {
+  display: inline-flex;
+  align-items: center;
+  height: var(--alto-control-s);
+  padding: 0 var(--espacio-3);
+  color: var(--color-exito);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}

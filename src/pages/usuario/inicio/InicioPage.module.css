@@ -6,6 +6,24 @@
   gap: var(--espacio-5);
 }
 
+/* Insignia de red: fondo igual al de la página, borde suave y texto verde */
+.red {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  height: var(--alto-control-s);
+  padding: 0 var(--espacio-4);
+  color: var(--color-exito);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .metricas {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -19,10 +37,29 @@
   align-items: start;
 }
 
-/* El mapa lee esta variable para definir su altura */
+/* El mapa lee esta variable para definir su altura. El botón de ubicación se superpone */
 .mapa {
   --alto-mapa: 22rem;
+  position: relative;
   min-width: 0;
+}
+
+.ubicacion {
+  position: absolute;
+  top: var(--espacio-3);
+  right: var(--espacio-3);
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--alto-control);
+  height: var(--alto-control);
+  color: var(--color-texto);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-l);
+  cursor: pointer;
 }
 
 .lateral {
@@ -58,13 +95,38 @@
   gap: var(--espacio-3);
 }
 
+/* Botón principal: alto de toque cómodo y texto en mayúsculas como en el diseño */
 .accion {
+  gap: var(--espacio-2);
+  min-height: 3.5rem;
+  font-size: var(--texto-m);
   font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
+/* Nota de la tarjeta NFC dentro de una caja suave */
 .ayuda {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
   font-size: var(--texto-xs);
   color: var(--color-texto-suave);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.ayuda > span:last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.iconoAyuda {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-exito);
+  font-size: var(--texto-l);
 }
 
 @media (min-width: 768px) {

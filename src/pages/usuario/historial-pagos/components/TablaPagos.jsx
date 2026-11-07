@@ -24,16 +24,21 @@ function TablaPagos({ pagos }) {
         <tbody>
           {pagos.map((pago) => (
             <tr key={pago.id}>
-              <td>{pago.fechaHora}</td>
+              <td>
+                <span className={`punto-vivo ${styles.punto}`} aria-hidden="true" />
+                <span className={styles.fecha}>{pago.fechaHora}</span>
+              </td>
               <td>{pago.concepto}</td>
               <td>
                 <Etiqueta texto={pago.tipo} color={pago.tipo === 'Cobro por exceso' ? 'amarilla' : 'menta'} />
               </td>
               <td className={styles.monto}>{formatearPesos(pago.monto)} COP</td>
               <td>
-                <span className={pago.estado === 'Pagado' ? 'insignia insignia--activa' : 'insignia insignia--neutra'}>
-                  {pago.estado}
-                </span>
+                {pago.estado === 'Pendiente' ? (
+                  <Etiqueta texto="Pendiente" color="amarilla" />
+                ) : (
+                  <span className="insignia insignia--activa">{pago.estado}</span>
+                )}
               </td>
             </tr>
           ))}
