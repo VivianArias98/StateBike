@@ -65,3 +65,39 @@ CREATE TABLE IF NOT EXISTS planes (
     CHECK (estado IN ('ACTIVO', 'INACTIVO')),
   creado TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- Suscripciones / planes adquiridos por los usuarios (HU_2 y HU_17)
+CREATE TABLE IF NOT EXISTS suscripciones (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES perfiles(usuario_id),
+  plan_id INTEGER NOT NULL REFERENCES planes(id),
+  nombre_plan TEXT NOT NULL,
+  costo_base INTEGER NOT NULL,
+  vigencia_dias INTEGER NOT NULL,
+  viajes_por_dia INTEGER NOT NULL,
+  tiempo_viaje_min INTEGER NOT NULL,
+  valor_minuto_exceso INTEGER NOT NULL,
+  fecha_inicio TEXT NOT NULL DEFAULT (datetime('now')),
+  fecha_fin TEXT NOT NULL,
+  estado TEXT NOT NULL DEFAULT 'ACTIVO'
+    CHECK (estado IN ('ACTIVO', 'CANCELADO', 'VENCIDO')),
+  fecha_cancelacion TEXT
+);
+
+-- Registro de viajes (HU_3, HU_4 y HU_5)
+CREATE TABLE IF NOT EXISTS viajes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES perfiles(usuario_id),
+  bicicleta_id INTEGER NOT NULL REFERENCES bicicletas(id),
+  estacion_origen_id INTEGER NOT NULL REFERENCES estaciones(id),
+  estacion_destino_id INTEGER REFERENCES estaciones(id),
+  fecha_inicio TEXT NOT NULL DEFAULT (datetime('now')),
+  fecha_fin TEXT,
+  duracion_min INTEGER DEFAULT 0,
+  minutos_exceso INTEGER DEFAULT 0,
+  valor_cobrado INTEGER DEFAULT 0,
+  estado TEXT NOT NULL DEFAULT 'EN_CURSO'
+    CHECK (estado IN ('EN_CURSO', 'FINALIZADO')),
+  estado_cobro TEXT NOT NULL DEFAULT 'SIN_COBRO'
+    CHECK (estado_cobro IN ('SIN_COBRO', 'PAGADO', 'PENDIENTE'))
+);
