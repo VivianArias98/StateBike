@@ -191,3 +191,48 @@ Authorization: Bearer {{adminLogin.response.body.acceso}}
 ### 28. Activar plan
 PATCH {{host}}/admin/planes/{{planId}}/activar
 Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 30. Admin: usuarios con su estado de tarjeta
+GET {{host}}/admin/tarjetas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 31. Admin: vincular tarjeta al usuario de prueba
+POST {{host}}/admin/tarjetas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "usuarioId": {{login.response.body.usuario.id}}, "uid": "04A1B2C3" }
+
+### 32. Admin: vincular otra al mismo usuario (debe fallar)
+POST {{host}}/admin/tarjetas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "usuarioId": {{login.response.body.usuario.id}}, "uid": "04D4E5F6" }
+
+### 33. Usuario: mi tarjeta
+GET {{host}}/tarjeta
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 34. Usuario: bloquear
+PATCH {{host}}/tarjeta/bloquear
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 35. Usuario: desbloquear
+PATCH {{host}}/tarjeta/desbloquear
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 36. Admin: buscar por correo
+GET {{host}}/admin/tarjetas?q=prueba
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 37. Admin: desvincular
+DELETE {{host}}/admin/tarjetas/{{login.response.body.usuario.id}}
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 38. Permisos: vincular con el token de un usuario común (debe dar 403)
+POST {{host}}/admin/tarjetas
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "usuarioId": 1, "uid": "04A1B2C3" }

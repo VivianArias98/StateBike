@@ -37,4 +37,14 @@ export const MENSAJES = {
     nombre_plan_duplicado: "El nombre del plan ya se encuentra registrado",
     plan_guardado: "Plan guardado y actualizado correctamente",
     sin_planes_disponibles: "No hay planes disponibles por el momento",
-  };
+      // Tarjetas NFC (HU_1, HU_18)
+    tarjeta_vinculada: "TARJETA VINCULADA CORRECTAMENTE",
+    tarjeta_desvinculada: "TARJETA DESVINCULADA CORRECTAMENTE",
+    tarjeta_bloqueada: "TARJETA BLOQUEADA CORRECTAMENTE",
+    tarjeta_desbloqueada: "TARJETA DESBLOQUEADA CORRECTAMENTE",
+    usuario_con_tarjeta: "El usuario ya tiene una tarjeta vinculada",
+    tarjeta_en_uso: "La tarjeta ya está vinculada a otro usuario",
+    desvincular_con_viaje: "No se puede desvincular con un viaje en curso",
+    bloquear_con_viaje: "No puede bloquear la tarjeta con un viaje en curso",
+    sin_tarjeta: "No tiene una tarjeta NFC vinculada",
+    };

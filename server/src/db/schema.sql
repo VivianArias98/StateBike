@@ -6,7 +6,19 @@ CREATE TABLE IF NOT EXISTS perfiles (
   fecha_nacimiento TEXT,
   telefono TEXT,
   ultimo_acceso TEXT,
+  correo TEXT,   -- copia local: TunjaAPI no busca usuarios por correo
+  nombre TEXT,
   creado TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Una tarjeta por usuario (HU_18). SIN VINCULAR = el usuario no tiene fila aquí
+CREATE TABLE IF NOT EXISTS tarjetas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL UNIQUE REFERENCES perfiles(usuario_id),
+  uid TEXT NOT NULL UNIQUE,
+  estado TEXT NOT NULL DEFAULT 'ACTIVA' CHECK (estado IN ('ACTIVA', 'BLOQUEADA')),
+  fecha_vinculacion TEXT NOT NULL DEFAULT (datetime('now')),  -- UTC
+  fecha_cambio_estado TEXT                                    -- UTC
 );
 
 CREATE TABLE IF NOT EXISTS estaciones (
