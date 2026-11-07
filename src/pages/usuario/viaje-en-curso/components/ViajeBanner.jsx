@@ -1,26 +1,21 @@
-import { IconoUbicacion, IconoNfc } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './ViajeBanner.module.css';
 
-// Franja con el resumen del viaje activo
-function ViajeBanner({ codigoBicicleta, estacionInicio, anclaje, nfc }) {
+// Banner superior del viaje en curso. Solo dibuja, no guarda estado.
+function ViajeBanner({ usuario }) {
   return (
-    <section className={styles.raiz}>
-      <p className={styles.estado}>
-        <span className={styles.punto} aria-hidden="true" />
-        {codigoBicicleta} · Viaje activo
-      </p>
+    <section className={`tarjeta ${styles.raiz}`}>
+      <div className={styles.texto}>
+        <p className={styles.estado}>
+          <span className={styles.punto} aria-hidden="true" />
+          <span className={styles.titulo}>VIAJE INICIADO. ¡BUEN RECORRIDO!</span>
+          <span className={styles.chip}>EN CURSO</span>
+        </p>
+        <p className={styles.subtitulo}>
+          Tiene 40 minutos incluidos en su plan mensual para este trayecto. Devuélvela en una estación con anclajes libres.
+        </p>
+      </div>
 
-      <p className={styles.inicio}>
-        <IconoUbicacion />
-        <span>
-          Inicio: <strong>{estacionInicio}</strong> · Anclaje {anclaje}
-        </span>
-      </p>
-
-      <p className={styles.nfc}>
-        <IconoNfc />
-        NFC ••••{nfc}
-      </p>
+      <span className={styles.usuario}>Usuario: {usuario}</span>
     </section>
   );
 }

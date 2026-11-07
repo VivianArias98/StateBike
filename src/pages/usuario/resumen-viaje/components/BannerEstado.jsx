@@ -1,3 +1,4 @@
+import { IconoCheck } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './BannerEstado.module.css';
 
 // Muestra el estado del viaje y la referencia. Solo dibuja, no guarda estado.
@@ -5,7 +6,9 @@ function BannerEstado({ mensaje, referencia }) {
   return (
     <div className={styles.raiz}>
       <p className={styles.mensaje}>
-        <span className={styles.icono} aria-hidden="true">✓</span>
+        <span className={styles.icono} aria-hidden="true">
+          <IconoCheck />
+        </span>
         {mensaje}
       </p>
       <div className={styles.ref}>

@@ -1,47 +1,20 @@
 import { useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import { IconoBicicleta, IconoCalendario, IconoDescarga, IconoReloj } from '../../../components/Iconos/Iconos.jsx';
+import { IconoDescarga, IconoDocumento } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import SelectorHistorial from '../components/SelectorHistorial.jsx';
-import FiltroFechas from '../components/FiltroFechas.jsx';
-import MetricaUsuario from '../components/MetricaUsuario.jsx';
+import FiltroFechas from './components/FiltroFechas.jsx';
 import TablaViajes from './components/TablaViajes.jsx';
+import MetricasViajes from './components/MetricasViajes.jsx';
+import FiltroActivo from './components/FiltroActivo.jsx';
 import styles from './HistorialPage.module.css';
 
 // Datos de ejemplo (solo maquetación). Después llegarán del backend.
 const VIAJES_MOCK = [
-  {
-    id: 1,
-    fechaHora: '14 oct 2026, 18:42',
-    origen: 'Estación Parque Central',
-    destino: 'Estación Terminal',
-    duracion: 52,
-    fecha: '2026-10-14',
-  },
-  {
-    id: 2,
-    fechaHora: '12 oct 2026, 08:15',
-    origen: 'Estación Universidad',
-    destino: 'Estación Parque Central',
-    duracion: 28,
-    fecha: '2026-10-12',
-  },
-  {
-    id: 3,
-    fechaHora: '09 oct 2026, 17:30',
-    origen: 'Estación Terminal',
-    destino: 'Estación Universidad',
-    duracion: 61,
-    fecha: '2026-10-09',
-  },
-  {
-    id: 4,
-    fechaHora: '05 oct 2026, 12:10',
-    origen: 'Estación Parque Central',
-    destino: 'Estación Mercado',
-    duracion: 33,
-    fecha: '2026-10-05',
-  },
+  { id: 1, fechaHora: '14 oct 2026, 18:42', origen: 'Estación Parque Central', destino: 'Estación Terminal', duracion: 52, fecha: '2026-10-14' },
+  { id: 2, fechaHora: '12 oct 2026, 08:15', origen: 'Estación Universidad', destino: 'Estación Parque Central', duracion: 28, fecha: '2026-10-12' },
+  { id: 3, fechaHora: '09 oct 2026, 17:30', origen: 'Estación Terminal', destino: 'Estación Universidad', duracion: 61, fecha: '2026-10-09' },
+  { id: 4, fechaHora: '05 oct 2026, 12:10', origen: 'Estación Parque Central', destino: 'Estación Mercado', duracion: 33, fecha: '2026-10-05' },
 ];
 
 // Convierte minutos totales al formato "Xh Ym" solo si hay horas; si no, "Ym"
@@ -67,9 +40,7 @@ function HistorialPage() {
   const [periodoMostrado, setPeriodoMostrado] = useState({ desde: '2026-10-01', hasta: '2026-10-15' });
 
   const handleConsultar = () => {
-    const filtrados = VIAJES_MOCK.filter((v) => {
-      return (!desde || v.fecha >= desde) && (!hasta || v.fecha <= hasta);
-    });
+    const filtrados = VIAJES_MOCK.filter((v) => (!desde || v.fecha >= desde) && (!hasta || v.fecha <= hasta));
     setViajesFiltrados(filtrados);
     setPeriodoMostrado({ desde, hasta });
   };
@@ -112,38 +83,36 @@ function HistorialPage() {
           onLimpiar={handleLimpiar}
         />
 
-        <div className={styles.metricas}>
-          <MetricaUsuario
-            etiqueta="Total recorridos"
-            valor={totalRecorridos}
-            detalle="viajes registrados"
-            icono={<IconoBicicleta />}
-          />
-          <MetricaUsuario
-            etiqueta="Tiempo total acumulado"
-            valor={`${tiempoTotal} min`}
-            detalle={formatearTiempoTotal(tiempoTotal)}
-            icono={<IconoReloj />}
-          />
-          <MetricaUsuario
-            etiqueta="Periodo consultado"
-            valor={periodoTexto}
-            detalle="Rango de fechas activo"
-            icono={<IconoCalendario />}
-          />
-        </div>
+        <MetricasViajes
+          total={totalRecorridos}
+          minutos={tiempoTotal}
+          horas={formatearTiempoTotal(tiempoTotal)}
+          periodo={periodoTexto}
+        />
 
-        <TablaViajes viajes={viajesFiltrados} />
+        <section className={`tarjeta ${styles.tablaTarjeta}`}>
+          <TablaViajes viajes={viajesFiltrados} />
 
-        {/* Pendiente: descarga de reportes (PDF y CSV) desde el backend */}
-        <div className={styles.descargas}>
-          <button type="button" className="boton">
-            <IconoDescarga /> Descargar reporte PDF
-          </button>
-          <button type="button" className="boton">
-            Descargar CSV
-          </button>
-        </div>
+          <div className={styles.pie}>
+            <p className={styles.resumen}>
+              Mostrando <strong>{viajesFiltrados.length}</strong> registros en el rango seleccionado
+            </p>
+            {/* Pendiente: descarga de reportes (PDF y CSV) desde el backend */}
+            <div className={styles.descargas}>
+              <button type="button" className="boton">
+                <IconoDocumento /> Descargar reporte PDF
+              </button>
+              <button type="button" className="boton">
+                <IconoDescarga /> Descargar CSV
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <FiltroActivo
+          texto="Si ningún viaje coincide, el sistema informará: «No hay registros para el rango seleccionado»."
+          estado={`ESTADO: ${viajesFiltrados.length} ENCONTRADOS`}
+        />
       </div>
     </UsuarioLayout>
   );

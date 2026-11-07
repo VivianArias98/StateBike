@@ -36,10 +36,10 @@ const RUTA = [
 ];
 
 const FILAS_SERVICIO = [
-  { etiqueta: 'Origen',              valor: 'Estación Parque Central (5:10 p. m.)',  destacado: true },
-  { etiqueta: 'Destino',             valor: 'Estación Terminal (6:02 p. m.)',         destacado: true },
-  { etiqueta: 'Duración',            valor: '52 min',                                destacado: true },
-  { etiqueta: 'Tiempo incluido en plan', valor: '45 min',                            destacado: false },
+  { etiqueta: 'Origen',                  valor: 'Estación Parque Central (5:10 p. m.)', destacado: true },
+  { etiqueta: 'Destino',                 valor: 'Estación Terminal (6:02 p. m.)',       destacado: true },
+  { etiqueta: 'Duración',                valor: '52 min',                              grande: true },
+  { etiqueta: 'Tiempo incluido en plan', valor: '45 min',                              destacado: false },
 ];
 
 function ResumenViajePage() {

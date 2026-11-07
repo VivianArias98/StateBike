@@ -1,7 +1,7 @@
 import { IconoNfc } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './PanelNfc.module.css';
 
-// Paso 1: la tarjeta NFC que se acerca al lector del anclaje
+// Paso 1: la tarjeta NFC que se acerca al lector del anclaje. Tarjeta verde.
 function PanelNfc({ ultimos, anclaje }) {
   return (
     <section className={`tarjeta ${styles.raiz}`} aria-labelledby="nfc-titulo">
@@ -14,7 +14,7 @@ function PanelNfc({ ultimos, anclaje }) {
           <IconoNfc />
         </span>
         <p className={styles.numero}>Tarjeta ••••{ultimos}</p>
-        <span className="insignia insignia--activa">Activa · Tarjeta reconocida</span>
+        <span className={styles.estado}>ACTIVA • Tarjeta reconocida</span>
       </div>
 
       <p className={styles.ayuda}>

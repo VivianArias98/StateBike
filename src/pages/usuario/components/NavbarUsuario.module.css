@@ -11,7 +11,6 @@
   justify-content: space-between;
   gap: var(--espacio-3);
   width: 100%;
-  max-width: var(--ancho-maximo);
   margin: 0 auto;
   padding: var(--espacio-3) var(--espacio-4);
 }

@@ -1,12 +1,11 @@
-/* BannerEstado.module.css – base: celular */
-
+/* Base = celular: mensaje y referencia apilados */
 .raiz {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-3);
   padding: var(--espacio-4) var(--espacio-5);
-  background: var(--color-primario);
-  color: var(--color-primario-texto);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
   border-radius: var(--radio-l);
 }
 
@@ -23,34 +22,34 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border: 2px solid var(--color-primario-texto);
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--color-acento-texto);
   border-radius: var(--radio-circulo);
-  font-size: var(--texto-m);
-  font-weight: 700;
   flex-shrink: 0;
 }
 
+/* Referencia en tarjeta blanca con texto oscuro, como en el mockup */
 .ref {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--espacio-3) var(--espacio-4);
-  background: var(--color-acento);
-  color: var(--color-acento-texto);
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--color-superficie);
+  color: var(--color-texto);
   border-radius: var(--radio-m);
   min-width: 8rem;
 }
 
 .refEtiqueta {
+  font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
   font-weight: 600;
   letter-spacing: 0.06em;
-  opacity: 0.8;
 }
 
 .refCodigo {
+  font-family: var(--fuente-mono);
   font-size: var(--texto-l);
   font-weight: 700;
 }

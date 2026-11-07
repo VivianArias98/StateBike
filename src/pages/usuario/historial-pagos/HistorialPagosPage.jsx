@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import { IconoBilletera, IconoCalendario, IconoDescarga, IconoReloj } from '../../../components/Iconos/Iconos.jsx';
+import { IconoBilletera, IconoCalendario, IconoDescarga, IconoDocumento, IconoReloj } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import SelectorHistorial from '../components/SelectorHistorial.jsx';
-import FiltroFechas from '../components/FiltroFechas.jsx';
+import FiltroFechas from './components/FiltroFechas.jsx';
 import MetricaUsuario from '../components/MetricaUsuario.jsx';
 import { formatearFechaCorta, formatearPesos } from '../formato.js';
 import TablaPagos from './components/TablaPagos.jsx';
+import FiltroActivo from './components/FiltroActivo.jsx';
 import styles from './HistorialPagosPage.module.css';
 
 // Datos de ejemplo (solo maquetación). Después llegarán del backend.
@@ -131,21 +132,30 @@ function HistorialPagosPage() {
           />
         </div>
 
-        <TablaPagos pagos={pagosFiltrados} />
+        <div className={styles.grupoTabla}>
+        <section className={`tarjeta ${styles.tablaTarjeta}`}>
+          <TablaPagos pagos={pagosFiltrados} />
 
-        <div className={styles.pie}>
-          <p className={styles.resumen}>
-            Mostrando <strong>{pagosFiltrados.length}</strong> registros en el rango seleccionado
-          </p>
-          {/* Pendiente: descarga de comprobantes desde el backend */}
-          <div className={styles.descargas}>
-            <button type="button" className="boton">
-              <IconoDescarga /> Descargar comprobante PDF
-            </button>
-            <button type="button" className="boton">
-              Descargar CSV
-            </button>
+          <div className={styles.pie}>
+            <p className={styles.resumen}>
+              Mostrando <strong>{pagosFiltrados.length}</strong> registros en el rango seleccionado
+            </p>
+            {/* Pendiente: descarga de comprobantes desde el backend */}
+            <div className={styles.descargas}>
+              <button type="button" className="boton">
+                <IconoDocumento /> Descargar comprobante PDF
+              </button>
+              <button type="button" className="boton">
+                <IconoDescarga /> Descargar CSV
+              </button>
+            </div>
           </div>
+        </section>
+
+        <FiltroActivo
+          texto="Si ningún pago coincide, el sistema informará: «No hay registros para el rango seleccionado»."
+          estado={`ESTADO: ${pagosFiltrados.length} ENCONTRADOS`}
+        />
         </div>
       </div>
     </UsuarioLayout>

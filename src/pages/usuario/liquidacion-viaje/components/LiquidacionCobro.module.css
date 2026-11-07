@@ -1,0 +1,141 @@
+/* Se usa junto a la clase global "tarjeta": el padding se reparte entre secciones */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: 0;
+  overflow: hidden;
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4) var(--espacio-4) 0;
+}
+
+.titulo {
+  font-size: var(--texto-m);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: 0 var(--espacio-4);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  font-size: var(--texto-s);
+}
+
+.etiqueta {
+  color: var(--color-texto-suave);
+}
+
+.valorMono {
+  font-family: var(--fuente-mono);
+  font-weight: 600;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-2);
+  margin: 0 var(--espacio-4);
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  text-align: center;
+}
+
+.totalEtiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.06em;
+  color: var(--color-texto-suave);
+}
+
+.totalValor {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-4xl);
+  font-weight: 700;
+}
+
+.estadoCobro {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.mensaje {
+  margin: 0 var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border: 1px solid var(--color-exito);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+}
+
+.saldo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  margin: 0 var(--espacio-4);
+  font-size: var(--texto-s);
+}
+
+.saldoValor {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-m);
+  color: var(--color-exito);
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  border-top: 1px solid var(--color-borde-suave);
+}
+
+.accion {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.enlace {
+  align-self: center;
+  background: none;
+  border: none;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  text-decoration: underline;
+  cursor: pointer;
+  color: var(--color-texto);
+}
+
+@media (min-width: 1024px) {
+  .cabecera,
+  .lista,
+  .saldo {
+    padding-left: var(--espacio-5);
+    padding-right: var(--espacio-5);
+  }
+}

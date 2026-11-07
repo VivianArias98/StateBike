@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Importa correctamente la ruta de AdquirirPlanPage
-import AdquirirPlanPage from './pages/usuario/viaje-en-curso/ViajeEnCursoPage';
+import AdquirirPlanPage from './pages/usuario/mi-billetera/MiBilleteraPage';
 
 
 

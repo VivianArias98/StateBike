@@ -1,59 +1,71 @@
-/* Base = celular: tres líneas apiladas */
+/* Se usa junto a la clase global "tarjeta" */
 .raiz {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacio-3);
-    padding: var(--espacio-4);
-    background: var(--color-acento);
-    color: var(--color-acento-texto);
-    border-radius: var(--radio-m);
-    font-size: var(--texto-s);
-  }
-  
-  .estado {
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.estado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.punto {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  background: var(--color-texto);
+  border-radius: var(--radio-circulo);
+}
+
+.titulo {
+  font-size: var(--texto-l);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.chip {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.subtitulo {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.usuario {
+  align-self: flex-start;
+  padding: var(--espacio-1) var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    flex-direction: row;
     align-items: center;
-    gap: var(--espacio-3);
-    font-size: var(--texto-m);
-    font-weight: 700;
+    justify-content: space-between;
+    padding: var(--espacio-4) var(--espacio-5);
   }
-  
-  .punto {
-    width: 0.625rem;
-    height: 0.625rem;
-    flex-shrink: 0;
-    background: var(--color-acento-texto);
-    border-radius: var(--radio-circulo);
+
+  .usuario {
+    align-self: center;
   }
-  
-  .inicio {
-    display: flex;
-    align-items: center;
-    gap: var(--espacio-2);
-  }
-  
-  .nfc {
-    display: inline-flex;
-    align-items: center;
-    align-self: flex-start;
-    gap: var(--espacio-2);
-    padding: var(--espacio-2) var(--espacio-3);
-    background: var(--color-etiqueta-menta);
-    color: var(--color-etiqueta-texto);
-    border: 1px solid var(--color-etiqueta-borde);
-    border-radius: var(--radio-s);
-    font-weight: 700;
-  }
-  
-  @media (min-width: 768px) {
-    .raiz {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--espacio-3) var(--espacio-5);
-    }
-  
-    .nfc {
-      align-self: auto;
-    }
-  }
+}

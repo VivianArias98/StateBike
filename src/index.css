@@ -95,6 +95,11 @@
         Son tokens nuevos: no los usa el administrador. */
      --color-campo-oscuro: color-mix(in srgb, var(--paleta-verde-oscuro) 40%, var(--paleta-negro));
      --color-borde-suave: rgba(5, 6, 7, 0.15);
+
+     /* Usuario: textos secundarios, verde de éxito y fondo suave de acento */
+     --color-texto-suave: rgba(5, 6, 7, 0.7);
+     --color-exito: var(--paleta-verde-oscuro);
+     --color-acento-suave: color-mix(in srgb, var(--paleta-lima) 18%, var(--paleta-blanco));
    
      /* Mapa (Leaflet): filtro aplicado a los tiles */
      --filtro-mapa: grayscale(1);
@@ -140,6 +145,11 @@
      --color-campo-oscuro: color-mix(in srgb, var(--paleta-verde-oscuro) 40%, var(--paleta-negro));
      --color-borde-suave: rgba(255, 255, 255, 0.2);
    
+     /* Usuario: textos secundarios, verde de éxito y fondo suave de acento */
+     --color-texto-suave: rgba(255, 255, 255, 0.7);
+     --color-exito: var(--paleta-lima);
+     --color-acento-suave: color-mix(in srgb, var(--paleta-lima) 14%, var(--paleta-verde-oscuro));
+
      --filtro-mapa: grayscale(1) invert(1);
    }
    
@@ -468,6 +478,8 @@
        --color-foco: var(--paleta-verde);
        --color-input-fondo: var(--paleta-negro);
        --color-placeholder: rgba(255, 255, 255, 0.8);
+       --color-texto-suave: rgba(255, 255, 255, 0.8);
+       --color-exito: var(--paleta-lima);
      --color-borde-suave: rgba(255, 255, 255, 0.2);
    
        color: var(--color-texto);

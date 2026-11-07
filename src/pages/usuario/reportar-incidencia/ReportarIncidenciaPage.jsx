@@ -82,57 +82,53 @@ function ReportarIncidenciaPage() {
 
           <section className={`tarjeta ${styles.seccion}`} aria-labelledby="seccion-bicicleta">
             <h2 id="seccion-bicicleta" className={styles.tituloSeccion}>
-              2. ID de bicicleta <span className={styles.opcional}>(opcional)</span>
+              2. ID_BICICLETA <span className={styles.opcional}>(opcional)</span>
             </h2>
-            <div className="campo">
-              <label htmlFor="incidencia-bicicleta">Bicicleta</label>
-              <select
-                id="incidencia-bicicleta"
-                className={`input ${styles.select}`}
-                value={bicicleta}
-                onChange={(e) => setBicicleta(e.target.value)}
-                aria-invalid={Boolean(errores.bicicleta)}
-              >
-                <option value="">Seleccionar bicicleta</option>
-                {BICICLETAS.map((codigo) => (
-                  <option key={codigo} value={codigo}>
-                    {codigo}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <select
+              id="incidencia-bicicleta"
+              aria-label="ID_BICICLETA"
+              className={`input ${styles.select}`}
+              value={bicicleta}
+              onChange={(e) => setBicicleta(e.target.value)}
+              aria-invalid={Boolean(errores.bicicleta)}
+            >
+              <option value="">Seleccionar bicicleta</option>
+              {BICICLETAS.map((codigo) => (
+                <option key={codigo} value={codigo}>
+                  {codigo}
+                </option>
+              ))}
+            </select>
             <p className={styles.ayuda}>Obligatoria si reporta bicicleta</p>
             {errores.bicicleta && <p className="mensaje-error" role="alert">{errores.bicicleta}</p>}
           </section>
 
           <section className={`tarjeta ${styles.seccion}`} aria-labelledby="seccion-estacion">
             <h2 id="seccion-estacion" className={styles.tituloSeccion}>
-              3. ID de estación <span className={styles.opcional}>(opcional)</span>
+              3. ID_ESTACION <span className={styles.opcional}>(opcional)</span>
             </h2>
-            <div className="campo">
-              <label htmlFor="incidencia-estacion">Estación</label>
-              <select
-                id="incidencia-estacion"
-                className={`input ${styles.select}`}
-                value={estacion}
-                onChange={(e) => setEstacion(e.target.value)}
-                aria-invalid={Boolean(errores.estacion)}
-              >
-                <option value="">Seleccionar estación</option>
-                {ESTACIONES.map((item) => (
-                  <option key={item.id} value={item.nombre}>
-                    {item.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <select
+              id="incidencia-estacion"
+              aria-label="ID_ESTACION"
+              className={`input ${styles.select}`}
+              value={estacion}
+              onChange={(e) => setEstacion(e.target.value)}
+              aria-invalid={Boolean(errores.estacion)}
+            >
+              <option value="">Seleccionar estación</option>
+              {ESTACIONES.map((item) => (
+                <option key={item.id} value={item.nombre}>
+                  {item.nombre}
+                </option>
+              ))}
+            </select>
             <p className={styles.ayuda}>Obligatoria si reporta anclaje o estación</p>
             {errores.estacion && <p className="mensaje-error" role="alert">{errores.estacion}</p>}
             {errores.general && <p className="mensaje-error" role="alert">{errores.general}</p>}
 
             <p className={styles.nota}>
-              Si selecciona &quot;Tarjeta NFC perdida o dañada&quot;, no requiere indicar bicicleta ni estación. En caso
-              contrario, debe indicar al menos una de las dos.
+              NOTA REGLA DE NEGOCIO: SI SELECCIONA &quot;TARJETA NFC PERDIDA O DAÑADA&quot;, NO REQUIERE INDICAR BICICLETA
+              NI ESTACIÓN. EN CASO CONTRARIO, DEBE INDICAR AL MENOS UNA DE LAS DOS.
             </p>
           </section>
 
@@ -145,27 +141,25 @@ function ReportarIncidenciaPage() {
                 {descripcion.length} / {MAXIMO_DESCRIPCION}
               </span>
             </div>
-            <div className="campo">
-              <label htmlFor="incidencia-descripcion">Descripción de la novedad</label>
-              <textarea
-                id="incidencia-descripcion"
-                className={`input ${styles.textarea}`}
-                rows={6}
-                maxLength={MAXIMO_DESCRIPCION}
-                placeholder="Describa el detalle de la avería o novedad encontrada..."
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                aria-invalid={Boolean(errores.descripcion)}
-              />
-            </div>
+            <textarea
+              id="incidencia-descripcion"
+              aria-label="Descripción"
+              className={`input ${styles.textarea}`}
+              rows={6}
+              maxLength={MAXIMO_DESCRIPCION}
+              placeholder="Describa el detalle de la avería o novedad encontrada..."
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              aria-invalid={Boolean(errores.descripcion)}
+            />
             {errores.descripcion && <p className="mensaje-error" role="alert">{errores.descripcion}</p>}
           </section>
 
           <div className={styles.acciones}>
-            <button type="button" className="boton" onClick={limpiarFormulario}>
+            <button type="button" className={`boton ${styles.boton}`} onClick={limpiarFormulario}>
               Limpiar formulario
             </button>
-            <button type="submit" className="boton boton--secundario">
+            <button type="submit" className={`boton boton--secundario ${styles.boton}`}>
               Enviar reporte
             </button>
           </div>

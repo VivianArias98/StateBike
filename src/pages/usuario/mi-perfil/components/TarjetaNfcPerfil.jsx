@@ -1,5 +1,5 @@
 import Etiqueta from '../../../../components/Etiqueta/Etiqueta.jsx';
-import { IconoBloqueo, IconoCandado, IconoNfc } from '../../../../components/Iconos/Iconos.jsx';
+import { IconoBloqueo, IconoCandado, IconoNfc, IconoTarjeta } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './TarjetaNfcPerfil.module.css';
 
 // Tarjeta NFC del usuario: la tarjeta física, su estado y la acción de bloqueo
@@ -10,9 +10,14 @@ function TarjetaNfcPerfil({ referencia, ultimos, titular, expira }) {
   return (
     <section className={`tarjeta ${styles.raiz}`} aria-labelledby="tarjeta-nfc-titulo">
       <header className={styles.cabecera}>
-        <h2 id="tarjeta-nfc-titulo" className={styles.titulo}>
-          Tarjeta NFC
-        </h2>
+        <div className={styles.izquierda}>
+          <span className={styles.icono} aria-hidden="true">
+            <IconoTarjeta />
+          </span>
+          <h2 id="tarjeta-nfc-titulo" className={styles.titulo}>
+            Tarjeta NFC
+          </h2>
+        </div>
         <Etiqueta texto={`#${referencia}`} color="menta" />
       </header>
 
@@ -21,7 +26,10 @@ function TarjetaNfcPerfil({ referencia, ultimos, titular, expira }) {
           <span className={styles.marca}>
             <IconoNfc /> STATION PASS
           </span>
-          <span className="insignia insignia--activa">Activa</span>
+          <span className={styles.activa}>
+            <span className={styles.punto} aria-hidden="true" />
+            Activa
+          </span>
         </div>
 
         <div>
@@ -39,12 +47,14 @@ function TarjetaNfcPerfil({ referencia, ultimos, titular, expira }) {
         <span className={styles.iconoAviso} aria-hidden="true">
           <IconoCandado />
         </span>
-        Una tarjeta bloqueada no desbloquea anclajes ni bicicletas, pero tu plan activo seguirá vigente. No es posible
-        bloquear la tarjeta mientras tengas un viaje en curso.
+        <span>
+          Una tarjeta bloqueada no desbloquea anclajes ni bicicletas, pero tu plan activo seguirá vigente. No es posible
+          bloquear la tarjeta mientras tengas un viaje en curso.
+        </span>
       </p>
 
-      <button type="button" className="boton boton--bloque" onClick={bloquear}>
-        <IconoBloqueo /> Bloquear tarjeta NFC
+      <button type="button" className={`boton boton--bloque ${styles.bloquear}`} onClick={bloquear}>
+        <IconoBloqueo /> Bloquear Tarjeta NFC
       </button>
     </section>
   );

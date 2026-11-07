@@ -1,0 +1,95 @@
+/* BarraPasos.module.css: base = celular. Una sola tarjeta con los pasos en columna */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.paso {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4) var(--espacio-5);
+  border-top: 1px solid var(--color-borde-suave);
+}
+
+.paso:first-child {
+  border-top: none;
+}
+
+.pasoActivo {
+  background: var(--color-acento-suave);
+}
+
+.indicador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radio-circulo);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+
+.completado {
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+}
+
+.activo {
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+}
+
+.pendiente {
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto-suave);
+  border: 1px solid var(--color-borde-suave);
+}
+
+.textos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  min-width: 0;
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.titulo {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.detalle {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    flex-direction: row;
+  }
+
+  .paso {
+    flex: 1;
+    flex-direction: row;
+    border-top: none;
+    border-left: 1px solid var(--color-borde-suave);
+  }
+
+  .paso:first-child {
+    border-left: none;
+  }
+}

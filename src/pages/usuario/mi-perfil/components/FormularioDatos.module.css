@@ -136,6 +136,7 @@
 }
 
 .guardar {
+  gap: var(--espacio-2);
   font-weight: 700;
   text-transform: uppercase;
 }

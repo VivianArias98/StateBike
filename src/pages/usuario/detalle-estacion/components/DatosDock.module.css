@@ -1,0 +1,40 @@
+/* DatosDock.module.css: base = celular, 2 columnas */
+
+.raiz {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-2);
+  margin: 0;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  min-width: 0;
+  padding: var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.etiqueta {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.valor {
+  margin: 0;
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+
+.destacado {
+  color: var(--color-exito);
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

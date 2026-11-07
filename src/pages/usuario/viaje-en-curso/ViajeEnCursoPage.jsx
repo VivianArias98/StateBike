@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import Etiqueta from '../../../components/Etiqueta/Etiqueta.jsx';
 import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
+import { IconoAlerta } from '../../../components/Iconos/Iconos.jsx';
 import ViajeBanner from './components/ViajeBanner.jsx';
+import FranjaViaje from './components/FranjaViaje.jsx';
 import TiempoTranscurrido from './components/TiempoTranscurrido.jsx';
 import DatosViaje from './components/DatosViaje.jsx';
 import styles from './ViajeEnCursoPage.module.css';
 
 // Datos de ejemplo (solo maquetación). Después llegarán del backend.
 const VIAJE = {
-  id: 88392,
+  id: '#VJ-2026-88392',
   bicicleta: 'BIC-003',
   estacionInicio: 'Estación Centro',
   anclaje: '03',
   direccion: 'Cra. 10 #20-15',
-  nfc: '4821',
+  horaInicio: '14:32:00',
+  usuario: '#TUN-8831',
   plan: 'Plan mensual',
-  minutosIncluidos: 45,
-  segundosIniciales: 754, // 12:34
+  minutosIncluidos: 40,
+  segundosIniciales: 1785, // 29:45 ya transcurridos
 };
 
 // Coordenadas aproximadas (ilustrativas)
@@ -46,8 +48,6 @@ function formatearTiempo(totalSegundos) {
 
 function ViajeEnCursoPage() {
   const [viaje] = useState(VIAJE);
-  const [estaciones] = useState(ESTACIONES);
-  const [ruta] = useState(RUTA);
   const [segundos, setSegundos] = useState(VIAJE.segundosIniciales);
 
   // Cronómetro en vivo: suma un segundo cada segundo
@@ -62,8 +62,8 @@ function ViajeEnCursoPage() {
   const porcentajeUsado = Math.min(100, Math.round((segundos / segundosIncluidos) * 100));
 
   // La ubicación actual es el último punto del recorrido
-  const ultimoPunto = ruta[ruta.length - 1];
-  const ubicacionActual = ultimoPunto ? { lat: ultimoPunto[0], lng: ultimoPunto[1] } : null;
+  const ultimoPunto = RUTA[RUTA.length - 1];
+  const ubicacionActual = { lat: ultimoPunto[0], lng: ultimoPunto[1] };
 
   const leyendas = [
     {
@@ -71,7 +71,7 @@ function ViajeEnCursoPage() {
       contenido: (
         <>
           <span className="punto-vivo" aria-hidden="true" />
-          El número es la cantidad de bicicletas disponibles
+          El número en cada estación indica bicicletas disponibles
         </>
       ),
     },
@@ -79,41 +79,33 @@ function ViajeEnCursoPage() {
       id: 'recorrido',
       contenido: (
         <>
-          → Recorrido desde <strong>{viaje.estacionInicio}</strong> · ubicación actual
+          — Recorrido activo desde <strong>{viaje.estacionInicio}</strong>
         </>
       ),
     },
   ];
 
-  //Pendiente: lógica para devolver la bicicleta
+  // Pendiente: lógica para devolver la bicicleta y reportar desde este viaje
   const devolverBicicleta = () => {};
+  const reportarIncidencia = () => {};
 
   return (
     <UsuarioLayout itemActivo="Viajes">
       <div className={styles.raiz}>
-        <header>
-          <div className={styles.tituloFila}>
-            <h1 className={styles.titulo}>Viaje en curso</h1>
-            <Etiqueta texto="En trayecto" color="menta" />
-          </div>
-          <p className={styles.subtitulo}>
-            Tu bicicleta está desbloqueada. Devuélvela en una estación con anclajes libres.
-          </p>
-        </header>
+        <ViajeBanner usuario={viaje.usuario} />
 
-        <ViajeBanner
-          codigoBicicleta={viaje.bicicleta}
-          estacionInicio={viaje.estacionInicio}
-          anclaje={viaje.anclaje}
-          nfc={viaje.nfc}
+        <FranjaViaje
+          idBicicleta={viaje.bicicleta}
+          estacionOrigen={`${viaje.estacionInicio} (Anclaje ${viaje.anclaje})`}
+          nfc={viaje.usuario}
         />
 
         <div className={styles.contenido}>
           <div className={styles.mapa}>
             <MapaTunja
               titulo={null}
-              estaciones={estaciones}
-              ruta={ruta}
+              estaciones={ESTACIONES}
+              ruta={RUTA}
               ubicacionActual={ubicacionActual}
               leyendas={leyendas}
             />
@@ -124,7 +116,6 @@ function ViajeEnCursoPage() {
               tiempo={formatearTiempo(segundos)}
               plan={viaje.plan}
               minutosIncluidos={viaje.minutosIncluidos}
-              segundosTranscurridos={segundos}
               restante={formatearTiempo(segundosRestantes)}
               porcentajeUsado={porcentajeUsado}
             />
@@ -132,9 +123,13 @@ function ViajeEnCursoPage() {
             <DatosViaje
               idViaje={viaje.id}
               filas={[
-                { etiqueta: 'Bicicleta', valor: viaje.bicicleta },
-                { etiqueta: 'Origen', valor: viaje.estacionInicio },
-                { etiqueta: 'Dirección', valor: viaje.direccion },
+                { etiqueta: 'ID_VIAJE', valor: viaje.id },
+                { etiqueta: 'ID_BICICLETA', valor: viaje.bicicleta, tipo: 'chip' },
+                { etiqueta: 'ESTACIÓN DE ORIGEN', valor: `${viaje.estacionInicio} (Anclaje ${viaje.anclaje})` },
+                { etiqueta: 'DIRECCIÓN', valor: viaje.direccion },
+                { etiqueta: 'HORA DE INICIO', valor: viaje.horaInicio },
+                { etiqueta: 'ID_USUARIO', valor: viaje.usuario },
+                { etiqueta: 'ESTADO', valor: 'EN CURSO', tipo: 'oscuro' },
               ]}
             />
 
@@ -146,11 +141,18 @@ function ViajeEnCursoPage() {
               >
                 DEVOLVER BICICLETA
               </button>
-              <button type="button" className={`boton boton--bloque ${styles.accion}`}>
+              <button
+                type="button"
+                className={`boton boton--bloque ${styles.accion} ${styles.reportar}`}
+                onClick={reportarIncidencia}
+              >
+                <span className={styles.iconoReportar} aria-hidden="true">
+                  <IconoAlerta />
+                </span>
                 REPORTAR INCIDENCIA
               </button>
               <p className={styles.ayuda}>
-                Acérquese al tótem de una estación libre e inserte la bicicleta para finalizar.
+                Acérquese al tótem de una estación libre e inserte la bicicleta para finalizar el servicio.
               </p>
             </div>
           </div>

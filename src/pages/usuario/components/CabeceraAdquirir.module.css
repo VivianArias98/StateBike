@@ -1,0 +1,73 @@
+/* CabeceraAdquirir.module.css: base = celular. Lo comparten las 4 pantallas de Adquirir plan */
+
+.cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.bloqueTitulo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.filaTitulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.insignia {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-exito);
+}
+
+.subtitulo {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  align-self: flex-start;
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .cabecera {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
