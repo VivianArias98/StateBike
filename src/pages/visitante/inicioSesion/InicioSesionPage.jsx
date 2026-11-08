@@ -1,9 +1,9 @@
 import VisitanteLayout from '../../../layouts/VisitanteLayout/VisitanteLayout.jsx';
 import LoginBienvenida from './components/LoginBienvenida.jsx';
 import LoginForm from './components/LoginForm.jsx';
-import styles from './LoginPage.module.css';
+import styles from './InicioSesionPage.module.css';
 
-function LoginPage() {
+function InicioSesionPage() {
   return (
     <VisitanteLayout>
       <div className={styles.pagina}>
@@ -16,4 +16,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default InicioSesionPage;

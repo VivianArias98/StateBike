@@ -25,6 +25,7 @@ function EstacionesLista({
   onBuscar,
   seleccionadaId,
   onSeleccionar,
+  mensajeVacio = 'No encontramos estaciones con ese nombre.',
 }) {
   return (
     <section
@@ -101,7 +102,7 @@ function EstacionesLista({
 
         {estaciones.length === 0 && (
           <li className={styles.vacio} role="status">
-            No encontramos estaciones con ese nombre.
+            {mensajeVacio}
           </li>
         )}
       </ul>

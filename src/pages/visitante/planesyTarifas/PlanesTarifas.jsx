@@ -1,73 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import VisitanteLayout from '../../../layouts/VisitanteLayout/VisitanteLayout.jsx';
 import { Icono } from '../components/IconosVisitante.jsx';
 import TarjetaPlan from './components/TarjetaPlan.jsx';
 import BannerAcceso from './components/BannerAcceso.jsx';
 import TarjetaBeneficio from './components/TarjetaBeneficio.jsx';
+import { obtenerPlanes } from '../../../services/catalogoService.js';
+import { textoError } from '../../../services/mensajesError.js';
+import { formatearCOP } from '../../../utils/formatoMoneda.js';
 import styles from './PlanesTarifas.module.css';
-
-// Catálogo del mockup (valores en COP). "lineas" son las viñetas de cada plan;
-// "fuerte" es el dato resaltado en negrita.
-const PLANES = [
-  {
-    id: 1,
-    codigo: 'CAT_01',
-    dias: '1 DÍA',
-    nombre: 'Plan Diario',
-    descripcion: 'Ideal para traslados esporádicos o emergencias.',
-    precio: '$4.000',
-    unidad: 'COP',
-    lineas: [
-      { pre: 'Vigencia: ', fuerte: '24 horas' },
-      { fuerte: '2 viajes', post: ' al día' },
-      { fuerte: '30 min', post: ' por trayecto' },
-    ],
-  },
-  {
-    id: 2,
-    codigo: 'CAT_02',
-    dias: '30 DÍAS',
-    nombre: 'Plan Mensual',
-    descripcion: 'El equilibrio óptimo para la rutina universitaria o laboral.',
-    precio: '$32.000',
-    unidad: 'COP / mes',
-    actual: true,
-    lineas: [
-      { pre: 'Vigencia: ', fuerte: '30 días continuos' },
-      { fuerte: '4 viajes', post: ' al día' },
-      { fuerte: '40 min', post: ' por trayecto' },
-    ],
-  },
-  {
-    id: 3,
-    codigo: 'CAT_03',
-    dias: '180 DÍAS',
-    nombre: 'Plan Semestral',
-    descripcion: 'Ahorro sostenido para períodos académicos y contratos.',
-    precio: '$150.000',
-    unidad: 'COP',
-    lineas: [
-      { pre: 'Vigencia: ', fuerte: '180 días continuos' },
-      { fuerte: '4 viajes', post: ' al día' },
-      { fuerte: '45 min', post: ' por trayecto' },
-    ],
-  },
-  {
-    id: 4,
-    codigo: 'CAT_04',
-    dias: '365 DÍAS',
-    nombre: 'Plan Anual',
-    descripcion: 'Máxima autonomía y máxima ventana de trayecto por viaje.',
-    precio: '$240.000',
-    unidad: 'COP',
-    lineas: [
-      { pre: 'Vigencia: ', fuerte: '365 días continuos' },
-      { fuerte: '4 viajes', post: ' al día' },
-      { fuerte: '60 min', post: ' por trayecto' },
-    ],
-  },
-];
 
 const BENEFICIOS = [
   {
@@ -87,21 +28,66 @@ const BENEFICIOS = [
   },
 ];
 
-function IconoAlternar() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M17 2l4 4-4 4" />
-      <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
-      <path d="M7 22l-4-4 4-4" />
-      <path d="M21 13v1a4 4 0 0 1-4 4H3" />
-    </svg>
-  );
+const plural = (cantidad, singular, plural_) => (cantidad === 1 ? singular : plural_);
+
+// Convierte un plan del backend a los datos que muestra la tarjeta.
+function aVistaPlan(plan) {
+  const dias = Number(plan.vigenciaDias);
+  return {
+    id: plan.id,
+    dias: `${dias} ${plural(dias, 'DÍA', 'DÍAS')}`,
+    nombre: plan.nombre,
+    precio: formatearCOP(plan.costoBase),
+    unidad: 'COP',
+    valorMinutoExceso: plan.valorMinutoExceso,
+    lineas: [
+      { pre: 'Vigencia: ', fuerte: `${dias} ${plural(dias, 'día', 'días')}` },
+      {
+        fuerte: `${plan.viajesPorDia} ${plural(plan.viajesPorDia, 'viaje', 'viajes')}`,
+        post: ' al día',
+      },
+      { fuerte: `${plan.tiempoViajeMin} min`, post: ' por trayecto' },
+    ],
+  };
 }
 
 function PlanesTarifas() {
-  const [mostrarVacio, setMostrarVacio] = useState(false);
+  const [planes, setPlanes] = useState(null);
+  const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
 
-  const planes = mostrarVacio ? [] : PLANES;
+  useEffect(() => {
+    let activo = true;
+    obtenerPlanes()
+      .then((datos) => {
+        if (!activo) return;
+        setPlanes(datos.planes.map(aVistaPlan));
+        setMensaje(datos.mensaje ?? '');
+      })
+      .catch((e) => {
+        if (activo) setError(textoError(e));
+      });
+    return () => {
+      activo = false;
+    };
+  }, []);
+
+  function contenidoPlanes() {
+    if (error) {
+      return <p className={styles.vacio} role="alert">{error}</p>;
+    }
+    if (!planes) {
+      return <p className={styles.vacio} role="status">Cargando planes…</p>;
+    }
+    if (planes.length === 0) {
+      return (
+        <p className={styles.vacio} role="status">
+          {mensaje || 'No hay planes disponibles por el momento'}
+        </p>
+      );
+    }
+    return planes.map((plan) => <TarjetaPlan key={plan.id} plan={plan} />);
+  }
 
   return (
     <VisitanteLayout itemActivo="Planes y tarifas" conUsuario>
@@ -110,7 +96,7 @@ function PlanesTarifas() {
           <div className={styles.encabezadoTexto}>
             <span className={styles.eyebrow}>
               <span className={styles.punto} aria-hidden="true" />
-              4 OPCIONES DISPONIBLES · TUNJA 2025
+              {planes ? `${planes.length} OPCIONES DISPONIBLES · TUNJA 2025` : 'PLANES Y TARIFAS · TUNJA 2025'}
             </span>
 
             <h1 className={`titulo-pagina ${styles.titulo}`}>Catálogo de Planes Tunja Bici</h1>
@@ -120,26 +106,10 @@ function PlanesTarifas() {
               Valores en pesos colombianos (COP).
             </p>
           </div>
-
-          <button
-            type="button"
-            className={styles.alternar}
-            onClick={() => setMostrarVacio((valor) => !valor)}
-            aria-pressed={mostrarVacio}
-          >
-            <IconoAlternar />
-            <span>Alternar: {mostrarVacio ? 'Ver planes' : 'Ver estado vacío'}</span>
-          </button>
         </div>
 
         <section className={styles.grilla} aria-label="Planes y tarifas disponibles">
-          {planes.length === 0 ? (
-            <p className={styles.vacio} role="status">
-              Aún no hay planes disponibles. Vuelve pronto.
-            </p>
-          ) : (
-            planes.map((plan) => <TarjetaPlan key={plan.id} plan={plan} />)
-          )}
+          {contenidoPlanes()}
         </section>
 
         <BannerAcceso />
