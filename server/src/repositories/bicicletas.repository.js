@@ -23,6 +23,10 @@ export function existeCodigo(codigo) {
   return Boolean(db.prepare("SELECT 1 FROM bicicletas WHERE codigo = ?").get(codigo));
 }
 
+export function buscarPorCodigo(codigo) {
+  return db.prepare("SELECT * FROM bicicletas WHERE codigo = ? COLLATE NOCASE").get(codigo);
+}
+
 //El anclaje libre de menor número de la estación
 export function primerAnclajeLibre(estacionId) {
   return db

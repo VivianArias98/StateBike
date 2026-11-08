@@ -101,3 +101,19 @@ CREATE TABLE IF NOT EXISTS viajes (
   estado_cobro TEXT NOT NULL DEFAULT 'SIN_COBRO'
     CHECK (estado_cobro IN ('SIN_COBRO', 'PAGADO', 'PENDIENTE'))
 );
+
+-- Reporte y gestión de incidencias (HU_6 y HU_19)
+CREATE TABLE IF NOT EXISTS incidencias (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES perfiles(usuario_id),
+  tipo TEXT NOT NULL CHECK (tipo IN ('BICICLETA', 'ANCLAJE', 'TARJETA', 'OTRO')),
+  bicicleta_id INTEGER REFERENCES bicicletas(id),
+  estacion_id INTEGER REFERENCES estaciones(id),
+  descripcion TEXT NOT NULL,
+  estado TEXT NOT NULL DEFAULT 'ABIERTA'
+    CHECK (estado IN ('ABIERTA', 'ATENDIDA', 'CERRADA')),
+  observacion_admin TEXT,
+  fecha_creacion TEXT NOT NULL DEFAULT (datetime('now')),
+  fecha_atencion TEXT,
+  fecha_cierre TEXT
+);
