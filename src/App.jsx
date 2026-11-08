@@ -17,6 +17,7 @@ import RegistroPage from './pages/visitante/registro/RegistroPage.jsx';
 import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
+import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
 
 function App() {
   return (
@@ -50,6 +51,14 @@ function App() {
           element={
             <RutaProtegida rol={ROLES.ADMINISTRADOR}>
               <AdminEstacionesPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/bicicletas"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminBicicletasPage />
             </RutaProtegida>
           }
         />

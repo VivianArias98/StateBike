@@ -1,18 +1,194 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import Aviso from '../../../components/Avisos/Aviso.jsx';
 import BicicletasTable from './components/BicicletasTable.jsx';
 import BicicletaForm from './components/BicicletaForm.jsx';
 import styles from './BicicletasPage.module.css';
 
-// Datos de ejemplo (solo maquetación)
-const BICICLETAS = [
-  { id: 1, codigo: 'BIC-001', estacion: 'Central', estado: 'DISPONIBLE' },
-  { id: 2, codigo: 'BIC-002', estacion: 'Plaza', estado: 'EN_USO' },
-  { id: 3, codigo: 'BIC-003', estacion: 'Terminal', estado: 'DISPONIBLE' },
-  { id: 4, codigo: 'BIC-004', estacion: 'Universidad', estado: 'NO_DISPONIBLE' },
-  { id: 5, codigo: 'BIC-005', estacion: 'Central', estado: 'DISPONIBLE' },
-];
+function leerToken() {
+  try {
+    const sesion = JSON.parse(localStorage.getItem('stationbike.sesion'));
+    return sesion?.acceso || null;
+  } catch {
+    return null;
+  }
+}
 
 function BicicletasPage() {
+  const navigate = useNavigate();
+  const [bicicletas, setBicicletas] = useState([]);
+  const [estaciones, setEstaciones] = useState([]);
+  const [busqueda, setBusqueda] = useState('');
+  const [aviso, setAviso] = useState('');
+  const [cargando, setCargando] = useState(false);
+  const [bicicletaAInactivar, setBicicletaAInactivar] = useState(null);
+
+  const cargarBicicletas = async (termino = '') => {
+    try {
+      const token = leerToken();
+      const query = termino ? `?q=${encodeURIComponent(termino)}` : '';
+      const respuesta = await fetch(`/api/admin/bicicletas${query}`, {
+        headers: {
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (!respuesta.ok) {
+        if (respuesta.status === 401 || respuesta.status === 403) {
+          navigate('/login');
+          return;
+        }
+        throw new Error('Error al cargar bicicletas');
+      }
+
+      const datos = await respuesta.json();
+      setBicicletas(Array.isArray(datos) ? datos : []);
+    } catch (error) {
+      console.error(error);
+      setAviso('No se pudo conectar con el servidor');
+    }
+  };
+
+  const cargarEstaciones = async () => {
+    try {
+      const token = leerToken();
+      const respuesta = await fetch('/api/admin/estaciones', {
+        headers: {
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (respuesta.ok) {
+        const datos = await respuesta.json();
+        setEstaciones(Array.isArray(datos) ? datos : []);
+      }
+    } catch {
+      // Ignorar error secundario de estaciones
+    }
+  };
+
+  useEffect(() => {
+    cargarBicicletas(busqueda);
+    cargarEstaciones();
+  }, [busqueda]);
+
+  // Estaciones activas con anclajes libres para el selector del formulario
+  const estacionesDisponibles = estaciones.filter((est) => {
+    const libres = est.anclajesLibres ?? (est.anclajes - (est.anclajesOcupados || 0));
+    return est.estado === 'ACTIVE' && libres > 0;
+  });
+
+  // Registrar bicicleta (HU_14)
+  const handleRegistrar = async (datos) => {
+    setCargando(true);
+    try {
+      const token = leerToken();
+      const respuesta = await fetch('/api/admin/bicicletas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(datos),
+      });
+
+      const resJson = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        if (resJson.error === 'codigo_bicicleta_duplicado') {
+          throw new Error('El código de la bicicleta ya se encuentra registrado');
+        }
+        if (resJson.error === 'estacion_sin_anclajes_libres') {
+          throw new Error('La estación no tiene anclajes libres');
+        }
+        throw new Error(resJson.mensaje || 'Error al registrar bicicleta');
+      }
+
+      setAviso('REGISTRO DE BICICLETA EXITOSO');
+      await cargarBicicletas(busqueda);
+      await cargarEstaciones();
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  // Alternar estado entre DISPONIBLE y MANTENIMIENTO (HU_20)
+  const handleCambiarEstado = async (id, nuevoEstado) => {
+    try {
+      const token = leerToken();
+      const respuesta = await fetch(`/api/admin/bicicletas/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ estado: nuevoEstado }),
+      });
+
+      const resJson = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        if (resJson.error === 'bicicleta_en_uso') {
+          setAviso('La bicicleta está en uso');
+        } else {
+          setAviso(resJson.mensaje || 'Error al cambiar estado de la bicicleta');
+        }
+        return;
+      }
+
+      setAviso('BICICLETA ACTUALIZADA CORRECTAMENTE');
+      await cargarBicicletas(busqueda);
+      await cargarEstaciones();
+    } catch {
+      setAviso('Error de conexión al actualizar la bicicleta');
+    }
+  };
+
+  // Inactivar bicicleta (HU_20)
+  const handleSolicitarInactivar = (bici) => {
+    if (bici.estado === 'EN_USO' || bici.estado === 'INACTIVA') return;
+    setBicicletaAInactivar(bici);
+  };
+
+  const handleConfirmarInactivar = async () => {
+    if (!bicicletaAInactivar) return;
+
+    try {
+      const token = leerToken();
+      const respuesta = await fetch(`/api/admin/bicicletas/${bicicletaAInactivar.id}/inactivar`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      const resJson = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        if (resJson.error === 'bicicleta_en_uso') {
+          setAviso('La bicicleta está en uso');
+        } else {
+          setAviso(resJson.mensaje || 'Error al inactivar la bicicleta');
+        }
+        return;
+      }
+
+      setAviso('BICICLETA INACTIVADA CORRECTAMENTE');
+      await cargarBicicletas(busqueda);
+      await cargarEstaciones();
+    } catch {
+      setAviso('Error de conexión al inactivar la bicicleta');
+    } finally {
+      setBicicletaAInactivar(null);
+    }
+  };
+
   return (
     <AdminLayout itemActivo="Bicicletas">
       <h1 className="titulo-pagina">Bicicletas</h1>
@@ -23,14 +199,61 @@ function BicicletasPage() {
           className={`input ${styles.buscador}`}
           placeholder="Buscar por código"
           aria-label="Buscar por código"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
         />
+
         <div className={styles.tabla}>
-          <BicicletasTable bicicletas={BICICLETAS} />
+          <BicicletasTable
+            bicicletas={bicicletas}
+            onCambiarEstado={handleCambiarEstado}
+            onInactivar={handleSolicitarInactivar}
+          />
         </div>
+
         <div className={styles.formulario}>
-          <BicicletaForm />
+          <BicicletaForm
+            estacionesDisponibles={estacionesDisponibles}
+            onRegistrar={handleRegistrar}
+            cargando={cargando}
+          />
         </div>
       </div>
+
+      {/* Modal de confirmación para inactivar bicicleta (HU_20) */}
+      {bicicletaAInactivar && (
+        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-inactivar-bici-titulo">
+          <div className={styles.modalCaja}>
+            <h2 id="modal-inactivar-bici-titulo" className={styles.modalTitulo}>
+              Inactivar bicicleta
+            </h2>
+            <p className={styles.modalTexto}>
+              ¿Está seguro de que desea inactivar la bicicleta <strong>{bicicletaAInactivar.codigo}</strong>?
+            </p>
+            <p className={styles.modalTexto}>
+              Esta acción liberará su anclaje y la retirará de la flota operativa disponible.
+            </p>
+            <div className={styles.modalAcciones}>
+              <button
+                type="button"
+                className="boton boton--secundario"
+                onClick={() => setBicicletaAInactivar(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className={`boton ${styles.botonPeligro}`}
+                onClick={handleConfirmarInactivar}
+              >
+                Confirmar inactivación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Aviso mensaje={aviso} onCerrar={() => setAviso('')} />
     </AdminLayout>
   );
 }
