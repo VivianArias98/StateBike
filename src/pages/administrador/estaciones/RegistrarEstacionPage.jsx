@@ -29,7 +29,7 @@ function RegistrarEstacionPage({ estaciones, onGuardar, onCancelar }) {
     setPunto({ lat, lng });
   };
 
-  const handleSubmit = (evento) => {
+  const handleSubmit = async (evento) => {
     evento.preventDefault();
 
     const mensaje = validarEstacion({ ...valores, punto });
@@ -43,20 +43,23 @@ function RegistrarEstacionPage({ estaciones, onGuardar, onCancelar }) {
       return;
     }
 
-    //La lista crea la estación ACTIVE y sus anclajes LIBRES (uno por puesto)
-    onGuardar({
-      nombre: valores.nombre.trim(),
-      direccion: valores.direccion.trim(),
-      capacidad: Number(valores.capacidad),
-      lat: punto.lat,
-      lng: punto.lng,
-    });
+    try {
+      await onGuardar({
+        nombre: valores.nombre.trim(),
+        direccion: valores.direccion.trim(),
+        capacidad: Number(valores.capacidad),
+        lat: punto.lat,
+        lng: punto.lng,
+      });
 
-    //Limpia el formulario y avisa
-    setError('');
-    setValores(FORMULARIO_VACIO);
-    setPunto(null);
-    setAviso('Estación registrada con éxito');
+      // Limpia el formulario y avisa
+      setError('');
+      setValores(FORMULARIO_VACIO);
+      setPunto(null);
+      setAviso('Estación registrada con éxito');
+    } catch (err) {
+      setError(err.message || MENSAJES.repetido);
+    }
   };
 
   return (

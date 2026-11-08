@@ -113,9 +113,47 @@
   padding: var(--espacio-4);
 }
 
+.areaPrincipal {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.marcaAdmin {
+  cursor: pointer;
+}
+
+/* Pie de página similar al de visitante */
+.footer {
+  display: flex;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-xs);
+  margin-top: auto;
+}
+
+.marcaFooter {
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    padding: var(--espacio-3) var(--espacio-5);
+  }
+}
+
 @media (min-width: 1024px) {
   .raiz {
     flex-direction: row;
+  }
+
+  .areaPrincipal {
+    min-height: 100vh;
   }
 
   .sidebar {
