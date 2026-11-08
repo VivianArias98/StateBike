@@ -1,4 +1,9 @@
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './RegistroForm.module.css';
+import { registrar } from '../../../../services/authService.js';
+import { validarRegistro } from '../../../../services/validaciones.js';
+import { textoError } from '../../../../services/mensajesError.js';
 
 function IconoOcultar() {
   return (
@@ -19,11 +24,68 @@ function IconoOcultar() {
   );
 }
 
+const CAMPOS_VACIOS = {
+  nombreCompleto: '',
+  fechaNacimiento: '',
+  correo: '',
+  contrasena: '',
+  confirmacion: '',
+  aceptaTerminos: false,
+};
+
 function RegistroForm() {
+  const navegar = useNavigate();
+  const [datos, setDatos] = useState(CAMPOS_VACIOS);
+  const [mostrar, setMostrar] = useState({ contrasena: false, confirmacion: false });
+  const [error, setError] = useState('');
+  const [enviando, setEnviando] = useState(false);
+
+  const hoy = new Date().toISOString().slice(0, 10);
+
+  function cambiar(campo, valor) {
+    setDatos((anterior) => ({ ...anterior, [campo]: valor }));
+  }
+
+  function alternarOjo(campo) {
+    setMostrar((anterior) => ({ ...anterior, [campo]: !anterior[campo] }));
+  }
+
+  async function enviar(evento) {
+    evento.preventDefault();
+    setError('');
+
+    const errorLocal = validarRegistro(datos);
+    if (errorLocal) {
+      setError(errorLocal);
+      return;
+    }
+
+    setEnviando(true);
+    try {
+      const respuesta = await registrar({
+        nombreCompleto: datos.nombreCompleto.trim(),
+        fechaNacimiento: datos.fechaNacimiento,
+        correo: datos.correo.trim(),
+        contrasena: datos.contrasena,
+        confirmacion: datos.confirmacion,
+        aceptaTerminos: datos.aceptaTerminos,
+      });
+      navegar('/login', {
+        replace: true,
+        state: { mensaje: respuesta?.mensaje ?? 'CUENTA CREADA CON ÉXITO' },
+      });
+    } catch (e) {
+      setError(textoError(e));
+      setEnviando(false);
+    }
+  }
+
   return (
-    <form className={styles.raiz}>
+    <form className={styles.raiz} onSubmit={enviar} noValidate>
       <h1 className={styles.titulo}>Crea tu cuenta</h1>
       <p className={styles.subtitulo}>Debes ser mayor de edad para registrarte</p>
+
+      {error && <p className="mensaje-error" role="alert">{error}</p>}
 
       <div className={`campo ${styles.campo}`}>
         <label htmlFor="nombre" className={styles.etiqueta}>Nombre completo</label>
@@ -32,12 +94,22 @@ function RegistroForm() {
           type="text"
           className={`input ${styles.entrada}`}
           placeholder="Escribe tu nombre completo"
+          value={datos.nombreCompleto}
+          onChange={(e) => cambiar('nombreCompleto', e.target.value)}
+          autoComplete="name"
         />
       </div>
 
       <div className={`campo ${styles.campo}`}>
         <label htmlFor="nacimiento" className={styles.etiqueta}>Fecha de nacimiento</label>
-        <input id="nacimiento" type="date" className={`input ${styles.entrada}`} />
+        <input
+          id="nacimiento"
+          type="date"
+          className={`input ${styles.entrada}`}
+          max={hoy}
+          value={datos.fechaNacimiento}
+          onChange={(e) => cambiar('fechaNacimiento', e.target.value)}
+        />
       </div>
 
       <div className={`campo ${styles.campo}`}>
@@ -47,6 +119,9 @@ function RegistroForm() {
           type="email"
           className={`input ${styles.entrada}`}
           placeholder="nombre@correo.com"
+          value={datos.correo}
+          onChange={(e) => cambiar('correo', e.target.value)}
+          autoComplete="email"
         />
       </div>
 
@@ -55,11 +130,19 @@ function RegistroForm() {
         <div className={styles.control}>
           <input
             id="password"
-            type="password"
+            type={mostrar.contrasena ? 'text' : 'password'}
             className={`input ${styles.entrada} ${styles.conOjo}`}
             placeholder="Crea una contraseña"
+            value={datos.contrasena}
+            onChange={(e) => cambiar('contrasena', e.target.value)}
+            autoComplete="new-password"
           />
-          <button type="button" className={styles.ojo} aria-label="Mostrar contraseña">
+          <button
+            type="button"
+            className={styles.ojo}
+            aria-label={mostrar.contrasena ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            onClick={() => alternarOjo('contrasena')}
+          >
             <IconoOcultar />
           </button>
         </div>
@@ -70,27 +153,44 @@ function RegistroForm() {
         <div className={styles.control}>
           <input
             id="confirmar"
-            type="password"
+            type={mostrar.confirmacion ? 'text' : 'password'}
             className={`input ${styles.entrada} ${styles.conOjo}`}
             placeholder="Repite tu contraseña"
+            value={datos.confirmacion}
+            onChange={(e) => cambiar('confirmacion', e.target.value)}
+            autoComplete="new-password"
           />
-          <button type="button" className={styles.ojo} aria-label="Mostrar contraseña">
+          <button
+            type="button"
+            className={styles.ojo}
+            aria-label={mostrar.confirmacion ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+            onClick={() => alternarOjo('confirmacion')}
+          >
             <IconoOcultar />
           </button>
         </div>
       </div>
 
       <label className={styles.terminos}>
-        <input type="checkbox" className={styles.casilla} />
+        <input
+          type="checkbox"
+          className={styles.casilla}
+          checked={datos.aceptaTerminos}
+          onChange={(e) => cambiar('aceptaTerminos', e.target.checked)}
+        />
         Acepto los términos y condiciones y el tratamiento de mis datos personales
       </label>
 
-      <button type="button" className={`boton boton--primario boton--bloque ${styles.accion}`}>
-        Crear cuenta
+      <button
+        type="submit"
+        className={`boton boton--primario boton--bloque ${styles.accion}`}
+        disabled={enviando}
+      >
+        {enviando ? 'Creando cuenta…' : 'Crear cuenta'}
       </button>
 
       <p className={styles.alterno}>
-        ¿Ya tienes cuenta? <a href="#" className="enlace">Iniciar sesión</a>
+        ¿Ya tienes cuenta? <Link to="/login" className="enlace">Iniciar sesión</Link>
       </p>
     </form>
   );

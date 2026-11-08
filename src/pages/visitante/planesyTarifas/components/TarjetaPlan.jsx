@@ -1,10 +1,11 @@
 import { Icono } from '../../components/IconosVisitante.jsx';
 import styles from './TarjetaPlan.module.css';
+import { formatearCOP } from '../../../../utils/formatoMoneda.js';
 
 // Tarjeta de un plan del catálogo. El plan "actual" lleva borde verde,
 // etiqueta "TU PLAN ACTUAL" y un estado en lugar del botón de compra.
 function TarjetaPlan({ plan }) {
-  const { codigo, dias, nombre, descripcion, precio, unidad, lineas, actual } = plan;
+  const { codigo, dias, nombre, descripcion, precio, unidad, lineas, actual, valorMinutoExceso } = plan;
 
   return (
     <article
@@ -14,12 +15,12 @@ function TarjetaPlan({ plan }) {
       {actual && <span className={styles.etiquetaActual}>TU PLAN ACTUAL</span>}
 
       <header className={styles.cabecera}>
-        <span className={styles.codigo}>{codigo}</span>
+        {codigo && <span className={styles.codigo}>{codigo}</span>}
         <span className={styles.dias}>{dias}</span>
       </header>
 
       <h2 className={styles.nombre}>{nombre}</h2>
-      <p className={styles.descripcion}>{descripcion}</p>
+      {descripcion && <p className={styles.descripcion}>{descripcion}</p>}
 
       <p className={styles.precio}>
         <span className={actual ? styles.precioVerde : ''}>{precio}</span>
@@ -41,14 +42,16 @@ function TarjetaPlan({ plan }) {
             </span>
           </li>
         ))}
-        <li className={`${styles.linea} ${styles.lineaSecundaria}`}>
-          <span className={styles.info} aria-hidden="true">
-            <Icono nombre="info" />
-          </span>
-          <span>
-            Exceso: <strong>$100 COP/min</strong>
-          </span>
-        </li>
+        {valorMinutoExceso != null && (
+          <li className={`${styles.linea} ${styles.lineaSecundaria}`}>
+            <span className={styles.info} aria-hidden="true">
+              <Icono nombre="info" />
+            </span>
+            <span>
+              Exceso: <strong>{formatearCOP(valorMinutoExceso)} COP/min</strong>
+            </span>
+          </li>
+        )}
       </ul>
 
       {actual ? (
