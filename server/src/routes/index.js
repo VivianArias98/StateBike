@@ -15,6 +15,7 @@ import incidencias from "./incidencias.routes.js";
 import adminIncidencias from "./admin.incidencias.routes.js";
 import perfil from "./perfil.routes.js";
 import adminCuentas from "./admin.cuentas.routes.js";
+import viajes from "./viajes.routes.js";
 
 const router = Router();
 
@@ -33,6 +34,7 @@ router.use("/incidencias", incidencias);
 router.use("/admin/incidencias", adminIncidencias);
 router.use("/perfil", perfil);
 router.use("/admin/cuentas", adminCuentas);
+router.use("/viajes", viajes);
 
 router.use("/interno", interno);
 

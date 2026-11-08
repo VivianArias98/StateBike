@@ -83,4 +83,17 @@ export const MENSAJES = {
     no_inactivar_propia_cuenta: "No puede inactivar la cuenta de administrador",
     telefono_invalido: "Número inválido",
     usuario_no_encontrado: "Usuario no encontrado",
+      // Viajes, Retiros y Devoluciones (HU_3, HU_4)
+    viaje_iniciado: "VIAJE INICIADO. ¡BUEN RECORRIDO!",
+    viaje_finalizado: "VIAJE FINALIZADO CON ÉXITO",
+    tarjeta_no_vinculada_o_bloqueada: "Tarjeta no vinculada o bloqueada",
+    no_se_pudo_leer_tarjeta: "No se pudo leer la tarjeta. Intente de nuevo",
+    limite_viajes_alcanzado: "Alcanzó el límite de viajes de su plan por hoy",
+    cobro_pendiente_bloquea: "Tiene un pago pendiente por exceso de tiempo. Recargue su saldo para continuar",
+    ya_tiene_viaje_en_curso: "Ya tiene un viaje en curso",
+    bicicleta_no_disponible: "La bicicleta no está disponible",
+    bloqueo_no_detectado: "No se detectó el bloqueo de la bicicleta. Verifique que esté bien encajada",
+    tarjeta_no_corresponde: "La tarjeta no corresponde al viaje en curso",
+    cobro_exceso_pendiente: "El cobro por exceso quedó pendiente. Recargue su saldo para volver a usar el servicio",
+    sin_viaje_en_curso: "No tiene un viaje en curso",
     };
