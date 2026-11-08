@@ -16,12 +16,47 @@ import RegistroPage from './pages/visitante/registro/RegistroPage.jsx';
 
 import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
+import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 
 function App() {
   return (
-    <UsuarioLayout>
-      <MiBilletera />
-    </UsuarioLayout>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<EstacionesPage />} />
+        <Route path="/planes" element={<PlanesTarifas />} />
+        <Route path="/acerca" element={<AcercaNosotros />} />
+        <Route path="/como-usar" element={<ComoUsarServicio />} />
+        <Route path="/login" element={<InicioSesionPage />} />
+        <Route path="/registro" element={<RegistroPage />} />
+
+        <Route
+          path="/inicio"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <InicioMapaPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <PanelControlPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/estaciones"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminEstacionesPage />
+            </RutaProtegida>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
