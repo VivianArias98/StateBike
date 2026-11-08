@@ -67,4 +67,12 @@ export const MENSAJES = {
     sin_cobros_pendientes: "No tiene cobros pendientes",
     saldo_insuficiente: "Saldo insuficiente. Le faltan $X. Recargue su saldo",
     sin_movimientos: "No hay movimientos registrados",
+      // Incidencias (HU_6, HU_19)
+    reporte_enviado: "REPORTE ENVIADO CON ÉXITO",
+    incidencia_atendida: "INCIDENCIA ATENDIDA CORRECTAMENTE",
+    incidencia_cerrada: "INCIDENCIA CERRADA CORRECTAMENTE",
+    indique_recurso: "Indique la bicicleta o la estación involucrada",
+    debe_atender_primero: "Debe atender la incidencia antes de cerrarla",
+    sin_incidencias: "No hay incidencias registradas",
+    incidencia_no_encontrada: "Incidencia no encontrada",
     };
