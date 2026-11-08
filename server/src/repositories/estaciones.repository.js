@@ -73,3 +73,38 @@ export function actualizar(id, { nombre, direccion, lat, lng }) {
 export function cambiarEstado(id, estado) {
   db.prepare("UPDATE estaciones SET estado = ? WHERE id = ?").run(estado, id);
 }
+
+export function contarPorEstado() {
+  const fila = db
+    .prepare(
+      `SELECT
+         COUNT(*) AS total,
+         SUM(CASE WHEN estado = 'ACTIVE' THEN 1 ELSE 0 END) AS activas,
+         SUM(CASE WHEN estado = 'INACTIVE' THEN 1 ELSE 0 END) AS inactivas
+       FROM estaciones`
+    )
+    .get();
+
+  return {
+    total: fila?.total ?? 0,
+    activas: fila?.activas ?? 0,
+    inactivas: fila?.inactivas ?? 0,
+  };
+}
+
+export function listarOcupacion() {
+  return db
+    .prepare(
+      `SELECT
+         e.id,
+         e.nombre,
+         e.capacidad_maxima AS capacidad,
+         COALESCE(SUM(CASE WHEN a.estado = 'OCUPADO' THEN 1 ELSE 0 END), 0) AS ocupados
+       FROM estaciones e
+       LEFT JOIN anclajes a ON a.estacion_id = e.id
+       WHERE e.estado = 'ACTIVE'
+       GROUP BY e.id
+       ORDER BY e.nombre`
+    )
+    .all();
+}

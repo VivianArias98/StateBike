@@ -16,6 +16,7 @@ import adminIncidencias from "./admin.incidencias.routes.js";
 import perfil from "./perfil.routes.js";
 import adminCuentas from "./admin.cuentas.routes.js";
 import viajes from "./viajes.routes.js";
+import adminDashboard from "./admin.dashboard.routes.js";
 
 const router = Router();
 
@@ -25,6 +26,7 @@ router.use("/estaciones", estaciones);
 router.use("/admin/estaciones", adminEstaciones);
 router.use("/admin/bicicletas", adminBicicletas);
 router.use("/admin/planes", adminPlanes);
+router.use("/admin/resumen", adminDashboard);
 router.use("/planes", planes);
 router.use("/tarjeta", tarjetas);
 router.use("/admin/tarjetas", adminTarjetas);

@@ -407,3 +407,8 @@ Content-Type: application/json
   "uid": "04A1B2C3",
   "bloqueoDetectado": true
 }
+
+### 68. Panel de control / Dashboard del Administrador (HU_22)
+GET {{host}}/admin/resumen
+Authorization: Bearer {{login.response.body.acceso}}
+
