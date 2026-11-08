@@ -84,3 +84,129 @@ export function listarPorUsuario(usuarioId, { desde, hasta } = {}) {
 
   return db.prepare(sql).all(...params);
 }
+
+// Obtiene el viaje en curso activo del usuario (HU_3, HU_4)
+export function obtenerViajeEnCursoPorUsuario(usuarioId) {
+  return db
+    .prepare(
+      `SELECT
+         v.id,
+         v.usuario_id AS usuarioId,
+         v.bicicleta_id AS bicicletaId,
+         b.codigo AS bicicletaCodigo,
+         v.estacion_origen_id AS estacionOrigenId,
+         eo.nombre AS estacionOrigenNombre,
+         v.fecha_inicio AS fechaInicio,
+         v.estado,
+         v.estado_cobro AS estadoCobro
+       FROM viajes v
+       JOIN bicicletas b ON v.bicicleta_id = b.id
+       JOIN estaciones eo ON v.estacion_origen_id = eo.id
+       WHERE v.usuario_id = ? AND v.estado = 'EN_CURSO'
+       LIMIT 1`
+    )
+    .get(usuarioId);
+}
+
+export function buscarPorId(id) {
+  return db
+    .prepare(
+      `SELECT
+         v.id,
+         v.usuario_id AS usuarioId,
+         v.bicicleta_id AS bicicletaId,
+         b.codigo AS bicicletaCodigo,
+         v.estacion_origen_id AS estacionOrigenId,
+         eo.nombre AS estacionOrigenNombre,
+         v.estacion_destino_id AS estacionDestinoId,
+         ed.nombre AS estacionDestinoNombre,
+         v.fecha_inicio AS fechaInicio,
+         v.fecha_fin AS fechaFin,
+         v.duracion_min AS duracionMin,
+         v.minutos_exceso AS minutosExceso,
+         v.valor_cobrado AS valorCobrado,
+         v.estado,
+         v.estado_cobro AS estadoCobro
+       FROM viajes v
+       JOIN bicicletas b ON v.bicicleta_id = b.id
+       JOIN estaciones eo ON v.estacion_origen_id = eo.id
+       LEFT JOIN estaciones ed ON v.estacion_destino_id = ed.id
+       WHERE v.id = ?`
+    )
+    .get(id);
+}
+
+// Inicia un viaje atómicamente: inserta viaje, libera anclaje y pasa bicicleta a EN_USO (HU_3)
+export function iniciarViaje({ usuarioId, bicicletaId, estacionOrigenId, anclajeOrigenId }) {
+  const transaccion = db.transaction(() => {
+    // 1. Insertar viaje
+    const resViaje = db
+      .prepare(
+        `INSERT INTO viajes (usuario_id, bicicleta_id, estacion_origen_id, estado)
+         VALUES (?, ?, ?, 'EN_CURSO')`
+      )
+      .run(usuarioId, bicicletaId, estacionOrigenId);
+
+    // 2. Liberar anclaje de la estación
+    if (anclajeOrigenId) {
+      db.prepare(`UPDATE anclajes SET estado = 'LIBRE' WHERE id = ?`).run(anclajeOrigenId);
+    }
+
+    // 3. Poner bicicleta en uso y desvincular de su anclaje
+    db.prepare(`UPDATE bicicletas SET estado = 'EN_USO', anclaje_id = NULL WHERE id = ?`).run(
+      bicicletaId
+    );
+
+    return resViaje.lastInsertRowid;
+  });
+
+  const nuevoId = transaccion();
+  return buscarPorId(nuevoId);
+}
+
+// Finaliza un viaje atómicamente: liquida viaje, ocupa anclaje y deja bicicleta DISPONIBLE (HU_4)
+export function finalizarViaje({
+  viajeId,
+  bicicletaId,
+  estacionDestinoId,
+  anclajeDestinoId,
+  duracionMin,
+  minutosExceso,
+  valorCobrado,
+  estadoCobro,
+}) {
+  const transaccion = db.transaction(() => {
+    // 1. Actualizar viaje a FINALIZADO
+    db.prepare(
+      `UPDATE viajes
+       SET estacion_destino_id = ?,
+           fecha_fin = datetime('now'),
+           duracion_min = ?,
+           minutos_exceso = ?,
+           valor_cobrado = ?,
+           estado = 'FINALIZADO',
+           estado_cobro = ?
+       WHERE id = ?`
+    ).run(estacionDestinoId, duracionMin, minutosExceso, valorCobrado, estadoCobro, viajeId);
+
+    // 2. Ocupar el nuevo anclaje en la estación de destino
+    if (anclajeDestinoId) {
+      db.prepare(`UPDATE anclajes SET estado = 'OCUPADO' WHERE id = ?`).run(anclajeDestinoId);
+    }
+
+    // 3. Dejar bicicleta disponible y asignada al anclaje
+    db.prepare(`UPDATE bicicletas SET estado = 'DISPONIBLE', anclaje_id = ? WHERE id = ?`).run(
+      anclajeDestinoId ?? null,
+      bicicletaId
+    );
+  });
+
+  transaccion();
+  return buscarPorId(viajeId);
+}
+
+// Cuenta viajes en curso actuales (HU_22)
+export function contarEnCurso() {
+  const fila = db.prepare(`SELECT COUNT(*) AS total FROM viajes WHERE estado = 'EN_CURSO'`).get();
+  return fila?.total ?? 0;
+}
