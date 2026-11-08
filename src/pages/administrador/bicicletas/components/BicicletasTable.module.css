@@ -1,3 +1,18 @@
-/* Se usa junto a la clase global "tabla": aquí solo los anchos de columna */
-.raiz th:nth-child(1) { width: 28%; }
-.raiz th:nth-child(2) { width: 36%; }
+/* Se usa junto a la clase global "tabla": anchos y botones de acción */
+.raiz th:nth-child(1) { width: 20%; }
+.raiz th:nth-child(2) { width: 25%; }
+.raiz th:nth-child(3) { width: 25%; }
+.raiz th:nth-child(4) { width: 30%; }
+
+.acciones {
+  display: flex;
+  gap: var(--espacio-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.botonAccion {
+  font-size: var(--texto-xs);
+  padding: 0 var(--espacio-3);
+  height: 2rem;
+}
