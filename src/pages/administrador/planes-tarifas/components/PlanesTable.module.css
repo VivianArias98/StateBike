@@ -1,13 +1,17 @@
-/* Se usa junto a la clase global "tabla": aquí solo anchos de columna */
+/* Se usa junto a la clase global "tabla" */
 .raiz th {
   white-space: nowrap;
 }
 
-.raiz th:nth-child(1) { width: 22%; }
-.raiz th:nth-child(2) { width: 25%; }
-.raiz th:nth-child(3) { width: 33%; }
+.acciones {
+  display: flex;
+  gap: var(--espacio-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-.editar {
-  min-width: 0;
-  padding: 0 var(--espacio-4);
+.botonAccion {
+  font-size: var(--texto-xs);
+  padding: 0 var(--espacio-3);
+  height: 2rem;
 }

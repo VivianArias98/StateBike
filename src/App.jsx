@@ -18,6 +18,7 @@ import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
+import AdminPlanesPage from './pages/administrador/planes-tarifas/PlanesTarifasPage.jsx';
 
 function App() {
   return (
@@ -59,6 +60,14 @@ function App() {
           element={
             <RutaProtegida rol={ROLES.ADMINISTRADOR}>
               <AdminBicicletasPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/planes"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminPlanesPage />
             </RutaProtegida>
           }
         />
