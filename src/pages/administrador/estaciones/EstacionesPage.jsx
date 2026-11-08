@@ -49,7 +49,8 @@ function EstacionesPage() {
       }
 
       const datos = await respuesta.json();
-      setEstaciones(Array.isArray(datos) ? datos : []);
+      const lista = Array.isArray(datos) ? datos : (datos.estaciones || []);
+      setEstaciones(lista);
     } catch (error) {
       console.error(error);
       setAviso('No se pudo conectar con el servidor');
