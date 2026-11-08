@@ -236,3 +236,127 @@ Authorization: Bearer {{login.response.body.acceso}}
 Content-Type: application/json
 
 { "usuarioId": 1, "uid": "04A1B2C3" }
+
+### 39. Usuario: consultar mi plan actual (HU_17)
+GET {{host}}/planes/mi-plan
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 40. Usuario: adquirir plan con saldo de billetera (HU_2)
+POST {{host}}/planes/adquirir
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "planId": 2 }
+
+### 41. Usuario: cancelar plan activo sin reembolso (HU_2)
+POST {{host}}/planes/cancelar
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 42. Usuario: consultar historial de viajes (HU_5)
+GET {{host}}/historial/viajes
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 43. Usuario: historial de viajes con filtro de fechas válido (HU_5)
+GET {{host}}/historial/viajes?desde=2026-10-01&hasta=2026-11-30
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 44. Usuario: historial con rango de fechas inválido (debe dar 400 fecha_invalida_rango)
+GET {{host}}/historial/viajes?desde=2026-11-30&hasta=2026-10-01
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 45. Usuario: consultar historial de pagos (HU_5)
+GET {{host}}/historial/pagos
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 46. Usuario: consultar billetera y estado de cobros (HU_23)
+GET {{host}}/billetera
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 47. Usuario: recargar saldo en billetera (HU_24)
+POST {{host}}/billetera/recargar
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "monto": 50000 }
+
+### 48. Usuario: recarga con monto inválido fuera de rango (debe dar 400)
+POST {{host}}/billetera/recargar
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "monto": 50 }
+
+### 49. Usuario: pagar cobro pendiente por exceso (HU_25)
+POST {{host}}/billetera/pagar-cobro
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 50. Usuario: reportar daño o incidencia en bicicleta (HU_6)
+POST {{host}}/incidencias
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "tipo": "BICICLETA",
+  "bicicletaId": 1,
+  "descripcion": "Freno trasero desajustado y cadena suelta"
+}
+
+### 51. Usuario: consultar mis incidencias reportadas (HU_6)
+GET {{host}}/incidencias
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 52. Admin: listar todas las incidencias (HU_19)
+GET {{host}}/admin/incidencias
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 53. Admin: atender incidencia con observación obligatoria (HU_19)
+PATCH {{host}}/admin/incidencias/1/atender
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "observacion": "Bicicleta ingresada al taller para ajuste técnico" }
+
+### 54. Admin: cerrar incidencia previamente atendida (HU_19)
+PATCH {{host}}/admin/incidencias/1/cerrar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 55. Permisos: intentar atender incidencia con token de usuario común (debe dar 403)
+PATCH {{host}}/admin/incidencias/1/atender
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "observacion": "Intento no autorizado" }
+
+### 56. Usuario: consultar mi perfil propio (HU_1)
+GET {{host}}/perfil
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 57. Usuario: editar nombre y teléfono de mi perfil (HU_1)
+PUT {{host}}/perfil
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Laura Gómez Rojas",
+  "telefono": "3201234567"
+}
+
+### 58. Admin: listar cuentas de usuario registradas (HU_21)
+GET {{host}}/admin/cuentas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 59. Admin: buscar usuario por correo o nombre (HU_21)
+GET {{host}}/admin/cuentas?busqueda=prueba
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 60. Admin: inactivar cuenta de usuario (HU_21)
+PATCH {{host}}/admin/cuentas/{{login.response.body.usuario.id}}/inactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 61. Admin: reactivar cuenta de usuario (HU_21)
+PATCH {{host}}/admin/cuentas/{{login.response.body.usuario.id}}/reactivar
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### 62. Permisos: usuario común intentar inactivar una cuenta (debe dar 403)
+PATCH {{host}}/admin/cuentas/1/inactivar
+Authorization: Bearer {{login.response.body.acceso}}

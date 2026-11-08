@@ -13,6 +13,8 @@ import historial from "./historial.routes.js";
 import billetera from "./billetera.routes.js";
 import incidencias from "./incidencias.routes.js";
 import adminIncidencias from "./admin.incidencias.routes.js";
+import perfil from "./perfil.routes.js";
+import adminCuentas from "./admin.cuentas.routes.js";
 
 const router = Router();
 
@@ -29,6 +31,8 @@ router.use("/historial", historial);
 router.use("/billetera", billetera);
 router.use("/incidencias", incidencias);
 router.use("/admin/incidencias", adminIncidencias);
+router.use("/perfil", perfil);
+router.use("/admin/cuentas", adminCuentas);
 
 router.use("/interno", interno);
 

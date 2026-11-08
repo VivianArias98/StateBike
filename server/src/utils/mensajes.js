@@ -75,4 +75,12 @@ export const MENSAJES = {
     debe_atender_primero: "Debe atender la incidencia antes de cerrarla",
     sin_incidencias: "No hay incidencias registradas",
     incidencia_no_encontrada: "Incidencia no encontrada",
+      // Perfil y Cuentas de Usuario (HU_1, HU_21)
+    perfil_actualizado: "PERFIL ACTUALIZADO CORRECTAMENTE",
+    cuenta_inactivada: "CUENTA INACTIVADA CORRECTAMENTE",
+    cuenta_reactivada: "CUENTA REACTIVADA CORRECTAMENTE",
+    inactivar_con_viaje: "No puede inactivar una cuenta con viaje en curso",
+    no_inactivar_propia_cuenta: "No puede inactivar la cuenta de administrador",
+    telefono_invalido: "Número inválido",
+    usuario_no_encontrado: "Usuario no encontrado",
     };
