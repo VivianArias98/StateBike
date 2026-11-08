@@ -28,6 +28,17 @@ export function obtenerCobroPendiente(usuarioId) {
   ).get(usuarioId);
 }
 
+// Actualiza el cobro pendiente de un viaje a PAGADO (HU_25)
+export function pagarCobroPendiente(viajeId) {
+  db.prepare(
+    `UPDATE viajes
+     SET estado_cobro = 'PAGADO'
+     WHERE id = ? AND estado_cobro = 'PENDIENTE'`
+  ).run(viajeId);
+
+  return db.prepare(`SELECT * FROM viajes WHERE id = ?`).get(viajeId);
+}
+
 // Cuenta cuántos viajes ha hecho el usuario hoy en Colombia (UTC-5)
 export function contarViajesHoy(usuarioId) {
   const fila = db.prepare(
