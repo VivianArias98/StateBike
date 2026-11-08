@@ -41,7 +41,8 @@ function PlanesTarifasPage() {
       }
 
       const datos = await respuesta.json();
-      setPlanes(Array.isArray(datos) ? datos : []);
+      const lista = Array.isArray(datos) ? datos : (datos.planes || []);
+      setPlanes(lista);
     } catch (error) {
       console.error(error);
       setAviso('No se pudo conectar con el servidor');

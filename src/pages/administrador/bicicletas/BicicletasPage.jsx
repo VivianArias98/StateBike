@@ -44,7 +44,8 @@ function BicicletasPage() {
       }
 
       const datos = await respuesta.json();
-      setBicicletas(Array.isArray(datos) ? datos : []);
+      const lista = Array.isArray(datos) ? datos : (datos.bicicletas || []);
+      setBicicletas(lista);
     } catch (error) {
       console.error(error);
       setAviso('No se pudo conectar con el servidor');
@@ -63,7 +64,8 @@ function BicicletasPage() {
 
       if (respuesta.ok) {
         const datos = await respuesta.json();
-        setEstaciones(Array.isArray(datos) ? datos : []);
+        const listaEst = Array.isArray(datos) ? datos : (datos.estaciones || []);
+        setEstaciones(listaEst);
       }
     } catch {
       // Ignorar error secundario de estaciones
