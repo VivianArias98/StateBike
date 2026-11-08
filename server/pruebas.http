@@ -363,7 +363,7 @@ Authorization: Bearer {{login.response.body.acceso}}
 
 ### 63. Terminal NFC: iniciar viaje / retiro de bicicleta en estación (HU_3)
 POST {{host}}/interno/retiros
-X-Clave-Interna: 7d9f2e4b8a1c3d5e6f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e
+X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
 Content-Type: application/json
 
 {
@@ -377,7 +377,7 @@ Authorization: Bearer {{login.response.body.acceso}}
 
 ### 65. Terminal NFC: devolver bicicleta y finalizar viaje (HU_4)
 POST {{host}}/interno/devoluciones
-X-Clave-Interna: 7d9f2e4b8a1c3d5e6f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e
+X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
 Content-Type: application/json
 
 {
@@ -388,7 +388,7 @@ Content-Type: application/json
 
 ### 66. Terminal NFC: devolver bicicleta sin bloqueo detectado (debe dar 400)
 POST {{host}}/interno/devoluciones
-X-Clave-Interna: 7d9f2e4b8a1c3d5e6f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e
+X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
 Content-Type: application/json
 
 {
@@ -399,7 +399,7 @@ Content-Type: application/json
 
 ### 67. Terminal NFC: devolver sin viaje en curso (debe dar 400 sin_viaje_en_curso)
 POST {{host}}/interno/devoluciones
-X-Clave-Interna: 7d9f2e4b8a1c3d5e6f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e
+X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
 Content-Type: application/json
 
 {
@@ -407,3 +407,8 @@ Content-Type: application/json
   "uid": "04A1B2C3",
   "bloqueoDetectado": true
 }
+
+### 68. Panel de control / Dashboard del Administrador (HU_22)
+GET {{host}}/admin/resumen
+Authorization: Bearer {{login.response.body.acceso}}
+

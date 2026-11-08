@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
-import BilleteraPage from './pages/usuario/billetera/BilleteraPage';
+import MiBilletera from './pages/usuario/billetera/MiBilletera';
 
 function App() {
   const [vista, setVista] = useState('inicio');
@@ -17,7 +17,7 @@ function App() {
 
   return (
     <UsuarioLayout>
-      <BilleteraPage />
+      <MiBilletera />
     </UsuarioLayout>
   );
 }
