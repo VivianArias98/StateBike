@@ -1,5 +1,6 @@
-// Reemplaza TODO el contenido de src/App.jsx por este código.
-// No se incluye en el zip: App.jsx quedó sin cambios.
+import React, { useState } from 'react';
+import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
+import MiBilletera from './pages/usuario/billetera/MiBilletera';
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
@@ -18,35 +19,9 @@ import PanelControlPage from './pages/administrador/panel-control/PanelControlPa
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<EstacionesPage />} />
-        <Route path="/planes" element={<PlanesTarifas />} />
-        <Route path="/acerca" element={<AcercaNosotros />} />
-        <Route path="/como-usar" element={<ComoUsarServicio />} />
-        <Route path="/login" element={<InicioSesionPage />} />
-        <Route path="/registro" element={<RegistroPage />} />
-
-        <Route
-          path="/inicio"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <InicioMapaPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <PanelControlPage />
-            </RutaProtegida>
-          }
-        />
-
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <UsuarioLayout>
+      <MiBilletera />
+    </UsuarioLayout>
   );
 }
 

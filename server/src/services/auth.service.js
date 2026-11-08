@@ -83,7 +83,11 @@ export async function registrar(datos = {}) {
 
   // Rol USUARIO por defecto; la billetera nace en $0 en TunjaAPI
   const usuarioId = respuesta.usuario.id;
-  perfiles.crear(usuarioId, fechaNacimiento);
+  perfiles.crear(usuarioId, {
+    fechaNacimiento,
+    correo: respuesta.usuario.email,
+    nombre: respuesta.usuario.nombre,
+  });
 
   // La HU manda a iniciar sesión: no se devuelven tokens
   return {
@@ -104,8 +108,10 @@ export async function iniciarSesion(datos = {}) {
   });
 
   const perfil = perfiles.obtenerOCrear(sesion.usuario.id);
+  perfiles.actualizarContacto(sesion.usuario.id, sesion.usuario.email, sesion.usuario.nombre);
   perfiles.registrarAcceso(sesion.usuario.id);
   return respuestaSesion(sesion, perfil);
+  
 }
 
 export async function refrescar(refresco) {

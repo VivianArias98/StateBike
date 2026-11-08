@@ -6,7 +6,19 @@ CREATE TABLE IF NOT EXISTS perfiles (
   fecha_nacimiento TEXT,
   telefono TEXT,
   ultimo_acceso TEXT,
+  correo TEXT,   -- copia local: TunjaAPI no busca usuarios por correo
+  nombre TEXT,
   creado TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Una tarjeta por usuario (HU_18). SIN VINCULAR = el usuario no tiene fila aquí
+CREATE TABLE IF NOT EXISTS tarjetas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL UNIQUE REFERENCES perfiles(usuario_id),
+  uid TEXT NOT NULL UNIQUE,
+  estado TEXT NOT NULL DEFAULT 'ACTIVA' CHECK (estado IN ('ACTIVA', 'BLOQUEADA')),
+  fecha_vinculacion TEXT NOT NULL DEFAULT (datetime('now')),  -- UTC
+  fecha_cambio_estado TEXT                                    -- UTC
 );
 
 CREATE TABLE IF NOT EXISTS estaciones (
@@ -52,4 +64,56 @@ CREATE TABLE IF NOT EXISTS planes (
   estado TEXT NOT NULL DEFAULT 'ACTIVO'
     CHECK (estado IN ('ACTIVO', 'INACTIVO')),
   creado TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Suscripciones / planes adquiridos por los usuarios (HU_2 y HU_17)
+CREATE TABLE IF NOT EXISTS suscripciones (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES perfiles(usuario_id),
+  plan_id INTEGER NOT NULL REFERENCES planes(id),
+  nombre_plan TEXT NOT NULL,
+  costo_base INTEGER NOT NULL,
+  vigencia_dias INTEGER NOT NULL,
+  viajes_por_dia INTEGER NOT NULL,
+  tiempo_viaje_min INTEGER NOT NULL,
+  valor_minuto_exceso INTEGER NOT NULL,
+  fecha_inicio TEXT NOT NULL DEFAULT (datetime('now')),
+  fecha_fin TEXT NOT NULL,
+  estado TEXT NOT NULL DEFAULT 'ACTIVO'
+    CHECK (estado IN ('ACTIVO', 'CANCELADO', 'VENCIDO')),
+  fecha_cancelacion TEXT
+);
+
+-- Registro de viajes (HU_3, HU_4 y HU_5)
+CREATE TABLE IF NOT EXISTS viajes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES perfiles(usuario_id),
+  bicicleta_id INTEGER NOT NULL REFERENCES bicicletas(id),
+  estacion_origen_id INTEGER NOT NULL REFERENCES estaciones(id),
+  estacion_destino_id INTEGER REFERENCES estaciones(id),
+  fecha_inicio TEXT NOT NULL DEFAULT (datetime('now')),
+  fecha_fin TEXT,
+  duracion_min INTEGER DEFAULT 0,
+  minutos_exceso INTEGER DEFAULT 0,
+  valor_cobrado INTEGER DEFAULT 0,
+  estado TEXT NOT NULL DEFAULT 'EN_CURSO'
+    CHECK (estado IN ('EN_CURSO', 'FINALIZADO')),
+  estado_cobro TEXT NOT NULL DEFAULT 'SIN_COBRO'
+    CHECK (estado_cobro IN ('SIN_COBRO', 'PAGADO', 'PENDIENTE'))
+);
+
+-- Reporte y gestión de incidencias (HU_6 y HU_19)
+CREATE TABLE IF NOT EXISTS incidencias (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL REFERENCES perfiles(usuario_id),
+  tipo TEXT NOT NULL CHECK (tipo IN ('BICICLETA', 'ANCLAJE', 'TARJETA', 'OTRO')),
+  bicicleta_id INTEGER REFERENCES bicicletas(id),
+  estacion_id INTEGER REFERENCES estaciones(id),
+  descripcion TEXT NOT NULL,
+  estado TEXT NOT NULL DEFAULT 'ABIERTA'
+    CHECK (estado IN ('ABIERTA', 'ATENDIDA', 'CERRADA')),
+  observacion_admin TEXT,
+  fecha_creacion TEXT NOT NULL DEFAULT (datetime('now')),
+  fecha_atencion TEXT,
+  fecha_cierre TEXT
 );
