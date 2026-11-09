@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import EstadoCarga from '../components/EstadoCarga.jsx';
-import CatalogoPlanes from '../components/CatalogoPlanes.jsx';
+import CatalogoPlanes from './components/CatalogoPlanes.jsx';
 import { useCarga } from '../../../utils/useCarga.js';
 import { obtenerMiPlan } from './planApi.js';
 import { SIN_PLANES } from './planVista.js';
