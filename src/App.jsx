@@ -15,6 +15,7 @@ import InicioSesionPage from './pages/visitante/inicioSesion/InicioSesionPage.js
 import RegistroPage from './pages/visitante/registro/RegistroPage.jsx';
 
 import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
+import MiPerfilPage from './pages/usuario/mi-perfil/MiPerfilPage.jsx';
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
@@ -36,6 +37,14 @@ function App() {
           element={
             <RutaProtegida rol={ROLES.USUARIO}>
               <InicioMapaPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <MiPerfilPage />
             </RutaProtegida>
           }
         />

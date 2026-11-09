@@ -1,27 +1,87 @@
+import { useEffect, useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import Etiqueta from '../../../components/Etiqueta/Etiqueta.jsx';
-import { IconoFlecha, IconoInfo } from '../../../components/Iconos/Iconos.jsx';
+import Aviso from '../../../components/Avisos/Aviso.jsx';
+import { IconoInfo } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
+import EstadoCarga from '../components/EstadoCarga.jsx';
 import FormularioDatos from './components/FormularioDatos.jsx';
 import TarjetaNfcPerfil from './components/TarjetaNfcPerfil.jsx';
+import { mensajeError } from '../../../utils/mensajeError.js';
+import {
+  obtenerPerfil,
+  actualizarPerfil,
+  obtenerTarjeta,
+  bloquearTarjeta,
+  desbloquearTarjeta,
+} from './perfilApi.js';
 import styles from './MiPerfilPage.module.css';
 
-// Datos de ejemplo (solo maquetación). Después llegarán del backend.
-const PERFIL = {
-  id: 'TNJ-08942',
-  nombre: 'Camila Rojas',
-  telefono: '300 123 4567',
-  documento: '1.049.876.543',
-  fechaNacimiento: '14/03/2001',
-  edad: 24,
-};
+const SIN_VINCULAR = 'SIN VINCULAR';
 
-const TARJETA = { referencia: 'TUN-4821', ultimos: '4821', titular: 'Camila Rojas', expira: '12/28' };
-
-// Perfil del usuario: datos personales, credenciales y tarjeta NFC
+// Perfil del usuario (HU_1): datos personales, cambio de contraseña y tarjeta NFC.
+// La página guarda el estado y habla con el backend; los componentes solo dibujan.
 function MiPerfilPage() {
-  // Pendiente: abrir el centro de ayuda (React Router)
-  const abrirAyuda = () => {};
+  const [perfil, setPerfil] = useState(null);
+  const [estadoTarjeta, setEstadoTarjeta] = useState(SIN_VINCULAR);
+  const [tarjeta, setTarjeta] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [errorCarga, setErrorCarga] = useState('');
+  const [aviso, setAviso] = useState('');
+  const [errorTarjeta, setErrorTarjeta] = useState('');
+  const [procesandoTarjeta, setProcesandoTarjeta] = useState(false);
+
+  // intento sube al pulsar "Reintentar" y vuelve a disparar la carga
+  const [intento, setIntento] = useState(0);
+
+  useEffect(() => {
+    let activo = true;
+    Promise.all([obtenerPerfil(), obtenerTarjeta()])
+      .then(([datosPerfil, datosTarjeta]) => {
+        if (!activo) return;
+        setPerfil(datosPerfil);
+        setEstadoTarjeta(datosTarjeta.estadoTarjeta);
+        setTarjeta(datosTarjeta.tarjeta);
+        setErrorCarga('');
+      })
+      .catch((error) => {
+        if (activo) setErrorCarga(mensajeError(error));
+      })
+      .finally(() => {
+        if (activo) setCargando(false);
+      });
+    return () => {
+      activo = false;
+    };
+  }, [intento]);
+
+  const reintentar = () => {
+    setCargando(true);
+    setErrorCarga('');
+    setIntento(intento + 1);
+  };
+
+  // Lo llama el formulario. Si falla, el error se lanza para que el formulario lo muestre.
+  const guardarPerfil = async (datos) => {
+    const respuesta = await actualizarPerfil(datos);
+    setPerfil(respuesta.usuario);
+    setAviso(respuesta.mensaje);
+  };
+
+  const cambiarEstadoTarjeta = async (bloquear) => {
+    setProcesandoTarjeta(true);
+    setErrorTarjeta('');
+    try {
+      const respuesta = bloquear ? await bloquearTarjeta() : await desbloquearTarjeta();
+      setTarjeta(respuesta.tarjeta);
+      setEstadoTarjeta(respuesta.tarjeta?.estado ?? SIN_VINCULAR);
+      setAviso(respuesta.mensaje);
+    } catch (error) {
+      setErrorTarjeta(mensajeError(error));
+    } finally {
+      setProcesandoTarjeta(false);
+    }
+  };
 
   return (
     <UsuarioLayout itemActivo="Mi perfil">
@@ -34,36 +94,48 @@ function MiPerfilPage() {
           }
           subtitulo="Gestión centralizada de credenciales, datos de identidad y acceso NFC a estaciones"
           acciones={
-            <span className={styles.idPerfil}>
-              <span className={styles.punto} aria-hidden="true" />
-              ID: {PERFIL.id}
-            </span>
+            perfil && (
+              <span className={styles.idPerfil}>
+                <span className={styles.punto} aria-hidden="true" />
+                ID: {perfil.id}
+              </span>
+            )
           }
         />
 
-        <section className={`tarjeta ${styles.aviso}`} aria-label="Estado de la identidad">
-          <span className={styles.iconoAviso} aria-hidden="true">
-            <IconoInfo />
-          </span>
-          <p className={styles.textoAviso}>
-            <strong>Identidad verificada:</strong> Tus datos personales están validados con el Registro Municipal. Para
-            actualizar tu clave, usa una combinación alfanumérica segura.
-          </p>
-          <button type="button" className={`boton boton--s ${styles.ayuda}`} onClick={abrirAyuda}>
-            Centro de ayuda <IconoFlecha />
-          </button>
-        </section>
+        <EstadoCarga cargando={cargando} error={errorCarga} onReintentar={reintentar} />
 
-        <div className={styles.contenido}>
-          <FormularioDatos perfil={PERFIL} />
-          <TarjetaNfcPerfil
-            referencia={TARJETA.referencia}
-            ultimos={TARJETA.ultimos}
-            titular={TARJETA.titular}
-            expira={TARJETA.expira}
-          />
-        </div>
+        {!cargando && perfil && (
+          <>
+            <section className={`tarjeta ${styles.aviso}`} aria-label="Reglas del perfil">
+              <span className={styles.iconoAviso} aria-hidden="true">
+                <IconoInfo />
+              </span>
+              <p className={styles.textoAviso}>
+                Puedes editar tu nombre, teléfono y contraseña. La fecha de nacimiento y el correo no se pueden
+                modificar.
+              </p>
+            </section>
+
+            <div className={styles.contenido}>
+              {/* key: si el perfil cambia en el servidor, el formulario vuelve a tomar sus valores */}
+              <FormularioDatos key={`${perfil.nombreCompleto}-${perfil.telefono}`} perfil={perfil} onGuardar={guardarPerfil} />
+              <TarjetaNfcPerfil
+                estado={estadoTarjeta}
+                ultimos={tarjeta?.ultimosDigitos}
+                titular={perfil.nombreCompleto}
+                fechaVinculacion={tarjeta?.fechaVinculacion}
+                procesando={procesandoTarjeta}
+                error={errorTarjeta}
+                onBloquear={() => cambiarEstadoTarjeta(true)}
+                onDesbloquear={() => cambiarEstadoTarjeta(false)}
+              />
+            </div>
+          </>
+        )}
       </div>
+
+      <Aviso mensaje={aviso} onCerrar={() => setAviso('')} />
     </UsuarioLayout>
   );
 }
