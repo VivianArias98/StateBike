@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
-import MiBilletera from './pages/usuario/billetera/MiBilletera';
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
