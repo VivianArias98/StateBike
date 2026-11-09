@@ -53,6 +53,16 @@ Documento de referencia centralizado basado en la documentación oficial de requ
 
 ---
 
+### D. Estándar de Commits (Conventional Commits)
+Para mantener la trazabilidad e historial claro de los cambios, el equipo aplicará la convención de mensajes estructurados utilizando los siguientes prefijos estándar:
+* **`feat:`** Implementación de nuevas funcionalidades (ej. `feat(front): ...`, `feat: ...`).
+* **`fix:`** Solución o corrección de errores (bugs) (ej. `fix(front): ...`, `fix: ...`).
+* **`docs:`** Cambios o adiciones en la documentación.
+* **`refactor:`** Reestructuración o reescritura del código sin alterar su comportamiento.
+* **`test:`** Adición o modificación de pruebas unitarias o de integración.
+
+---
+
 ## 2. Matriz de Historias de Usuario (HU_1 a HU_26)
 
 | No. HU | Rol | Módulo / Funcionalidad | Peso | Descripción y Reglas Clave |
