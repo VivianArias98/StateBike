@@ -1,19 +1,20 @@
-import { IconoBilletera, IconoCandado, IconoFlecha, IconoInfo, IconoRecibo } from '../../../../components/Iconos/Iconos.jsx';
+import { IconoBilletera, IconoFlecha, IconoInfo, IconoRecibo } from '../../../../components/Iconos/Iconos.jsx';
 import { formatearPesos } from '../../formato.js';
+import { textoVigencia } from '../../mi-plan/planVista.js';
 import styles from './PasoResumenPago.module.css';
 
-// Paso 3: revisar las condiciones del plan y autorizar el débito de la billetera
-function PasoResumenPago({ plan, nfc, saldo, autorizado, onAutorizar, onModificar, onConfirmar }) {
-  const saldoProyectado = saldo - plan.precio;
+// Paso 3: revisar las condiciones del plan y autorizar el débito de la billetera.
+// Solo dibuja; la compra la hace la página con onConfirmar.
+function PasoResumenPago({ plan, ultimosDigitos, saldo, autorizado, pagando, error, onAutorizar, onModificar, onConfirmar }) {
+  const saldoProyectado = saldo - plan.costoBase;
   const filas = [
     { etiqueta: 'Plan seleccionado:', valor: plan.nombre },
-    { etiqueta: 'Costo del plan:', valor: `${formatearPesos(plan.precio)} COP`, destacado: true },
-    { etiqueta: 'Tarjeta NFC asociada:', valor: `#${nfc}`, chip: true },
-    { etiqueta: 'Vigencia del plan:', valor: plan.vigenciaTexto },
-    { etiqueta: 'Viajes por día:', valor: plan.viajesDiaTexto },
-    { etiqueta: 'Tiempo límite por trayecto:', valor: plan.tiempoTexto },
-    { etiqueta: 'Minuto de exceso:', valor: '$100 COP / min', mono: true },
-    { etiqueta: 'Fecha estimada de fin:', valor: plan.fechaFinTexto },
+    { etiqueta: 'Costo del plan:', valor: `${formatearPesos(plan.costoBase)} COP`, destacado: true },
+    { etiqueta: 'Tarjeta NFC asociada:', valor: `•••• ${ultimosDigitos}`, chip: true },
+    { etiqueta: 'Vigencia del plan:', valor: `${textoVigencia(plan.vigenciaDias)} desde el pago` },
+    { etiqueta: 'Viajes por día:', valor: `${plan.viajesPorDia}` },
+    { etiqueta: 'Tiempo límite por viaje:', valor: `${plan.tiempoViajeMin} minutos` },
+    { etiqueta: 'Minuto de exceso:', valor: `${formatearPesos(plan.valorMinutoExceso)} COP / min`, mono: true },
   ];
 
   return (
@@ -27,7 +28,7 @@ function PasoResumenPago({ plan, nfc, saldo, autorizado, onAutorizar, onModifica
             <h2 id="resumen-titulo" className={styles.titulo}>
               Resumen de Compra
             </h2>
-            <p className={styles.subtitulo}>Detalles y condiciones de liquidación</p>
+            <p className={styles.subtitulo}>Condiciones del plan</p>
           </div>
         </header>
 
@@ -43,12 +44,9 @@ function PasoResumenPago({ plan, nfc, saldo, autorizado, onAutorizar, onModifica
         </dl>
 
         <div className={styles.liquidacion}>
-          <div>
-            <p className={styles.etiquetaLiquidacion}>Liquidación directa</p>
-            <p className={styles.tituloLiquidacion}>Total a liquidar</p>
-          </div>
+          <p className={styles.tituloLiquidacion}>Total a pagar</p>
           <p className={styles.totalCifra}>
-            {formatearPesos(plan.precio)} <span className={styles.moneda}>COP</span>
+            {formatearPesos(plan.costoBase)} <span className={styles.moneda}>COP</span>
           </p>
         </div>
       </section>
@@ -66,19 +64,9 @@ function PasoResumenPago({ plan, nfc, saldo, autorizado, onAutorizar, onModifica
         </header>
 
         <div className={styles.metodo}>
-          <div className={styles.metodoCabecera}>
-            <span className={styles.etiqueta}>Método de pago</span>
-            <button type="button" className="enlace">
-              Cambiar
-            </button>
-          </div>
-          <div className={styles.metodoCuerpo}>
-            <span className={styles.radio} aria-hidden="true" />
-            <div>
-              <p className={styles.metodoNombre}>Saldo en Mi Billetera</p>
-              <p className={styles.metodoDetalle}>(débito directo)</p>
-            </div>
-          </div>
+          <span className={styles.etiqueta}>Método de pago</span>
+          <p className={styles.metodoNombre}>Saldo en Mi Billetera</p>
+          <p className={styles.metodoDetalle}>(débito directo)</p>
         </div>
 
         <div className={styles.saldos}>
@@ -88,7 +76,7 @@ function PasoResumenPago({ plan, nfc, saldo, autorizado, onAutorizar, onModifica
           </div>
           <div className={styles.saldoFila}>
             <span className={styles.costo}>Descuento por compra:</span>
-            <span className={`${styles.mono} ${styles.costo}`}>- {formatearPesos(plan.precio)} COP</span>
+            <span className={`${styles.mono} ${styles.costo}`}>- {formatearPesos(plan.costoBase)} COP</span>
           </div>
           <div className={`${styles.saldoFila} ${styles.proyectado}`}>
             <span>Saldo remanente proyectado:</span>
@@ -97,40 +85,35 @@ function PasoResumenPago({ plan, nfc, saldo, autorizado, onAutorizar, onModifica
         </div>
 
         <label className={styles.autorizacion}>
-          <input
-            type="checkbox"
-            checked={autorizado}
-            onChange={(evento) => onAutorizar(evento.target.checked)}
-          />
+          <input type="checkbox" checked={autorizado} onChange={(evento) => onAutorizar(evento.target.checked)} />
           <span>
-            Autorizo el débito de <strong>{formatearPesos(plan.precio)} COP</strong> de mi saldo en Mi Billetera para la
-            activación del plan en <strong>StationBike</strong>.
+            Autorizo el débito de <strong>{formatearPesos(plan.costoBase)} COP</strong> de mi saldo en Mi Billetera
+            para la activación del plan.
           </span>
         </label>
 
         <p className={styles.registro}>
           <IconoInfo />
-          <span>
-            <strong>Registro de movimiento:</strong> el pago se registrará como un movimiento en el historial de Mi
-            Billetera bajo el concepto «Compra {plan.nombre.toLowerCase()}».
-          </span>
+          <span>El pago queda registrado en los movimientos de Mi Billetera. La cancelación posterior no tiene reembolso.</span>
         </p>
+
+        {error && (
+          <p className="mensaje-error" role="alert">
+            {error}
+          </p>
+        )}
 
         <button
           type="button"
           className={`boton boton--acento boton--bloque ${styles.pagar}`}
           onClick={onConfirmar}
-          disabled={!autorizado}
+          disabled={!autorizado || pagando}
         >
-          Pagar y confirmar {formatearPesos(plan.precio)} COP <IconoFlecha />
+          {pagando ? 'Procesando...' : `Pagar y confirmar ${formatearPesos(plan.costoBase)} COP`} <IconoFlecha />
         </button>
-        <button type="button" className={`boton boton--bloque ${styles.volver}`} onClick={onModificar}>
+        <button type="button" className={`boton boton--bloque ${styles.volver}`} onClick={onModificar} disabled={pagando}>
           Volver a modificar
         </button>
-
-        <p className={styles.seguridad}>
-          <IconoCandado /> Transacción segura 256-bit SSL municipal
-        </p>
       </section>
     </div>
   );

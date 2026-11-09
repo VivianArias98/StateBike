@@ -21,6 +21,13 @@ import RecargarSaldoPaso1Page from './pages/usuario/recargar-saldo-paso-1/Recarg
 import RecargarSaldoPaso2Page from './pages/usuario/recargar-saldo-paso-2/RecargarSaldoPaso2Page.jsx';
 import PagarCobroPaso1Page from './pages/usuario/pagar-cobro-paso-1/PagarCobroPaso1Page.jsx';
 import PagarCobroPaso2Page from './pages/usuario/pagar-cobro-paso-2/PagarCobroPaso2Page.jsx';
+import MiPlanPage from './pages/usuario/mi-plan/MiPlanPage.jsx';
+import AdquirirPlanPaso1Page from './pages/usuario/adquirir-plan-paso-1/AdquirirPlanPaso1Page.jsx';
+import AdquirirPlanPaso2Page from './pages/usuario/adquirir-plan-paso-2/AdquirirPlanPaso2Page.jsx';
+import AdquirirPlanPaso3Page from './pages/usuario/adquirir-plan-paso-3/AdquirirPlanPaso3Page.jsx';
+import AdquirirPlanPaso4Page from './pages/usuario/adquirir-plan-paso-4/AdquirirPlanPaso4Page.jsx';
+import CancelarPlanPaso1Page from './pages/usuario/cancelar-plan-paso-1/CancelarPlanPaso1Page.jsx';
+import CancelarPlanPaso2Page from './pages/usuario/cancelar-plan-paso-2/CancelarPlanPaso2Page.jsx';
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
@@ -90,6 +97,62 @@ function App() {
           element={
             <RutaProtegida rol={ROLES.USUARIO}>
               <PagarCobroPaso2Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <MiPlanPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan/adquirir"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <AdquirirPlanPaso1Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan/adquirir/elegir"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <AdquirirPlanPaso2Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan/adquirir/resumen"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <AdquirirPlanPaso3Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan/adquirir/activado"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <AdquirirPlanPaso4Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan/cancelar"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <CancelarPlanPaso1Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/plan/cancelar/listo"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <CancelarPlanPaso2Page />
             </RutaProtegida>
           }
         />

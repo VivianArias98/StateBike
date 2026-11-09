@@ -92,26 +92,6 @@
   color: var(--color-texto-suave);
 }
 
-.estadoToken {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-1);
-  padding: var(--espacio-3) var(--espacio-4);
-  background: var(--color-fondo-pagina);
-  border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-m);
-}
-
-.emision {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-s);
-  font-weight: 700;
-  color: var(--color-exito);
-}
-
 /* Cabecera de las tarjetas inferiores */
 .cabecera {
   display: flex;
@@ -145,15 +125,6 @@
   font-size: var(--texto-l);
   font-weight: 800;
   text-transform: uppercase;
-}
-
-.codigo {
-  padding: var(--espacio-1) var(--espacio-3);
-  background: var(--color-acento-suave);
-  border-radius: var(--radio-s);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 700;
 }
 
 /* Lista de datos del comprobante */
@@ -234,23 +205,10 @@
   border-radius: var(--radio-l);
 }
 
-.impuestos {
-  font-size: var(--texto-xs);
-  color: var(--color-texto-suave);
-}
-
 .totalCifra {
   font-size: var(--texto-3xl);
   font-weight: 800;
   color: var(--color-exito);
-}
-
-.descargar {
-  gap: var(--espacio-2);
-  background: var(--color-acento-suave);
-  border: 1px solid var(--color-secundario);
-  color: var(--color-texto);
-  font-weight: 700;
 }
 
 /* Pasos para retirar la bicicleta */
@@ -309,10 +267,6 @@
   font-size: var(--texto-l);
 }
 
-.tip .etiqueta {
-  color: var(--color-exito);
-}
-
 @media (min-width: 768px) {
   .marca {
     width: 5rem;
@@ -329,12 +283,7 @@
     min-width: 0;
   }
 
-  .estadoToken {
-    flex-shrink: 0;
-    align-items: flex-end;
-    text-align: right;
   }
-}
 
 @media (min-width: 1024px) {
   .columnas {

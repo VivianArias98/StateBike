@@ -2,7 +2,8 @@ import { IconoCheck } from '../../../components/Iconos/Iconos.jsx';
 import styles from './TarjetaCatalogo.module.css';
 
 // Tarjeta de un plan del catálogo de Mi Plan. Solo dibuja lo que recibe.
-// variante: 'primario' (lima), 'suave' (verde claro) o 'actual' (deshabilitado, plan en uso).
+// variante: 'primario' (lima), 'suave' (verde claro) o 'actual' (plan en uso).
+// deshabilitada: bloquea el botón (por defecto solo en la variante 'actual').
 function TarjetaCatalogo({
   encabezado,
   vigencia,
@@ -15,11 +16,10 @@ function TarjetaCatalogo({
   etiqueta,
   destacada = false,
   variante = 'suave',
+  deshabilitada = variante === 'actual',
   accion,
   onAccion,
 }) {
-  const deshabilitada = variante === 'actual';
-
   return (
     <article className={`tarjeta ${styles.raiz} ${destacada ? styles.destacada : ''}`}>
       {etiqueta && <span className={styles.etiqueta}>{etiqueta}</span>}

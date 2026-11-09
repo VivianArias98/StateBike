@@ -6,19 +6,6 @@
   gap: var(--espacio-5);
 }
 
-.registro {
-  padding: var(--espacio-2) var(--espacio-4);
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-pastilla);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-}
-
-.registro strong {
-  color: var(--color-error-texto);
-}
-
 .seccion {
   display: flex;
   flex-direction: column;
@@ -48,26 +35,6 @@
 .descripcionSeccion {
   font-size: var(--texto-s);
   color: var(--color-texto-suave);
-}
-
-.pastillas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espacio-2);
-}
-
-.pastilla {
-  display: inline-flex;
-  align-items: center;
-  height: 2rem;
-  padding: 0 var(--espacio-3);
-  border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-pastilla);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .nota {

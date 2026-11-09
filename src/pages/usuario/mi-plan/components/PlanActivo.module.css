@@ -61,13 +61,6 @@
   border-top: 1px solid var(--color-borde-suave);
 }
 
-.filaEtiqueta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--espacio-2);
-}
-
 .etiqueta,
 .etiquetaCelda {
   font-family: var(--fuente-mono);
@@ -95,8 +88,7 @@
 }
 
 .texto,
-.ayuda,
-.detalleCelda {
+.ayuda {
   font-size: var(--texto-s);
   color: var(--color-texto-suave);
 }
@@ -167,8 +159,7 @@
   font-size: var(--texto-xs);
 }
 
-.pastillaConsumo,
-.pastillaProtocolo {
+.pastillaConsumo {
   padding: var(--espacio-1) var(--espacio-3);
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
@@ -192,13 +183,6 @@
 .uidTitulo {
   font-family: var(--fuente-mono);
   font-size: var(--texto-l);
-}
-
-.sensor {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  font-size: var(--texto-s);
 }
 
 .accion {

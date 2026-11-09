@@ -1,49 +1,32 @@
 import TarjetaCatalogo from './TarjetaCatalogo.jsx';
 import { formatearPesos } from '../formato.js';
+import { caracteristicasPlan, textoVigencia } from '../mi-plan/planVista.js';
 import styles from './CatalogoPlanes.module.css';
 
-// Rejilla de planes de Mi Plan.
-// modo 'sinPlan': el recomendado va en lima y los demás en verde claro.
-// modo 'conPlan': el plan vigente queda bloqueado y los demás van en lima.
-function CatalogoPlanes({ planes, modo, planActualId = null, onAdquirir }) {
+// Rejilla del catálogo de planes de Mi plan (HU_17).
+// planes: lista del backend; el que trae tuPlanActual=true se muestra como "Tu plan actual" y sin botón activo.
+// puedeAdquirir=false deshabilita la compra (por ejemplo, si ya tiene un plan vigente).
+function CatalogoPlanes({ planes, puedeAdquirir, onAdquirir }) {
   return (
     <div className={styles.rejilla}>
       {planes.map((plan) => {
-        if (modo === 'conPlan') {
-          const esActual = plan.id === planActualId;
-          return (
-            <TarjetaCatalogo
-              key={plan.id}
-              encabezado={plan.codigo}
-              vigencia={plan.vigencia}
-              nombre={plan.nombre}
-              descripcion={plan.descripcion}
-              precio={formatearPesos(plan.precio)}
-              unidad={plan.unidad}
-              caracteristicas={plan.caracteristicas}
-              etiqueta={esActual ? 'Tu plan actual' : null}
-              destacada={esActual}
-              variante={esActual ? 'actual' : 'primario'}
-              accion={esActual ? 'Plan activo - En uso' : 'Adquirir plan'}
-              onAccion={() => onAdquirir(plan.id)}
-            />
-          );
-        }
+        const esActual = Boolean(plan.tuPlanActual);
+        let accion = 'Adquirir plan';
+        if (esActual) accion = 'Plan activo - En uso';
 
-        const recomendado = Boolean(plan.recomendado);
         return (
           <TarjetaCatalogo
             key={plan.id}
-            encabezado={plan.encabezado}
-            vigencia={plan.vigencia}
-            precio={formatearPesos(plan.precio)}
+            encabezado={plan.nombre}
+            vigencia={textoVigencia(plan.vigenciaDias)}
+            precio={formatearPesos(plan.costoBase)}
             unidad="COP"
-            detallePrecio={plan.detallePrecio}
-            caracteristicas={plan.caracteristicas}
-            etiqueta={recomendado ? 'Recomendado' : null}
-            destacada={recomendado}
-            variante={recomendado ? 'primario' : 'suave'}
-            accion="Adquirir plan"
+            caracteristicas={caracteristicasPlan(plan)}
+            etiqueta={esActual ? 'TU PLAN ACTUAL' : null}
+            destacada={esActual}
+            variante={esActual ? 'actual' : 'primario'}
+            deshabilitada={esActual || !puedeAdquirir}
+            accion={accion}
             onAccion={() => onAdquirir(plan.id)}
           />
         );
