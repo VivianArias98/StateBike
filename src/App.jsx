@@ -16,6 +16,11 @@ import RegistroPage from './pages/visitante/registro/RegistroPage.jsx';
 
 import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
 import MiPerfilPage from './pages/usuario/mi-perfil/MiPerfilPage.jsx';
+import MiBilleteraPage from './pages/usuario/mi-billetera/MiBilleteraPage.jsx';
+import RecargarSaldoPaso1Page from './pages/usuario/recargar-saldo-paso-1/RecargarSaldoPaso1Page.jsx';
+import RecargarSaldoPaso2Page from './pages/usuario/recargar-saldo-paso-2/RecargarSaldoPaso2Page.jsx';
+import PagarCobroPaso1Page from './pages/usuario/pagar-cobro-paso-1/PagarCobroPaso1Page.jsx';
+import PagarCobroPaso2Page from './pages/usuario/pagar-cobro-paso-2/PagarCobroPaso2Page.jsx';
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
@@ -45,6 +50,46 @@ function App() {
           element={
             <RutaProtegida rol={ROLES.USUARIO}>
               <MiPerfilPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/billetera"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <MiBilleteraPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/billetera/recargar"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <RecargarSaldoPaso1Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/billetera/recargar/comprobante"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <RecargarSaldoPaso2Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/billetera/pagar"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <PagarCobroPaso1Page />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/billetera/pagar/comprobante"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <PagarCobroPaso2Page />
             </RutaProtegida>
           }
         />

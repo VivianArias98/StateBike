@@ -1,16 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import { IconoCheck, IconoFlecha, IconoInfo, IconoNfc } from '../../../components/Iconos/Iconos.jsx';
+import { IconoCheck, IconoFlecha } from '../../../components/Iconos/Iconos.jsx';
+import EstadoCarga from '../components/EstadoCarga.jsx';
 import { formatearPesos } from '../formato.js';
+import { mensajeError } from '../../../utils/mensajeError.js';
+import {
+  obtenerBilletera,
+  recargarSaldo,
+  RECARGA_MINIMA,
+  RECARGA_MAXIMA,
+  SALDO_MAXIMO,
+} from '../mi-billetera/billeteraApi.js';
 import styles from './RecargarSaldoPaso1Page.module.css';
 
-// Datos de ejemplo del mockup. Después llegarán del backend.
-const SALDO_ACTUAL = 15000;
-const MINIMO = 100;
-const MAXIMO = 500000;
-const SALDO_MAXIMO = 2000000;
-const CUPO_DISPONIBLE = 1985000;
-
+// Montos de selección rápida (atajos de la interfaz, no datos del usuario)
 const SUGERIDOS = [
   { valor: 10000, detalle: 'Recarga básica' },
   { valor: 20000, detalle: 'Frecuente' },
@@ -18,54 +22,109 @@ const SUGERIDOS = [
   { valor: 50000, detalle: 'Larga duración' },
 ];
 
-const INFORMACION = [
-  { etiqueta: 'Sincronización', valor: 'Actualización Inmediata en Docks' },
-  { etiqueta: 'Seguridad bancaria', valor: 'Cifrado PSE & Pasarela Directa' },
-  { etiqueta: 'Red municipal', valor: 'Tunja - Estaciones Activas' },
-];
-
-function RecargarSaldoPaso1Page() {
-  const [texto, setTexto] = useState('20000');
+// Validación previa con los mensajes de la HU_24 (el backend vuelve a validar)
+function validarMonto(texto, saldo) {
+  if (!/^\d+$/.test(texto)) return 'Monto inválido';
   const monto = Number(texto);
-  const valido = texto !== '' && monto >= MINIMO && monto <= MAXIMO;
+  if (monto < RECARGA_MINIMA || monto > RECARGA_MAXIMA) return 'El monto debe estar entre $100 y $500.000';
+  if (saldo + monto > SALDO_MAXIMO) return 'La recarga supera el saldo máximo permitido de $2.000.000';
+  return '';
+}
+
+// Recargar saldo, paso 1 de 2 (HU_24): elegir el monto y confirmar la recarga
+function RecargarSaldoPaso1Page() {
+  const navegar = useNavigate();
+  const [billetera, setBilletera] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [errorCarga, setErrorCarga] = useState('');
+  const [intento, setIntento] = useState(0);
+  const [texto, setTexto] = useState('');
+  const [error, setError] = useState('');
+  const [enviando, setEnviando] = useState(false);
+
+  useEffect(() => {
+    let activo = true;
+    obtenerBilletera()
+      .then((datos) => {
+        if (!activo) return;
+        setBilletera(datos);
+        setErrorCarga('');
+      })
+      .catch((errorApi) => {
+        if (activo) setErrorCarga(mensajeError(errorApi));
+      })
+      .finally(() => {
+        if (activo) setCargando(false);
+      });
+    return () => {
+      activo = false;
+    };
+  }, [intento]);
+
+  const reintentar = () => {
+    setCargando(true);
+    setErrorCarga('');
+    setIntento(intento + 1);
+  };
+
+  const saldo = billetera?.saldo ?? 0;
+  const cupoDisponible = Math.max(0, SALDO_MAXIMO - saldo);
+
+  const recargar = async (evento) => {
+    evento.preventDefault();
+    const errorValidacion = validarMonto(texto, saldo);
+    if (errorValidacion) {
+      setError(errorValidacion);
+      return;
+    }
+
+    setEnviando(true);
+    setError('');
+    try {
+      const recarga = await recargarSaldo(Number(texto));
+      // El comprobante (paso 2) muestra la respuesta del backend
+      navegar('/billetera/recargar/comprobante', {
+        state: { recarga, cobroPendiente: billetera.cobroPendiente, fecha: new Date().toISOString() },
+      });
+    } catch (errorApi) {
+      setError(mensajeError(errorApi));
+      setEnviando(false);
+    }
+  };
 
   return (
     <UsuarioLayout itemActivo="Mi billetera">
       <div className={styles.raiz}>
-        <button type="button" className={`enlace ${styles.volver}`}>
+        <button type="button" className={`enlace ${styles.volver}`} onClick={() => navegar('/billetera')}>
           ← Volver a Mi Billetera
         </button>
 
         <header className={styles.cabecera}>
           <div className={styles.textoCabecera}>
             <h1 className={styles.titulo}>Recargar Saldo</h1>
-            <p className={styles.subtitulo}>
-              Paso 1 de 2: Ingresa el monto que deseas recargar en tu billetera institucional.
-            </p>
+            <p className={styles.subtitulo}>Paso 1 de 2: Ingresa el monto que deseas recargar en tu billetera.</p>
           </div>
           <span className={`insignia ${styles.paso}`}>PASO 1 / 2</span>
         </header>
 
-        <div className={styles.contenido}>
-          <section className={`tarjeta ${styles.principal}`} aria-labelledby="recarga-titulo">
+        <EstadoCarga cargando={cargando} error={errorCarga} onReintentar={reintentar} />
+
+        {!cargando && billetera && (
+          <form className={`tarjeta ${styles.principal}`} onSubmit={recargar} noValidate>
             <div className={styles.estadoCuenta}>
               <div>
                 <p className={styles.etiqueta}>Estado de cuenta</p>
                 <p className={styles.saldo}>
-                  Saldo actual: <strong>{formatearPesos(SALDO_ACTUAL)} COP</strong>
+                  Saldo actual: <strong>{formatearPesos(saldo)} COP</strong>
                 </p>
               </div>
-              <span className={styles.disponible}>
-                <span className="punto-vivo" aria-hidden="true" />
-                DISPONIBLE
-              </span>
             </div>
 
             <div className={styles.filaCampo}>
               <label htmlFor="monto" className={styles.etiquetaCampo}>
                 Monto a recargar (COP) <span className={styles.requerido}>*</span>
               </label>
-              <span className={styles.minimo}>Mínimo: {formatearPesos(MINIMO)} COP</span>
+              <span className={styles.minimo}>Mínimo: {formatearPesos(RECARGA_MINIMA)} COP</span>
             </div>
 
             <div className={styles.campoMonto}>
@@ -75,33 +134,39 @@ function RecargarSaldoPaso1Page() {
                 className={styles.input}
                 inputMode="numeric"
                 value={texto}
-                onChange={(evento) => setTexto(evento.target.value.replace(/\D/g, ''))}
+                onChange={(evento) => {
+                  setTexto(evento.target.value.replace(/\D/g, ''));
+                  setError('');
+                }}
               />
               <span className={styles.sufijo}>COP</span>
             </div>
 
             <div className={styles.ayuda}>
               <p className={styles.ayudaTitulo}>
-                <IconoCheck /> Escribe libremente el monto o elige una opción predefinida abajo.
+                <IconoCheck /> Escribe el monto o elige una opción predefinida abajo.
               </p>
               <p className={styles.ayudaDetalle}>
-                Valor entero positivo sin decimales ({formatearPesos(MINIMO)} - {formatearPesos(MAXIMO)} COP).
+                Valor entero sin decimales ({formatearPesos(RECARGA_MINIMA)} - {formatearPesos(RECARGA_MAXIMA)} COP).
                 Saldo máx: <strong>{formatearPesos(SALDO_MAXIMO)} COP</strong> (Cupo disponible:{' '}
-                <strong>{formatearPesos(CUPO_DISPONIBLE)} COP</strong>).
+                <strong>{formatearPesos(cupoDisponible)} COP</strong>).
               </p>
             </div>
 
             <p className={styles.tituloSeccion}>Montos sugeridos de selección rápida</p>
             <div className={styles.sugeridos}>
               {SUGERIDOS.map((sugerido) => {
-                const activo = monto === sugerido.valor;
+                const activo = Number(texto) === sugerido.valor;
                 return (
                   <button
                     key={sugerido.valor}
                     type="button"
                     aria-pressed={activo}
                     className={`${styles.sugerido} ${activo ? styles.sugeridoActivo : ''}`}
-                    onClick={() => setTexto(String(sugerido.valor))}
+                    onClick={() => {
+                      setTexto(String(sugerido.valor));
+                      setError('');
+                    }}
                   >
                     <span className={styles.valorSugerido}>{formatearPesos(sugerido.valor)} COP</span>
                     <span className={styles.detalleSugerido}>{sugerido.detalle}</span>
@@ -110,45 +175,22 @@ function RecargarSaldoPaso1Page() {
               })}
             </div>
 
+            {error && (
+              <p className="mensaje-error" role="alert">
+                {error}
+              </p>
+            )}
+
             <div className={styles.acciones}>
-              <button type="button" className={`boton ${styles.cancelar}`}>Cancelar</button>
-              <button type="button" className={`boton ${styles.continuar}`} disabled={!valido}>
-                Continuar <IconoFlecha />
+              <button type="button" className={`boton ${styles.cancelar}`} onClick={() => navegar('/billetera')}>
+                Cancelar
+              </button>
+              <button type="submit" className={`boton ${styles.continuar}`} disabled={enviando || texto === ''}>
+                {enviando ? 'Recargando...' : 'Recargar'} <IconoFlecha />
               </button>
             </div>
-          </section>
-
-          <aside className={styles.lateral} aria-label="Información de la recarga">
-            <div className={`tarjeta ${styles.bloqueInformacion}`}>
-              <p className={styles.textoInformacion}>
-                <IconoInfo /> La acreditación se realiza de forma directa en el saldo de StationBike una vez
-                verificado el medio de pago.
-              </p>
-              {INFORMACION.map((dato) => (
-                <div key={dato.etiqueta} className={styles.datoInformacion}>
-                  <span className={styles.etiquetaDato}>{dato.etiqueta}</span>
-                  <span className={styles.valorDato}>{dato.valor}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className={`tarjeta ${styles.tarjetaNfc}`}>
-              <div className={styles.nfcCabecera}>
-                <span className={styles.iconoNfc}>
-                  <IconoNfc />
-                </span>
-                <div>
-                  <p className={styles.nfcTitulo}>Tarjeta NFC #TUN-8831</p>
-                  <p className={styles.nfcDetalle}>Vinculación instantánea a credencial física.</p>
-                </div>
-              </div>
-              <div className={styles.nfcPie}>
-                <span className={styles.etiquetaDato}>Estado</span>
-                <span className={styles.telemetria}>TELEMETRÍA EN LÍNEA</span>
-              </div>
-            </div>
-          </aside>
-        </div>
+          </form>
+        )}
       </div>
     </UsuarioLayout>
   );

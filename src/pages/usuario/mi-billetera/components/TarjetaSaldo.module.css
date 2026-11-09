@@ -1,0 +1,40 @@
+/* TarjetaSaldo.module.css: base = celular */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.monto {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+}
+
+.moneda {
+  font-size: var(--texto-s);
+  font-weight: 600;
+  color: var(--color-texto-suave);
+}
+
+.descripcion {
+  padding: var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+}
+
+.boton {
+  margin-top: auto;
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+}

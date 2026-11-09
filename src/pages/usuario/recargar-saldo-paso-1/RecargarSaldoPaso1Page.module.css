@@ -32,12 +32,6 @@
   align-self: flex-start;
 }
 
-.contenido {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-4);
-}
-
 .principal {
   display: flex;
   flex-direction: column;
@@ -65,19 +59,6 @@
 
 .saldo {
   font-size: var(--texto-m);
-}
-
-.disponible {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  padding: var(--espacio-1) var(--espacio-3);
-  border-radius: var(--radio-pastilla);
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-  white-space: nowrap;
 }
 
 .filaCampo {
@@ -224,103 +205,6 @@
   color: var(--color-acento);
 }
 
-.lateral {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-3);
-}
-
-.bloqueInformacion {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-3);
-  padding: var(--espacio-4);
-  background: var(--color-secundario);
-  border-color: var(--color-secundario);
-  color: var(--color-secundario-texto);
-}
-
-.textoInformacion {
-  display: flex;
-  gap: var(--espacio-2);
-  font-size: var(--texto-s);
-}
-
-.datoInformacion {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-1);
-  padding: var(--espacio-3);
-  border-radius: var(--radio-m);
-  background: var(--color-acento-suave);
-  color: var(--color-texto);
-}
-
-.etiquetaDato {
-  font-size: var(--texto-xs);
-  color: var(--color-texto-suave);
-}
-
-.valorDato {
-  font-size: var(--texto-s);
-  font-weight: 700;
-}
-
-.tarjetaNfc {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-4);
-  padding: var(--espacio-4);
-  background: var(--color-secundario);
-  border-color: var(--color-secundario);
-  color: var(--color-secundario-texto);
-}
-
-.tarjetaNfc .nfcDetalle,
-.tarjetaNfc .etiquetaDato {
-  color: inherit;
-}
-
-.nfcCabecera {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-3);
-}
-
-.iconoNfc {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--alto-control);
-  height: var(--alto-control);
-  border-radius: var(--radio-pastilla);
-  background: var(--color-acento-suave);
-}
-
-.nfcTitulo {
-  font-weight: 700;
-}
-
-.nfcDetalle {
-  font-size: var(--texto-xs);
-  color: var(--color-texto-suave);
-}
-
-.nfcPie {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--espacio-3);
-}
-
-.telemetria {
-  padding: var(--espacio-1) var(--espacio-3);
-  border-radius: var(--radio-pastilla);
-  background: var(--color-superficie);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-}
-
 @media (min-width: 768px) {
   .principal {
     padding: var(--espacio-6);
@@ -330,13 +214,5 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-  }
-}
-
-@media (min-width: 1024px) {
-  .contenido {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
-    align-items: start;
   }
 }

@@ -1,45 +1,33 @@
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import { IconoBilletera, IconoCheck, IconoDescarga, IconoInfo, IconoNfc, IconoTarjeta } from '../../../components/Iconos/Iconos.jsx';
+import { IconoBilletera, IconoCheck, IconoInfo } from '../../../components/Iconos/Iconos.jsx';
 import { formatearPesos } from '../formato.js';
+import { formatearFechaBogota } from '../../../utils/formatoMoneda.js';
 import styles from './RecargarSaldoPaso2Page.module.css';
 
-// Datos de ejemplo del mockup. Después llegarán del backend.
-const RECARGA = {
-  referencia: 'REF: TRX-994021',
-  saldoAnterior: 15000,
-  montoRecargado: 20000,
-  nuevoSaldo: 35000,
-  concepto: 'Recarga de saldo',
-  canal: 'PSE • Aprobado #77291',
-  fecha: '02 Nov 2026, 10:15 AM',
-  estado: 'Acreditado de inmediato',
-};
-const COBRO_PENDIENTE = 2500;
-
+// Recargar saldo, paso 2 de 2 (HU_24): comprobante con la respuesta del backend.
+// Los datos llegan desde el paso 1 (estado de la navegación). Sin ellos no hay nada que mostrar.
 function RecargarSaldoPaso2Page() {
+  const navegar = useNavigate();
+  const { state } = useLocation();
+
+  if (!state?.recarga) return <Navigate to="/billetera" replace />;
+
+  const { recarga, cobroPendiente, fecha } = state;
   const filas = [
-    { etiqueta: 'Saldo anterior', valor: `${formatearPesos(RECARGA.saldoAnterior)} COP` },
-    { etiqueta: 'Monto recargado', valor: `+${formatearPesos(RECARGA.montoRecargado)} COP`, destacada: true },
-  ];
-  const detalles = [
-    { etiqueta: 'Concepto registrado', valor: RECARGA.concepto },
-    { etiqueta: 'Canal de pago', valor: RECARGA.canal },
-    { etiqueta: 'Fecha y hora', valor: RECARGA.fecha },
+    { etiqueta: 'Saldo anterior', valor: `${formatearPesos(recarga.saldoAnterior)} COP` },
+    { etiqueta: 'Monto recargado', valor: `+${formatearPesos(recarga.montoRecargado)} COP`, destacada: true },
   ];
 
   return (
     <UsuarioLayout itemActivo="Mi billetera">
       <div className={styles.raiz}>
-        <button type="button" className={`enlace ${styles.volver}`}>
+        <button type="button" className={`enlace ${styles.volver}`} onClick={() => navegar('/billetera')}>
           ← Volver a Mi Billetera
         </button>
 
         <header className={styles.cabecera}>
           <div className={styles.textoCabecera}>
-            <p className={styles.transaccion}>
-              <span className={styles.chipExito}>TRANSACCIÓN EXITOSA</span>
-              <span className={styles.referencia}>#RC-2026-90412</span>
-            </p>
             <h1 className={styles.titulo}>Recargar Saldo</h1>
             <p className={styles.subtitulo}>Paso 2 de 2: Confirmación y comprobante de recarga.</p>
           </div>
@@ -54,51 +42,51 @@ function RecargarSaldoPaso2Page() {
               </span>
               <div className={styles.textoExito}>
                 <h2 id="exito-titulo" className={styles.tituloExito}>
-                  RECARGA EXITOSA <span className={styles.punto} aria-hidden="true" />
+                  {recarga.mensaje}
                 </h2>
-                <p className={styles.detalleExito}>
-                  Se ha acreditado el monto correctamente a tu billetera y el movimiento ha sido registrado en el sistema.
-                </p>
               </div>
-              <span className={styles.referenciaChip}>{RECARGA.referencia}</span>
             </section>
 
-            <section className={`tarjeta ${styles.tarjetaAviso}`} aria-label="Cobro pendiente">
-              <span className={styles.iconoAviso}>
-                <IconoInfo />
-              </span>
-              <p className={styles.textoAviso}>
-                Tiene un cobro pendiente de{' '}
-                <strong className={styles.montoPendiente}>{formatearPesos(COBRO_PENDIENTE)} COP</strong>. La recarga
-                no debita cobros pendientes de forma automática; puede pagarlo desde <strong>MI BILLETERA</strong>{' '}
-                con el botón <strong className={styles.botonReferido}>Pagar Cobro Pendiente</strong>.
-              </p>
-              <p className={styles.nota}>
-                <span className={styles.chipNota}>NOTA</span>
-                <span>La recarga no pasa el cobro de forma automática.</span>
-              </p>
-            </section>
+            {cobroPendiente && (
+              <section className={`tarjeta ${styles.tarjetaAviso}`} aria-label="Cobro pendiente">
+                <span className={styles.iconoAviso}>
+                  <IconoInfo />
+                </span>
+                <p className={styles.textoAviso}>
+                  Tiene un cobro pendiente de{' '}
+                  <strong className={styles.montoPendiente}>{formatearPesos(cobroPendiente.monto)} COP</strong>. La
+                  recarga no paga cobros pendientes de forma automática; puede pagarlo desde{' '}
+                  <strong>MI BILLETERA</strong>.
+                </p>
+              </section>
+            )}
 
             <section className={`tarjeta ${styles.tarjetaAcciones}`} aria-labelledby="acciones-titulo">
-              <h2 id="acciones-titulo" className={styles.tituloSeccion}>Acciones rápidas</h2>
+              <h2 id="acciones-titulo" className={styles.tituloSeccion}>
+                Acciones rápidas
+              </h2>
               <div className={styles.botones}>
-                <button type="button" className={`boton ${styles.principal}`}>
+                <button type="button" className={`boton ${styles.principal}`} onClick={() => navegar('/billetera')}>
                   <IconoBilletera /> Ir a mi billetera
                 </button>
-                <button type="button" className={`boton ${styles.secundario}`}>
-                  <IconoTarjeta /> Adquirir un plan
-                </button>
+                {cobroPendiente && (
+                  <button
+                    type="button"
+                    className={`boton ${styles.secundario}`}
+                    onClick={() => navegar('/billetera/pagar')}
+                  >
+                    Pagar cobro pendiente
+                  </button>
+                )}
               </div>
-              <button type="button" className={`enlace ${styles.descarga}`}>
-                <IconoDescarga /> Descargar comprobante en PDF
-              </button>
             </section>
           </div>
 
           <section className={`tarjeta ${styles.detalle}`} aria-labelledby="detalle-titulo">
             <header className={styles.cabeceraDetalle}>
-              <h2 id="detalle-titulo" className={styles.tituloDetalle}>Detalle del movimiento</h2>
-              <span className={styles.chipComprobante}>COMPROBANTE REGISTRADO</span>
+              <h2 id="detalle-titulo" className={styles.tituloDetalle}>
+                Detalle del movimiento
+              </h2>
             </header>
 
             <div className={styles.filas}>
@@ -114,30 +102,19 @@ function RecargarSaldoPaso2Page() {
               <span className={styles.nuevoSaldoEtiqueta}>
                 <IconoBilletera /> Nuevo saldo disponible:
               </span>
-              <span className={styles.nuevoSaldoValor}>{formatearPesos(RECARGA.nuevoSaldo)} COP</span>
+              <span className={styles.nuevoSaldoValor}>{formatearPesos(recarga.nuevoSaldo)} COP</span>
             </div>
 
             <div className={styles.filas}>
-              {detalles.map((fila) => (
-                <div key={fila.etiqueta} className={styles.fila}>
-                  <span>{fila.etiqueta}</span>
-                  <span className={styles.valor}>{fila.valor}</span>
-                </div>
-              ))}
               <div className={styles.fila}>
-                <span>Estado</span>
-                <span className={styles.estado}>
-                  <span className="punto-vivo" aria-hidden="true" /> {RECARGA.estado}
-                </span>
+                <span>Concepto</span>
+                <span className={styles.valor}>Recarga de saldo</span>
+              </div>
+              <div className={styles.fila}>
+                <span>Fecha y hora</span>
+                <span className={styles.valor}>{formatearFechaBogota(fecha)}</span>
               </div>
             </div>
-
-            <footer className={styles.pie}>
-              <span className={styles.pieNfc}>
-                <IconoNfc /> NFC sincronizado: Tarjeta activa para desanclaje
-              </span>
-              <span className={styles.pieRed}>RED MUNICIPAL TUNJA</span>
-            </footer>
           </section>
         </div>
       </div>

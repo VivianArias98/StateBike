@@ -13,7 +13,6 @@ function ResumenTransaccion({ total, saldoAnterior, nuevoSaldo, descuento }) {
           <span className={styles.completado}>Completado</span>
         </div>
         <div className={styles.totalPie}>
-          <span className={styles.tarifa}>TARIFA REGLAMENTADA</span>
           <span className={styles.totalValor}>{total}</span>
         </div>
       </section>

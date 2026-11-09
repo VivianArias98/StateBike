@@ -65,12 +65,6 @@
   font-weight: 800;
 }
 
-.resultadoDetalle {
-  margin: var(--espacio-1) 0 0;
-  font-size: var(--texto-s);
-  color: var(--color-texto-suave);
-}
-
 .resultadoValor {
   margin: 0;
   font-size: var(--texto-xl);

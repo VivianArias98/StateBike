@@ -54,12 +54,6 @@
   gap: var(--espacio-2);
 }
 
-.tarifa {
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  opacity: 0.8;
-}
-
 .totalValor {
   font-size: var(--texto-3xl);
   font-weight: 800;

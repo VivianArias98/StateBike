@@ -16,14 +16,6 @@
   gap: var(--espacio-2);
 }
 
-.etiqueta {
-  margin: 0;
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-  color: var(--color-exito);
-}
-
 .tituloFila {
   display: flex;
   flex-wrap: wrap;
@@ -73,20 +65,6 @@
   min-width: 0;
 }
 
-.estado {
-  margin: 0;
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-  color: var(--color-exito);
-}
-
-.estado span {
-  font-family: inherit;
-  color: var(--color-texto-suave);
-  font-weight: 400;
-}
-
 .exitoTitulo {
   margin: var(--espacio-1) 0 0;
   font-size: var(--texto-l);
@@ -97,18 +75,6 @@
   margin: var(--espacio-2) 0 0;
   font-size: var(--texto-s);
   color: var(--color-texto-suave);
-}
-
-.chipHabilitada {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  padding: var(--espacio-2) var(--espacio-3);
-  border-radius: var(--radio-pastilla);
-  background: var(--color-secundario);
-  color: var(--color-secundario-texto);
-  font-size: var(--texto-xs);
-  font-weight: 700;
 }
 
 .principal {
@@ -148,13 +114,6 @@
 .verEstaciones {
   background: var(--color-acento-suave);
   font-weight: 700;
-}
-
-.descarga {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  font-size: var(--texto-s);
 }
 
 @media (min-width: 768px) {

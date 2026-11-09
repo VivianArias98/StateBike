@@ -1,0 +1,66 @@
+/* TarjetaCobroPendiente.module.css: base = celular */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.alerta {
+  border-color: var(--color-error-borde);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.etiquetaAlerta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-error-texto);
+}
+
+.sinCobro {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.monto {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  color: var(--color-error-texto);
+}
+
+.moneda {
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.concepto {
+  padding: var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border-radius: var(--radio-m);
+}
+
+.textoConcepto {
+  margin-top: var(--espacio-1);
+  font-size: var(--texto-s);
+}
+
+.mensaje {
+  font-size: var(--texto-s);
+  color: var(--color-error-texto);
+}
+
+.boton {
+  margin-top: auto;
+  background: var(--color-superficie);
+  color: var(--color-error-texto);
+  border: 1px solid var(--color-error-borde);
+}

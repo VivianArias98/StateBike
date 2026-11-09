@@ -1,4 +1,4 @@
-/* Base = celular. Dos columnas desde 1024px */
+/* Base = celular */
 .raiz {
   display: flex;
   flex-direction: column;
@@ -82,21 +82,6 @@
   color: var(--color-texto-suave);
 }
 
-.chipSuficiente {
-  padding: var(--espacio-1) var(--espacio-3);
-  border-radius: var(--radio-pastilla);
-  background: var(--color-etiqueta-verde);
-  color: var(--color-texto);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-}
-
-.principal {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-5);
-}
-
 .columna {
   display: flex;
   flex-direction: column;
@@ -145,13 +130,5 @@
     width: auto;
     flex: 0 1 auto;
     min-width: 12rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .principal {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-    align-items: start;
   }
 }
