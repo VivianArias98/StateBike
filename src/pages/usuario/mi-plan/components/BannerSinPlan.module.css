@@ -26,38 +26,7 @@
   gap: var(--espacio-2);
 }
 
-.etiquetaFila {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--espacio-2);
-}
-
-.etiqueta {
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-texto-suave);
-}
-
 /* Pastilla "Conectado": verde claro, totalmente redondeada */
-.conectado {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  height: 1.75rem;
-  padding: 0 var(--espacio-3);
-  background: var(--color-acento-suave);
-  color: var(--color-exito);
-  border-radius: var(--radio-pastilla);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 .titulo {
   font-size: var(--texto-xl);
   font-weight: 700;

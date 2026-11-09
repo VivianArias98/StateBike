@@ -1,0 +1,282 @@
+/* PasoElegirPlan.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+}
+
+.columnas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.catalogo,
+.pago {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+/* Tarjeta del catálogo: fondo verde de la interfaz, con los planes blancos encima */
+.catalogo {
+  padding: var(--espacio-5);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.cabeceraSeccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.tituloFila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.tituloSeccion {
+  font-size: var(--texto-l);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tarifa {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-exito);
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+
+/* Tarjeta de plan */
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+}
+
+.planSeleccionado {
+  border: 2px solid var(--color-acento);
+}
+
+.cabeceraPlan {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.nombrePlan {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+}
+
+.precio {
+  display: flex;
+  align-items: baseline;
+  gap: var(--espacio-2);
+}
+
+.cifra {
+  font-size: var(--texto-4xl);
+  font-weight: 800;
+  color: var(--color-exito);
+}
+
+.moneda {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.caracteristicas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding-left: var(--espacio-4);
+  font-size: var(--texto-s);
+  list-style: disc;
+}
+
+.botonSuave {
+  background: var(--color-acento-suave);
+  border-color: transparent;
+}
+
+/* Botón "Volver al paso 1": blanco con borde verde oscuro, se lee como botón */
+.volver {
+  align-self: flex-start;
+  min-width: 0;
+  padding: 0 var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-secundario);
+  color: var(--color-texto);
+  font-weight: 700;
+}
+
+/* Columna de pago */
+.pago {
+  padding: var(--espacio-5);
+}
+
+.cabeceraPago {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.saldoBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-l);
+}
+
+.saldoTitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.saldoTitulo p {
+  flex: 1;
+}
+
+.iconoSaldo {
+  display: inline-flex;
+  font-size: var(--texto-l);
+}
+
+.saldoTexto {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.cuentas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  font-size: var(--texto-s);
+}
+
+.cuentas div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.cuentas dd {
+  white-space: nowrap;
+  font-family: var(--fuente-mono);
+  font-weight: 700;
+}
+
+.proyectado {
+  padding-top: var(--espacio-2);
+  border-top: 1px solid var(--color-borde-suave);
+}
+
+.costo {
+  color: var(--color-error-texto);
+}
+
+.exito {
+  color: var(--color-exito);
+}
+
+.fondos {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-superficie);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-exito);
+}
+
+.resumenTotal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-l);
+}
+
+.etiquetaTotal {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+.filaTotal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  font-size: var(--texto-m);
+}
+
+.totalCifra {
+  font-size: var(--texto-3xl);
+  font-weight: 800;
+}
+
+.textoTotal {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.continuar {
+  gap: var(--espacio-2);
+  white-space: normal;
+  height: auto;
+  min-height: var(--alto-control);
+  padding: var(--espacio-3) var(--espacio-4);
+}
+
+@media (min-width: 768px) {
+  .rejilla {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .columnas {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .catalogo {
+    flex: 1 1 60%;
+  }
+
+  .pago {
+    flex: 0 0 26rem;
+  }
+}

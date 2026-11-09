@@ -120,12 +120,6 @@
   flex: 1;
 }
 
-.textoFuerza {
-  font-size: var(--texto-xs);
-  color: var(--color-texto-suave);
-  white-space: nowrap;
-}
-
 .acciones {
   display: flex;
   flex-wrap: wrap;
@@ -141,22 +135,9 @@
   text-transform: uppercase;
 }
 
-.cifrado {
-  width: 100%;
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  color: var(--color-texto-suave);
-  text-align: right;
-}
-
 @media (min-width: 768px) {
   .rejilla {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--espacio-5);
-  }
-
-  .cifrado {
-    width: auto;
-    margin-left: auto;
   }
 }

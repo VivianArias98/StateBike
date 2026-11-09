@@ -1,0 +1,134 @@
+/* Base = celular */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.volver {
+  align-self: flex-start;
+  font-size: var(--texto-s);
+}
+
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.titulo {
+  font-size: var(--texto-2xl);
+  font-weight: 800;
+  margin: 0;
+}
+
+.subtitulo {
+  margin: var(--espacio-2) 0 0;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-s);
+}
+
+.pasoBadge {
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-pastilla);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.saldo {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+}
+
+.iconoSaldo {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radio-m);
+  background: var(--color-acento-suave);
+  color: var(--color-texto);
+}
+
+.saldoTexto {
+  flex: 1;
+  min-width: 0;
+}
+
+.saldoEtiqueta {
+  margin: 0;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.saldoValor {
+  margin: var(--espacio-1) 0 0;
+  font-size: var(--texto-xl);
+  font-weight: 800;
+}
+
+.moneda {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+}
+
+.nota {
+  margin: 0;
+  padding: var(--espacio-4);
+  border-radius: var(--radio-l);
+  background: var(--color-acento-suave);
+  font-size: var(--texto-s);
+  line-height: 1.6;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.cancelar {
+  font-weight: 700;
+}
+
+.confirmar {
+  font-weight: 700;
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+}
+
+@media (min-width: 768px) {
+  .titulo {
+    font-size: var(--texto-3xl);
+  }
+
+  .acciones {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .acciones > .cancelar,
+  .acciones > .confirmar {
+    width: auto;
+    flex: 0 1 auto;
+    min-width: 12rem;
+  }
+}

@@ -1,73 +1,88 @@
+import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
-import CatalogoPlanes from '../components/CatalogoPlanes.jsx';
-import { formatearPesos } from '../formato.js';
-import { USUARIO } from '../datos.js';
-import { CATALOGO_SIN_PLAN } from './catalogo.js';
+import EstadoCarga from '../components/EstadoCarga.jsx';
+import CatalogoPlanes from './components/CatalogoPlanes.jsx';
+import { useCarga } from '../../../utils/useCarga.js';
+import { obtenerMiPlan } from './planApi.js';
+import { SIN_PLANES } from './planVista.js';
 import BannerSinPlan from './components/BannerSinPlan.jsx';
 import FlujoActivacion from './components/FlujoActivacion.jsx';
+import PlanActivo from './components/PlanActivo.jsx';
 import styles from './MiPlanPage.module.css';
 
-const SALDO_BILLETERA = 65000;
-
-// Flujo de activación: los pasos 1 y 2 están en curso o hechos; 3 y 4 pendientes
+// Pasos del flujo Adquirir plan (solo informativo en Mi plan)
 const PASOS_ACTIVACION = [
-  { titulo: 'Verificación NFC', detalle: `(#${USUARIO.nfc})`, estado: 'hecho' },
-  { titulo: 'Elegir plan', detalle: 'En proceso', estado: 'activo' },
+  { titulo: 'Verificación NFC', detalle: 'Tarjeta activa vinculada', estado: 'pendiente' },
+  { titulo: 'Elegir plan', detalle: 'Del catálogo vigente', estado: 'pendiente' },
   { titulo: 'Resumen compra', detalle: 'Débito saldo billetera', estado: 'pendiente' },
-  { titulo: 'Activación inmediata', detalle: 'Habilitación en docks', estado: 'pendiente' },
+  { titulo: 'Activación inmediata', detalle: 'Desde la fecha de pago', estado: 'pendiente' },
 ];
 
-// Pantalla 02: Mi Plan sin suscripción vigente
+// Mi plan (HU_17): si tiene plan muestra su estado y las condiciones; si no, el aviso y el flujo para adquirir.
+// Debajo siempre va el catálogo, marcando "TU PLAN ACTUAL".
 function MiPlanPage() {
-  // Pendiente: navegar al flujo Adquirir plan (React Router)
-  const adquirirPlan = () => {};
+  const navegar = useNavigate();
+  const { datos, cargando, error, reintentar } = useCarga(obtenerMiPlan);
+
+  // El plan elegido en el catálogo se pasa al flujo para dejarlo preseleccionado en el paso 2
+  const adquirir = (planId) => navegar('/plan/adquirir', { state: planId ? { planId } : null });
 
   return (
     <UsuarioLayout itemActivo="Mi plan">
       <div className={styles.raiz}>
         <EncabezadoPagina
           titulo="Mi Plan"
-          subtitulo="Gestión de suscripciones, condiciones de uso y acceso a bicicletas del sistema integrado."
-          acciones={
-            <span className={styles.registro}>
-              Registro de ciclo: <strong>sin suscripción vigente</strong>
-            </span>
-          }
+          subtitulo="Gestión de tu suscripción actual y catálogo de planes disponibles."
         />
 
-        <BannerSinPlan nfc={USUARIO.nfc} onAdquirir={adquirirPlan} />
+        <EstadoCarga cargando={cargando} error={error} onReintentar={reintentar} />
 
-        <FlujoActivacion pasos={PASOS_ACTIVACION} />
+        {!cargando && datos && (
+          <>
+            {datos.tienePlan ? (
+              <PlanActivo
+                plan={datos.plan}
+                onCancelar={() => navegar('/plan/cancelar')}
+                onVerHistorial={() => navegar('/historial')}
+              />
+            ) : (
+              <>
+                <BannerSinPlan
+                  mensaje={datos.mensaje}
+                  ultimosDigitos={datos.tarjeta?.ultimosDigitos}
+                  onAdquirir={() => adquirir()}
+                />
+                <FlujoActivacion pasos={PASOS_ACTIVACION} />
+              </>
+            )}
 
-        <section className={styles.seccion} aria-labelledby="planes-titulo">
-          <div className={styles.cabeceraSeccion}>
-            <div className={styles.textoSeccion}>
-              <h2 id="planes-titulo" className={styles.tituloSeccion}>
-                Planes Disponibles
-              </h2>
-              <p className={styles.descripcionSeccion}>
-                Selecciona la modalidad de suscripción que mejor se adapte a tus necesidades. La activación se
-                reflejará de inmediato en tu tarjeta NFC vinculada.
-              </p>
+            <section className={styles.seccion} aria-labelledby="planes-titulo">
+              <div className={styles.cabeceraSeccion}>
+                <div className={styles.textoSeccion}>
+                  <h2 id="planes-titulo" className={styles.tituloSeccion}>
+                    Planes Disponibles
+                  </h2>
+                  <p className={styles.descripcionSeccion}>
+                    El valor del plan se descuenta del saldo de tu billetera y se activa de inmediato.
+                  </p>
+                </div>
+              </div>
+
+              {datos.catalogo.length === 0 ? (
+                <EstadoCarga vacio={SIN_PLANES} />
+              ) : (
+                <CatalogoPlanes planes={datos.catalogo} puedeAdquirir={!datos.tienePlan} onAdquirir={adquirir} />
+              )}
+            </section>
+
+            <div className={`tarjeta ${styles.nota}`}>
+              <button type="button" className="enlace" onClick={() => navegar('/billetera')}>
+                Ver saldo en Mi Billetera →
+              </button>
             </div>
-            <div className={styles.pastillas}>
-              <span className={styles.pastilla}>COP / 2026</span>
-              <span className={styles.pastilla}>Débito billetera</span>
-            </div>
-          </div>
-
-          <CatalogoPlanes planes={CATALOGO_SIN_PLAN} modo="sinPlan" onAdquirir={adquirirPlan} />
-        </section>
-
-        <div className={`tarjeta ${styles.nota}`}>
-          <p>
-            * El valor de la suscripción se debita automáticamente del saldo de tu billetera al confirmar la compra.
-          </p>
-          <button type="button" className="enlace">
-            Ver saldo en Mi Billetera ({formatearPesos(SALDO_BILLETERA)} COP) →
-          </button>
-        </div>
+          </>
+        )}
       </div>
     </UsuarioLayout>
   );

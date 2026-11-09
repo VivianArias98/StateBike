@@ -1,0 +1,139 @@
+/* Base = celular. Dos columnas desde 1024px */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.volver {
+  align-self: flex-start;
+  font-size: var(--texto-s);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.tituloFila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--texto-2xl);
+  font-weight: 800;
+}
+
+.pasoBadge {
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-pastilla);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.exito {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+}
+
+.iconoExito {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radio-m);
+  background: var(--color-acento);
+  color: var(--color-acento-texto);
+  font-size: var(--texto-xl);
+  font-weight: 800;
+}
+
+.exitoTexto {
+  flex: 1;
+  min-width: 0;
+}
+
+.exitoTitulo {
+  margin: var(--espacio-1) 0 0;
+  font-size: var(--texto-l);
+  font-weight: 800;
+}
+
+.exitoDetalle {
+  margin: var(--espacio-2) 0 0;
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.columnaDerecha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+}
+
+.botonesFila {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  width: 100%;
+}
+
+.irBilletera {
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  font-weight: 700;
+}
+
+.verEstaciones {
+  background: var(--color-acento-suave);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .titulo {
+    font-size: var(--texto-3xl);
+  }
+
+  .botonesFila {
+    flex-direction: row;
+  }
+
+  .botonesFila > * {
+    flex: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .principal {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}

@@ -1,0 +1,97 @@
+/* TablaMovimientos.module.css: base = celular */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border-radius: var(--radio-m);
+}
+
+.titulo {
+  font-size: var(--texto-l);
+  font-weight: 800;
+}
+
+.subtitulo {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.vacio {
+  padding: var(--espacio-4);
+  font-size: var(--texto-s);
+}
+
+.tabla {
+  width: 100%;
+}
+
+.concepto {
+  font-weight: 700;
+}
+
+.pendiente {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-error-texto);
+}
+
+.derecha {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tipoIngreso,
+.tipoEgreso {
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.tipoIngreso {
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+}
+
+.tipoEgreso {
+  background: var(--color-error-fondo);
+  color: var(--color-error-texto);
+}
+
+.montoIngreso {
+  color: var(--color-exito);
+  font-weight: 700;
+}
+
+.montoEgreso {
+  color: var(--color-error-texto);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .cabecera {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .raiz {
+    padding: var(--espacio-6);
+  }
+}
