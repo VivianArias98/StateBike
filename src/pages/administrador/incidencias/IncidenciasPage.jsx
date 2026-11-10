@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import AdminEncabezado from '../components/AdminEncabezado.jsx';
+import { IconoAlerta } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import { leerSesion } from '../../../utils/sesion.js';
 import styles from './IncidenciasPage.module.css';
@@ -145,27 +147,26 @@ function IncidenciasPage() {
   return (
     <AdminLayout itemActivo="Incidencias">
       <div className={styles.raiz}>
-        <header className={styles.cabeceraSeccion}>
-          <div>
-            <h1 className={styles.tituloSeccion}>Gestión de Incidencias</h1>
-            <p style={{ margin: 'var(--espacio-1) 0 0', opacity: 0.8, fontSize: 'var(--texto-s)' }}>
-              HU_19: Supervisión, atención obligatoria y cierre formal de reportes operativos
-            </p>
-          </div>
-
-          <div className={styles.filtrosBarra} role="group" aria-label="Filtrar por estado">
-            {['TODAS', 'ABIERTA', 'ATENDIDA', 'CERRADA'].map((estado) => (
-              <button
-                key={estado}
-                type="button"
-                className={`${styles.filtroBoton} ${filtroEstado === estado ? styles.filtroActivo : ''}`}
-                onClick={() => setFiltroEstado(estado)}
-              >
-                {estado}
-              </button>
-            ))}
-          </div>
-        </header>
+        <AdminEncabezado
+          etiqueta="Administración / Soporte Técnico & Daños"
+          titulo="Gestión de Incidencias"
+          subtitulo="Supervisión, atención técnica obligatoria y cierre formal de fallas en bicicletas, estaciones y tarjetas (HU_19)."
+          icono={<IconoAlerta />}
+          acciones={
+            <div className={styles.filtrosBarra} role="group" aria-label="Filtrar por estado">
+              {['TODAS', 'ABIERTA', 'ATENDIDA', 'CERRADA'].map((estado) => (
+                <button
+                  key={estado}
+                  type="button"
+                  className={`${styles.filtroBoton} ${filtroEstado === estado ? styles.filtroActivo : ''}`}
+                  onClick={() => setFiltroEstado(estado)}
+                >
+                  {estado}
+                </button>
+              ))}
+            </div>
+          }
+        />
 
         {aviso && (
           <div>

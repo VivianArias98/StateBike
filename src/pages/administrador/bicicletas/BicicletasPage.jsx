@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import AdminEncabezado from '../components/AdminEncabezado.jsx';
+import { IconoBicicleta } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import BicicletasTable from './components/BicicletasTable.jsx';
 import BicicletaForm from './components/BicicletaForm.jsx';
@@ -193,14 +195,24 @@ function BicicletasPage() {
 
   return (
     <AdminLayout itemActivo="Bicicletas">
-      <h1 className="titulo-pagina">Bicicletas</h1>
+      <AdminEncabezado
+        etiqueta="Administración / Flota de Transporte"
+        titulo="Gestión de Bicicletas"
+        subtitulo="Supervisión de flota, asignación de anclajes automáticos, alternancia a mantenimiento e inactivación (HU_14, HU_20)."
+        icono={<IconoBicicleta />}
+        acciones={
+          <span className="insignia insignia--activa" style={{ height: '2.5rem', padding: '0 var(--espacio-4)', fontWeight: 700 }}>
+            🚲 {bicicletas.length} bicicletas registradas
+          </span>
+        }
+      />
 
       <div className={styles.contenido}>
         <input
-          type="text"
+          type="search"
           className={`input ${styles.buscador}`}
-          placeholder="Buscar por código"
-          aria-label="Buscar por código"
+          placeholder="Buscar bicicleta por código (ej. BICI-001)..."
+          aria-label="Buscar bicicleta por código"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />

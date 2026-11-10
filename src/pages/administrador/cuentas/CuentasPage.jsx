@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import AdminEncabezado from '../components/AdminEncabezado.jsx';
+import { IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import { leerSesion } from '../../../utils/sesion.js';
 import styles from './CuentasPage.module.css';
@@ -126,14 +128,17 @@ function CuentasPage() {
   return (
     <AdminLayout itemActivo="Cuentas">
       <div className={styles.raiz}>
-        <header className={styles.cabeceraSeccion}>
-          <div>
-            <h1 className={styles.tituloSeccion}>Gestión de Cuentas de Usuario</h1>
-            <p style={{ margin: 'var(--espacio-1) 0 0', opacity: 0.8, fontSize: 'var(--texto-s)' }}>
-              HU_21: Consulta de perfiles, control de acceso y alternancia de estado operativo
-            </p>
-          </div>
-        </header>
+        <AdminEncabezado
+          etiqueta="Administración / Perfiles & Accesos"
+          titulo="Gestión de Cuentas de Usuario"
+          subtitulo="Control de perfiles registrados, estado operativo y alternancia de acceso al sistema (HU_21)."
+          icono={<IconoUsuario />}
+          acciones={
+            <span className="insignia insignia--activa" style={{ height: '2.5rem', padding: '0 var(--espacio-4)', fontWeight: 700 }}>
+              {usuarios.length} cuentas registradas
+            </span>
+          }
+        />
 
         {aviso && (
           <div>

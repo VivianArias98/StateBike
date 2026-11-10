@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import AdminEncabezado from '../components/AdminEncabezado.jsx';
+import { IconoNfc } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import { leerSesion } from '../../../utils/sesion.js';
 import styles from './TarjetasPage.module.css';
@@ -167,14 +169,17 @@ function TarjetasPage() {
   return (
     <AdminLayout itemActivo="Tarjetas NFC">
       <div>
-        <header className={styles.cabeceraSeccion}>
-          <div>
-            <h1 className={styles.tituloSeccion}>Gestión de Tarjetas NFC</h1>
-            <p style={{ margin: 'var(--espacio-1) 0 0', opacity: 0.8, fontSize: 'var(--texto-s)' }}>
-              HU_18: Vinculación y desvinculación de tarjetas físicas al perfil de los usuarios
-            </p>
-          </div>
-        </header>
+        <AdminEncabezado
+          etiqueta="Administración / Hardware & Accesos"
+          titulo="Gestión de Tarjetas NFC"
+          subtitulo="Vinculación de tarjetas físicas al perfil de usuarios mediante UID hexadecimal y desvinculación controlada (HU_18)."
+          icono={<IconoNfc />}
+          acciones={
+            <span className="insignia insignia--activa" style={{ height: '2.5rem', padding: '0 var(--espacio-4)', fontWeight: 700 }}>
+              {usuarios.filter((u) => u.estadoTarjeta === 'ACTIVA').length} tarjetas activas
+            </span>
+          }
+        />
 
         {aviso && (
           <div style={{ marginBottom: 'var(--espacio-4)' }}>

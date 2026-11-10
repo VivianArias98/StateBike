@@ -1,28 +1,37 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../../components/Logo/Logo.jsx';
+import {
+  IconoPanel,
+  IconoUbicacion,
+  IconoBicicleta,
+  IconoCalendario,
+  IconoNfc,
+  IconoAlerta,
+  IconoUsuario,
+} from '../../components/Iconos/Iconos.jsx';
 import { cerrarSesion } from '../../utils/auth.js';
 import { leerSesion } from '../../utils/sesion.js';
 import styles from './AdminLayout.module.css';
 
 // Los 7 módulos oficiales del Rol Administrador según especificación
 const MENU = [
-  { nombre: 'Panel de control', ruta: '/admin' },
-  { nombre: 'Estaciones', ruta: '/admin/estaciones' },
-  { nombre: 'Bicicletas', ruta: '/admin/bicicletas' },
-  { nombre: 'Planes y tarifas', ruta: '/admin/planes' },
-  { nombre: 'Tarjetas NFC', ruta: '/admin/tarjetas' },
-  { nombre: 'Incidencias', ruta: '/admin/incidencias' },
-  { nombre: 'Cuentas', ruta: '/admin/cuentas' },
+  { nombre: 'Panel de control', ruta: '/admin', icono: <IconoPanel /> },
+  { nombre: 'Estaciones', ruta: '/admin/estaciones', icono: <IconoUbicacion /> },
+  { nombre: 'Bicicletas', ruta: '/admin/bicicletas', icono: <IconoBicicleta /> },
+  { nombre: 'Planes y tarifas', ruta: '/admin/planes', icono: <IconoCalendario /> },
+  { nombre: 'Tarjetas NFC', ruta: '/admin/tarjetas', icono: <IconoNfc /> },
+  { nombre: 'Incidencias', ruta: '/admin/incidencias', icono: <IconoAlerta /> },
+  { nombre: 'Cuentas', ruta: '/admin/cuentas', icono: <IconoUsuario /> },
 ];
 
-// Layout compartido del panel de administración.
-// En pantallas pequeñas el menú está plegado y se abre con un botón.
 function AdminLayout({ itemActivo, children }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const navigate = useNavigate();
 
   const sesion = leerSesion();
   const nombreAdmin = sesion?.usuario?.nombreCompleto || 'Administrador';
+  const correoAdmin = sesion?.usuario?.correo || sesion?.usuario?.email || 'admin@stationbike.com';
 
   const handleCerrarSesion = async () => {
     await cerrarSesion();
@@ -48,8 +57,11 @@ function AdminLayout({ itemActivo, children }) {
             onKeyDown={(e) => e.key === 'Enter' && handleNavegar('/admin')}
             aria-label="Ir al Panel de Administración"
           >
-            <p className={styles.titulo}>Panel Admin</p>
-            <p className={styles.subtitulo}>{nombreAdmin} · Gestión Central</p>
+            <Logo altura="2.5rem" variante="oscuro" />
+            <span className={styles.badgeAdmin}>
+              <span className="punto-vivo" aria-hidden="true" />
+              Gestión Central Tunja
+            </span>
           </div>
 
           <button
@@ -69,7 +81,7 @@ function AdminLayout({ itemActivo, children }) {
           className={menuAbierto ? `${styles.panel} ${styles.panelAbierto}` : styles.panel}
         >
           <nav className={styles.menu} aria-label="Navegación de administración">
-            {MENU.map(({ nombre, ruta, conPunto }) => {
+            {MENU.map(({ nombre, ruta, icono }) => {
               const activo = nombre === itemActivo;
               return (
                 <button
@@ -79,18 +91,30 @@ function AdminLayout({ itemActivo, children }) {
                   aria-current={activo ? 'page' : undefined}
                   onClick={() => handleNavegar(ruta)}
                 >
-                  {nombre}
-                  {conPunto && <span className="punto-vivo" aria-hidden="true" />}
+                  <span className={styles.itemIcono}>{icono}</span>
+                  <span className={styles.itemTexto}>{nombre}</span>
+                  {activo && <span className="punto-vivo" style={{ backgroundColor: 'var(--color-primario-texto)' }} aria-hidden="true" />}
                 </button>
               );
             })}
           </nav>
 
           <div className={styles.pie}>
+            <div className={styles.tarjetaPerfil}>
+              <div className={styles.avatarAdmin}>
+                <IconoUsuario />
+              </div>
+              <div className={styles.datosAdmin}>
+                <p className={styles.nombreAdmin}>{nombreAdmin}</p>
+                <p className={styles.correoAdmin}>{correoAdmin}</p>
+              </div>
+            </div>
+
             <button
               type="button"
-              className={`enlace ${styles.salir}`}
+              className={styles.salir}
               onClick={handleCerrarSesion}
+              title="Cerrar sesión segura de administración"
             >
               Cerrar sesión
             </button>
@@ -100,9 +124,9 @@ function AdminLayout({ itemActivo, children }) {
 
       <div className={styles.areaPrincipal}>
         <main className={styles.contenido}>{children}</main>
-        {/* Footer idéntico al de visitante */}
         <footer className={`contexto-oscuro ${styles.footer}`}>
-          <span className={styles.marcaFooter}>StationBike</span>
+          <span className={styles.marcaFooter}>StationBike · Sistema Oficial de Bicicletas Compartidas de Tunja</span>
+          <span style={{ opacity: 0.7 }}>Versión Comercial 2.0</span>
         </footer>
       </div>
     </div>

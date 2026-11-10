@@ -263,3 +263,22 @@ function Icono({ children }) {
       </Icono>
     );
   }
+
+  export function IconoPanel() {
+    return (
+      <Icono>
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      </Icono>
+    );
+  }
+
+  export function IconoPlus() {
+    return (
+      <Icono>
+        <path d="M12 5v14M5 12h14" />
+      </Icono>
+    );
+  }
