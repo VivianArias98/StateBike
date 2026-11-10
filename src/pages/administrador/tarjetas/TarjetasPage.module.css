@@ -1,17 +1,4 @@
 /* Layout general del módulo de Tarjetas NFC */
-.contenido {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-5);
-  align-items: start;
-}
-
-@media (min-width: 1024px) {
-  .contenido {
-    grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
-  }
-}
-
 .cabeceraSeccion {
   display: flex;
   justify-content: space-between;
@@ -28,12 +15,70 @@
   color: var(--color-texto);
 }
 
-.buscador {
+/* Barra de búsqueda horizontal */
+.barraBusqueda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
   margin-bottom: var(--espacio-4);
+  max-width: 34rem;
+}
+
+@media (min-width: 600px) {
+  .barraBusqueda {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.inputBuscador {
+  flex: 1;
 }
 
 .tablaContenedor {
   overflow-x: auto;
+  border-radius: var(--radio-l);
+  border: 1px solid var(--color-borde);
+}
+
+.tablaTarjetas table {
+  min-width: 52rem;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.colId {
+  width: 4.5rem;
+}
+
+.colUsuario {
+  width: 13rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colCorreo {
+  width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colEstado {
+  width: 9rem;
+  text-align: center;
+}
+
+.colDigitos {
+  width: 8rem;
+  text-align: center;
+}
+
+.colAcciones {
+  width: 11rem;
+  text-align: right;
 }
 
 .tarjetaNfcBadge {
@@ -50,6 +95,20 @@
   display: flex;
   gap: var(--espacio-2);
   align-items: center;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.botonAccion {
+  font-size: var(--texto-xs) !important;
+  padding: 0 var(--espacio-3) !important;
+  height: 2rem !important;
+  min-width: auto !important;
+  white-space: nowrap !important;
+  border-radius: var(--radio-s) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Modal */

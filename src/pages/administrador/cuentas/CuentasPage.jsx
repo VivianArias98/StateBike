@@ -141,47 +141,45 @@ function CuentasPage() {
           </div>
         )}
 
-        <form onSubmit={handleBuscar} className={styles.buscador}>
-          <div className="campo" style={{ display: 'flex', gap: 'var(--espacio-2)', maxWidth: '30rem' }}>
-            <input
-              type="search"
-              className="input"
-              placeholder="Buscar por correo o nombre completo..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              aria-label="Buscar cuenta de usuario"
-            />
-            <button type="submit" className="boton boton--secundario" disabled={cargando}>
-              Buscar
+        <form onSubmit={handleBuscar} className={styles.barraBusqueda}>
+          <input
+            type="search"
+            className={`input ${styles.inputBuscador}`}
+            placeholder="Buscar por correo o nombre completo..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            aria-label="Buscar cuenta de usuario"
+          />
+          <button type="submit" className="boton boton--secundario" disabled={cargando}>
+            Buscar
+          </button>
+          {busqueda && (
+            <button
+              type="button"
+              className="boton boton--secundario"
+              onClick={() => {
+                setBusqueda('');
+                cargarCuentas('');
+              }}
+            >
+              Limpiar
             </button>
-            {busqueda && (
-              <button
-                type="button"
-                className="boton boton--secundario"
-                onClick={() => {
-                  setBusqueda('');
-                  cargarCuentas('');
-                }}
-              >
-                Limpiar
-              </button>
-            )}
-          </div>
+          )}
         </form>
 
-        <section className="tarjeta" aria-label="Listado de cuentas">
-          <div className={`tabla ${styles.tablaContenedor}`}>
+        <section className="tarjeta" aria-label="Listado de cuentas" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className={`tabla ${styles.tablaContenedor} ${styles.tablaCuentas}`}>
             <table>
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Nombre Completo</th>
-                  <th>Correo Electrónico</th>
-                  <th>Rol</th>
-                  <th>Teléfono</th>
-                  <th>Tarjeta NFC</th>
-                  <th>Último Acceso</th>
-                  <th style={{ textAlign: 'right' }}>Acciones</th>
+                  <th className={styles.colId}>ID</th>
+                  <th className={styles.colNombre}>Nombre Completo</th>
+                  <th className={styles.colCorreo}>Correo Electrónico</th>
+                  <th className={styles.colRol}>Rol</th>
+                  <th className={styles.colTelefono}>Teléfono</th>
+                  <th className={styles.colTarjeta}>Tarjeta NFC</th>
+                  <th className={styles.colAcceso}>Último Acceso</th>
+                  <th className={styles.colAcciones}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -199,8 +197,8 @@ function CuentasPage() {
 
                     return (
                       <tr key={u.id}>
-                        <td style={{ fontWeight: 700 }}>#{u.id}</td>
-                        <td style={{ fontWeight: 600 }}>
+                        <td className={styles.colId} style={{ fontWeight: 700 }}>#{u.id}</td>
+                        <td className={styles.colNombre} style={{ fontWeight: 600 }} title={u.nombreCompleto}>
                           {u.nombreCompleto || 'Sin registrar'}
                           {esPropiaCuenta && (
                             <span
@@ -211,8 +209,10 @@ function CuentasPage() {
                             </span>
                           )}
                         </td>
-                        <td>{u.correo}</td>
-                        <td>
+                        <td className={styles.colCorreo} title={u.correo}>
+                          {u.correo}
+                        </td>
+                        <td className={styles.colRol}>
                           <span
                             className={`insignia ${esAdmin ? 'insignia--activa' : ''}`}
                             style={{
@@ -223,8 +223,10 @@ function CuentasPage() {
                             {u.rol}
                           </span>
                         </td>
-                        <td style={{ fontSize: 'var(--texto-s)' }}>{u.telefono || '—'}</td>
-                        <td>
+                        <td className={styles.colTelefono} style={{ fontSize: 'var(--texto-s)' }}>
+                          {u.telefono || '—'}
+                        </td>
+                        <td className={styles.colTarjeta}>
                           {tieneTarjeta ? (
                             <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>
                               •••• {u.tarjeta.ultimosDigitos}
@@ -233,10 +235,10 @@ function CuentasPage() {
                             <span style={{ opacity: 0.5, fontSize: 'var(--texto-xs)' }}>Sin vincular</span>
                           )}
                         </td>
-                        <td style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
+                        <td className={styles.colAcceso} style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
                           {u.ultimoAcceso?.slice(0, 16) || 'Sin accesos'}
                         </td>
-                        <td style={{ textAlign: 'right' }}>
+                        <td className={styles.colAcciones}>
                           <div className={styles.accionesCelda}>
                             {esPropiaCuenta ? (
                               <span style={{ fontSize: 'var(--texto-xs)', opacity: 0.6 }}>
@@ -246,7 +248,7 @@ function CuentasPage() {
                               <>
                                 <button
                                   type="button"
-                                  className="boton boton--s boton--secundario"
+                                  className={`boton boton--secundario ${styles.botonAccion}`}
                                   onClick={() => setUsuarioAInactivar(u)}
                                   title="Inactivar el acceso de este usuario"
                                 >
@@ -254,7 +256,7 @@ function CuentasPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  className="boton boton--s boton--primario"
+                                  className={`boton boton--primario ${styles.botonAccion}`}
                                   onClick={() => setUsuarioAReactivar(u)}
                                   title="Reactivar el acceso de este usuario"
                                 >
@@ -346,3 +348,4 @@ function CuentasPage() {
 }
 
 export default CuentasPage;
+

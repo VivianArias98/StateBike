@@ -20,12 +20,81 @@
   color: var(--color-texto);
 }
 
-.buscador {
+/* Barra de búsqueda horizontal */
+.barraBusqueda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
   margin-bottom: var(--espacio-2);
+  max-width: 34rem;
 }
 
+@media (min-width: 600px) {
+  .barraBusqueda {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.inputBuscador {
+  flex: 1;
+}
+
+/* Tabla con anchos dedicados para evitar solapamientos */
 .tablaContenedor {
   overflow-x: auto;
+  border-radius: var(--radio-l);
+  border: 1px solid var(--color-borde);
+}
+
+.tablaCuentas table {
+  min-width: 60rem;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.colId {
+  width: 4rem;
+}
+
+.colNombre {
+  width: 13rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colCorreo {
+  width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colRol {
+  width: 7.5rem;
+  text-align: center;
+}
+
+.colTelefono {
+  width: 8rem;
+  white-space: nowrap;
+}
+
+.colTarjeta {
+  width: 7.5rem;
+  white-space: nowrap;
+}
+
+.colAcceso {
+  width: 10rem;
+  white-space: nowrap;
+}
+
+.colAcciones {
+  width: 12.5rem;
+  text-align: right;
 }
 
 .accionesCelda {
@@ -33,6 +102,19 @@
   gap: var(--espacio-2);
   align-items: center;
   justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.botonAccion {
+  font-size: var(--texto-xs) !important;
+  padding: 0 var(--espacio-3) !important;
+  height: 2rem !important;
+  min-width: auto !important;
+  white-space: nowrap !important;
+  border-radius: var(--radio-s) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Modales */

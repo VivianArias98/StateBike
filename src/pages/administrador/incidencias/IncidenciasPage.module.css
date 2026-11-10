@@ -51,23 +51,51 @@
 
 .tablaContenedor {
   overflow-x: auto;
+  border-radius: var(--radio-l);
+  border: 1px solid var(--color-borde);
 }
 
+.tablaIncidencias table {
+  min-width: 82rem;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.colId { width: 4.5rem; }
+.colTipo { width: 10.5rem; white-space: nowrap; }
+.colRecurso { width: 12rem; white-space: nowrap; }
+.colUsuario { width: 13rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.colFecha { width: 8.5rem; white-space: nowrap; }
+.colEstado { width: 8rem; text-align: center; }
+.colDescripcion { width: 18rem; }
+.colObservacion { width: 16rem; }
+.colAcciones { width: 11rem; text-align: right; }
+
 .descripcionTexto {
-  max-width: 20rem;
   font-size: var(--texto-s);
   line-height: 1.4;
   word-break: break-word;
 }
 
 .observacionTexto {
-  max-width: 18rem;
   font-size: var(--texto-xs);
   background-color: var(--color-input-fondo);
   padding: var(--espacio-2);
   border-left: 3px solid var(--color-primario);
   border-radius: var(--radio-s);
-  margin-top: var(--espacio-1);
+}
+
+.botonAccion {
+  font-size: var(--texto-xs) !important;
+  padding: 0 var(--espacio-3) !important;
+  height: 2rem !important;
+  min-width: auto !important;
+  white-space: nowrap !important;
+  border-radius: var(--radio-s) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Modales */

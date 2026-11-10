@@ -182,45 +182,43 @@ function TarjetasPage() {
           </div>
         )}
 
-        <form onSubmit={handleBuscar} className={styles.buscador}>
-          <div className="campo" style={{ display: 'flex', gap: 'var(--espacio-2)', maxWidth: '30rem' }}>
-            <input
-              type="search"
-              className="input"
-              placeholder="Buscar usuario por correo o nombre..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              aria-label="Buscar usuario"
-            />
-            <button type="submit" className="boton boton--secundario" disabled={cargando}>
-              Buscar
+        <form onSubmit={handleBuscar} className={styles.barraBusqueda}>
+          <input
+            type="search"
+            className={`input ${styles.inputBuscador}`}
+            placeholder="Buscar usuario por correo o nombre..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            aria-label="Buscar usuario"
+          />
+          <button type="submit" className="boton boton--secundario" disabled={cargando}>
+            Buscar
+          </button>
+          {busqueda && (
+            <button
+              type="button"
+              className="boton boton--secundario"
+              onClick={() => {
+                setBusqueda('');
+                cargarUsuarios('');
+              }}
+            >
+              Limpiar
             </button>
-            {busqueda && (
-              <button
-                type="button"
-                className="boton boton--secundario"
-                onClick={() => {
-                  setBusqueda('');
-                  cargarUsuarios('');
-                }}
-              >
-                Limpiar
-              </button>
-            )}
-          </div>
+          )}
         </form>
 
-        <section className="tarjeta" aria-label="Listado de usuarios y tarjetas">
-          <div className={`tabla ${styles.tablaContenedor}`}>
+        <section className="tarjeta" aria-label="Listado de usuarios y tarjetas" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className={`tabla ${styles.tablaContenedor} ${styles.tablaTarjetas}`}>
             <table>
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Usuario</th>
-                  <th>Correo</th>
-                  <th>Estado Tarjeta</th>
-                  <th>Últimos Dígitos</th>
-                  <th style={{ textAlign: 'right' }}>Acciones</th>
+                  <th className={styles.colId}>ID</th>
+                  <th className={styles.colUsuario}>Usuario</th>
+                  <th className={styles.colCorreo}>Correo</th>
+                  <th className={styles.colEstado}>Estado Tarjeta</th>
+                  <th className={styles.colDigitos}>Últimos Dígitos</th>
+                  <th className={styles.colAcciones}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,14 +232,13 @@ function TarjetasPage() {
                   usuarios.map((u) => {
                     const tieneTarjeta = u.estadoTarjeta !== 'SIN VINCULAR';
                     const esActiva = u.estadoTarjeta === 'ACTIVA';
-                    const esBloqueada = u.estadoTarjeta === 'BLOQUEADA';
 
                     return (
                       <tr key={u.usuarioId}>
-                        <td style={{ fontWeight: 600 }}>#{u.usuarioId}</td>
-                        <td>{u.nombreCompleto || 'Sin nombre'}</td>
-                        <td>{u.correo}</td>
-                        <td>
+                        <td className={styles.colId} style={{ fontWeight: 600 }}>#{u.usuarioId}</td>
+                        <td className={styles.colUsuario} title={u.nombreCompleto}>{u.nombreCompleto || 'Sin nombre'}</td>
+                        <td className={styles.colCorreo} title={u.correo}>{u.correo}</td>
+                        <td className={styles.colEstado}>
                           {tieneTarjeta ? (
                             <span
                               className={`insignia ${esActiva ? 'insignia--activa' : 'insignia--inactiva'}`}
@@ -254,19 +251,19 @@ function TarjetasPage() {
                             </span>
                           )}
                         </td>
-                        <td>
+                        <td className={styles.colDigitos}>
                           {u.ultimosDigitos ? (
                             <span className={styles.tarjetaNfcBadge}>•••• {u.ultimosDigitos}</span>
                           ) : (
                             <span style={{ opacity: 0.5 }}>—</span>
                           )}
                         </td>
-                        <td style={{ textAlign: 'right' }}>
-                          <div className={styles.accionesCelda} style={{ justifyContent: 'flex-end' }}>
+                        <td className={styles.colAcciones}>
+                          <div className={styles.accionesCelda}>
                             {tieneTarjeta ? (
                               <button
                                 type="button"
-                                className="boton boton--s boton--secundario"
+                                className={`boton boton--secundario ${styles.botonAccion}`}
                                 onClick={() => setUsuarioADesvincular(u)}
                                 title="Desvincular tarjeta física"
                               >
@@ -275,11 +272,11 @@ function TarjetasPage() {
                             ) : (
                               <button
                                 type="button"
-                                className="boton boton--s boton--primario"
+                                className={`boton boton--primario ${styles.botonAccion}`}
                                 onClick={() => abrirModalVincular(u)}
                                 title="Vincular nueva tarjeta NFC"
                               >
-                                Vincular Tarjeta
+                                Vincular
                               </button>
                             )}
                           </div>
@@ -391,3 +388,4 @@ function TarjetasPage() {
 }
 
 export default TarjetasPage;
+

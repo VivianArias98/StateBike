@@ -173,20 +173,20 @@ function IncidenciasPage() {
           </div>
         )}
 
-        <section className="tarjeta" aria-label="Listado de incidencias registradas">
-          <div className={`tabla ${styles.tablaContenedor}`}>
+        <section className="tarjeta" aria-label="Listado de incidencias registradas" style={{ padding: 0, overflow: 'hidden' }}>
+          <div className={`tabla ${styles.tablaContenedor} ${styles.tablaIncidencias}`}>
             <table>
               <thead>
                 <tr>
-                  <th>#ID</th>
-                  <th>Tipo</th>
-                  <th>Recurso Afectado</th>
-                  <th>Reportado Por</th>
-                  <th>Fecha</th>
-                  <th>Estado</th>
-                  <th>Descripción del Usuario</th>
-                  <th>Observación Admin</th>
-                  <th style={{ textAlign: 'right' }}>Acciones</th>
+                  <th className={styles.colId}>#ID</th>
+                  <th className={styles.colTipo}>Tipo</th>
+                  <th className={styles.colRecurso}>Recurso Afectado</th>
+                  <th className={styles.colUsuario}>Reportado Por</th>
+                  <th className={styles.colFecha}>Fecha</th>
+                  <th className={styles.colEstado}>Estado</th>
+                  <th className={styles.colDescripcion}>Descripción del Usuario</th>
+                  <th className={styles.colObservacion}>Observación Admin</th>
+                  <th className={styles.colAcciones}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -211,17 +211,17 @@ function IncidenciasPage() {
 
                     return (
                       <tr key={inc.id}>
-                        <td style={{ fontWeight: 700 }}>#{inc.id}</td>
-                        <td style={{ fontSize: 'var(--texto-s)' }}>{tipoTexto}</td>
-                        <td style={{ fontWeight: 600 }}>{recursoTexto}</td>
-                        <td style={{ fontSize: 'var(--texto-s)' }}>
+                        <td className={styles.colId} style={{ fontWeight: 700 }}>#{inc.id}</td>
+                        <td className={styles.colTipo}>{tipoTexto}</td>
+                        <td className={styles.colRecurso} style={{ fontWeight: 600 }}>{recursoTexto}</td>
+                        <td className={styles.colUsuario} title={`${inc.nombreUsuario || ''} (${inc.correoUsuario || ''})`}>
                           <div>{inc.nombreUsuario || 'Usuario'}</div>
                           <small style={{ opacity: 0.7 }}>{inc.correoUsuario || ''}</small>
                         </td>
-                        <td style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
+                        <td className={styles.colFecha} style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
                           {inc.creado?.slice(0, 16) || '—'}
                         </td>
-                        <td>
+                        <td className={styles.colEstado}>
                           {esAbierta && (
                             <span className="insignia" style={{ backgroundColor: 'var(--color-etiqueta-amarilla)', color: 'var(--color-texto)' }}>
                               ABIERTA
@@ -238,12 +238,12 @@ function IncidenciasPage() {
                             </span>
                           )}
                         </td>
-                        <td>
+                        <td className={styles.colDescripcion}>
                           <div className={styles.descripcionTexto}>
                             {inc.descripcion}
                           </div>
                         </td>
-                        <td>
+                        <td className={styles.colObservacion}>
                           {inc.observacion ? (
                             <div className={styles.observacionTexto}>
                               {inc.observacion}
@@ -252,12 +252,12 @@ function IncidenciasPage() {
                             <span style={{ opacity: 0.5, fontSize: 'var(--texto-xs)' }}>Sin atención</span>
                           )}
                         </td>
-                        <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                          <div style={{ display: 'flex', gap: 'var(--espacio-2)', justifyContent: 'flex-end' }}>
+                        <td className={styles.colAcciones}>
+                          <div style={{ display: 'flex', gap: 'var(--espacio-2)', justifyContent: 'flex-end', whiteSpace: 'nowrap' }}>
                             {esAbierta && (
                               <button
                                 type="button"
-                                className="boton boton--s boton--primario"
+                                className={`boton boton--primario ${styles.botonAccion}`}
                                 onClick={() => abrirModalAtender(inc)}
                               >
                                 Atender
@@ -267,7 +267,7 @@ function IncidenciasPage() {
                               <>
                                 <button
                                   type="button"
-                                  className="boton boton--s boton--secundario"
+                                  className={`boton boton--secundario ${styles.botonAccion}`}
                                   onClick={() => abrirModalAtender(inc)}
                                   title="Editar la observación de atención"
                                 >
@@ -275,7 +275,7 @@ function IncidenciasPage() {
                                 </button>
                                 <button
                                   type="button"
-                                  className="boton boton--s boton--primario"
+                                  className={`boton boton--primario ${styles.botonAccion}`}
                                   onClick={() => setIncidenciaACerrar(inc)}
                                   title="Cerrar formalmente la incidencia"
                                 >
@@ -403,3 +403,4 @@ function IncidenciasPage() {
 }
 
 export default IncidenciasPage;
+
