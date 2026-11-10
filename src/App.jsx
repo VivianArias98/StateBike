@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom';
 
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
 import { ROLES } from './utils/sesion.js';
+import { UsuarioProvider } from './pages/usuario/context/UsuarioContext.jsx';
 
 // Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';
@@ -51,141 +52,32 @@ function App() {
 
         {/* Rutas del rol Usuario */}
         <Route
-          path="/inicio"
           element={
             <RutaProtegida rol={ROLES.USUARIO}>
-              <InicioPage />
+              <UsuarioProvider>
+                <Outlet />
+              </UsuarioProvider>
             </RutaProtegida>
           }
-        />
-        <Route
-          path="/viajes"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <ViajesPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/perfil"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <MiPerfilPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <MiBilleteraPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/recargar"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <RecargarSaldoPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/recargar/comprobante"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <RecargarSaldoPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/pagar"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <PagarCobroPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/pagar/comprobante"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <PagarCobroPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <MiPlanPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir/elegir"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir/resumen"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso3Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir/activado"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso4Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/cancelar"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <CancelarPlanPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/cancelar/listo"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <CancelarPlanPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/historial"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <HistorialPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/incidencias"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <ReportarIncidenciaPage />
-            </RutaProtegida>
-          }
-        />
+        >
+          <Route path="/inicio" element={<InicioPage />} />
+          <Route path="/viajes" element={<ViajesPage />} />
+          <Route path="/perfil" element={<MiPerfilPage />} />
+          <Route path="/billetera" element={<MiBilleteraPage />} />
+          <Route path="/billetera/recargar" element={<RecargarSaldoPaso1Page />} />
+          <Route path="/billetera/recargar/comprobante" element={<RecargarSaldoPaso2Page />} />
+          <Route path="/billetera/pagar" element={<PagarCobroPaso1Page />} />
+          <Route path="/billetera/pagar/comprobante" element={<PagarCobroPaso2Page />} />
+          <Route path="/plan" element={<MiPlanPage />} />
+          <Route path="/plan/adquirir" element={<AdquirirPlanPaso1Page />} />
+          <Route path="/plan/adquirir/elegir" element={<AdquirirPlanPaso2Page />} />
+          <Route path="/plan/adquirir/resumen" element={<AdquirirPlanPaso3Page />} />
+          <Route path="/plan/adquirir/activado" element={<AdquirirPlanPaso4Page />} />
+          <Route path="/plan/cancelar" element={<CancelarPlanPaso1Page />} />
+          <Route path="/plan/cancelar/listo" element={<CancelarPlanPaso2Page />} />
+          <Route path="/historial" element={<HistorialPage />} />
+          <Route path="/incidencias" element={<ReportarIncidenciaPage />} />
+        </Route>
 
         {/* Rutas del rol Administrador */}
         <Route

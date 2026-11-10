@@ -19,16 +19,17 @@ const LEYENDAS = [{ id: 'numero', contenido: 'El número indica la cantidad de b
 
 function InicioPage() {
   const navigate = useNavigate();
-  const { perfil, plan, billetera, viajeActivo, estaciones } = useUsuario();
+  const { perfil, plan, billetera, viajeActivo, estaciones = [] } = useUsuario();
   const [estacionSeleccionada, setEstacionSeleccionada] = useState(null);
 
-  const estacionActual = estacionSeleccionada || estaciones[0] || null;
+  const listaEstaciones = Array.isArray(estaciones) ? estaciones : [];
+  const estacionActual = estacionSeleccionada || (listaEstaciones.length > 0 ? listaEstaciones[0] : null);
 
   const irADesbloquear = (estacion) => {
     navigate('/viajes', { state: { estacionId: estacion?.id || estacionActual?.id } });
   };
 
-  const primerNombre = perfil?.nombreCompleto?.split(' ')[0] || 'Ciudadano';
+  const primerNombre = perfil?.nombreCompleto ? perfil.nombreCompleto.split(' ')[0] : 'Ciudadano';
   const tarjetaNfc = perfil?.tarjeta;
   const nfcActivo = tarjetaNfc?.estado === 'ACTIVA';
 
@@ -71,13 +72,13 @@ function InicioPage() {
         <div className={styles.metricas}>
           <MetricaUsuario
             etiqueta="Mi plan"
-            valor={plan.tienePlan ? plan.planActivo.nombre : 'Sin plan activo'}
-            detalle={plan.tienePlan ? `${plan.planActivo.tiempoViajeMin} min incluidos por viaje` : 'Adquiere uno en Mi Plan'}
+            valor={plan?.tienePlan && plan?.planActivo ? plan.planActivo.nombre : 'Sin plan activo'}
+            detalle={plan?.tienePlan && plan?.planActivo ? `${plan.planActivo.tiempoViajeMin || 0} min incluidos por viaje` : 'Adquiere uno en Mi Plan'}
             icono={<IconoCalendario />}
           />
           <MetricaUsuario
             etiqueta="Viajes restantes hoy"
-            valor={plan.tienePlan ? `${plan.planActivo.viajesRestantesHoy} de ${plan.planActivo.viajesPorDia}` : '0 viajes'}
+            valor={plan?.tienePlan && plan?.planActivo ? `${plan.planActivo.viajesRestantesHoy ?? 0} de ${plan.planActivo.viajesPorDia ?? 0}` : '0 viajes'}
             detalle="Límite diario según tu suscripción"
             icono={<IconoReloj />}
           />
@@ -93,7 +94,7 @@ function InicioPage() {
           <div className={styles.mapa}>
             <MapaTunja
               titulo={null}
-              estaciones={estaciones}
+              estaciones={listaEstaciones}
               leyendas={LEYENDAS}
               onSeleccionarEstacion={(est) => setEstacionSeleccionada(est)}
             />
@@ -104,16 +105,16 @@ function InicioPage() {
               <h2 id="estaciones-cercanas" className={styles.tituloLista}>
                 Estaciones de la red
               </h2>
-              <span className={styles.conteo}>{estaciones.length} estaciones</span>
+              <span className={styles.conteo}>{listaEstaciones.length} estaciones</span>
             </div>
 
             <div className={styles.lista}>
-              {estaciones.length === 0 ? (
+              {listaEstaciones.length === 0 ? (
                 <p style={{ padding: 'var(--espacio-4)', color: 'var(--color-texto-apagado)', textAlign: 'center' }}>
                   No hay estaciones disponibles
                 </p>
               ) : (
-                estaciones.map((est) => {
+                listaEstaciones.map((est) => {
                   const seleccionada = (estacionActual?.id === est.id);
                   return (
                     <div

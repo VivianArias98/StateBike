@@ -193,7 +193,7 @@ export function UsuarioProvider({ children }) {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [viajeActivo]);
+  }, [viajeActivo?.id]);
 
   // ==========================================
   // OPERACIONES CONECTADAS AL BACKEND REAL
@@ -450,7 +450,29 @@ export function UsuarioProvider({ children }) {
 export function useUsuario() {
   const context = useContext(UsuarioContext);
   if (!context) {
-    throw new Error('useUsuario debe usarse dentro de un UsuarioProvider');
+    return {
+      cargando: false,
+      errorConexion: '',
+      perfil: { nombreCompleto: '', correo: '', telefono: '', tarjeta: null },
+      billetera: { saldo: 0, tieneCobroPendiente: false, cobroPendiente: null, movimientos: [] },
+      plan: { tienePlan: false, planActivo: null },
+      planesCatalogo: [],
+      estaciones: [],
+      viajeActivo: null,
+      historialViajes: [],
+      historialPagos: [],
+      incidencias: [],
+      cargarDatosUsuario: async () => {},
+      actualizarPerfil: async () => {},
+      toggleBloqueoTarjeta: async () => {},
+      recargarSaldo: async () => {},
+      pagarCobroPendiente: async () => {},
+      adquirirPlan: async () => {},
+      cancelarPlan: async () => {},
+      reportarIncidencia: async () => {},
+      iniciarViaje: async () => {},
+      finalizarViaje: async () => {},
+    };
   }
   return context;
 }
