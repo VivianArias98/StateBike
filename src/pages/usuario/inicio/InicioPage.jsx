@@ -83,8 +83,8 @@ function InicioPage() {
           />
           <MetricaUsuario
             etiqueta="Tarjeta NFC"
-            valor={`•••• ${tarjetaNfc?.ultimosDigitos ?? '4821'}`}
-            detalle={nfcActivo ? 'ACTIVA · Lista para desbloqueo' : 'BLOQUEADA · No abre anclajes'}
+            valor={tarjetaNfc?.ultimosDigitos ? `•••• ${tarjetaNfc.ultimosDigitos}` : 'Sin vincular'}
+            detalle={tarjetaNfc ? (nfcActivo ? 'ACTIVA · Lista para desbloqueo' : 'BLOQUEADA · No abre anclajes') : 'Sin tarjeta asignada'}
             icono={<IconoNfc />}
           />
         </div>
@@ -162,7 +162,7 @@ function InicioPage() {
                 <IconoNfc />
               </span>
               <span>
-                También puedes acercar tu tarjeta física <strong>#{tarjetaNfc?.ultimosDigitos ?? '4821'}</strong> directamente al tótem del anclaje.
+                También puedes acercar tu tarjeta física {tarjetaNfc?.ultimosDigitos ? <strong>#{tarjetaNfc.ultimosDigitos}</strong> : ''} directamente al tótem del anclaje.
               </span>
             </p>
           </section>

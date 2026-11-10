@@ -76,7 +76,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
 
             <p className={styles.nfc} title={`Tarjeta NFC: ${nfcActivo ? 'Activa' : 'Bloqueada'}`}>
               <span className={nfcActivo ? 'punto-vivo' : ''} style={{ backgroundColor: nfcActivo ? undefined : 'var(--color-peligro)' }} aria-hidden="true" />
-              NFC: {nfcActivo ? 'ACTIVO' : 'BLOQUEADA'} · <span className={styles.nfcId}>#{perfil?.tarjeta?.ultimosDigitos ?? '4821'}</span>
+              NFC: {nfcActivo ? 'ACTIVO' : 'BLOQUEADA'} · <span className={styles.nfcId}>#{perfil?.tarjeta?.ultimosDigitos || '----'}</span>
             </p>
 
             <div className={styles.perfil}>
@@ -84,7 +84,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
                 <IconoUsuario />
               </span>
               <div className={styles.datos}>
-                <p className={styles.nombreUsuario}>{perfil?.nombreCompleto ?? 'Laura Gómez Rojas'}</p>
+                <p className={styles.nombreUsuario}>{perfil?.nombreCompleto || 'Usuario'}</p>
                 <p className={styles.subtitulo}>Usuario verificado</p>
               </div>
             </div>

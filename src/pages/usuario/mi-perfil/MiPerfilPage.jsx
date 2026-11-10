@@ -75,8 +75,8 @@ function MiPerfilPage() {
           />
           <TarjetaNfcPerfil
             estado={perfil.tarjeta?.estado ?? 'SIN VINCULAR'}
-            ultimos={perfil.tarjeta?.ultimosDigitos ?? '4821'}
-            titular={perfil.nombreCompleto}
+            ultimos={perfil.tarjeta?.ultimosDigitos || '----'}
+            titular={perfil.nombreCompleto || 'Usuario'}
             fechaVinculacion={perfil.tarjeta?.fechaVinculacion}
             procesando={procesandoTarjeta}
             error={errorTarjeta}

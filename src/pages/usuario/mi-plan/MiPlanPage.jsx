@@ -40,7 +40,7 @@ function MiPlanPage() {
           <>
             <BannerSinPlan
               mensaje="No tienes un plan activo en este momento."
-              ultimosDigitos={perfil?.tarjeta?.ultimosDigitos ?? '4821'}
+              ultimosDigitos={perfil?.tarjeta?.ultimosDigitos || '----'}
               onAdquirir={() => adquirir()}
             />
             <FlujoActivacion pasos={PASOS_ACTIVACION} />

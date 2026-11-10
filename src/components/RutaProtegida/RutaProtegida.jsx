@@ -20,10 +20,16 @@ function RutaProtegida({ rol, children }) {
         if (!activo) return;
         setEstado(usuario.rol === rol ? 'ok' : 'rol_distinto');
       })
-      .catch(() => {
+      .catch((error) => {
         if (!activo) return;
-        borrarSesion();
-        setEstado('fuera');
+        // Solo expulsar si el servidor confirma que el token venció o es inválido (401/403)
+        if (error?.status === 401 || error?.status === 403) {
+          borrarSesion();
+          setEstado('fuera');
+        } else {
+          // Si es fallo temporal de red o conexión, conservar la sesión local
+          setEstado(rolSesion === rol ? 'ok' : 'rol_distinto');
+        }
       });
 
     return () => {

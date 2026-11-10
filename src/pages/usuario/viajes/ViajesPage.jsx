@@ -179,7 +179,7 @@ function ViajesPage() {
               </span>
               <h2 style={{ fontSize: 'var(--texto-xl)', margin: 0 }}>Terminal NFC de Estación</h2>
               <p style={{ fontSize: 'var(--texto-s)', color: 'var(--color-texto-apagado)', margin: 0 }}>
-                Acerca tu tarjeta <strong>NFC #{perfil?.tarjeta?.ultimosDigitos ?? '4821'}</strong> al lector del tótem o anclaje para desbloquear automáticamente.
+                Acerca tu tarjeta <strong>NFC {perfil?.tarjeta?.ultimosDigitos ? `•••• ${perfil.tarjeta.ultimosDigitos}` : 'física'}</strong> al lector del tótem o anclaje para desbloquear automáticamente.
               </p>
 
               <div
@@ -201,14 +201,14 @@ function ViajesPage() {
                       perfil?.tarjeta?.estado === 'ACTIVA' ? 'insignia--activa' : 'insignia--bloqueada'
                     }`}
                   >
-                    {perfil?.tarjeta?.estado}
+                    {perfil?.tarjeta?.estado || 'SIN VINCULAR'}
                   </span>
                 </div>
                 <div style={{ fontSize: 'var(--texto-m)', fontWeight: 'bold' }}>
-                  UID: {perfil?.tarjeta?.uid}
+                  NFC: {perfil?.tarjeta?.ultimosDigitos ? `•••• •••• ${perfil.tarjeta.ultimosDigitos}` : 'Sin tarjeta vinculada'}
                 </div>
                 <div style={{ fontSize: 'var(--texto-xs)', opacity: 0.8, marginTop: 'var(--espacio-1)' }}>
-                  Titular: {perfil?.nombreCompleto}
+                  Titular: {perfil?.nombreCompleto || 'Usuario'}
                 </div>
               </div>
 
