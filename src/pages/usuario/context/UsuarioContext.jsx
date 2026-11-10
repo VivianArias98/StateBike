@@ -393,10 +393,11 @@ export function UsuarioProvider({ children }) {
   // Reportar Incidencia (HU_6 -> POST /api/incidencias)
   const reportarIncidencia = async ({ tipo, bicicleta, estacion, descripcion }) => {
     try {
+      const estObj = estaciones.find((e) => e.nombre === estacion || e.id === Number(estacion));
       const cuerpo = {
-        tipo,
-        bicicletaId: tipo === 'bicicleta' ? bicicleta : undefined,
-        estacionId: tipo === 'estacion' ? estacion : undefined,
+        tipo: tipo === 'nfc' ? 'TARJETA' : tipo === 'estacion' ? 'ANCLAJE' : tipo === 'bicicleta' ? 'BICICLETA' : 'OTRO',
+        codigoBicicleta: tipo === 'bicicleta' || tipo === 'otro' ? bicicleta : undefined,
+        estacionId: (tipo === 'estacion' || tipo === 'otro') && estObj ? estObj.id : undefined,
         descripcion,
       };
 
