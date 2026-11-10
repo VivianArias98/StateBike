@@ -1,12 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import BarraPasos from '../components/BarraPasos.jsx';
 import CabeceraAdquirir from '../components/CabeceraAdquirir.jsx';
-import EstadoCarga from '../../components/EstadoCarga.jsx';
-import { useCarga } from '../../../../utils/useCarga.js';
-import { mensajeError } from '../../../../utils/mensajeError.js';
-import { adquirirPlan, obtenerDatosCompra } from '../planApi.js';
+import { useUsuario } from '../../context/UsuarioContext.jsx';
 import PasoResumenPago from './components/PasoResumenPago.jsx';
 import styles from './AdquirirPlanPaso3Page.module.css';
 
@@ -17,32 +14,44 @@ const BARRAS = [
   { etiqueta: 'Paso 4', titulo: 'Confirmación', estado: 'pendiente' },
 ];
 
-// Adquirir plan, paso 3 de 4 (HU_2): resumen y pago con el saldo de la billetera
 function AdquirirPlanPaso3Page() {
   const navegar = useNavigate();
   const { state } = useLocation();
-  const { datos, cargando, error, reintentar } = useCarga(obtenerDatosCompra);
+  const { perfil, billetera, planesCatalogo, adquirirPlan } = useUsuario();
   const [autorizado, setAutorizado] = useState(false);
   const [pagando, setPagando] = useState(false);
   const [errorPago, setErrorPago] = useState('');
 
-  // Sin plan elegido (entró directo por la URL) vuelve a elegir
   if (!state?.planId) return <Navigate to="/plan/adquirir/elegir" replace />;
 
-  const plan = datos?.miPlan.catalogo.find((item) => item.id === state.planId);
-  if (datos && !plan) return <Navigate to="/plan/adquirir/elegir" replace />;
+  const plan = planesCatalogo.find((item) => item.id === state.planId);
+  if (!plan) return <Navigate to="/plan/adquirir/elegir" replace />;
 
-  const confirmar = async () => {
+  const confirmar = () => {
     setPagando(true);
     setErrorPago('');
     try {
-      const respuesta = await adquirirPlan(plan.id);
+      const respuesta = adquirirPlan(plan);
       navegar('/plan/adquirir/activado', {
-        state: { respuesta, plan, saldoRestante: datos.saldo - plan.costoBase, tarjeta: datos.miPlan.tarjeta },
+        state: {
+          respuesta: {
+            ...respuesta,
+            suscripcion: {
+              id: `SUSC-${Date.now().toString().slice(-4)}`,
+              nombre: plan.nombre,
+              vigenciaDias: plan.vigenciaDias,
+              fechaInicio: new Date().toISOString(),
+              fechaFin: new Date(Date.now() + 3600000 * 24 * plan.vigenciaDias).toISOString(),
+              estado: 'ACTIVA',
+            },
+          },
+          plan,
+          saldoRestante: billetera.saldo - plan.costoBase,
+          tarjeta: perfil.tarjeta,
+        },
       });
-    } catch (errorApi) {
-      // "Saldo insuficiente para adquirir el plan. Le faltan $X...": el faltante se calcula aquí
-      setErrorPago(mensajeError(errorApi, { faltante: plan.costoBase - datos.saldo }));
+    } catch (err) {
+      setErrorPago(err.message);
       setPagando(false);
     }
   };
@@ -53,25 +62,21 @@ function AdquirirPlanPaso3Page() {
         <CabeceraAdquirir
           titulo="Adquirir Plan"
           subtitulo="Paso 3: Resumen y Pago"
-          chip={datos?.miPlan.tarjeta ? `NFC: ${datos.miPlan.tarjeta.estado}` : 'NFC'}
+          chip={`NFC: ${perfil?.tarjeta?.estado ?? 'ACTIVA'}`}
         />
         <BarraPasos pasos={BARRAS} />
 
-        <EstadoCarga cargando={cargando} error={error} onReintentar={reintentar} />
-
-        {!cargando && plan && (
-          <PasoResumenPago
-            plan={plan}
-            ultimosDigitos={datos.miPlan.tarjeta?.ultimosDigitos}
-            saldo={datos.saldo}
-            autorizado={autorizado}
-            pagando={pagando}
-            error={errorPago}
-            onAutorizar={setAutorizado}
-            onModificar={() => navegar('/plan/adquirir/elegir', { state: { planId: plan.id } })}
-            onConfirmar={confirmar}
-          />
-        )}
+        <PasoResumenPago
+          plan={plan}
+          ultimosDigitos={perfil?.tarjeta?.ultimosDigitos ?? '4821'}
+          saldo={billetera.saldo}
+          autorizado={autorizado}
+          pagando={pagando}
+          error={errorPago}
+          onAutorizar={setAutorizado}
+          onModificar={() => navegar('/plan/adquirir/elegir', { state: { planId: plan.id } })}
+          onConfirmar={confirmar}
+        />
       </div>
     </UsuarioLayout>
   );

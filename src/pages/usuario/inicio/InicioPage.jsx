@@ -1,39 +1,42 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
 import {
-  IconoBicicleta,
   IconoCalendario,
   IconoCandado,
   IconoNfc,
   IconoReloj,
   IconoUbicacion,
+  IconoBicicleta,
 } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import MetricaUsuario from '../components/MetricaUsuario.jsx';
-import { ESTACIONES, USUARIO } from '../datos.js';
-import TarjetaEstacion from './components/TarjetaEstacion.jsx';
+import { useUsuario } from '../context/UsuarioContext.jsx';
 import styles from './InicioPage.module.css';
 
 const LEYENDAS = [{ id: 'numero', contenido: 'El número indica la cantidad de bicicletas disponibles' }];
 
-// Pantalla principal del usuario: resumen de su plan, mapa de estaciones y estaciones cercanas
 function InicioPage() {
-  // Pendiente: al elegir una estación, abrir su detalle (React Router)
-  const abrirEstacion = () => {};
-  // Pendiente: centrar el mapa en la ubicación del usuario
-  const centrarUbicacion = () => {};
-  // Pendiente: iniciar el desbloqueo de la bicicleta
-  const desbloquear = () => {};
+  const navigate = useNavigate();
+  const { perfil, plan, billetera, viajeActivo, estaciones } = useUsuario();
+  const [estacionSeleccionada, setEstacionSeleccionada] = useState(estaciones[0]);
 
-  const cercanas = ESTACIONES.slice(0, 3);
+  const irADesbloquear = (estacion) => {
+    navigate('/viajes', { state: { estacionId: estacion?.id || estacionSeleccionada.id } });
+  };
+
+  const primerNombre = perfil?.nombreCompleto?.split(' ')[0] || 'Ciudadano';
+  const tarjetaNfc = perfil?.tarjeta;
+  const nfcActivo = tarjetaNfc?.estado === 'ACTIVA';
 
   return (
-    <UsuarioLayout itemActivo="Viajes">
+    <UsuarioLayout itemActivo="Inicio">
       <div className={styles.raiz}>
         <EncabezadoPagina
           etiqueta="Usuario / Inicio y estaciones / Pantalla principal"
-          titulo={`Hola, ${USUARIO.nombre.split(' ')[0]}`}
-          subtitulo="Consulta las estaciones de Tunja y encuentra una bicicleta para tu próximo viaje."
+          titulo={`Hola, ${primerNombre}`}
+          subtitulo="Consulta las estaciones de Tunja y encuentra una bicicleta disponible para tu próximo recorrido."
           acciones={
             <span className={styles.red}>
               <span className="punto-vivo" aria-hidden="true" />
@@ -42,57 +45,107 @@ function InicioPage() {
           }
         />
 
+        {viajeActivo && (
+          <div className="tarjeta" style={{ borderColor: 'var(--color-primario)', background: 'var(--color-input-fondo)', marginBottom: 'var(--espacio-4)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--espacio-3)' }}>
+            <div>
+              <p style={{ margin: 0, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
+                <span className="punto-vivo" />
+                Tienes un viaje en curso activo con la bicicleta #{viajeActivo.bicicleta}
+              </p>
+              <p style={{ margin: 0, fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
+                Origen: {viajeActivo.estacionOrigen} · {viajeActivo.minutosTranscurridos} minutos transcurridos
+              </p>
+            </div>
+            <button
+              type="button"
+              className="boton boton--primario"
+              onClick={() => navigate('/viajes')}
+            >
+              Ver viaje en curso
+            </button>
+          </div>
+        )}
+
         <div className={styles.metricas}>
           <MetricaUsuario
             etiqueta="Mi plan"
-            valor="Plan mensual"
-            detalle="45 min incluidos por viaje"
+            valor={plan.tienePlan ? plan.planActivo.nombre : 'Sin plan activo'}
+            detalle={plan.tienePlan ? `${plan.planActivo.tiempoViajeMin} min incluidos por viaje` : 'Adquiere uno en Mi Plan'}
             icono={<IconoCalendario />}
           />
           <MetricaUsuario
-            etiqueta="Tiempo disponible"
-            valor="45 minutos"
-            detalle="Disponibles para tu próximo viaje"
+            etiqueta="Viajes restantes hoy"
+            valor={plan.tienePlan ? `${plan.planActivo.viajesRestantesHoy} de ${plan.planActivo.viajesPorDia}` : '0 viajes'}
+            detalle="Límite diario según tu suscripción"
             icono={<IconoReloj />}
           />
           <MetricaUsuario
             etiqueta="Tarjeta NFC"
-            valor={`•••• ${USUARIO.nfc.slice(-4)}`}
-            detalle="ACTIVA · Lista para usar"
+            valor={`•••• ${tarjetaNfc?.ultimosDigitos ?? '4821'}`}
+            detalle={nfcActivo ? 'ACTIVA · Lista para desbloqueo' : 'BLOQUEADA · No abre anclajes'}
             icono={<IconoNfc />}
           />
         </div>
 
         <div className={styles.contenido}>
           <div className={styles.mapa}>
-            <MapaTunja titulo={null} estaciones={ESTACIONES} leyendas={LEYENDAS} />
-            <button type="button" className={styles.ubicacion} onClick={centrarUbicacion} aria-label="Centrar en mi ubicación">
-              <IconoUbicacion />
-            </button>
+            <MapaTunja
+              titulo={null}
+              estaciones={estaciones}
+              leyendas={LEYENDAS}
+              onSeleccionarEstacion={(est) => setEstacionSeleccionada(est)}
+            />
           </div>
 
           <section className={styles.lateral} aria-labelledby="estaciones-cercanas">
             <div className={styles.cabeceraLista}>
               <h2 id="estaciones-cercanas" className={styles.tituloLista}>
-                Estaciones cercanas
+                Estaciones de la red
               </h2>
-              <span className={styles.conteo}>{cercanas.length} estaciones</span>
+              <span className={styles.conteo}>{estaciones.length} estaciones</span>
             </div>
 
             <div className={styles.lista}>
-              {cercanas.map((estacion) => (
-                <TarjetaEstacion
-                  key={estacion.id}
-                  nombre={estacion.nombre}
-                  direccion={estacion.direccion}
-                  bicicletas={estacion.bicicletas}
-                  anclajesLibres={estacion.anclajesLibres}
-                  onAbrir={abrirEstacion}
-                />
-              ))}
+              {estaciones.map((est) => {
+                const seleccionada = estacionSeleccionada?.id === est.id;
+                return (
+                  <div
+                    key={est.id}
+                    className={`tarjeta ${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''}`}
+                    onClick={() => setEstacionSeleccionada(est)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && setEstacionSeleccionada(est)}
+                    style={{
+                      cursor: 'pointer',
+                      border: seleccionada ? '2px solid var(--color-primario)' : undefined,
+                      padding: 'var(--espacio-3)',
+                      marginBottom: 'var(--espacio-2)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <h3 style={{ fontSize: 'var(--texto-s)', margin: 0 }}>{est.nombre}</h3>
+                      <span className="insignia insignia--activa" style={{ fontSize: 'var(--texto-xs)' }}>
+                        {est.bicicletas} bicis
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 'var(--texto-xs)', opacity: 0.7, margin: 'var(--espacio-1) 0' }}>
+                      {est.direccion}
+                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--texto-xs)' }}>
+                      <span style={{ color: 'var(--color-exito)' }}>🚲 {est.bicicletas} disponibles</span>
+                      <span style={{ opacity: 0.8 }}>🔒 {est.anclajesLibres} anclajes libres</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            <button type="button" className={`boton boton--acento boton--bloque ${styles.accion}`} onClick={desbloquear}>
+            <button
+              type="button"
+              className={`boton boton--primario boton--bloque ${styles.accion}`}
+              onClick={() => irADesbloquear(estacionSeleccionada)}
+            >
               <IconoCandado /> DESBLOQUEAR BICICLETA
             </button>
 
@@ -101,7 +154,7 @@ function InicioPage() {
                 <IconoNfc />
               </span>
               <span>
-                También puedes acercar tu tarjeta física <strong>#{USUARIO.nfc}</strong> directamente al tótem del anclaje.
+                También puedes acercar tu tarjeta física <strong>#{tarjetaNfc?.ultimosDigitos ?? '4821'}</strong> directamente al tótem del anclaje.
               </span>
             </p>
           </section>

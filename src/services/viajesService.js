@@ -1,4 +1,9 @@
-import { SALDO_INICIAL, ESTACIONES_DEVOLUCION } from '../pages/usuario/devolucion/devolucionMock.js';
+const SALDO_INICIAL = 20000;
+const ESTACIONES_DEVOLUCION = [
+  { id: 1, nombre: 'Plaza de Bolívar - Tunja', anclajesLibres: 8 },
+  { id: 2, nombre: 'Universidad Santo Tomás', anclajesLibres: 4 },
+  { id: 3, nombre: 'Terminal de Transportes', anclajesLibres: 0 },
+];
 import { calcularCobroExceso } from '../utils/calculoViaje.js';
 import { formatearCOP } from '../utils/formatoMoneda.js';
 

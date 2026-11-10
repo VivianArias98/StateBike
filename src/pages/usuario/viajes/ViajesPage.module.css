@@ -1,0 +1,232 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  width: 100%;
+  max-width: var(--ancho-maximo);
+  margin: 0 auto;
+  padding: var(--espacio-4);
+}
+
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: 800;
+  margin: 0;
+}
+
+.subtitulo {
+  font-size: var(--texto-s);
+  color: var(--color-texto-apagado);
+  margin: 0;
+}
+
+/* Pasos visuales */
+.pasos {
+  display: flex;
+  gap: var(--espacio-2);
+  flex-wrap: wrap;
+}
+
+.pasoItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--color-texto-apagado);
+}
+
+.pasoActivo {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-color: var(--color-primario);
+}
+
+/* Grid de Retiro / Desbloqueo */
+.gridRetiro {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-5);
+}
+
+@media (min-width: 1024px) {
+  .gridRetiro {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.tarjetaNfcVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+}
+
+.iconoTerminal {
+  font-size: 3rem;
+  margin: var(--espacio-2) 0;
+}
+
+.grillaDocks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--espacio-2);
+  margin: var(--espacio-3) 0;
+}
+
+@media (min-width: 768px) {
+  .grillaDocks {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.dockBoton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 3.5rem;
+  border-radius: var(--radio-s);
+  border: 1px solid var(--color-borde);
+  cursor: pointer;
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  transition: all 0.15s ease;
+}
+
+.dockConBici {
+  background: var(--color-primario-suave, var(--color-input-fondo));
+  border-color: var(--color-primario);
+}
+
+.dockSeleccionado {
+  outline: 2px solid var(--color-primario);
+  border-color: var(--color-primario);
+}
+
+.dockNumero {
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+
+.dockEstado {
+  font-size: var(--texto-xs);
+  opacity: 0.8;
+}
+
+/* Panel Viaje en Curso */
+.panelViajeEnCurso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  padding: var(--espacio-6);
+  border: 2px solid var(--color-primario);
+  background: var(--color-superficie);
+  border-radius: var(--radio-l);
+}
+
+.cabeceraViaje {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+}
+
+.cronometroContenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--espacio-5);
+  background: var(--color-superficie-inversa);
+  color: var(--color-superficie);
+  border-radius: var(--radio-m);
+}
+
+.tiempoDigitos {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-5xl);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin: var(--espacio-2) 0;
+  color: var(--color-acento);
+}
+
+.detallesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-3);
+}
+
+@media (min-width: 768px) {
+  .detallesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cajaDato {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
+  background: var(--color-input-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-s);
+}
+
+.datoEtiqueta {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-apagado);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.datoValor {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.barraContenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.accionesViaje {
+  display: flex;
+  gap: var(--espacio-3);
+  flex-wrap: wrap;
+}
+
+/* Devolución y Resumen */
+.resumenLiquidacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border-radius: var(--radio-m);
+  border: 1px solid var(--color-borde);
+}
+
+.filaResumen {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--espacio-2) 0;
+  border-bottom: 1px solid var(--color-borde);
+  font-size: var(--texto-s);
+}

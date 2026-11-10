@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
-import MiBilletera from './pages/usuario/billetera/MiBilletera';
-
+import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
 import { ROLES } from './services/sesion.js';
 
+// Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';
 import PlanesTarifas from './pages/visitante/planesyTarifas/PlanesTarifas.jsx';
 import AcercaNosotros from './pages/visitante/acercaNosotros/AcercaNosotros.jsx';
@@ -14,7 +12,9 @@ import ComoUsarServicio from './pages/visitante/comoUsarServicio/ComoUsarServici
 import InicioSesionPage from './pages/visitante/inicioSesion/InicioSesionPage.jsx';
 import RegistroPage from './pages/visitante/registro/RegistroPage.jsx';
 
-import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
+// Vistas del rol Usuario (StateBike Tunja)
+import InicioPage from './pages/usuario/inicio/InicioPage.jsx';
+import ViajesPage from './pages/usuario/viajes/ViajesPage.jsx';
 import MiPerfilPage from './pages/usuario/mi-perfil/MiPerfilPage.jsx';
 import MiBilleteraPage from './pages/usuario/mi-billetera/MiBilleteraPage.jsx';
 import RecargarSaldoPaso1Page from './pages/usuario/mi-billetera/recargar-saldo-paso-1/RecargarSaldoPaso1Page.jsx';
@@ -28,6 +28,10 @@ import AdquirirPlanPaso3Page from './pages/usuario/mi-plan/adquirir-plan-paso-3/
 import AdquirirPlanPaso4Page from './pages/usuario/mi-plan/adquirir-plan-paso-4/AdquirirPlanPaso4Page.jsx';
 import CancelarPlanPaso1Page from './pages/usuario/mi-plan/cancelar-plan-paso-1/CancelarPlanPaso1Page.jsx';
 import CancelarPlanPaso2Page from './pages/usuario/mi-plan/cancelar-plan-paso-2/CancelarPlanPaso2Page.jsx';
+import HistorialPage from './pages/usuario/historial/HistorialPage.jsx';
+import ReportarIncidenciaPage from './pages/usuario/reportar-incidencia/ReportarIncidenciaPage.jsx';
+
+// Vistas del rol Administrador
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
@@ -37,6 +41,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rutas públicas / Visitante */}
         <Route path="/" element={<EstacionesPage />} />
         <Route path="/planes" element={<PlanesTarifas />} />
         <Route path="/acerca" element={<AcercaNosotros />} />
@@ -44,11 +49,20 @@ function App() {
         <Route path="/login" element={<InicioSesionPage />} />
         <Route path="/registro" element={<RegistroPage />} />
 
+        {/* Rutas del rol Usuario */}
         <Route
           path="/inicio"
           element={
             <RutaProtegida rol={ROLES.USUARIO}>
-              <InicioMapaPage />
+              <InicioPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/viajes"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <ViajesPage />
             </RutaProtegida>
           }
         />
@@ -156,6 +170,24 @@ function App() {
             </RutaProtegida>
           }
         />
+        <Route
+          path="/historial"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <HistorialPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/incidencias"
+          element={
+            <RutaProtegida rol={ROLES.USUARIO}>
+              <ReportarIncidenciaPage />
+            </RutaProtegida>
+          }
+        />
+
+        {/* Rutas del rol Administrador */}
         <Route
           path="/admin"
           element={
