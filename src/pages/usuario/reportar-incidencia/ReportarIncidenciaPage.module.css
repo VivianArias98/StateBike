@@ -1,0 +1,109 @@
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.encabezadoSeccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: 800;
+  margin: 0;
+  color: var(--color-texto);
+}
+
+.subtitulo {
+  color: var(--color-texto);
+  opacity: 0.8;
+  font-size: var(--texto-s);
+  margin: 0;
+}
+
+.formularioGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.bloqueTarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+}
+
+.labelBloque {
+  font-size: var(--texto-xs);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  color: var(--color-texto);
+}
+
+.radioGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-3);
+}
+
+.cardRadio {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-s);
+  background-color: var(--color-input-fondo);
+  font-size: var(--texto-s);
+  cursor: pointer;
+}
+
+.cardRadioActiva {
+  border-color: var(--color-foco);
+  outline: 2px solid var(--color-foco);
+}
+
+.textoAyuda {
+  font-size: var(--texto-xs);
+  opacity: 0.6;
+}
+
+.boxReglaNegocio {
+  background-color: var(--color-input-fondo);
+  border: 1px solid var(--color-borde);
+  padding: var(--espacio-3);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.03em;
+  opacity: 0.8;
+  line-height: 1.4;
+  margin-top: var(--espacio-2);
+}
+
+.headerDescripcion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contadorCaracteres {
+  font-size: var(--texto-xs);
+  opacity: 0.6;
+}
+
+.accionesFormulario {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+}
+
+@media (min-width: 768px) {
+  .radioGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

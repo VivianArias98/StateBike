@@ -1,5 +1,383 @@
+/* Layout Principal */
 .raiz {
   display: flex;
   flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.migas {
+  font-size: var(--texto-xs);
+  letter-spacing: 0.05em;
+  color: var(--color-texto);
+  opacity: 0.7;
+}
+
+.encabezadoSeccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.titulo {
+  font-size: var(--texto-3xl);
+  font-weight: 800;
+  margin: 0;
+  color: var(--color-texto);
+}
+
+.subtitulo {
+  color: var(--color-texto);
+  opacity: 0.8;
+  font-size: var(--texto-s);
+  margin: 0;
+}
+
+/* Tarjetas Métricas */
+.tarjetasMetricas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-4);
+}
+
+.metricaEtiqueta {
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-texto);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+.metricaTitulo {
+  font-size: var(--texto-2xl);
+  margin: var(--espacio-2) 0;
+  color: var(--color-texto);
+}
+
+.metricaDetalle {
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.textoActivo,
+.textoVerde {
+  color: var(--color-primario-texto);
+  font-weight: 600;
+  font-size: var(--texto-s);
+}
+
+.smallTexto {
+  font-size: var(--texto-xs);
+  font-weight: normal;
+  opacity: 0.7;
+}
+
+/* Grid Contenedor Principal */
+.gridContenido {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-5);
+}
+
+/* Panel y Visor de Leaflet / OpenStreetMap */
+.panelMapa {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-superficie);
+}
+
+.contenedorLeaflet {
   width: 100%;
+  height: 350px;
+  background-color: var(--color-input-fondo);
+}
+
+/* Filtro global para tiles de Leaflet según la guía */
+.contenedorLeaflet :global(.leaflet-tile-pane) {
+  filter: var(--filtro-mapa);
+}
+
+/* Marcadores personalizados en el mapa */
+.markerOpenStreet {
+  background: transparent;
+  border: none;
+}
+
+.circlePin {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radio-circulo);
+  background-color: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border: 2px solid var(--color-superficie);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: var(--texto-xs);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.circlePinActivo {
+  background-color: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-color: var(--color-texto-inverso);
+}
+
+.pieMapa {
+  padding: var(--espacio-3);
+  background-color: var(--color-superficie);
+  color: var(--color-texto);
+  font-size: var(--texto-xs);
+  border-top: 1px solid var(--color-borde);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Panel Lateral y Lista de Estaciones */
+.panelLateral {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.listaEstaciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.headerLista {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contadorBadge {
+  font-size: var(--texto-xs);
+  font-weight: bold;
+  opacity: 0.6;
+}
+
+.itemEstacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espacio-3) 0;
+  border-bottom: 1px solid var(--color-borde);
+  cursor: pointer;
+}
+
+.direccionTxt {
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+  margin: var(--espacio-1) 0;
+}
+
+.dispoTxt {
+  font-size: var(--texto-s);
+  margin: 0;
+}
+
+.flecha {
+  font-size: var(--texto-2xl);
+  opacity: 0.4;
+}
+
+.notaInferior {
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* Grilla de Docks / Anclajes */
+.panelDocks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.subtituloDocks {
+  font-size: var(--texto-s);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.badgeAnclajeActivo {
+  background-color: var(--color-input-fondo);
+  border: 1px solid var(--color-borde);
+  padding: var(--espacio-2);
+  border-radius: var(--radio-s);
+  font-weight: bold;
+  font-size: var(--texto-xs);
+  text-align: center;
+}
+
+.grillaDocks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--espacio-2);
+}
+
+.dockItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--espacio-2);
+  border-radius: var(--radio-s);
+  border: 1px solid var(--color-borde);
+  cursor: pointer;
+  height: var(--alto-control);
+  justify-content: center;
+}
+
+.dockBici {
+  background-color: var(--color-primario);
+  color: var(--color-primario-texto);
+  font-weight: bold;
+}
+
+.dockLibre {
+  background-color: var(--color-superficie);
+  color: var(--color-texto);
+  opacity: 0.6;
+}
+
+.dockSeleccionado {
+  outline: 2px solid var(--color-foco);
+}
+
+.dockNum {
+  font-size: var(--texto-s);
+}
+
+.dockTipo {
+  font-size: var(--texto-xs);
+}
+
+.boxDetalleBici {
+  background-color: var(--color-input-fondo);
+  padding: var(--espacio-3);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-s);
+  border-left: 4px solid var(--color-primario);
+}
+
+.bateriaInfo {
+  font-weight: bold;
+  margin-top: var(--espacio-1);
+}
+
+.accionesFlex {
+  display: flex;
+  gap: var(--espacio-3);
+  flex-wrap: wrap;
+}
+
+/* Vista de Desbloqueo NFC */
+.pasosContenedor {
+  display: flex;
+  gap: var(--espacio-2);
+  flex-wrap: wrap;
+}
+
+.pasoItemActivo {
+  background-color: var(--color-primario);
+  color: var(--color-primario-texto);
+  padding: var(--espacio-2) var(--espacio-4);
+  border-radius: var(--radio-s);
+  font-weight: bold;
+  font-size: var(--texto-xs);
+}
+
+.pasoItemPendiente {
+  background-color: var(--color-input-fondo);
+  color: var(--color-texto);
+  opacity: 0.6;
+  padding: var(--espacio-2) var(--espacio-4);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-xs);
+}
+
+.gridDesbloqueo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espacio-5);
+}
+
+.tarjetaNfc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--espacio-3);
+}
+
+.iconoNfc {
+  font-size: var(--texto-4xl);
+  margin: var(--espacio-2) 0;
+}
+
+.notaPaso {
+  font-size: var(--texto-xs);
+  opacity: 0.7;
+}
+
+.tarjetaConfirmacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.listaValores {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.filaValor {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--espacio-2) 0;
+  border-bottom: 1px solid var(--color-borde);
+  font-size: var(--texto-s);
+}
+
+.subtituloPaso3 {
+  font-size: var(--texto-l);
+  font-weight: bold;
+  margin-top: var(--espacio-3);
+}
+
+/* Responsive Media Queries (Solamente 768px y 1024px según norma) */
+@media (min-width: 768px) {
+  .encabezadoSeccion {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tarjetasMetricas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grillaDocks {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gridContenido {
+    grid-template-columns: 1fr var(--ancho-panel-lateral, 380px);
+  }
+
+  .gridDesbloqueo {
+    grid-template-columns: 1fr 1.2fr;
+  }
 }

@@ -3,7 +3,6 @@ import styles from './NavbarUsuario.module.css';
 
 const ENLACES = ['Viajes', 'Historial', 'Mi Perfil', 'Mi Plan', 'Mi Billetera', 'Reportar Incidencia'];
 
-//Barra de navegación del rol usuario. El estado del menú vive en el layout.
 function NavbarUsuario({
   itemActivo,
   nombre,
@@ -11,7 +10,35 @@ function NavbarUsuario({
   ciudad = 'TUNJA',
   menuAbierto,
   onAlternarMenu,
+  onCambiarSeccion,
 }) {
+  const manejarClickEnlace = (enlace) => {
+    if (!onCambiarSeccion) return;
+    
+    switch (enlace) {
+      case 'Viajes':
+        onCambiarSeccion('viajes');
+        break;
+      case 'Historial':
+        onCambiarSeccion('historial');
+        break;
+      case 'Mi Perfil':
+        onCambiarSeccion('mi-perfil');
+        break;
+      case 'Mi Plan':
+        onCambiarSeccion('mi-plan');
+        break;
+      case 'Mi Billetera':
+        onCambiarSeccion('mi-billetera');
+        break;
+      case 'Reportar Incidencia':
+        onCambiarSeccion('incidencias');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <header className={`contexto-oscuro ${styles.raiz}`}>
       <div className={styles.barra}>
@@ -40,16 +67,23 @@ function NavbarUsuario({
           id="usuario-menu"
           className={menuAbierto ? `${styles.panel} ${styles.panelAbierto}` : styles.panel}
         >
-          {/* Cuando exista React Router, estos botones pasan a ser <NavLink> */}
           <nav className={styles.menu}>
             {ENLACES.map((enlace) => {
-              const activo = enlace === itemActivo;
+              const activo = 
+                (enlace === 'Viajes' && itemActivo === 'viajes') ||
+                (enlace === 'Historial' && itemActivo === 'historial') ||
+                (enlace === 'Mi Perfil' && itemActivo === 'mi-perfil') ||
+                (enlace === 'Mi Plan' && itemActivo === 'mi-plan') ||
+                (enlace === 'Mi Billetera' && itemActivo === 'mi-billetera') ||
+                (enlace === 'Reportar Incidencia' && itemActivo === 'incidencias');
+
               return (
                 <button
                   key={enlace}
                   type="button"
                   className={activo ? `${styles.enlace} ${styles.enlaceActivo}` : styles.enlace}
                   aria-current={activo ? 'page' : undefined}
+                  onClick={() => manejarClickEnlace(enlace)}
                 >
                   {enlace}
                 </button>

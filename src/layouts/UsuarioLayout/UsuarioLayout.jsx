@@ -3,24 +3,29 @@ import NavbarUsuario from './components/NavbarUsuario.jsx';
 import Footer from './components/Footer.jsx';
 import styles from './UsuarioLayout.module.css';
 
-//Datos de ejemplo (vendrán de la sesión del usuario)
 const USUARIO = { nombre: 'Camila Rojas', plan: 'Plan Mensual Activo' };
 
-// Layout compartido de todas las pantallas del rol usuario.
-// En pantallas pequeñas el menú está plegado y se abre con un botón.
-function UsuarioLayout({ itemActivo, children }) {
+function UsuarioLayout({ itemActivo, onCambiarSeccion, children }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   return (
-    <div className={styles.raiz}>
+    <div className={styles.raiz} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {/* Barra de navegación única */}
       <NavbarUsuario
         itemActivo={itemActivo}
         nombre={USUARIO.nombre}
         plan={USUARIO.plan}
         menuAbierto={menuAbierto}
         onAlternarMenu={() => setMenuAbierto(!menuAbierto)}
+        onCambiarSeccion={onCambiarSeccion}
       />
-      <main className={styles.contenido}>{children}</main>
+      
+      {/* Contenido principal */}
+      <main className={styles.contenido} style={{ flex: 1 }}>
+        {children}
+      </main>
+      
+      {/* Pie de página */}
       <Footer />
     </div>
   );
