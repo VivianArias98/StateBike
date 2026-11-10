@@ -1,4 +1,5 @@
 import Logo from '../../../components/Logo/Logo.jsx';
+import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
 import { Icono } from './IconosVisitante.jsx';
 import styles from './NavbarVisitante.module.css';
 
@@ -20,16 +21,19 @@ function NavbarVisitante({ itemActivo, menuAbierto, onAlternarMenu, conUsuario =
           <Logo altura="2.5rem" variante="oscuro" />
         </a>
 
-        <button
-          type="button"
-          className={`boton boton--s ${styles.botonMenu}`}
-          aria-expanded={menuAbierto}
-          aria-controls="menu-visitante"
-          onClick={onAlternarMenu}
-        >
-          <Icono nombre="cuadricula" />
-          <span>Menú</span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
+          <BotonTema compacto />
+          <button
+            type="button"
+            className={`boton boton--s ${styles.botonMenu}`}
+            aria-expanded={menuAbierto}
+            aria-controls="menu-visitante"
+            onClick={onAlternarMenu}
+          >
+            <Icono nombre="cuadricula" />
+            <span>Menú</span>
+          </button>
+        </div>
       </div>
 
       <div
