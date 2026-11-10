@@ -102,11 +102,15 @@ function PanelControlPage() {
             titulo="Estaciones activas"
             valor={indicadores.estacionesActivas}
             etiqueta={<Etiqueta texto={`${indicadores.estacionesInactivas} inactivas`} color="verde" />}
+            enlace="Ver estaciones →"
+            onClicEnlace={() => navigate('/admin/estaciones')}
           />
           <TarjetaIndicador
             titulo="Bicicletas disponibles"
             valor={indicadores.bicicletasDisponibles}
             etiqueta={<Etiqueta texto={`${indicadores.porcentajeFlota}% flota`} color="menta" />}
+            enlace="Ver bicicletas →"
+            onClicEnlace={() => navigate('/admin/bicicletas')}
           />
           <TarjetaIndicador
             titulo="Viajes en curso"
@@ -117,7 +121,8 @@ function PanelControlPage() {
             titulo="Incidencias abiertas"
             valor={indicadores.incidenciasAbiertas}
             etiqueta={<Etiqueta texto="PENDIENTES" color="amarilla" />}
-            enlace="Ver detalles →"
+            enlace="Ver incidencias →"
+            onClicEnlace={() => navigate('/admin/incidencias')}
           />
         </div>
 

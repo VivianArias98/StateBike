@@ -37,6 +37,9 @@ import PanelControlPage from './pages/administrador/panel-control/PanelControlPa
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
 import AdminPlanesPage from './pages/administrador/planes-tarifas/PlanesTarifasPage.jsx';
+import AdminTarjetasPage from './pages/administrador/tarjetas/TarjetasPage.jsx';
+import AdminIncidenciasPage from './pages/administrador/incidencias/IncidenciasPage.jsx';
+import AdminCuentasPage from './pages/administrador/cuentas/CuentasPage.jsx';
 
 function App() {
   return (
@@ -109,6 +112,30 @@ function App() {
           element={
             <RutaProtegida rol={ROLES.ADMINISTRADOR}>
               <AdminPlanesPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/tarjetas"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminTarjetasPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/incidencias"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminIncidenciasPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/cuentas"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminCuentasPage />
             </RutaProtegida>
           }
         />

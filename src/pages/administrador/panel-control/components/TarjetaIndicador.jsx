@@ -4,7 +4,8 @@ import styles from './TarjetaIndicador.module.css';
 // etiqueta: elemento opcional (por ejemplo <Etiqueta />)
 // vivo: muestra el punto verde parpadeante
 // enlace: texto opcional del enlace inferior
-function TarjetaIndicador({ titulo, valor, etiqueta, vivo = false, enlace }) {
+// onClicEnlace: acción al hacer clic en el enlace
+function TarjetaIndicador({ titulo, valor, etiqueta, vivo = false, enlace, onClicEnlace }) {
   return (
     <article className={`tarjeta ${styles.raiz}`}>
       <div className={styles.superior}>
@@ -15,9 +16,8 @@ function TarjetaIndicador({ titulo, valor, etiqueta, vivo = false, enlace }) {
 
       <div className={styles.inferior}>
         <p className={styles.valor}>{valor}</p>
-        {/* Cuando exista React Router, este botón pasa a ser un <Link> */}
         {enlace && (
-          <button type="button" className={`enlace ${styles.enlace}`}>
+          <button type="button" className={`enlace ${styles.enlace}`} onClick={onClicEnlace}>
             {enlace}
           </button>
         )}
