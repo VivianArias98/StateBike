@@ -22,3 +22,4 @@ function AdminEncabezado({ etiqueta, titulo, subtitulo, acciones, icono }) {
 }
 
 export default AdminEncabezado;
+
