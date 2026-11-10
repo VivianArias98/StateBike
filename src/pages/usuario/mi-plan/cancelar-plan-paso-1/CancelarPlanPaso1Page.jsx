@@ -20,16 +20,16 @@ function CancelarPlanPaso1Page() {
   const planActivo = plan?.planActivo;
   const volver = () => navegar('/plan');
 
-  const confirmar = () => {
+  const confirmar = async () => {
     setCancelando(true);
     setErrorCancelar('');
     try {
-      const respuesta = cancelarPlan();
+      const respuesta = await cancelarPlan();
       navegar('/plan/cancelar/listo', {
         state: {
           respuesta: {
             ...respuesta,
-            suscripcion: {
+            suscripcion: respuesta.suscripcion || {
               id: 'SUSC-CANCELADA',
               planId: planActivo?.id,
               nombre: planActivo?.nombre,

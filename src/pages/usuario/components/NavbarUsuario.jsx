@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../components/Logo/Logo.jsx';
 import { IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
 import { useUsuario } from '../context/UsuarioContext.jsx';
-import { borrarSesion } from '../../../services/sesion.js';
+import { borrarSesion } from '../../../utils/sesion.js';
 import styles from './NavbarUsuario.module.css';
 
 const ENLACES = [

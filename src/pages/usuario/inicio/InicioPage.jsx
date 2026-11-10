@@ -20,10 +20,12 @@ const LEYENDAS = [{ id: 'numero', contenido: 'El número indica la cantidad de b
 function InicioPage() {
   const navigate = useNavigate();
   const { perfil, plan, billetera, viajeActivo, estaciones } = useUsuario();
-  const [estacionSeleccionada, setEstacionSeleccionada] = useState(estaciones[0]);
+  const [estacionSeleccionada, setEstacionSeleccionada] = useState(null);
+
+  const estacionActual = estacionSeleccionada || estaciones[0] || null;
 
   const irADesbloquear = (estacion) => {
-    navigate('/viajes', { state: { estacionId: estacion?.id || estacionSeleccionada.id } });
+    navigate('/viajes', { state: { estacionId: estacion?.id || estacionActual?.id } });
   };
 
   const primerNombre = perfil?.nombreCompleto?.split(' ')[0] || 'Ciudadano';
@@ -106,39 +108,45 @@ function InicioPage() {
             </div>
 
             <div className={styles.lista}>
-              {estaciones.map((est) => {
-                const seleccionada = estacionSeleccionada?.id === est.id;
-                return (
-                  <div
-                    key={est.id}
-                    className={`tarjeta ${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''}`}
-                    onClick={() => setEstacionSeleccionada(est)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && setEstacionSeleccionada(est)}
-                    style={{
-                      cursor: 'pointer',
-                      border: seleccionada ? '2px solid var(--color-primario)' : undefined,
-                      padding: 'var(--espacio-3)',
-                      marginBottom: 'var(--espacio-2)',
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3 style={{ fontSize: 'var(--texto-s)', margin: 0 }}>{est.nombre}</h3>
-                      <span className="insignia insignia--activa" style={{ fontSize: 'var(--texto-xs)' }}>
-                        {est.bicicletas} bicis
-                      </span>
+              {estaciones.length === 0 ? (
+                <p style={{ padding: 'var(--espacio-4)', color: 'var(--color-texto-apagado)', textAlign: 'center' }}>
+                  No hay estaciones disponibles
+                </p>
+              ) : (
+                estaciones.map((est) => {
+                  const seleccionada = (estacionActual?.id === est.id);
+                  return (
+                    <div
+                      key={est.id}
+                      className={`tarjeta ${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''}`}
+                      onClick={() => setEstacionSeleccionada(est)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && setEstacionSeleccionada(est)}
+                      style={{
+                        cursor: 'pointer',
+                        border: seleccionada ? '2px solid var(--color-primario)' : undefined,
+                        padding: 'var(--espacio-3)',
+                        marginBottom: 'var(--espacio-2)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <h3 style={{ fontSize: 'var(--texto-s)', margin: 0 }}>{est.nombre}</h3>
+                        <span className="insignia insignia--activa" style={{ fontSize: 'var(--texto-xs)' }}>
+                          {est.bicicletas ?? 0} bicis
+                        </span>
+                      </div>
+                      <p style={{ fontSize: 'var(--texto-xs)', opacity: 0.7, margin: 'var(--espacio-1) 0' }}>
+                        {est.direccion}
+                      </p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--texto-xs)' }}>
+                        <span style={{ color: 'var(--color-exito)' }}>🚲 {est.bicicletas ?? 0} disponibles</span>
+                        <span style={{ opacity: 0.8 }}>🔒 {est.anclajesLibres ?? 0} anclajes libres</span>
+                      </div>
                     </div>
-                    <p style={{ fontSize: 'var(--texto-xs)', opacity: 0.7, margin: 'var(--espacio-1) 0' }}>
-                      {est.direccion}
-                    </p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--texto-xs)' }}>
-                      <span style={{ color: 'var(--color-exito)' }}>🚲 {est.bicicletas} disponibles</span>
-                      <span style={{ opacity: 0.8 }}>🔒 {est.anclajesLibres} anclajes libres</span>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             <button

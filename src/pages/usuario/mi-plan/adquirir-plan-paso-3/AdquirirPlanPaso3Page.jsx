@@ -27,16 +27,16 @@ function AdquirirPlanPaso3Page() {
   const plan = planesCatalogo.find((item) => item.id === state.planId);
   if (!plan) return <Navigate to="/plan/adquirir/elegir" replace />;
 
-  const confirmar = () => {
+  const confirmar = async () => {
     setPagando(true);
     setErrorPago('');
     try {
-      const respuesta = adquirirPlan(plan);
+      const respuesta = await adquirirPlan(plan);
       navegar('/plan/adquirir/activado', {
         state: {
           respuesta: {
             ...respuesta,
-            suscripcion: {
+            suscripcion: respuesta.suscripcion || {
               id: `SUSC-${Date.now().toString().slice(-4)}`,
               nombre: plan.nombre,
               vigenciaDias: plan.vigenciaDias,

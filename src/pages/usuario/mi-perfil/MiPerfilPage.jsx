@@ -27,11 +27,11 @@ function MiPerfilPage() {
     }
   };
 
-  const cambiarEstadoTarjeta = () => {
+  const cambiarEstadoTarjeta = async () => {
     setProcesandoTarjeta(true);
     setErrorTarjeta('');
     try {
-      const mensajeResultado = toggleBloqueoTarjeta();
+      const mensajeResultado = await toggleBloqueoTarjeta();
       setAviso(mensajeResultado);
     } catch (err) {
       setErrorTarjeta(err.message);

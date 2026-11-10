@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
-import { ROLES } from './services/sesion.js';
+import { ROLES } from './utils/sesion.js';
 
 // Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';

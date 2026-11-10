@@ -35,7 +35,7 @@ function RecargarSaldoPaso1Page() {
   const saldo = billetera?.saldo ?? 0;
   const cupoDisponible = Math.max(0, SALDO_MAXIMO - saldo);
 
-  const recargar = (evento) => {
+  const recargar = async (evento) => {
     evento.preventDefault();
     const errorValidacion = validarMonto(texto, saldo);
     if (errorValidacion) {
@@ -46,7 +46,7 @@ function RecargarSaldoPaso1Page() {
     setEnviando(true);
     setError('');
     try {
-      const res = recargarSaldo(Number(texto));
+      const res = await recargarSaldo(Number(texto));
       navegar('/billetera/recargar/comprobante', {
         state: {
           recarga: {

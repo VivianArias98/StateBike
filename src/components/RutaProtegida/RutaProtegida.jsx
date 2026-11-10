@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { leerSesion, borrarSesion, rutaInicio } from '../../services/sesion.js';
-import { obtenerUsuarioActual } from '../../services/authService.js';
+import { leerSesion, borrarSesion, rutaInicio } from '../../utils/sesion.js';
+import { obtenerUsuarioActual } from '../../utils/auth.js';
 
 // Deja pasar solo a usuarios con sesión válida y del rol indicado.
 // Confirma la sesión con el servidor (/auth/me) una vez al entrar.

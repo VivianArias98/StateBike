@@ -4,8 +4,8 @@ import VisitanteLayout from '../../../layouts/VisitanteLayout/VisitanteLayout.js
 import EstacionesLista from './components/EstacionesLista.jsx';
 import { Icono } from '../components/IconosVisitante.jsx';
 import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
-import { obtenerEstaciones } from '../../../services/catalogoService.js';
-import { textoError } from '../../../services/mensajesError.js';
+import { obtenerEstaciones } from '../../../utils/catalogo.js';
+import { textoError } from '../../../utils/mensajesError.js';
 
 import styles from './EstacionesPage.module.css';
 

@@ -1,4 +1,4 @@
-import { pedirAutenticado } from '../../../services/authService.js';
+import { pedirAutenticado } from '../../../utils/auth.js';
 
 // Llamadas al backend del módulo Mi perfil (HU_1).
 // pedirAutenticado envía el token y lo renueva solo si vence.

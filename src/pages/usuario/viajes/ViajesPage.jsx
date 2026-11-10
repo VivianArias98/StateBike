@@ -45,15 +45,15 @@ function ViajesPage() {
   const [errorLocal, setErrorLocal] = useState(null);
 
   const estacionActual =
-    estaciones.find((e) => e.id === Number(estacionSeleccionadaId)) || estaciones[0];
+    estaciones.find((e) => e.id === Number(estacionSeleccionadaId)) || estaciones[0] || null;
   const estacionDestino =
-    estaciones.find((e) => e.id === Number(estacionDestinoId)) || estaciones[1];
+    estaciones.find((e) => e.id === Number(estacionDestinoId)) || estaciones[1] || estaciones[0] || null;
 
   // Acción: Retirar con NFC
-  const handleIniciarViaje = () => {
+  const handleIniciarViaje = async () => {
     setErrorLocal(null);
     try {
-      const res = iniciarViaje({
+      const res = await iniciarViaje({
         estacionId: estacionSeleccionadaId,
         anclajeId: anclajeSeleccionado,
         bicicletaId: bicicletaSeleccionada,
@@ -65,10 +65,10 @@ function ViajesPage() {
   };
 
   // Acción: Finalizar Viaje
-  const handleConfirmarDevolucion = () => {
+  const handleConfirmarDevolucion = async () => {
     setErrorLocal(null);
     try {
-      const res = finalizarViaje({
+      const res = await finalizarViaje({
         estacionDestinoId,
         anclajeDestinoId,
       });

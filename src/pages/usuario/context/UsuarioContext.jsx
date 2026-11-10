@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { leerSesion, borrarSesion } from '../../../services/sesion.js';
+import { leerSesion, borrarSesion } from '../../../utils/sesion.js';
 
 const UsuarioContext = createContext(null);
 

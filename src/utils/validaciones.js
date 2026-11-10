@@ -1,4 +1,4 @@
-// Mismas reglas y mensajes que el backend (services/auth.service.js), en el mismo orden.
+// Mismas reglas y mensajes que el backend (auth.service.js), en el mismo orden.
 const FORMATO_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LARGO_MAX_CORREO = 100;
 const LARGO_MIN_CONTRASENA = 8;

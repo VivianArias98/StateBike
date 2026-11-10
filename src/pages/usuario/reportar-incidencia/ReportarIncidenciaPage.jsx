@@ -54,14 +54,14 @@ function ReportarIncidenciaPage() {
     return nuevosErrores;
   };
 
-  const enviar = (evento) => {
+  const enviar = async (evento) => {
     evento.preventDefault();
     const nuevosErrores = validar();
     setErrores(nuevosErrores);
     if (Object.keys(nuevosErrores).length > 0) return;
 
     try {
-      const res = reportarIncidencia({
+      const res = await reportarIncidencia({
         tipo,
         bicicleta,
         estacion,

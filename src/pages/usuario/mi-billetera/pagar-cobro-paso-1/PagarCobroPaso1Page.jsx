@@ -18,11 +18,11 @@ function PagarCobroPaso1Page() {
   const cobro = billetera?.cobroPendiente;
   const saldo = billetera?.saldo ?? 0;
 
-  const pagar = () => {
+  const pagar = async () => {
     setPagando(true);
     setError('');
     try {
-      const res = pagarCobroPendiente();
+      const res = await pagarCobroPendiente();
       navegar('/billetera/pagar/comprobante', {
         state: {
           pago: res,
