@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import AdminEncabezado from '../components/AdminEncabezado.jsx';
+import { IconoUbicacion, IconoPlus } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import EstacionesTable from './components/EstacionesTable.jsx';
 import RegistrarEstacionPage from './RegistrarEstacionPage.jsx';
@@ -207,24 +209,40 @@ function EstacionesPage() {
 
   return (
     <AdminLayout itemActivo="Estaciones">
-      <h1 className="titulo-pagina">Estaciones</h1>
+      <AdminEncabezado
+        etiqueta="Administración / Red Física"
+        titulo="Gestión de Estaciones"
+        subtitulo="Supervisión, alta de puntos físicos en Tunja, edición de anclajes e inactivación controlada."
+        icono={<IconoUbicacion />}
+        acciones={
+          <button
+            type="button"
+            className="boton boton--primario"
+            onClick={handleRegistrar}
+          >
+            <IconoPlus /> Registrar Estación
+          </button>
+        }
+      />
 
       <div className={styles.barra}>
         <input
-          type="text"
+          type="search"
           className={`input ${styles.buscador}`}
-          placeholder="Buscar por nombre"
-          aria-label="Buscar por nombre"
+          placeholder="Buscar estación por nombre..."
+          aria-label="Buscar estación por nombre"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
-        <button
-          type="button"
-          className={`boton boton--primario ${styles.registrar}`}
-          onClick={handleRegistrar}
-        >
-          Registrar estación
-        </button>
+        {busqueda && (
+          <button
+            type="button"
+            className="boton boton--secundario"
+            onClick={() => setBusqueda('')}
+          >
+            Limpiar
+          </button>
+        )}
       </div>
 
       {cargando ? (

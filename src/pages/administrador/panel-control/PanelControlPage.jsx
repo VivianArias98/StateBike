@@ -6,6 +6,7 @@ import PanelEncabezado from './components/PanelEncabezado.jsx';
 import TarjetaIndicador from './components/TarjetaIndicador.jsx';
 import OcupacionAnclajes from './components/OcupacionAnclajes.jsx';
 import IncidenciasRecientes from './components/IncidenciasRecientes.jsx';
+import { IconoUbicacion, IconoBicicleta, IconoReloj, IconoAlerta } from '../../../components/Iconos/Iconos.jsx';
 import styles from './PanelControlPage.module.css';
 
 function leerToken() {
@@ -102,22 +103,31 @@ function PanelControlPage() {
             titulo="Estaciones activas"
             valor={indicadores.estacionesActivas}
             etiqueta={<Etiqueta texto={`${indicadores.estacionesInactivas} inactivas`} color="verde" />}
+            enlace="Ver estaciones →"
+            onClicEnlace={() => navigate('/admin/estaciones')}
+            icono={<IconoUbicacion />}
           />
           <TarjetaIndicador
             titulo="Bicicletas disponibles"
             valor={indicadores.bicicletasDisponibles}
             etiqueta={<Etiqueta texto={`${indicadores.porcentajeFlota}% flota`} color="menta" />}
+            enlace="Ver bicicletas →"
+            onClicEnlace={() => navigate('/admin/bicicletas')}
+            icono={<IconoBicicleta />}
           />
           <TarjetaIndicador
             titulo="Viajes en curso"
             valor={indicadores.viajesEnCurso}
             vivo
+            icono={<IconoReloj />}
           />
           <TarjetaIndicador
             titulo="Incidencias abiertas"
             valor={indicadores.incidenciasAbiertas}
             etiqueta={<Etiqueta texto="PENDIENTES" color="amarilla" />}
-            enlace="Ver detalles →"
+            enlace="Ver incidencias →"
+            onClicEnlace={() => navigate('/admin/incidencias')}
+            icono={<IconoAlerta />}
           />
         </div>
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
+import AdminEncabezado from '../components/AdminEncabezado.jsx';
+import { IconoCalendario } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import PlanesTable from './components/PlanesTable.jsx';
 import PlanForm from './components/PlanForm.jsx';
@@ -130,7 +132,17 @@ function PlanesTarifasPage() {
 
   return (
     <AdminLayout itemActivo="Planes y tarifas">
-      <h1 className="titulo-pagina">Planes y tarifas</h1>
+      <AdminEncabezado
+        etiqueta="Administración / Planes y Tarifas"
+        titulo="Planes y Tarifas"
+        subtitulo="Gestión del catálogo de suscripciones, vigencias, viajes permitidos y tarifas de exceso por minuto."
+        icono={<IconoCalendario />}
+        acciones={
+          <span className="insignia insignia--activa" style={{ height: '2.5rem', padding: '0 var(--espacio-4)', fontWeight: 700 }}>
+            {planes.length} planes en catálogo
+          </span>
+        }
+      />
 
       <div className={styles.contenido}>
         <PlanesTable

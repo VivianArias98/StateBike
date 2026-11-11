@@ -1,8 +1,9 @@
-/* Se usa junto a la clase global "tarjeta" */
+/* Formulario de registro y edición de planes */
 .titulo {
   margin-bottom: var(--espacio-5);
   font-size: var(--texto-l);
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-texto);
 }
 
 .campos {
@@ -10,6 +11,13 @@
   flex-direction: column;
   gap: var(--espacio-4);
   margin-bottom: var(--espacio-5);
+}
+
+@media (min-width: 600px) and (max-width: 1279px) {
+  .campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .nota {

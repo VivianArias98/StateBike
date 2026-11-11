@@ -1,49 +1,73 @@
-/* Base = celular: barra superior con botón de menú.
-   Desde 1024px el sidebar queda fijo a la izquierda. */
+/* Layout maestro de Administración StateBike */
 .raiz {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--color-fondo-pagina);
 }
 
 .sidebar {
   background: var(--color-secundario);
   color: var(--color-secundario-texto);
-}
-
-.subtitulo {
-  font-size: var(--texto-xs);
-  opacity: 0.7;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+  z-index: 100;
 }
 
 .cabecera {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--espacio-3) var(--espacio-4);
+  padding: var(--espacio-4) var(--espacio-5);
 }
 
-.titulo {
-  font-size: var(--texto-xl);
+.marcaAdmin {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.badgeAdmin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  font-size: 10px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(95, 211, 74, 0.18);
+  color: var(--color-primario);
+  padding: 2px 8px;
+  border-radius: var(--radio-s);
+  border: 1px solid rgba(95, 211, 74, 0.3);
+  margin-top: var(--espacio-1);
 }
 
 .botonMenu {
   min-width: var(--alto-control);
   height: var(--alto-control);
-  background: none;
+  background: rgba(255, 255, 255, 0.08);
   color: inherit;
-  border: 1px solid var(--color-sidebar-item);
-  border-radius: var(--radio-s);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radio-m);
   font-size: var(--texto-l);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-/* Menú plegado en celular; se abre con la clase panelAbierto */
+.botonMenu:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Menú plegado en celular; se abre con panelAbierto */
 .panel {
   display: none;
   flex-direction: column;
-  padding: 0 var(--espacio-4) var(--espacio-4);
+  padding: 0 var(--espacio-4) var(--espacio-5);
 }
 
 .panelAbierto {
@@ -59,58 +83,142 @@
 .item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: var(--alto-control);
-  padding: 0 var(--espacio-3);
+  gap: var(--espacio-3);
+  height: 2.75rem;
+  padding: 0 var(--espacio-4);
   text-align: left;
   background: transparent;
-  color: var(--color-secundario-texto);
+  color: rgba(255, 255, 255, 0.78);
   border: none;
   border-radius: var(--radio-m);
   font-size: var(--texto-s);
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.18s ease;
+  position: relative;
+}
+
+.itemIcono {
+  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  transition: transform 0.18s ease;
+}
+
+.itemTexto {
+  flex: 1;
 }
 
 .item:hover {
-  background: var(--color-sidebar-item);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-texto-inverso);
+  transform: translateX(3px);
 }
 
-.item:focus-visible,
-.salir:focus-visible,
-.botonMenu:focus-visible {
-  outline-color: var(--color-primario);
+.item:hover .itemIcono {
+  transform: scale(1.1);
+  color: var(--color-primario);
 }
 
 .itemActivo,
 .itemActivo:hover {
   background: var(--color-primario);
   color: var(--color-primario-texto);
-  font-weight: 600;
+  font-weight: 700;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(95, 211, 74, 0.25);
 }
 
-/* Sobre el ítem activo (verde) el punto debe verse oscuro */
-.itemActivo :global(.punto-vivo) {
-  background: var(--color-primario-texto);
+.itemActivo .itemIcono {
+  color: var(--color-primario-texto);
+  transform: none;
+}
+
+.item:focus-visible,
+.salir:focus-visible,
+.botonMenu:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
 }
 
 .pie {
   margin-top: var(--espacio-5);
   padding-top: var(--espacio-4);
-  border-top: 1px solid var(--color-sidebar-item);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
 }
 
-/* Se usa junto a la clase global "enlace" */
-.salir {
-  padding-left: var(--espacio-3);
+.tarjetaPerfil {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-2) var(--espacio-1);
+}
+
+.avatarAdmin {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radio-circulo);
+  background: rgba(95, 211, 74, 0.15);
+  border: 1.5px solid var(--color-primario);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primario);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.datosAdmin {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nombreAdmin {
   font-size: var(--texto-s);
-  font-weight: 400;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-texto-inverso);
 }
 
-.contenido {
-  flex: 1;
-  min-width: 0; /* permite que las tablas hagan scroll en vez de ensanchar la página */
-  padding: var(--espacio-4);
+.correoAdmin {
+  font-size: var(--texto-xs);
+  opacity: 0.65;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.salir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  width: 100%;
+  height: 2.25rem;
+  border-radius: var(--radio-m);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.salir:hover {
+  background: rgba(176, 0, 32, 0.2);
+  border-color: rgba(176, 0, 32, 0.4);
+  color: #ff8080;
 }
 
 .areaPrincipal {
@@ -121,30 +229,31 @@
   min-height: 100vh;
 }
 
-.marcaAdmin {
-  cursor: pointer;
+.contenido {
+  flex: 1;
+  min-width: 0;
+  padding: var(--espacio-4);
+  max-width: 88rem;
+  width: 100%;
+  margin: 0 auto;
 }
 
-/* Pie de página similar al de visitante */
 .footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   min-height: 3.5rem;
-  padding: var(--espacio-3) var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-5);
   background: var(--color-superficie-inversa);
   color: var(--color-texto-inverso);
   font-size: var(--texto-xs);
+  border-top: 1px solid var(--color-borde);
   margin-top: auto;
 }
 
 .marcaFooter {
-  font-weight: 600;
-}
-
-@media (min-width: 768px) {
-  .footer {
-    padding: var(--espacio-3) var(--espacio-5);
-  }
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 @media (min-width: 1024px) {
@@ -152,26 +261,21 @@
     flex-direction: row;
   }
 
-  .areaPrincipal {
-    min-height: 100vh;
-  }
-
   .sidebar {
+    width: 17.5rem;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    width: var(--ancho-sidebar);
-    flex-shrink: 0;
-    padding: var(--espacio-8) var(--espacio-4) var(--espacio-5);
+    padding: var(--espacio-6) var(--espacio-4) var(--espacio-5);
+    height: 100vh;
+    position: sticky;
+    top: 0;
   }
 
   .cabecera {
-    padding: 0 var(--espacio-3) var(--espacio-4);
+    padding: 0 0 var(--espacio-5);
     margin-bottom: var(--espacio-5);
-    border-bottom: 1px solid var(--color-sidebar-item);
-  }
-
-  .titulo {
-    font-size: var(--texto-2xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .botonMenu {
@@ -184,12 +288,15 @@
     padding: 0;
   }
 
+  .menu {
+    gap: var(--espacio-2);
+  }
+
   .pie {
     margin-top: auto;
-    padding-top: var(--espacio-5);
   }
 
   .contenido {
-    padding: var(--espacio-7);
+    padding: var(--espacio-7) var(--espacio-8);
   }
 }

@@ -1,23 +1,29 @@
+import React from 'react';
 import styles from './TarjetaIndicador.module.css';
 
-// Tarjeta con un indicador numérico.
-// etiqueta: elemento opcional (por ejemplo <Etiqueta />)
-// vivo: muestra el punto verde parpadeante
-// enlace: texto opcional del enlace inferior
-function TarjetaIndicador({ titulo, valor, etiqueta, vivo = false, enlace }) {
+// Tarjeta con un indicador numérico de alta presentación
+function TarjetaIndicador({ titulo, valor, etiqueta, vivo = false, enlace, onClicEnlace, icono }) {
   return (
-    <article className={`tarjeta ${styles.raiz}`}>
+    <article className={styles.raiz}>
       <div className={styles.superior}>
-        <h2 className={styles.titulo}>{titulo}</h2>
-        {etiqueta}
-        {vivo && <span className="punto-vivo" aria-hidden="true" />}
+        <div className={styles.titulos}>
+          <h2 className={styles.titulo}>{titulo}</h2>
+          {etiqueta}
+        </div>
+        {icono ? (
+          <div className={styles.iconoCaja}>{icono}</div>
+        ) : (
+          vivo && <span className="punto-vivo" aria-hidden="true" />
+        )}
       </div>
 
       <div className={styles.inferior}>
-        <p className={styles.valor}>{valor}</p>
-        {/* Cuando exista React Router, este botón pasa a ser un <Link> */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
+          <p className={styles.valor}>{valor}</p>
+          {vivo && icono && <span className="punto-vivo" title="Operación en vivo" aria-hidden="true" />}
+        </div>
         {enlace && (
-          <button type="button" className={`enlace ${styles.enlace}`}>
+          <button type="button" className={`enlace ${styles.enlace}`} onClick={onClicEnlace}>
             {enlace}
           </button>
         )}

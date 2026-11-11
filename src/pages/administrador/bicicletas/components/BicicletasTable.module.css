@@ -1,18 +1,39 @@
-/* Se usa junto a la clase global "tabla": anchos y botones de acción */
-.raiz th:nth-child(1) { width: 20%; }
-.raiz th:nth-child(2) { width: 25%; }
-.raiz th:nth-child(3) { width: 25%; }
-.raiz th:nth-child(4) { width: 30%; }
+/* Tabla de Bicicletas */
+.raiz {
+  border-radius: var(--radio-l);
+  border: 1px solid var(--color-borde);
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.raiz table {
+  min-width: 48rem;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.raiz th:nth-child(1) { width: 22%; }
+.raiz th:nth-child(2) { width: 28%; }
+.raiz th:nth-child(3) { width: 20%; text-align: center; }
+.raiz th:nth-child(4) { width: 30%; text-align: right; }
 
 .acciones {
   display: flex;
   gap: var(--espacio-2);
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  white-space: nowrap;
 }
 
 .botonAccion {
-  font-size: var(--texto-xs);
-  padding: 0 var(--espacio-3);
-  height: 2rem;
+  font-size: var(--texto-xs) !important;
+  padding: 0 var(--espacio-3) !important;
+  height: 2rem !important;
+  min-width: auto !important;
+  white-space: nowrap !important;
+  border-radius: var(--radio-s) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
