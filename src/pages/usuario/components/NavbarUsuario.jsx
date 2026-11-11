@@ -37,7 +37,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
           </NavLink>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
+        <div className={styles.accionesMovil}>
           <BotonTema compacto />
           <button
             type="button"

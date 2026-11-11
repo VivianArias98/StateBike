@@ -181,6 +181,18 @@
   display: none;
 }
 
+.accionesMovil {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+@media (min-width: 1024px) {
+  .accionesMovil {
+    display: none;
+  }
+}
+
 @media (min-width: 1024px) {
   .ocultarEnMovil {
     display: flex;

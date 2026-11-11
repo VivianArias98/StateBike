@@ -65,19 +65,16 @@ function AdminLayout({ itemActivo, children }) {
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
-            <BotonTema compacto />
-            <button
-              type="button"
-              className={styles.botonMenu}
-              aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
-              aria-expanded={menuAbierto}
-              aria-controls="admin-menu"
-              onClick={() => setMenuAbierto(!menuAbierto)}
-            >
-              {menuAbierto ? '✕' : '☰'}
-            </button>
-          </div>
+          <button
+            type="button"
+            className={styles.botonMenu}
+            aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={menuAbierto}
+            aria-controls="admin-menu"
+            onClick={() => setMenuAbierto(!menuAbierto)}
+          >
+            {menuAbierto ? '✕' : '☰'}
+          </button>
         </div>
 
         <div
@@ -134,7 +131,7 @@ function AdminLayout({ itemActivo, children }) {
         <main className={styles.contenido}>{children}</main>
         <footer className={`contexto-oscuro ${styles.footer}`}>
           <span className={styles.marcaFooter}>StationBike · Sistema Oficial de Bicicletas Compartidas de Tunja</span>
-          <span style={{ opacity: 0.7 }}>Versión Comercial 2.0</span>
+          <span style={{ opacity: 0.7 }}>v2.0</span>
         </footer>
       </div>
     </div>
