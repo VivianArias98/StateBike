@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import UsuarioLayout from './layouts/UsuarioLayout/UsuarioLayout';
-import MiBilletera from './pages/usuario/billetera/MiBilletera';
-
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom';
 
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
-import { ROLES } from './services/sesion.js';
+import { ROLES } from './utils/sesion.js';
+import { UsuarioProvider } from './pages/usuario/context/UsuarioContext.jsx';
 
+// Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';
 import PlanesTarifas from './pages/visitante/planesyTarifas/PlanesTarifas.jsx';
 import AcercaNosotros from './pages/visitante/acercaNosotros/AcercaNosotros.jsx';
@@ -14,7 +13,9 @@ import ComoUsarServicio from './pages/visitante/comoUsarServicio/ComoUsarServici
 import InicioSesionPage from './pages/visitante/inicioSesion/InicioSesionPage.jsx';
 import RegistroPage from './pages/visitante/registro/RegistroPage.jsx';
 
-import InicioMapaPage from './pages/usuario/inicioMapa/InicioMapaPage.jsx';
+// Vistas del rol Usuario (StateBike Tunja)
+import InicioPage from './pages/usuario/inicio/InicioPage.jsx';
+import ViajesPage from './pages/usuario/viajes/ViajesPage.jsx';
 import MiPerfilPage from './pages/usuario/mi-perfil/MiPerfilPage.jsx';
 import MiBilleteraPage from './pages/usuario/mi-billetera/MiBilleteraPage.jsx';
 import RecargarSaldoPaso1Page from './pages/usuario/mi-billetera/recargar-saldo-paso-1/RecargarSaldoPaso1Page.jsx';
@@ -28,6 +29,10 @@ import AdquirirPlanPaso3Page from './pages/usuario/mi-plan/adquirir-plan-paso-3/
 import AdquirirPlanPaso4Page from './pages/usuario/mi-plan/adquirir-plan-paso-4/AdquirirPlanPaso4Page.jsx';
 import CancelarPlanPaso1Page from './pages/usuario/mi-plan/cancelar-plan-paso-1/CancelarPlanPaso1Page.jsx';
 import CancelarPlanPaso2Page from './pages/usuario/mi-plan/cancelar-plan-paso-2/CancelarPlanPaso2Page.jsx';
+import HistorialPage from './pages/usuario/historial/HistorialPage.jsx';
+import ReportarIncidenciaPage from './pages/usuario/reportar-incidencia/ReportarIncidenciaPage.jsx';
+
+// Vistas del rol Administrador
 import PanelControlPage from './pages/administrador/panel-control/PanelControlPage.jsx';
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
@@ -37,6 +42,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rutas públicas / Visitante */}
         <Route path="/" element={<EstacionesPage />} />
         <Route path="/planes" element={<PlanesTarifas />} />
         <Route path="/acerca" element={<AcercaNosotros />} />
@@ -44,118 +50,36 @@ function App() {
         <Route path="/login" element={<InicioSesionPage />} />
         <Route path="/registro" element={<RegistroPage />} />
 
+        {/* Rutas del rol Usuario */}
         <Route
-          path="/inicio"
           element={
             <RutaProtegida rol={ROLES.USUARIO}>
-              <InicioMapaPage />
+              <UsuarioProvider>
+                <Outlet />
+              </UsuarioProvider>
             </RutaProtegida>
           }
-        />
-        <Route
-          path="/perfil"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <MiPerfilPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <MiBilleteraPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/recargar"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <RecargarSaldoPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/recargar/comprobante"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <RecargarSaldoPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/pagar"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <PagarCobroPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/billetera/pagar/comprobante"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <PagarCobroPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <MiPlanPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir/elegir"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso2Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir/resumen"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso3Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/adquirir/activado"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <AdquirirPlanPaso4Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/cancelar"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <CancelarPlanPaso1Page />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/plan/cancelar/listo"
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <CancelarPlanPaso2Page />
-            </RutaProtegida>
-          }
-        />
+        >
+          <Route path="/inicio" element={<InicioPage />} />
+          <Route path="/viajes" element={<ViajesPage />} />
+          <Route path="/perfil" element={<MiPerfilPage />} />
+          <Route path="/billetera" element={<MiBilleteraPage />} />
+          <Route path="/billetera/recargar" element={<RecargarSaldoPaso1Page />} />
+          <Route path="/billetera/recargar/comprobante" element={<RecargarSaldoPaso2Page />} />
+          <Route path="/billetera/pagar" element={<PagarCobroPaso1Page />} />
+          <Route path="/billetera/pagar/comprobante" element={<PagarCobroPaso2Page />} />
+          <Route path="/plan" element={<MiPlanPage />} />
+          <Route path="/plan/adquirir" element={<AdquirirPlanPaso1Page />} />
+          <Route path="/plan/adquirir/elegir" element={<AdquirirPlanPaso2Page />} />
+          <Route path="/plan/adquirir/resumen" element={<AdquirirPlanPaso3Page />} />
+          <Route path="/plan/adquirir/activado" element={<AdquirirPlanPaso4Page />} />
+          <Route path="/plan/cancelar" element={<CancelarPlanPaso1Page />} />
+          <Route path="/plan/cancelar/listo" element={<CancelarPlanPaso2Page />} />
+          <Route path="/historial" element={<HistorialPage />} />
+          <Route path="/incidencias" element={<ReportarIncidenciaPage />} />
+        </Route>
+
+        {/* Rutas del rol Administrador */}
         <Route
           path="/admin"
           element={

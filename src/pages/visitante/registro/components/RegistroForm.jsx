@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './RegistroForm.module.css';
-import { registrar } from '../../../../services/authService.js';
-import { validarRegistro } from '../../../../services/validaciones.js';
-import { textoError } from '../../../../services/mensajesError.js';
+import { registrar } from '../../../../utils/auth.js';
+import { validarRegistro } from '../../../../utils/validaciones.js';
+import { textoError } from '../../../../utils/mensajesError.js';
 
 function IconoOcultar() {
   return (

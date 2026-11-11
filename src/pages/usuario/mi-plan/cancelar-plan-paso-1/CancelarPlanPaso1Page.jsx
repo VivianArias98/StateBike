@@ -1,12 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import { IconoAlerta, IconoFlecha, IconoCerrar } from '../../../../components/Iconos/Iconos.jsx';
-import EstadoCarga from '../../components/EstadoCarga.jsx';
-import { useCarga } from '../../../../utils/useCarga.js';
-import { mensajeError } from '../../../../utils/mensajeError.js';
 import { formatearFechaBogota } from '../../../../utils/formatoMoneda.js';
-import { cancelarPlan, obtenerMiPlan } from '../planApi.js';
+import { useUsuario } from '../../context/UsuarioContext.jsx';
 import styles from './CancelarPlanPaso1Page.module.css';
 
 const PASOS = [
@@ -14,15 +11,13 @@ const PASOS = [
   { numero: '02', titulo: 'Plan cancelado', estado: 'PENDIENTE', activo: false },
 ];
 
-// Cancelar plan, paso 1 de 2 (HU_2): revisar el plan vigente y confirmar.
-// La cancelación es inmediata y sin reembolso; el backend la rechaza si hay un viaje en curso.
 function CancelarPlanPaso1Page() {
   const navegar = useNavigate();
-  const { datos, cargando, error, reintentar } = useCarga(obtenerMiPlan);
+  const { plan, cancelarPlan } = useUsuario();
   const [cancelando, setCancelando] = useState(false);
   const [errorCancelar, setErrorCancelar] = useState('');
 
-  const plan = datos?.plan;
+  const planActivo = plan?.planActivo;
   const volver = () => navegar('/plan');
 
   const confirmar = async () => {
@@ -30,9 +25,23 @@ function CancelarPlanPaso1Page() {
     setErrorCancelar('');
     try {
       const respuesta = await cancelarPlan();
-      navegar('/plan/cancelar/listo', { state: { respuesta, plan } });
-    } catch (errorApi) {
-      setErrorCancelar(mensajeError(errorApi));
+      navegar('/plan/cancelar/listo', {
+        state: {
+          respuesta: {
+            ...respuesta,
+            suscripcion: respuesta.suscripcion || {
+              id: 'SUSC-CANCELADA',
+              planId: planActivo?.id,
+              nombre: planActivo?.nombre,
+              estado: 'CANCELADA',
+              fechaCancelacion: new Date().toISOString(),
+            },
+          },
+          plan: planActivo,
+        },
+      });
+    } catch (err) {
+      setErrorCancelar(err.message);
       setCancelando(false);
     }
   };
@@ -59,27 +68,27 @@ function CancelarPlanPaso1Page() {
           ))}
         </ol>
 
-        <EstadoCarga
-          cargando={cargando}
-          error={error}
-          onReintentar={reintentar}
-          vacio={datos && !datos.tienePlan ? datos.mensaje : ''}
-        />
-
-        {!cargando && plan && (
+        {!plan.tienePlan || !planActivo ? (
+          <div className="tarjeta" style={{ textAlign: 'center', padding: 'var(--espacio-6)' }}>
+            <p style={{ fontSize: 'var(--texto-l)', fontWeight: 'bold' }}>No tienes ningún plan activo para cancelar</p>
+            <button type="button" className={`boton ${styles.botonVolver}`} onClick={volver} style={{ marginTop: 'var(--espacio-3)' }}>
+              <IconoFlecha /> Volver a Mi plan
+            </button>
+          </div>
+        ) : (
           <section className={styles.seccion} aria-label="Confirmación de cancelación">
             <div className={styles.tarjetas}>
               <div className={styles.tarjeta}>
                 <p className={styles.etiqueta}>TIPO DE SUSCRIPCIÓN</p>
-                <p className={styles.valor}>{plan.nombre}</p>
+                <p className={styles.valor}>{planActivo.nombre}</p>
               </div>
               <div className={styles.tarjeta}>
                 <p className={styles.etiqueta}>FECHA DE FIN ORIGINAL</p>
-                <p className={styles.valor}>{formatearFechaBogota(plan.fechaFin)}</p>
+                <p className={styles.valor}>{formatearFechaBogota(planActivo.fechaFin)}</p>
               </div>
               <div className={styles.tarjeta}>
                 <p className={styles.etiqueta}>VIGENCIA RESTANTE</p>
-                <p className={styles.valor}>{plan.diasRestantes} días restantes</p>
+                <p className={styles.valor}>{planActivo.diasRestantes} días restantes</p>
                 <p className={styles.alerta}>SIN REEMBOLSO</p>
               </div>
             </div>
@@ -112,12 +121,6 @@ function CancelarPlanPaso1Page() {
               </button>
             </div>
           </section>
-        )}
-
-        {!cargando && datos && !datos.tienePlan && (
-          <button type="button" className={`boton ${styles.botonVolver}`} onClick={volver}>
-            <IconoFlecha /> Volver a Mi plan
-          </button>
         )}
       </div>
     </UsuarioLayout>

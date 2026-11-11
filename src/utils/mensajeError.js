@@ -1,4 +1,4 @@
-import { textoError } from '../services/mensajesError.js';
+import { textoError } from './mensajesError.js';
 import { formatearCOP } from './formatoMoneda.js';
 
 // Códigos que genera el propio front (sin conexión o sesión vencida); su texto ya existe en mensajesError.js

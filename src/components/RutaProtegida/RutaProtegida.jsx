@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { leerSesion, borrarSesion, rutaInicio } from '../../services/sesion.js';
-import { obtenerUsuarioActual } from '../../services/authService.js';
+import { leerSesion, borrarSesion, rutaInicio } from '../../utils/sesion.js';
+import { obtenerUsuarioActual } from '../../utils/auth.js';
 
 // Deja pasar solo a usuarios con sesión válida y del rol indicado.
 // Confirma la sesión con el servidor (/auth/me) una vez al entrar.
@@ -20,10 +20,16 @@ function RutaProtegida({ rol, children }) {
         if (!activo) return;
         setEstado(usuario.rol === rol ? 'ok' : 'rol_distinto');
       })
-      .catch(() => {
+      .catch((error) => {
         if (!activo) return;
-        borrarSesion();
-        setEstado('fuera');
+        // Solo expulsar si el servidor confirma que el token venció o es inválido (401/403)
+        if (error?.status === 401 || error?.status === 403) {
+          borrarSesion();
+          setEstado('fuera');
+        } else {
+          // Si es fallo temporal de red o conexión, conservar la sesión local
+          setEstado(rolSesion === rol ? 'ok' : 'rol_distinto');
+        }
       });
 
     return () => {

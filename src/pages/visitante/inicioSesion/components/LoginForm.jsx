@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
-import { iniciarSesion } from '../../../../services/authService.js';
-import { validarLogin } from '../../../../services/validaciones.js';
-import { textoError } from '../../../../services/mensajesError.js';
-import { rutaInicio } from '../../../../services/sesion.js';
+import { iniciarSesion } from '../../../../utils/auth.js';
+import { validarLogin } from '../../../../utils/validaciones.js';
+import { textoError } from '../../../../utils/mensajesError.js';
+import { rutaInicio } from '../../../../utils/sesion.js';
 
 function IconoOcultar() {
   return (
