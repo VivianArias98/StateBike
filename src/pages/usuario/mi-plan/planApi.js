@@ -1,4 +1,4 @@
-import { pedirAutenticado } from '../../../services/authService.js';
+import { pedirAutenticado } from '../../../utils/auth.js';
 
 // Llamadas al backend del módulo Mi plan (HU_2, HU_10, HU_17).
 // Las usan Mi plan y los flujos Adquirir plan (pasos 1 a 4) y Cancelar plan (pasos 1 y 2).

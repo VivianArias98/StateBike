@@ -5,8 +5,8 @@ import { Icono } from '../components/IconosVisitante.jsx';
 import TarjetaPlan from './components/TarjetaPlan.jsx';
 import BannerAcceso from './components/BannerAcceso.jsx';
 import TarjetaBeneficio from './components/TarjetaBeneficio.jsx';
-import { obtenerPlanes } from '../../../services/catalogoService.js';
-import { textoError } from '../../../services/mensajesError.js';
+import { obtenerPlanes } from '../../../utils/catalogo.js';
+import { textoError } from '../../../utils/mensajesError.js';
 import { formatearCOP } from '../../../utils/formatoMoneda.js';
 import styles from './PlanesTarifas.module.css';
 

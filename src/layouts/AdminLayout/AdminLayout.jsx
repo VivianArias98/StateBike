@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cerrarSesion } from '../../services/authService.js';
-import { leerSesion } from '../../services/sesion.js';
+import { cerrarSesion } from '../../utils/auth.js';
+import { leerSesion } from '../../utils/sesion.js';
 import styles from './AdminLayout.module.css';
 
 // Los 7 módulos oficiales del Rol Administrador según especificación

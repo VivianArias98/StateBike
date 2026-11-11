@@ -1,4 +1,4 @@
-import { pedirAutenticado } from '../../../services/authService.js';
+import { pedirAutenticado } from '../../../utils/auth.js';
 
 // Llamadas al backend del módulo Mi billetera (HU_23, HU_24, HU_25).
 // Las usan también las pantallas de recarga y de pago de cobro (pasos 1 y 2).
