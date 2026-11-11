@@ -4,7 +4,6 @@ import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
 import { ROLES } from './utils/sesion.js';
 import { UsuarioProvider } from './pages/usuario/context/UsuarioContext.jsx';
-import { TemaProvider } from './context/TemaContext.jsx';
 
 // Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';
@@ -38,12 +37,14 @@ import PanelControlPage from './pages/administrador/panel-control/PanelControlPa
 import AdminEstacionesPage from './pages/administrador/estaciones/EstacionesPage.jsx';
 import AdminBicicletasPage from './pages/administrador/bicicletas/BicicletasPage.jsx';
 import AdminPlanesPage from './pages/administrador/planes-tarifas/PlanesTarifasPage.jsx';
+import AdminTarjetasPage from './pages/administrador/tarjetas/TarjetasPage.jsx';
+import AdminIncidenciasPage from './pages/administrador/incidencias/IncidenciasPage.jsx';
+import AdminCuentasPage from './pages/administrador/cuentas/CuentasPage.jsx';
 
 function App() {
   return (
-    <TemaProvider>
-      <BrowserRouter>
-        <Routes>
+    <BrowserRouter>
+      <Routes>
         {/* Rutas públicas / Visitante */}
         <Route path="/" element={<EstacionesPage />} />
         <Route path="/planes" element={<PlanesTarifas />} />
@@ -114,11 +115,34 @@ function App() {
             </RutaProtegida>
           }
         />
+        <Route
+          path="/admin/tarjetas"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminTarjetasPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/incidencias"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminIncidenciasPage />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/cuentas"
+          element={
+            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+              <AdminCuentasPage />
+            </RutaProtegida>
+          }
+        />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
-  </TemaProvider>
   );
 }
 
