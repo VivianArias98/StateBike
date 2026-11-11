@@ -1,0 +1,43 @@
+.botonTema {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  padding: 0.4rem 0.75rem;
+  min-height: 2.25rem;
+  border-radius: var(--radio-entero);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-texto-inverso);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transicion-rapida);
+  user-select: none;
+}
+
+.botonTema:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: var(--color-primario);
+  transform: translateY(-1px);
+}
+
+.compacto {
+  padding: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  min-height: 2.25rem;
+  border-radius: var(--radio-circulo);
+}
+
+.icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.etiqueta {
+  white-space: nowrap;
+}
+

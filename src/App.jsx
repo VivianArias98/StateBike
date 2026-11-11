@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
 import { ROLES } from './utils/sesion.js';
 import { UsuarioProvider } from './pages/usuario/context/UsuarioContext.jsx';
+import { TemaProvider } from './context/TemaContext.jsx';
 
 // Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';
@@ -40,8 +41,9 @@ import AdminPlanesPage from './pages/administrador/planes-tarifas/PlanesTarifasP
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <TemaProvider>
+      <BrowserRouter>
+        <Routes>
         {/* Rutas públicas / Visitante */}
         <Route path="/" element={<EstacionesPage />} />
         <Route path="/planes" element={<PlanesTarifas />} />
@@ -116,6 +118,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
+  </TemaProvider>
   );
 }
 

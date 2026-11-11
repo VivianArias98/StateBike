@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../components/Logo/Logo.jsx';
+import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
 import { IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
 import { useUsuario } from '../context/UsuarioContext.jsx';
 import { borrarSesion } from '../../../utils/sesion.js';
@@ -36,16 +37,19 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
           </NavLink>
         </div>
 
-        <button
-          type="button"
-          className={styles.botonMenu}
-          aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
-          aria-expanded={menuAbierto}
-          aria-controls="usuario-menu"
-          onClick={onAlternarMenu}
-        >
-          {menuAbierto ? '✕' : '☰'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
+          <BotonTema compacto />
+          <button
+            type="button"
+            className={styles.botonMenu}
+            aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={menuAbierto}
+            aria-controls="usuario-menu"
+            onClick={onAlternarMenu}
+          >
+            {menuAbierto ? '✕' : '☰'}
+          </button>
+        </div>
 
         <div
           id="usuario-menu"
@@ -67,6 +71,10 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
           </nav>
 
           <div className={styles.derecha}>
+            <div className={styles.ocultarEnMovil}>
+              <BotonTema compacto />
+            </div>
+
             {viajeActivo && (
               <NavLink to="/viajes" className={styles.badgeViaje} title="Tienes un viaje en curso activo">
                 <span className="punto-vivo" aria-hidden="true" />

@@ -177,6 +177,17 @@
   border-color: var(--color-peligro);
 }
 
+.ocultarEnMovil {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ocultarEnMovil {
+    display: flex;
+    align-items: center;
+  }
+}
+
 @media (min-width: 1024px) {
   .barra {
     flex-wrap: nowrap;
