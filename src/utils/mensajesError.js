@@ -2,6 +2,15 @@
 // Si el servidor manda "mensaje" se usa ese; si solo manda el código, aquí va el texto.
 const TEXTOS = {
   campos_vacios: 'Hay campos obligatorios vacíos',
+  credenciales_invalidas: 'Correo o contraseña incorrectos',
+  usuario_inactivo: 'La cuenta se encuentra inactiva. Contacte al administrador',
+  tunja_no_responde: 'El servicio externo (TunjaAPI) no responde. Revisa tu conexión a internet o intenta más tarde',
+  clave_tunja_invalida: 'La clave de TunjaAPI configurada en el servidor es inválida',
+  error_interno: 'Error interno del servidor. Intenta de nuevo',
+  sin_permisos: 'No tienes permisos para acceder a esta sección',
+  correo_ya_registrado: 'El correo ya se encuentra registrado',
+  contrasena_debil: 'La contraseña no cumple los requisitos mínimos',
+  correo_invalido: 'El correo electrónico no es válido',
   token_requerido: 'Debes iniciar sesión para continuar',
   token_expirado: 'Tu sesión expiró. Vuelve a iniciar sesión',
   refresco_invalido: 'Tu sesión ya no es válida. Vuelve a iniciar sesión',

@@ -51,6 +51,7 @@ function LoginForm() {
       const usuario = await iniciarSesion(correo.trim(), contrasena);
       navegar(ubicacion.state?.desde ?? rutaInicio(usuario.rol), { replace: true });
     } catch (e) {
+      console.error('Error al iniciar sesión:', e);
       setError(textoError(e));
       setEnviando(false);
     }
