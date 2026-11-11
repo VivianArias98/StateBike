@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
 import { ROLES } from './utils/sesion.js';
 import { UsuarioProvider } from './pages/usuario/context/UsuarioContext.jsx';
+import { TemaProvider } from './context/TemaContext.jsx';
 
 // Vistas de visitante
 import EstacionesPage from './pages/visitante/estaciones/EstacionesPage.jsx';
@@ -43,106 +44,108 @@ import AdminCuentasPage from './pages/administrador/cuentas/CuentasPage.jsx';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Rutas públicas / Visitante */}
-        <Route path="/" element={<EstacionesPage />} />
-        <Route path="/planes" element={<PlanesTarifas />} />
-        <Route path="/acerca" element={<AcercaNosotros />} />
-        <Route path="/como-usar" element={<ComoUsarServicio />} />
-        <Route path="/login" element={<InicioSesionPage />} />
-        <Route path="/registro" element={<RegistroPage />} />
+    <TemaProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Rutas públicas / Visitante */}
+          <Route path="/" element={<EstacionesPage />} />
+          <Route path="/planes" element={<PlanesTarifas />} />
+          <Route path="/acerca" element={<AcercaNosotros />} />
+          <Route path="/como-usar" element={<ComoUsarServicio />} />
+          <Route path="/login" element={<InicioSesionPage />} />
+          <Route path="/registro" element={<RegistroPage />} />
 
-        {/* Rutas del rol Usuario */}
-        <Route
-          element={
-            <RutaProtegida rol={ROLES.USUARIO}>
-              <UsuarioProvider>
-                <Outlet />
-              </UsuarioProvider>
-            </RutaProtegida>
-          }
-        >
-          <Route path="/inicio" element={<InicioPage />} />
-          <Route path="/viajes" element={<ViajesPage />} />
-          <Route path="/perfil" element={<MiPerfilPage />} />
-          <Route path="/billetera" element={<MiBilleteraPage />} />
-          <Route path="/billetera/recargar" element={<RecargarSaldoPaso1Page />} />
-          <Route path="/billetera/recargar/comprobante" element={<RecargarSaldoPaso2Page />} />
-          <Route path="/billetera/pagar" element={<PagarCobroPaso1Page />} />
-          <Route path="/billetera/pagar/comprobante" element={<PagarCobroPaso2Page />} />
-          <Route path="/plan" element={<MiPlanPage />} />
-          <Route path="/plan/adquirir" element={<AdquirirPlanPaso1Page />} />
-          <Route path="/plan/adquirir/elegir" element={<AdquirirPlanPaso2Page />} />
-          <Route path="/plan/adquirir/resumen" element={<AdquirirPlanPaso3Page />} />
-          <Route path="/plan/adquirir/activado" element={<AdquirirPlanPaso4Page />} />
-          <Route path="/plan/cancelar" element={<CancelarPlanPaso1Page />} />
-          <Route path="/plan/cancelar/listo" element={<CancelarPlanPaso2Page />} />
-          <Route path="/historial" element={<HistorialPage />} />
-          <Route path="/incidencias" element={<ReportarIncidenciaPage />} />
-        </Route>
+          {/* Rutas del rol Usuario */}
+          <Route
+            element={
+              <RutaProtegida rol={ROLES.USUARIO}>
+                <UsuarioProvider>
+                  <Outlet />
+                </UsuarioProvider>
+              </RutaProtegida>
+            }
+          >
+            <Route path="/inicio" element={<InicioPage />} />
+            <Route path="/viajes" element={<ViajesPage />} />
+            <Route path="/perfil" element={<MiPerfilPage />} />
+            <Route path="/billetera" element={<MiBilleteraPage />} />
+            <Route path="/billetera/recargar" element={<RecargarSaldoPaso1Page />} />
+            <Route path="/billetera/recargar/comprobante" element={<RecargarSaldoPaso2Page />} />
+            <Route path="/billetera/pagar" element={<PagarCobroPaso1Page />} />
+            <Route path="/billetera/pagar/comprobante" element={<PagarCobroPaso2Page />} />
+            <Route path="/plan" element={<MiPlanPage />} />
+            <Route path="/plan/adquirir" element={<AdquirirPlanPaso1Page />} />
+            <Route path="/plan/adquirir/elegir" element={<AdquirirPlanPaso2Page />} />
+            <Route path="/plan/adquirir/resumen" element={<AdquirirPlanPaso3Page />} />
+            <Route path="/plan/adquirir/activado" element={<AdquirirPlanPaso4Page />} />
+            <Route path="/plan/cancelar" element={<CancelarPlanPaso1Page />} />
+            <Route path="/plan/cancelar/listo" element={<CancelarPlanPaso2Page />} />
+            <Route path="/historial" element={<HistorialPage />} />
+            <Route path="/incidencias" element={<ReportarIncidenciaPage />} />
+          </Route>
 
-        {/* Rutas del rol Administrador */}
-        <Route
-          path="/admin"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <PanelControlPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin/estaciones"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <AdminEstacionesPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin/bicicletas"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <AdminBicicletasPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin/planes"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <AdminPlanesPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin/tarjetas"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <AdminTarjetasPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin/incidencias"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <AdminIncidenciasPage />
-            </RutaProtegida>
-          }
-        />
-        <Route
-          path="/admin/cuentas"
-          element={
-            <RutaProtegida rol={ROLES.ADMINISTRADOR}>
-              <AdminCuentasPage />
-            </RutaProtegida>
-          }
-        />
+          {/* Rutas del rol Administrador */}
+          <Route
+            path="/admin"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <PanelControlPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/estaciones"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminEstacionesPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/bicicletas"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminBicicletasPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/planes"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminPlanesPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/tarjetas"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminTarjetasPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/incidencias"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminIncidenciasPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/cuentas"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminCuentasPage />
+              </RutaProtegida>
+            }
+          />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </TemaProvider>
   );
 }
 
