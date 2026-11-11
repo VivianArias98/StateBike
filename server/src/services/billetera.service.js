@@ -188,7 +188,7 @@ export async function pagarCobroPendiente(usuarioId, token) {
       const faltante = cobro.valor_cobrado - saldo;
       throw new AppError(400, "saldo_insuficiente", {
         faltante,
-        mensaje: `Saldo insuficiente. Le faltan $${faltante.toLocaleString("es-CO")}. Recargue su saldo`,
+        mensaje: `Saldo insuficiente. Recargue su saldo`,
       });
     }
 

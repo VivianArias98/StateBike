@@ -1,0 +1,57 @@
+/* EsperaTotem.module.css: base = celular */
+.raiz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espacio-5);
+  }
+  
+  .lector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espacio-3);
+    text-align: center;
+  }
+  
+  .icono {
+    display: grid;
+    place-items: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: var(--radio-circulo);
+    background: var(--color-acento-suave);
+    font-size: 2.5rem;
+  }
+  
+  .titulo {
+    margin: 0;
+    font-size: var(--texto-xl);
+    font-weight: 700;
+  }
+  
+  .texto {
+    margin: 0;
+    font-size: var(--texto-s);
+    color: var(--color-texto-suave);
+  }
+  
+  .datos {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .mapa {
+    --alto-mapa: 20rem;
+    min-width: 0;
+  }
+  
+  @media (min-width: 1024px) {
+    .raiz {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: start;
+    }
+  
+    .mapa {
+      --alto-mapa: 28rem;
+    }
+  }

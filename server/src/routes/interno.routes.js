@@ -16,11 +16,9 @@ router.get("/ping", (req, res) => {
 router.get("/estaciones/:id/anclajes", controlador.consultarAnclajes);
 
 // Retiro de bicicleta (HU_3)
-router.post("/retiros", controlador.retirar);
 router.post("/estaciones/:id/retiros", controlador.retirar);
 
 // Devolución de bicicleta (HU_4)
-router.post("/devoluciones", controlador.devolver);
 router.post("/estaciones/:id/devoluciones", controlador.devolver);
 
 export default router;

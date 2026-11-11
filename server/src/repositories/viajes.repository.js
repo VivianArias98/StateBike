@@ -96,6 +96,8 @@ export function obtenerViajeEnCursoPorUsuario(usuarioId) {
          b.codigo AS bicicletaCodigo,
          v.estacion_origen_id AS estacionOrigenId,
          eo.nombre AS estacionOrigenNombre,
+         eo.lat AS estacionOrigenLat,
+         eo.lng AS estacionOrigenLng,
          v.fecha_inicio AS fechaInicio,
          v.estado,
          v.estado_cobro AS estadoCobro
@@ -209,4 +211,14 @@ export function finalizarViaje({
 export function contarEnCurso() {
   const fila = db.prepare(`SELECT COUNT(*) AS total FROM viajes WHERE estado = 'EN_CURSO'`).get();
   return fila?.total ?? 0;
+}
+
+// Último viaje FINALIZADO del usuario (para mostrar el resumen en el front)
+export function obtenerUltimoFinalizado(usuarioId) {
+  const fila = db
+    .prepare(
+      `SELECT id FROM viajes WHERE usuario_id = ? AND estado = 'FINALIZADO' ORDER BY id DESC LIMIT 1`
+    )
+    .get(usuarioId);
+  return fila ? buscarPorId(fila.id) : null;
 }

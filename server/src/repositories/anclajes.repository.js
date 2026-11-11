@@ -50,4 +50,24 @@ export function contarOcupacionGlobal() {
     ocupados: fila?.ocupados ?? 0,
     libres: fila?.libres ?? 0,
   };
+  
+}
+
+//Anclaje de una estación según su número (el terminal envía el número, no el id)
+export function buscarPorEstacionYNumero(estacionId, numero) {
+  return db
+    .prepare(
+      `SELECT a.id, a.estacion_id AS estacionId, a.numero, a.codigo, a.estado,
+              b.id AS bicicletaId, b.codigo AS bicicletaCodigo, b.estado AS bicicletaEstado
+       FROM anclajes a
+       LEFT JOIN bicicletas b ON b.anclaje_id = a.id
+       WHERE a.estacion_id = ? AND a.numero = ?`
+    )
+    .get(estacionId, numero);
+}
+
+export function contarLibres(estacionId) {
+  return db
+    .prepare(`SELECT COUNT(*) AS total FROM anclajes WHERE estacion_id = ? AND estado = 'LIBRE'`)
+    .get(estacionId).total;
 }

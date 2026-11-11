@@ -9,5 +9,7 @@ router.use(autenticar);
 // Consulta del viaje activo del usuario en sesión
 router.get("/en-curso", controlador.consultarEnCurso);
 
+router.get("/ultimo", controlador.consultarUltimo);
+
 export default router;
 

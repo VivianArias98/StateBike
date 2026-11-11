@@ -361,54 +361,211 @@ Authorization: Bearer {{adminLogin.response.body.acceso}}
 PATCH {{host}}/admin/cuentas/1/inactivar
 Authorization: Bearer {{login.response.body.acceso}}
 
-### 63. Terminal NFC: iniciar viaje / retiro de bicicleta en estación (HU_3)
-POST {{host}}/interno/retiros
-X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
+### ============================================================
+### VIAJES (HU_3 / HU_4) - API NFC + backend + TunjaAPI
+### Ejecutar en orden, una sola vez cada petición con "# @name".
+### Si repites una, la respuesta guardada se reemplaza (y un 409 borra el id).
+### ============================================================
+
+@nfc = http://localhost:4100
+@tunja = https://nfc.multimediaudeb.com/api/v1
+# UID inventado. Si da "La tarjeta ya está vinculada a otro usuario", cámbialo (hex, 4 a 32 caracteres)
+@uid = 7B1C2D3E
+
+### 69. (Opcional) Limpiar: cancelar plan activo que traiga el usuario de pruebas anteriores
+POST {{host}}/planes/cancelar
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 70. Estación origen (4 anclajes)
+# @name estOrigen
+POST {{host}}/admin/estaciones
+Authorization: Bearer {{adminLogin.response.body.acceso}}
 Content-Type: application/json
 
-{
-  "anclajeId": 1,
-  "uid": "04A1B2C3"
-}
+{ "nombre": "Tótem Origen", "direccion": "Cra 10 #15-20", "capacidad": 4, "lat": 5.5353, "lng": -73.3678 }
 
-### 64. Usuario: consultar estado de mi viaje en curso
+### 71. Estación destino (4 anclajes)
+# @name estDestino
+POST {{host}}/admin/estaciones
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "nombre": "Tótem Destino", "direccion": "Av Universitaria #20-30", "capacidad": 4, "lat": 5.5400, "lng": -73.3600 }
+
+### 72. Bicicleta 1 en la estación origen (queda en el anclaje 1)
+POST {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "codigo": "BIC-T001", "estacionId": {{estOrigen.response.body.estacion.id}} }
+
+### 73. Bicicleta 2 en la estación origen (anclaje 2)
+POST {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "codigo": "BIC-T002", "estacionId": {{estOrigen.response.body.estacion.id}} }
+
+### 74. Vincular la tarjeta al usuario de prueba (ACTIVA)
+POST {{host}}/admin/tarjetas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "usuarioId": {{login.response.body.usuario.id}}, "uid": "{{uid}}" }
+
+### 75. Plan de prueba: 1 minuto incluido, $100 por minuto de exceso (así el exceso se prueba en minutos)
+# @name planPrueba
+POST {{host}}/admin/planes
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+Content-Type: application/json
+
+{ "nombre": "Plan Prueba Exceso", "costoBase": 1000, "vigenciaDias": 1, "viajesPorDia": 10, "tiempoViajeMin": 1, "valorMinutoExceso": 100 }
+
+### 76. Recargar saldo: $1.200 (con el plan de $1.000 quedan $200)
+POST {{host}}/billetera/recargar
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "monto": 1200 }
+
+### 77. Adquirir el plan de prueba (debe decir PLAN ADQUIRIDO CON ÉXITO)
+POST {{host}}/planes/adquirir
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "planId": {{planPrueba.response.body.plan.id}} }
+
+### 78. Estado del escenario: anclajes de la estación origen (clave interna)
+GET {{host}}/interno/estaciones/{{estOrigen.response.body.estacion.id}}/anclajes
+X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
+
+### ============================================================
+### ESCENARIO 1: viaje sin exceso (todo por la API NFC, como el simulador)
+### ============================================================
+
+### 79. RETIRO: anclaje 1 -> "VIAJE INICIADO. ¡BUEN RECORRIDO!" + minutosIncluidos: 1
+POST {{nfc}}/estaciones/{{estOrigen.response.body.estacion.id}}/retiros
+Content-Type: application/json
+
+{ "anclaje": 1, "uid": "{{uid}}" }
+
+### 80. Lo que consulta el front: viaje en curso (segundosTranscurridos, origen, tarifa, tope)
 GET {{host}}/viajes/en-curso
 Authorization: Bearer {{login.response.body.acceso}}
 
-### 65. Terminal NFC: devolver bicicleta y finalizar viaje (HU_4)
-POST {{host}}/interno/devoluciones
-X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
+### 81. Segundo retiro con viaje en curso -> "Ya tiene un viaje en curso"
+POST {{nfc}}/estaciones/{{estOrigen.response.body.estacion.id}}/retiros
 Content-Type: application/json
 
-{
-  "anclajeId": 2,
-  "uid": "04A1B2C3",
-  "bloqueoDetectado": true
-}
+{ "anclaje": 2, "uid": "{{uid}}" }
 
-### 66. Terminal NFC: devolver bicicleta sin bloqueo detectado (debe dar 400)
-POST {{host}}/interno/devoluciones
-X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
+### 82. DEVOLUCIÓN sin sensor de bloqueo -> "No se detectó el bloqueo de la bicicleta. Verifique que esté bien encajada"
+POST {{nfc}}/estaciones/{{estDestino.response.body.estacion.id}}/devoluciones
 Content-Type: application/json
 
-{
-  "anclajeId": 2,
-  "uid": "04A1B2C3",
-  "bloqueoDetectado": false
-}
+{ "anclaje": 1, "uid": "{{uid}}", "bloqueoDetectado": false }
 
-### 67. Terminal NFC: devolver sin viaje en curso (debe dar 400 sin_viaje_en_curso)
-POST {{host}}/interno/devoluciones
-X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
+### 83. DEVOLUCIÓN en el destino, rápido (< 1 min) -> "VIAJE FINALIZADO CON ÉXITO", exceso 0
+POST {{nfc}}/estaciones/{{estDestino.response.body.estacion.id}}/devoluciones
 Content-Type: application/json
 
-{
-  "anclajeId": 2,
-  "uid": "04A1B2C3",
-  "bloqueoDetectado": true
-}
+{ "anclaje": 1, "uid": "{{uid}}", "bloqueoDetectado": true }
 
-### 68. Panel de control / Dashboard del Administrador (HU_22)
-GET {{host}}/admin/resumen
+### 84. Otra devolución sin viaje -> "La tarjeta no corresponde al viaje en curso"
+POST {{nfc}}/estaciones/{{estDestino.response.body.estacion.id}}/devoluciones
+Content-Type: application/json
+
+{ "anclaje": 2, "uid": "{{uid}}", "bloqueoDetectado": true }
+
+### 85. Resumen del último viaje (lo que mostrará el front al terminar)
+GET {{host}}/viajes/ultimo
 Authorization: Bearer {{login.response.body.acceso}}
 
+### 86. Tarjeta ilegible -> "No se pudo leer la tarjeta. Intente de nuevo"
+POST {{nfc}}/estaciones/{{estOrigen.response.body.estacion.id}}/retiros
+Content-Type: application/json
+
+{ "anclaje": 2, "uid": "ZZ" }
+
+### ============================================================
+### ESCENARIO 2: exceso PAGADO (esperar ~1 min 30 s entre 87 y 88)
+### Duración 2 min -> 1 min de exceso -> $100 descontados del saldo ($200 -> $100)
+### ============================================================
+
+### 87. RETIRO de la bicicleta que quedó en el destino (anclaje 1 de la estación destino)
+POST {{nfc}}/estaciones/{{estDestino.response.body.estacion.id}}/retiros
+Content-Type: application/json
+
+{ "anclaje": 1, "uid": "{{uid}}" }
+
+### 88. (esperar ~1:30) DEVOLUCIÓN en el origen, anclaje 3 -> exceso 1 min, valorCobrado 100, estadoCobro PAGADO
+POST {{nfc}}/estaciones/{{estOrigen.response.body.estacion.id}}/devoluciones
+Content-Type: application/json
+
+{ "anclaje": 3, "uid": "{{uid}}", "bloqueoDetectado": true }
+
+### 89. Verificar el cobro DIRECTO en TunjaAPI: debe haber un movimiento "Exceso de tiempo viaje #N" de $100
+GET {{tunja}}/users/{{login.response.body.usuario.id}}/wallet?limite=3
+X-API-Key: {{$dotenv TUNJA_CLAVE}}
+
+### ============================================================
+### ESCENARIO 3: cobro PENDIENTE (esperar ~4 min entre 90 y 91; saldo $100 < $400)
+### ============================================================
+
+### 90. RETIRO de la BIC-T002 (origen, anclaje 2)
+POST {{nfc}}/estaciones/{{estOrigen.response.body.estacion.id}}/retiros
+Content-Type: application/json
+
+{ "anclaje": 2, "uid": "{{uid}}" }
+
+### 91. (esperar ~4 min; saldo $100, el exceso será de ~$300) DEVOLUCIÓN en el destino, anclaje 2
+### Debe traer aviso: "El cobro por exceso quedó pendiente. Recargue su saldo para volver a usar el servicio"
+POST {{nfc}}/estaciones/{{estDestino.response.body.estacion.id}}/devoluciones
+Content-Type: application/json
+
+{ "anclaje": 2, "uid": "{{uid}}", "bloqueoDetectado": true }
+
+### 92. Nuevo retiro con cobro pendiente -> "Tiene un pago pendiente por exceso de tiempo. Recargue su saldo para continuar"
+POST {{nfc}}/estaciones/{{estOrigen.response.body.estacion.id}}/retiros
+Content-Type: application/json
+
+{ "anclaje": 1, "uid": "{{uid}}" }
+
+### 93. Billetera: debe mostrar el cobro pendiente
+GET {{host}}/billetera
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 94. Recargar $1.000 y pagar el cobro pendiente (HU_24 y HU_25)
+POST {{host}}/billetera/recargar
+Authorization: Bearer {{login.response.body.acceso}}
+Content-Type: application/json
+
+{ "monto": 1000 }
+
+### 95. Pagar cobro pendiente -> "COBRO PENDIENTE PAGADO CORRECTAMENTE"
+POST {{host}}/billetera/pagar-cobro
+Authorization: Bearer {{login.response.body.acceso}}
+
+### 96. Después de pagar el cobro: retiro de la BIC-T001 (destino, anclaje 1)
+POST {{nfc}}/estaciones/{{estDestino.response.body.estacion.id}}/retiros
+Content-Type: application/json
+
+{ "anclaje": 1, "uid": "{{uid}}" }
+
+### 97. Seguridad: la API interna sin clave debe dar 401
+POST {{host}}/interno/estaciones/1/retiros
+Content-Type: application/json
+
+{ "anclaje": 1, "uid": "{{uid}}" }
+
+### A. Onde está cada bicicleta agora (código, estado, estación y anclaje)
+GET {{host}}/admin/bicicletas
+Authorization: Bearer {{adminLogin.response.body.acceso}}
+
+### B. Anclajes da estação origem
+GET {{host}}/interno/estaciones/{{estOrigen.response.body.estacion.id}}/anclajes
+X-Clave-Interna: {{$dotenv CLAVE_INTERNA}}
+
+### C. Últimos viajes: origem, destino, estado e cobro
+GET {{host}}/historial/viajes
+Authorization: Bearer {{login.response.body.acceso}}
