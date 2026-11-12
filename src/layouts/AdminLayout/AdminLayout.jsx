@@ -10,12 +10,13 @@ import {
   IconoNfc,
   IconoAlerta,
   IconoUsuario,
+  IconoBilletera,
 } from '../../components/Iconos/Iconos.jsx';
 import { cerrarSesion } from '../../utils/auth.js';
 import { leerSesion } from '../../utils/sesion.js';
 import styles from './AdminLayout.module.css';
 
-// Los 7 módulos oficiales del Rol Administrador según especificación
+// Módulos oficiales del Rol Administrador (Gestión Central Tunja)
 const MENU = [
   { nombre: 'Panel de control', ruta: '/admin', icono: <IconoPanel /> },
   { nombre: 'Estaciones', ruta: '/admin/estaciones', icono: <IconoUbicacion /> },
@@ -24,6 +25,7 @@ const MENU = [
   { nombre: 'Tarjetas NFC', ruta: '/admin/tarjetas', icono: <IconoNfc /> },
   { nombre: 'Incidencias', ruta: '/admin/incidencias', icono: <IconoAlerta /> },
   { nombre: 'Cuentas', ruta: '/admin/cuentas', icono: <IconoUsuario /> },
+  { nombre: 'Billetera', ruta: '/admin/billetera', icono: <IconoBilletera /> },
 ];
 
 function AdminLayout({ itemActivo, children }) {

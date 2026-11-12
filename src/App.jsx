@@ -41,6 +41,7 @@ import AdminPlanesPage from './pages/administrador/planes-tarifas/PlanesTarifasP
 import AdminTarjetasPage from './pages/administrador/tarjetas/TarjetasPage.jsx';
 import AdminIncidenciasPage from './pages/administrador/incidencias/IncidenciasPage.jsx';
 import AdminCuentasPage from './pages/administrador/cuentas/CuentasPage.jsx';
+import AdminBilleteraPage from './pages/administrador/billetera/AdminBilleteraPage.jsx';
 
 function App() {
   return (
@@ -138,6 +139,14 @@ function App() {
             element={
               <RutaProtegida rol={ROLES.ADMINISTRADOR}>
                 <AdminCuentasPage />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/admin/billetera"
+            element={
+              <RutaProtegida rol={ROLES.ADMINISTRADOR}>
+                <AdminBilleteraPage />
               </RutaProtegida>
             }
           />

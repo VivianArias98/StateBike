@@ -11,5 +11,8 @@ router.get("/", controlador.listar);
 router.patch("/:id/inactivar", controlador.inactivar);
 router.patch("/:id/reactivar", controlador.reactivar);
 
-export default router;
+// Billetera y recarga en taquilla
+router.get("/:id/billetera", controlador.consultarBilletera);
+router.post("/:id/recargar", controlador.recargarSaldo);
 
+export default router;

@@ -214,3 +214,87 @@ export async function reactivarCuenta(adminId, usuarioId) {
   };
 }
 
+const MINIMO_RECARGA = 100;
+const MAXIMO_RECARGA = 500_000;
+const SALDO_MAXIMO_PERMITIDO = 2_000_000;
+
+/**
+ * Consulta la billetera de un usuario para la taquilla del administrador.
+ */
+export async function consultarBilleteraUsuario(usuarioId) {
+  const idObjetivo = Number(usuarioId);
+  const perfil = perfilesRepo.buscar(idObjetivo);
+  if (!perfil) {
+    throw new AppError(404, "usuario_no_encontrado");
+  }
+
+  let saldo = 0;
+  try {
+    const resp = await tunja(`/users/${idObjetivo}/wallet`);
+    saldo = resp?.saldo ?? 0;
+  } catch {
+    saldo = 0;
+  }
+
+  return {
+    usuarioId: idObjetivo,
+    nombreCompleto: perfil.nombre,
+    correo: perfil.correo,
+    saldo,
+  };
+}
+
+/**
+ * Recarga saldo a un usuario en taquilla por parte del administrador.
+ * Conecta de forma segura con TunjaAPI (/users/:id/wallet/topup) usando TUNJA_CLAVE en el servidor.
+ */
+export async function recargarSaldoUsuario(adminId, usuarioId, monto) {
+  const idObjetivo = Number(usuarioId);
+  const perfil = perfilesRepo.buscar(idObjetivo);
+  if (!perfil) {
+    throw new AppError(404, "usuario_no_encontrado");
+  }
+
+  const texto = String(monto ?? "").trim();
+  if (!/^\d+$/.test(texto)) {
+    throw new AppError(400, "monto_invalido");
+  }
+  const montoNum = Number(texto);
+  if (!Number.isSafeInteger(montoNum) || montoNum < MINIMO_RECARGA || montoNum > MAXIMO_RECARGA) {
+    throw new AppError(400, "monto_fuera_rango", {
+      mensaje: "El monto debe estar entre $100 y $500.000 COP",
+    });
+  }
+
+  let saldoActual = 0;
+  try {
+    const billetera = await tunja(`/users/${idObjetivo}/wallet`);
+    saldoActual = billetera?.saldo ?? 0;
+  } catch (err) {
+    if (err instanceof AppError) throw err;
+    throw new AppError(502, "tunja_no_responde");
+  }
+
+  if (saldoActual + montoNum > SALDO_MAXIMO_PERMITIDO) {
+    throw new AppError(400, "recarga_supera_maximo", {
+      mensaje: "La recarga supera el saldo máximo permitido de $2.000.000",
+    });
+  }
+
+  const resultado = await tunja(`/users/${idObjetivo}/wallet/topup`, {
+    metodo: "POST",
+    cuerpo: { monto: montoNum },
+  });
+
+  return {
+    mensaje: "RECARGA EN TAQUILLA EXITOSA",
+    usuarioId: idObjetivo,
+    nombreCompleto: perfil.nombre,
+    correo: perfil.correo,
+    saldoAnterior: saldoActual,
+    montoRecargado: montoNum,
+    nuevoSaldo: resultado?.saldo ?? (saldoActual + montoNum),
+  };
+}
+
+

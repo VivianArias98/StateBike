@@ -49,14 +49,18 @@ export async function consultarBilletera(usuarioId, token) {
   // Verificar si tiene cobro pendiente por exceso en SQLite
   const cobroPendiente = viajesRepo.obtenerCobroPendiente(usuarioId);
 
-  // Mapear movimientos consolidados
+  // Mapear movimientos consolidados según el formato de TunjaAPI
   const movimientos = movimientosTunja.map((m) => ({
     id: m.id || `mov-${Math.random()}`,
     fecha: m.fecha || m.created_at || m.creado || new Date().toISOString(),
-    tipo: m.tipo || (m.monto >= 0 ? "RECARGA" : "COBRO"),
-    concepto: m.concepto || (m.tipo === "TOPUP" ? "Recarga de saldo" : "Cobro de servicio"),
+    tipo: m.tipo || (m.operacion === "recarga" || m.monto >= 0 ? "RECARGA" : "COBRO"),
+    concepto:
+      m.concepto ||
+      (m.tipo === "TOPUP" || m.operacion === "recarga"
+        ? "Recarga de saldo"
+        : "Cobro de servicio"),
     monto: Math.abs(m.monto || 0),
-    saldoResultante: m.saldo_posterior ?? null,
+    saldoResultante: m.saldo ?? m.saldo_posterior ?? null,
     estado: "PAGADO",
   }));
 

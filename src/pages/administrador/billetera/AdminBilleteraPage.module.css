@@ -1,0 +1,351 @@
+/* AdminBilleteraPage.module.css */
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.barraAcciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+}
+
+.formularioBusqueda {
+  display: flex;
+  gap: var(--espacio-2);
+  width: 100%;
+}
+
+.contenedorInputBusqueda {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.inputBusqueda {
+  width: 100%;
+  height: 2.75rem;
+  background: var(--color-input-fondo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  padding: 0 var(--espacio-7) 0 var(--espacio-3);
+  font-size: var(--texto-s);
+}
+
+.inputBusqueda::placeholder {
+  color: var(--color-placeholder);
+}
+
+.inputBusqueda:focus {
+  outline: 2px solid var(--color-foco);
+  outline-offset: -1px;
+}
+
+.botonLimpiarInput {
+  position: absolute;
+  right: var(--espacio-3);
+  background: none;
+  border: none;
+  color: var(--color-texto-suave);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.botonLimpiarInput:hover {
+  color: var(--color-texto);
+}
+
+.botonBuscar {
+  height: 2.75rem;
+  padding: 0 var(--espacio-4);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border: none;
+  border-radius: var(--radio-m);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.botonRestablecer {
+  height: 2.75rem;
+  padding: 0 var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.botonRestablecer:hover {
+  border-color: var(--color-primario);
+}
+
+.contenedorTabla {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  overflow-x: auto;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--texto-s);
+}
+
+.tabla th {
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border-bottom: 1px solid var(--color-borde);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+}
+
+.tabla td {
+  padding: var(--espacio-3) var(--espacio-4);
+  border-bottom: 1px solid var(--color-borde);
+  vertical-align: middle;
+}
+
+.tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla tr:hover td {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.botonRecargar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border: none;
+  border-radius: var(--radio-m);
+  font-weight: 700;
+  font-size: var(--texto-xs);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.botonRecargar:hover {
+  opacity: 0.9;
+}
+
+/* Modal de recarga en taquilla */
+.modalFondo {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-4);
+}
+
+.modalTarjeta {
+  width: 100%;
+  max-width: 520px;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modalCabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+}
+
+.modalTitulo {
+  font-size: var(--texto-l);
+  font-weight: 700;
+}
+
+.modalCerrar {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.modalCuerpo {
+  padding: var(--espacio-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.infoUsuario {
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border-radius: var(--radio-m);
+  border-left: 4px solid var(--color-primario);
+}
+
+.infoNombre {
+  font-weight: 700;
+  font-size: var(--texto-m);
+  margin-bottom: 2px;
+}
+
+.infoDetalle {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.saldoActualBox {
+  margin-top: var(--espacio-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--espacio-2);
+  border-top: 1px solid var(--color-borde);
+  font-size: var(--texto-s);
+}
+
+.grillaSugeridos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espacio-2);
+}
+
+.botonSugerido {
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  font-weight: 600;
+  font-size: var(--texto-s);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.botonSugerido:hover {
+  border-color: var(--color-primario);
+}
+
+.sugeridoActivo {
+  background: var(--color-secundario, #e2f7db);
+  border-color: var(--color-primario);
+  color: var(--color-primario-texto, #153019);
+  font-weight: 700;
+}
+
+.sugeridoSub {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+.campoMonto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.inputMontoWrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  background: var(--color-fondo-pagina);
+  padding: 0 var(--espacio-3);
+}
+
+.prefijoMonto {
+  font-weight: 700;
+  font-size: var(--texto-l);
+  color: var(--color-texto-suave);
+  margin-right: var(--espacio-2);
+}
+
+.inputMonto {
+  flex: 1;
+  height: 2.75rem;
+  background: transparent;
+  color: var(--color-texto);
+  border: none;
+  font-size: var(--texto-l);
+  font-weight: 700;
+  outline: none;
+}
+
+.sufijoMonto {
+  font-weight: 600;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.ayudaLimites {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  line-height: 1.4;
+}
+
+.modalPie {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4) var(--espacio-5);
+  border-top: 1px solid var(--color-borde);
+}
+
+.botonConfirmar {
+  padding: var(--espacio-2) var(--espacio-5);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border: none;
+  border-radius: var(--radio-m);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.botonConfirmar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.botonCancelar {
+  padding: var(--espacio-2) var(--espacio-4);
+  background: transparent;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  cursor: pointer;
+}
+

@@ -199,6 +199,23 @@ export function UsuarioProvider({ children }) {
   // OPERACIONES CONECTADAS AL BACKEND REAL
   // ==========================================
 
+  // Sincronización en vivo exclusiva de la billetera
+  const actualizarBilletera = useCallback(async () => {
+    try {
+      const billeteraRes = await peticionAutenticada('/api/billetera').catch(() => null);
+      if (billeteraRes) {
+        setBilletera({
+          saldo: billeteraRes.saldo ?? 0,
+          tieneCobroPendiente: Boolean(billeteraRes.tieneCobroPendiente),
+          cobroPendiente: billeteraRes.cobroPendiente || null,
+          movimientos: billeteraRes.movimientos || [],
+        });
+      }
+    } catch {
+      // Ignorar fallos de red silenciosos
+    }
+  }, []);
+
   // Actualizar perfil (HU_1 -> PUT /api/perfil)
   const actualizarPerfil = async ({ nombreCompleto, telefono, contrasenaActual, nuevaContrasena }) => {
     try {
@@ -431,6 +448,7 @@ export function UsuarioProvider({ children }) {
         estaciones,
         planesCatalogo,
         cargarDatosUsuario,
+        actualizarBilletera,
         actualizarPerfil,
         toggleBloqueoTarjeta,
         recargarSaldo,
@@ -463,6 +481,7 @@ export function useUsuario() {
       historialPagos: [],
       incidencias: [],
       cargarDatosUsuario: async () => {},
+      actualizarBilletera: async () => {},
       actualizarPerfil: async () => {},
       toggleBloqueoTarjeta: async () => {},
       recargarSaldo: async () => {},
