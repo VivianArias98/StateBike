@@ -1,0 +1,75 @@
+/* ViajeEnCurso.module.css: base = celular */
+.raiz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espacio-5);
+  }
+  
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+  }
+  
+  .cabecera {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espacio-2);
+  }
+  
+  .bicicleta {
+    margin: 0;
+    font-size: var(--texto-2xl);
+    font-weight: 700;
+  }
+  
+  .cronometro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--espacio-1);
+    padding: var(--espacio-5);
+    border-radius: var(--radio-m);
+    background: var(--color-superficie-inversa);
+    color: var(--color-texto-inverso);
+  }
+  
+  .cronometroEtiqueta {
+    font-size: var(--texto-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .digitos {
+    font-family: var(--fuente-mono);
+    font-size: var(--texto-5xl);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .excedido {
+    color: var(--color-error-texto);
+  }
+  
+  .instruccion {
+    margin: 0;
+    font-size: var(--texto-s);
+    color: var(--color-texto-suave);
+  }
+  
+  .mapa {
+    --alto-mapa: 20rem;
+    min-width: 0;
+  }
+  
+  @media (min-width: 1024px) {
+    .raiz {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: start;
+    }
+  
+    .mapa {
+      --alto-mapa: 32rem;
+    }
+  }

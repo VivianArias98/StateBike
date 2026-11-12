@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { leerSesion, borrarSesion } from '../../../utils/sesion.js';
 
 const UsuarioContext = createContext(null);
+const INTERVALO_VIAJE_MS = 5000; // cada cuánto se consulta si hay un viaje en curso
 
 function leerToken() {
   try {
@@ -75,6 +76,8 @@ export function UsuarioProvider({ children }) {
   const [planesCatalogo, setPlanesCatalogo] = useState([]);
   const [estaciones, setEstaciones] = useState([]);
   const [viajeActivo, setViajeActivo] = useState(null);
+  const [ultimoViaje, setUltimoViaje] = useState(null); // resumen del viaje recién devuelto
+  const viajeIdRef = useRef(undefined); // undefined = todavía no se ha consultado
   const [historialViajes, setHistorialViajes] = useState([]);
   const [historialPagos, setHistorialPagos] = useState([]);
   const [incidencias, setIncidencias] = useState([]);
@@ -141,15 +144,7 @@ export function UsuarioProvider({ children }) {
         });
       }
 
-      // 5. Viaje en Curso
-      const viajeRes = await peticionAutenticada('/api/viajes/en-curso').catch(() => null);
-      if (viajeRes && viajeRes.enCurso && viajeRes.viaje) {
-        setViajeActivo(viajeRes.viaje);
-      } else {
-        setViajeActivo(null);
-      }
-
-      // 6. Historiales e Incidencias
+      //. Historiales e Incidencias
       const [viajesHistRes, pagosHistRes, incidenciasRes] = await Promise.all([
         peticionAutenticada('/api/historial/viajes').catch(() => ({ viajes: [] })),
         peticionAutenticada('/api/historial/pagos').catch(() => ({ pagos: [] })),
@@ -177,23 +172,53 @@ export function UsuarioProvider({ children }) {
     cargarDatosUsuario();
   }, [cargarDatosUsuario]);
 
-  // Cronómetro del viaje activo en vivo si existe
-  useEffect(() => {
-    if (!viajeActivo) return;
-    const interval = setInterval(() => {
-      setViajeActivo((prev) => {
-        if (!prev) return null;
-        const segundos = (prev.segundosTranscurridos || 0) + 1;
-        const minutos = Math.floor(segundos / 60);
-        return {
-          ...prev,
-          segundosTranscurridos: segundos,
-          minutosTranscurridos: minutos,
-        };
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [viajeActivo?.id]);
+    // El viaje lo inicia y lo cierra el tótem (API NFC): aquí solo se consulta al backend.
+    const sincronizarViaje = useCallback(async () => {
+      if (!leerToken()) return;
+      try {
+        const res = await peticionAutenticada('/api/viajes/en-curso');
+        const viaje = res.enCurso && res.viaje ? { ...res.viaje, recibidoEn: Date.now() } : null;
+        const idAnterior = viajeIdRef.current;
+        const idNuevo = viaje?.id ?? null;
+  
+        viajeIdRef.current = idNuevo;
+        setViajeActivo(viaje);
+  
+        if (idAnterior === undefined) return; // primera consulta: no hay cambio que avisar
+  
+        if (idAnterior === null && idNuevo) {
+          // El viaje empezó en el tótem
+          setUltimoViaje(null);
+          cargarDatosUsuario();
+        } else if (idAnterior && !idNuevo) {
+          // La bicicleta se devolvió en el tótem: se trae el resumen y se refrescan saldo y plan
+          const ultimo = await peticionAutenticada('/api/viajes/ultimo').catch(() => null);
+          if (ultimo?.viaje) setUltimoViaje(ultimo);
+          cargarDatosUsuario();
+        } else if (viaje) {
+          // Viaje en curso: se mantienen al día las bicicletas y anclajes de las estaciones
+          const resEstaciones = await fetch('/api/estaciones').then((r) => r.json()).catch(() => null);
+          if (resEstaciones) {
+            setEstaciones(Array.isArray(resEstaciones) ? resEstaciones : resEstaciones.estaciones || []);
+          }
+        }
+      } catch (err) {
+        if (err.status === 401 || err.status === 403) {
+          borrarSesion();
+          navigate('/login');
+        }
+      }
+    }, [cargarDatosUsuario, navigate]);
+  
+    useEffect(() => {
+      sincronizarViaje();
+      const intervalo = setInterval(() => {
+        if (document.visibilityState === 'visible') sincronizarViaje();
+      }, INTERVALO_VIAJE_MS);
+      return () => clearInterval(intervalo);
+    }, [sincronizarViaje]);
+  
+    const descartarUltimoViaje = () => setUltimoViaje(null);
 
   // ==========================================
   // OPERACIONES CONECTADAS AL BACKEND REAL
@@ -328,85 +353,6 @@ export function UsuarioProvider({ children }) {
     }
   };
 
-  // Iniciar Viaje (HU_3)
-  const iniciarViaje = async ({ estacionId = 1, anclajeId = 1, bicicletaId = 'BIC-001' }) => {
-    try {
-      const respuesta = await peticionAutenticada('/api/viajes/iniciar', {
-        method: 'POST',
-        body: JSON.stringify({ estacionId, anclajeId, bicicletaId }),
-      }).catch(async () => {
-        // Fallback simulador local con datos reales si el endpoint está en interno
-        const est = estaciones.find((e) => e.id === Number(estacionId)) || estaciones[0];
-        const nuevoViaje = {
-          id: `VJ-${Date.now().toString().slice(-5)}`,
-          bicicleta: bicicletaId,
-          estacionOrigen: est ? est.nombre : 'Estación Centro',
-          anclajeOrigen: anclajeId,
-          horaInicio: new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }),
-          fechaInicio: new Date().toISOString(),
-          segundosTranscurridos: 0,
-          minutosTranscurridos: 0,
-          minutosIncluidos: plan.planActivo ? plan.planActivo.tiempoViajeMin : 30,
-          valorMinutoExceso: plan.planActivo ? plan.planActivo.valorMinutoExceso : 100,
-        };
-        setViajeActivo(nuevoViaje);
-        return {
-          mensaje: `VIAJE INICIADO. ¡BUEN RECORRIDO! Tiene ${nuevoViaje.minutosIncluidos} minutos incluidos en su plan`,
-          viaje: nuevoViaje,
-        };
-      });
-
-      await cargarDatosUsuario();
-      return respuesta;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  // Finalizar Viaje (HU_4)
-  const finalizarViaje = async ({ estacionDestinoId = 1, anclajeDestinoId = 1 }) => {
-    try {
-      const respuesta = await peticionAutenticada('/api/viajes/finalizar', {
-        method: 'POST',
-        body: JSON.stringify({ estacionDestinoId, anclajeDestinoId }),
-      }).catch(async () => {
-        // Fallback simulador local
-        const est = estaciones.find((e) => e.id === Number(estacionDestinoId)) || estaciones[0];
-        const duracionMin = Math.max(1, viajeActivo?.minutosTranscurridos || 1);
-        const minutosIncluidos = viajeActivo?.minutosIncluidos || 30;
-        const excesoMin = Math.max(0, duracionMin - minutosIncluidos);
-        const cobroExceso = Math.min(excesoMin * 100, 5000);
-
-        const resumen = {
-          id: Date.now(),
-          codigo: viajeActivo ? viajeActivo.id : 'VJ-001',
-          bicicleta: viajeActivo ? viajeActivo.bicicleta : 'BIC-001',
-          origen: viajeActivo ? viajeActivo.estacionOrigen : 'Estación Centro',
-          destino: est ? est.nombre : 'Estación Destino',
-          anclajeDestino: anclajeDestinoId,
-          duracionMin,
-          minutosExceso: excesoMin,
-          costoExceso: cobroExceso,
-          fechaInicio: viajeActivo ? viajeActivo.fechaInicio : new Date().toISOString(),
-          fechaFin: new Date().toISOString(),
-        };
-
-        setViajeActivo(null);
-        return {
-          mensaje: cobroExceso > 0
-            ? `VIAJE FINALIZADO CON ÉXITO. Tiempo excedido: ${excesoMin} min. Cobro: $${cobroExceso.toLocaleString('es-CO')}`
-            : 'VIAJE FINALIZADO CON ÉXITO',
-          resumen,
-        };
-      });
-
-      await cargarDatosUsuario();
-      return respuesta;
-    } catch (err) {
-      throw err;
-    }
-  };
-
   // Reportar Incidencia (HU_6 -> POST /api/incidencias)
   const reportarIncidencia = async ({ tipo, bicicleta, estacion, descripcion }) => {
     try {
@@ -455,8 +401,8 @@ export function UsuarioProvider({ children }) {
         pagarCobroPendiente,
         adquirirPlan,
         cancelarPlan,
-        iniciarViaje,
-        finalizarViaje,
+        ultimoViaje,
+        descartarUltimoViaje,
         reportarIncidencia,
       }}
     >
@@ -489,8 +435,8 @@ export function useUsuario() {
       adquirirPlan: async () => {},
       cancelarPlan: async () => {},
       reportarIncidencia: async () => {},
-      iniciarViaje: async () => {},
-      finalizarViaje: async () => {},
+      ultimoViaje: null,
+      descartarUltimoViaje: () => {},
     };
   }
   return context;

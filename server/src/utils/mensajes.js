@@ -96,4 +96,5 @@ export const MENSAJES = {
     tarjeta_no_corresponde: "La tarjeta no corresponde al viaje en curso",
     cobro_exceso_pendiente: "El cobro por exceso quedó pendiente. Recargue su saldo para volver a usar el servicio",
     sin_viaje_en_curso: "No tiene un viaje en curso",
+    devolucion_sin_anclajes: "La estación no tiene anclajes libres, busque otra estación",
     };

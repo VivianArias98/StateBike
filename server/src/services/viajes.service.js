@@ -8,229 +8,188 @@ import * as suscripcionesRepo from "../repositories/suscripciones.repository.js"
 import * as anclajesRepo from "../repositories/anclajes.repository.js";
 import * as estacionesRepo from "../repositories/estaciones.repository.js";
 
-const TOPE_EXCESO_VIAJE = 5000; // HU_4 y HU_15: Tope máximo de $5.000 por cobro de exceso en un viaje
+const TOPE_EXCESO_VIAJE = 5000; // HU_4 y HU_15: tope por viaje
 
-/**
- * Desbloquear bicicleta e iniciar viaje (HU_3).
- * Llamado desde la terminal NFC física o simulador.
- */
-export function iniciarViaje({ anclajeId, uid }) {
-  if (!uid) {
-    throw new AppError(400, "no_se_pudo_leer_tarjeta");
-  }
+// SQLite guarda UTC como "YYYY-MM-DD HH:MM:SS"
+const aMs = (fecha) => new Date(fecha.includes("Z") ? fecha : fecha.replace(" ", "T") + "Z").getTime();
 
-  const uidLimpio = normalizarUid(uid);
-  const tarjeta = tarjetasRepo.buscarPorUid(uidLimpio);
+// Condiciones del plan: el activo, o el último si se canceló o venció durante el viaje
+function condicionesDelPlan(usuarioId) {
+  const plan = suscripcionesRepo.obtenerActiva(usuarioId) || suscripcionesRepo.obtenerUltima(usuarioId);
+  return {
+    minutosIncluidos: plan?.tiempo_viaje_min ?? 30,
+    valorMinutoExceso: plan?.valor_minuto_exceso ?? 100,
+  };
+}
+
+/** Desbloquear bicicleta e iniciar viaje (HU_3). Lo llama la API NFC. */
+export function iniciarViaje({ estacionId, anclaje, uid }) {
+  if (!uid) throw new AppError(400, "no_se_pudo_leer_tarjeta");
+
+  const tarjeta = tarjetasRepo.buscarPorUid(normalizarUid(uid));
   if (!tarjeta || tarjeta.estado !== "ACTIVA") {
     throw new AppError(400, "tarjeta_no_vinculada_o_bloqueada");
   }
-
   const usuarioId = tarjeta.usuario_id;
 
-  // 1. Debe tener un plan ACTIVO vigente (HU_3)
-  const planActivo = suscripcionesRepo.obtenerActiva(usuarioId);
-  if (!planActivo) {
-    throw new AppError(400, "sin_plan_activo");
+  // Plan activo y vigente: si ya venció se avisa distinto (criterio 7)
+  const plan = suscripcionesRepo.obtenerActiva(usuarioId);
+  if (!plan) {
+    const ultimo = suscripcionesRepo.obtenerUltima(usuarioId);
+    throw new AppError(400, ultimo?.estado === "VENCIDO" ? "plan_vencido" : "sin_plan_activo");
   }
-
-  // 2. No debe haber alcanzado el límite diario de viajes de su plan (HU_3)
-  const viajesHoy = viajesRepo.contarViajesHoy(usuarioId);
-  if (viajesHoy >= planActivo.viajes_por_dia) {
+  if (viajesRepo.contarViajesHoy(usuarioId) >= plan.viajes_por_dia) {
     throw new AppError(400, "limite_viajes_alcanzado");
   }
-
-  // 3. No debe tener cobros pendientes por exceso (HU_3)
   if (viajesRepo.tieneCobroPendiente(usuarioId)) {
     throw new AppError(400, "cobro_pendiente_bloquea");
   }
-
-  // 4. No debe tener ya otro viaje en curso (HU_3)
   if (viajesRepo.tieneViajeEnCurso(usuarioId)) {
     throw new AppError(400, "ya_tiene_viaje_en_curso");
   }
 
-  // 5. Validar anclaje y bicicleta disponible
-  const anclaje = anclajesRepo.buscarPorId(Number(anclajeId));
-  if (!anclaje || anclaje.estado !== "OCUPADO" || !anclaje.bicicletaId) {
+  // El anclaje debe ser de la estación del tótem y tener una bicicleta DISPONIBLE
+  const ancla = anclajesRepo.buscarPorEstacionYNumero(Number(estacionId), Number(anclaje));
+  if (!ancla || ancla.estado !== "OCUPADO" || ancla.bicicletaEstado !== "DISPONIBLE") {
     throw new AppError(400, "bicicleta_no_disponible");
   }
-  if (anclaje.bicicletaEstado !== "DISPONIBLE") {
-    throw new AppError(400, "bicicleta_no_disponible");
-  }
+  const estacion = estacionesRepo.buscarPorId(ancla.estacionId);
+  if (!estacion || estacion.estado !== "ACTIVE") throw new AppError(400, "estacion_inactiva");
 
-  // 6. Validar estación activa
-  const estacion = estacionesRepo.buscarPorId(anclaje.estacionId);
-  if (!estacion || estacion.estado !== "ACTIVE") {
-    throw new AppError(400, "estacion_inactiva");
-  }
-
-  // 7. Iniciar viaje atómicamente
   const viaje = viajesRepo.iniciarViaje({
     usuarioId,
-    bicicletaId: anclaje.bicicletaId,
+    bicicletaId: ancla.bicicletaId,
     estacionOrigenId: estacion.id,
-    anclajeOrigenId: anclaje.id,
+    anclajeOrigenId: ancla.id,
   });
 
-  const mensaje = `VIAJE INICIADO. ¡BUEN RECORRIDO! Tiene ${planActivo.tiempo_viaje_min} minutos incluidos en su plan`;
-
-  return {
-    mensaje,
-    viaje,
-    minutosIncluidos: planActivo.tiempo_viaje_min,
-  };
+  return { mensaje: MENSAJES.viaje_iniciado, minutosIncluidos: plan.tiempo_viaje_min, viaje };
 }
 
-/**
- * Devolver bicicleta y finalizar viaje (HU_4).
- * Valida sensor de bloqueo, calcula duración y exceso, aplica cobro y finaliza.
- */
-export async function finalizarViaje({ anclajeId, estacionId, uid, bloqueoDetectado = true }) {
-  // 1. Validar sensor de bloqueo físico
-  if (bloqueoDetectado === false) {
+/** Devolver bicicleta y finalizar viaje (HU_4). Lo llama la API NFC. */
+export async function finalizarViaje({ estacionId, anclaje, uid, bloqueoDetectado = true }) {
+  if (!uid) throw new AppError(400, "no_se_pudo_leer_tarjeta");
+
+  const estId = Number(estacionId);
+  const estacion = estacionesRepo.buscarPorId(estId);
+  if (!estacion) throw new AppError(404, "estacion_no_encontrada");
+
+  // 1. Anclaje donde se encaja la bicicleta
+  let anclajeDestino = null;
+  if (anclaje != null) {
+    anclajeDestino = anclajesRepo.buscarPorEstacionYNumero(estId, Number(anclaje));
+    if (!anclajeDestino) throw new AppError(404, "anclaje_no_encontrado");
+    if (anclajeDestino.estado !== "LIBRE") throw new AppError(409, "anclaje_no_libre");
+  } else if (anclajesRepo.contarLibres(estId) === 0) {
+    throw new AppError(400, "devolucion_sin_anclajes"); // criterio 2
+  }
+
+  // 2. Sin anclaje o sin sensor de bloqueo, la bicicleta no está encajada (criterio 3)
+  if (!anclajeDestino || bloqueoDetectado === false) {
     throw new AppError(400, "bloqueo_no_detectado");
   }
 
-  if (!uid) {
-    throw new AppError(400, "no_se_pudo_leer_tarjeta");
-  }
+  // 3. La tarjeta debe ser la del viaje en curso (criterio 4)
+  const tarjeta = tarjetasRepo.buscarPorUid(normalizarUid(uid));
+  if (!tarjeta) throw new AppError(400, "tarjeta_no_vinculada_o_bloqueada");
+  const viaje = viajesRepo.obtenerViajeEnCursoPorUsuario(tarjeta.usuario_id);
+  if (!viaje) throw new AppError(400, "tarjeta_no_corresponde");
 
-  const uidLimpio = normalizarUid(uid);
-  const tarjeta = tarjetasRepo.buscarPorUid(uidLimpio);
-  if (!tarjeta) {
-    throw new AppError(400, "tarjeta_no_vinculada_o_bloqueada");
-  }
+  // 4. La estación debe estar ACTIVE
+  if (estacion.estado !== "ACTIVE") throw new AppError(400, "estacion_inactiva");
 
-  const usuarioId = tarjeta.usuario_id;
-
-  // 2. Verificar viaje en curso del usuario
-  const viajeEnCurso = viajesRepo.obtenerViajeEnCursoPorUsuario(usuarioId);
-  if (!viajeEnCurso) {
-    throw new AppError(400, "sin_viaje_en_curso");
-  }
-
-  // 3. Validar anclaje libre en estación de destino activa
-  let anclajeDestinoId = null;
-  let estacionDestinoId = null;
-
-  if (anclajeId) {
-    const anclaje = anclajesRepo.buscarPorId(Number(anclajeId));
-    if (!anclaje || anclaje.estado !== "LIBRE") {
-      throw new AppError(400, "estacion_sin_anclajes_libres");
-    }
-    anclajeDestinoId = anclaje.id;
-    estacionDestinoId = anclaje.estacionId;
-  } else if (estacionId) {
-    const libre = anclajesRepo.buscarPrimerLibre(Number(estacionId));
-    if (!libre) {
-      throw new AppError(400, "estacion_sin_anclajes_libres");
-    }
-    anclajeDestinoId = libre.id;
-    estacionDestinoId = Number(estacionId);
-  } else {
-    throw new AppError(400, "estacion_sin_anclajes_libres");
-  }
-
-  const estacion = estacionesRepo.buscarPorId(estacionDestinoId);
-  if (!estacion || estacion.estado !== "ACTIVE") {
-    throw new AppError(400, "estacion_inactiva");
-  }
-
-  // 4. Calcular duración (redondeo hacia arriba al minuto iniciado, HU_4)
-  const fechaInicio = new Date(
-    viajeEnCurso.fechaInicio.includes("Z")
-      ? viajeEnCurso.fechaInicio
-      : viajeEnCurso.fechaInicio.replace(" ", "T") + "Z"
-  );
-  const duracionMin = Math.max(1, Math.ceil((Date.now() - fechaInicio.getTime()) / (1000 * 60)));
-
-  // 5. Determinar condiciones del plan contratado
-  const plan =
-    suscripcionesRepo.obtenerActiva(usuarioId) || suscripcionesRepo.obtenerUltima(usuarioId);
-  const minutosIncluidos = plan?.tiempo_viaje_min ?? 30;
-  const tarifaExceso = plan?.valor_minuto_exceso ?? 100;
-
-  // 6. Calcular minutos de exceso y valor cobrado (con tope de $5.000)
+  // 5. Duración y exceso (se cuenta el minuto iniciado)
+  const duracionMin = Math.max(1, Math.ceil((Date.now() - aMs(viaje.fechaInicio)) / 60000));
+  const { minutosIncluidos, valorMinutoExceso } = condicionesDelPlan(tarjeta.usuario_id);
   const minutosExceso = Math.max(0, duracionMin - minutosIncluidos);
-  let valorCobrado = 0;
-  let estadoCobro = "SIN_COBRO";
+  const valorCobrado = Math.min(minutosExceso * valorMinutoExceso, TOPE_EXCESO_VIAJE);
 
-  if (minutosExceso > 0) {
-    valorCobrado = Math.min(minutosExceso * tarifaExceso, TOPE_EXCESO_VIAJE);
-
-    // Intentar cobrar en TunjaAPI
-    let cobradoEnApi = false;
-    try {
-      await tunja(`/users/${usuarioId}/wallet/charge`, {
-        metodo: "POST",
-        cuerpo: {
-          monto: valorCobrado,
-          concepto: `Cobro exceso viaje #${viajeEnCurso.id} (${minutosExceso} min)`,
-        },
-      });
-      cobradoEnApi = true;
-    } catch {
-      // Si falta saldo o no responde la API externa, el cobro queda PENDIENTE
-      cobradoEnApi = false;
-    }
-
-    estadoCobro = cobradoEnApi ? "PAGADO" : "PENDIENTE";
-  }
-
-  // 7. Finalizar viaje en SQLite
-  const viajeFinalizado = viajesRepo.finalizarViaje({
-    viajeId: viajeEnCurso.id,
-    bicicletaId: viajeEnCurso.bicicletaId,
-    estacionDestinoId,
-    anclajeDestinoId,
+  // 6. Se cierra el viaje con el cobro PENDIENTE antes de cobrar: así nunca se cobra dos veces
+  viajesRepo.finalizarViaje({
+    viajeId: viaje.id,
+    bicicletaId: viaje.bicicletaId,
+    estacionDestinoId: estId,
+    anclajeDestinoId: anclajeDestino.id,
     duracionMin,
     minutosExceso,
     valorCobrado,
-    estadoCobro,
+    estadoCobro: valorCobrado > 0 ? "PENDIENTE" : "SIN_COBRO",
   });
 
-  let mensaje = "VIAJE FINALIZADO CON ÉXITO";
-  if (minutosExceso > 0) {
-    mensaje += `. Tiempo excedido: ${minutosExceso} min. Cobro: $${valorCobrado.toLocaleString("es-CO")}`;
-    if (estadoCobro === "PENDIENTE") {
-      mensaje += ". El cobro por exceso quedó pendiente. Recargue su saldo para volver a usar el servicio";
+  // 7. Se intenta descontar del saldo; si no alcanza o falla, queda PENDIENTE (HU_25)
+  if (valorCobrado > 0) {
+    try {
+      await tunja(`/users/${tarjeta.usuario_id}/wallet/charge`, {
+        metodo: "POST",
+        cuerpo: { monto: valorCobrado, concepto: `Exceso de tiempo viaje #${viaje.id}` },
+      });
+      viajesRepo.pagarCobroPendiente(viaje.id);
+    } catch (err) {
+      console.error("Cobro por exceso no realizado:", err.codigo ?? err.message);
     }
   }
 
+  const final = viajesRepo.buscarPorId(viaje.id);
   return {
-    mensaje,
-    viaje: viajeFinalizado,
-    duracionMin,
-    minutosExceso,
-    valorCobrado,
-    estadoCobro,
+    mensaje: MENSAJES.viaje_finalizado,
+    ...(final.estadoCobro === "PENDIENTE" && { aviso: MENSAJES.cobro_exceso_pendiente }),
+    resumen: resumenDe(final),
   };
 }
 
-/**
- * Consulta el viaje activo del usuario en sesión (para el frontend).
- */
+// Datos del resumen de HU_4: origen, destino, duración, minutos de exceso y valor cobrado
+function resumenDe(v) {
+  return {
+    id: v.id,
+    bicicleta: v.bicicletaCodigo,
+    origen: v.estacionOrigenNombre,
+    destino: v.estacionDestinoNombre,
+    duracionMin: v.duracionMin,
+    minutosExceso: v.minutosExceso,
+    valorCobrado: v.valorCobrado,
+    estadoCobro: v.estadoCobro,
+    fechaInicio: new Date(aMs(v.fechaInicio)).toISOString(),
+    fechaFin: v.fechaFin ? new Date(aMs(v.fechaFin)).toISOString() : null,
+  };
+}
+
+/** Viaje en curso del usuario en sesión (el front lo consulta cada pocos segundos). */
 export function consultarViajeEnCurso(usuarioId) {
   const viaje = viajesRepo.obtenerViajeEnCursoPorUsuario(usuarioId);
-  if (!viaje) {
-    return { enCurso: false, viaje: null };
-  }
+  if (!viaje) return { enCurso: false, viaje: null };
 
-  const fechaInicio = new Date(
-    viaje.fechaInicio.includes("Z") ? viaje.fechaInicio : viaje.fechaInicio.replace(" ", "T") + "Z"
-  );
-  const duracionMin = Math.max(1, Math.ceil((Date.now() - fechaInicio.getTime()) / (1000 * 60)));
-  const plan = suscripcionesRepo.obtenerActiva(usuarioId);
-  const minutosIncluidos = plan?.tiempo_viaje_min ?? 30;
+  const inicio = aMs(viaje.fechaInicio);
+  const segundos = Math.max(0, Math.floor((Date.now() - inicio) / 1000));
+  const minutosTranscurridos = Math.floor(segundos / 60);
+  const { minutosIncluidos, valorMinutoExceso } = condicionesDelPlan(usuarioId);
 
   return {
     enCurso: true,
     viaje: {
-      ...viaje,
-      duracionMin,
+      id: viaje.id,
+      bicicleta: viaje.bicicletaCodigo,
+      estacionOrigenId: viaje.estacionOrigenId,
+      estacionOrigen: viaje.estacionOrigenNombre,
+      origenLat: viaje.estacionOrigenLat,
+      origenLng: viaje.estacionOrigenLng,
+      fechaInicio: new Date(inicio).toISOString(),
+      segundosTranscurridos: segundos, // calculado en el servidor: no depende del reloj del celular
+      minutosTranscurridos,
       minutosIncluidos,
-      minutosExceso: Math.max(0, duracionMin - minutosIncluidos),
+      minutosExceso: Math.max(0, minutosTranscurridos - minutosIncluidos),
+      valorMinutoExceso,
+      topeExceso: TOPE_EXCESO_VIAJE,
     },
   };
 }
 
+/** Último viaje finalizado (resumen que se muestra al devolver la bicicleta). */
+export function consultarUltimoViaje(usuarioId) {
+  const viaje = viajesRepo.obtenerUltimoFinalizado(usuarioId);
+  if (!viaje) return { viaje: null };
+  return {
+    mensaje: MENSAJES.viaje_finalizado,
+    ...(viaje.estadoCobro === "PENDIENTE" && { aviso: MENSAJES.cobro_exceso_pendiente }),
+    viaje: resumenDe(viaje),
+  };
+}
