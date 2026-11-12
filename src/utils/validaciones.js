@@ -2,6 +2,8 @@
 const FORMATO_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LARGO_MAX_CORREO = 100;
 const LARGO_MIN_CONTRASENA = 8;
+const TIENE_LETRAS = /[a-zA-Z]/;
+const TIENE_NUMEROS = /[0-9]/;
 const EDAD_MINIMA = 18;
 
 const vacio = (valor) => typeof valor !== 'string' || valor.trim() === '';
@@ -38,12 +40,16 @@ export function validarRegistro(datos) {
   if (email.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(email)) {
     return 'Correo inválido';
   }
-  if (contrasena.length < LARGO_MIN_CONTRASENA) {
-    return 'La contraseña no cumple los requisitos';
+  if (
+    contrasena.length < LARGO_MIN_CONTRASENA ||
+    !TIENE_LETRAS.test(contrasena) ||
+    !TIENE_NUMEROS.test(contrasena)
+  ) {
+    return 'La contraseña debe tener mínimo 8 caracteres e incluir letras y números';
   }
   if (contrasena !== confirmacion) return 'Las contraseñas no coinciden';
   if (!esFechaValida(fechaNacimiento)) return 'La fecha de nacimiento no es válida';
-  if (!esMayorDeEdad(fechaNacimiento)) return 'Debe ser mayor de edad para registrarse';
+  if (!esMayorDeEdad(fechaNacimiento)) return 'Debe ser mayor de edad para poder crear una cuenta';
   if (aceptaTerminos !== true) return 'Debe aceptar los términos y condiciones para registrarse';
   return null;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
 import { iniciarSesion } from '../../../../utils/auth.js';
@@ -36,6 +36,19 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [enviando, setEnviando] = useState(false);
 
+  // El mensaje de error permanece visible durante 4 segundos y luego desaparece automáticamente
+  useEffect(() => {
+    if (!error) return undefined;
+    const temporizador = setTimeout(() => {
+      setError('');
+    }, 4000);
+    return () => clearTimeout(temporizador);
+  }, [error]);
+
+  function limpiarError() {
+    if (error) setError('');
+  }
+
   async function enviar(evento) {
     evento.preventDefault();
     setError('');
@@ -43,6 +56,11 @@ function LoginForm() {
     const errorLocal = validarLogin({ correo, contrasena });
     if (errorLocal) {
       setError(errorLocal);
+      if (!correo.trim()) {
+        document.getElementById('correo')?.focus();
+      } else if (!contrasena) {
+        document.getElementById('password')?.focus();
+      }
       return;
     }
 
@@ -63,7 +81,39 @@ function LoginForm() {
       <p className={styles.subtitulo}>Ingresa con tu correo y contraseña</p>
 
       {mensajeRegistro && <p className={styles.mensajeExito} role="status">{mensajeRegistro}</p>}
-      {error && <p className="mensaje-error" role="alert">{error}</p>}
+
+      {error && (
+        <div
+          className="mensaje-error"
+          role="alert"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 'var(--espacio-2)',
+            marginBottom: 'var(--espacio-4)',
+          }}
+        >
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={() => setError('')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'inherit',
+              fontSize: '1.25rem',
+              lineHeight: 1,
+              cursor: 'pointer',
+              padding: '0 4px',
+              opacity: 0.8,
+            }}
+            aria-label="Cerrar aviso de error"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       <div className={`campo ${styles.campo}`}>
         <label htmlFor="correo" className={styles.etiqueta}>Correo electrónico</label>
@@ -73,7 +123,11 @@ function LoginForm() {
           className={`input ${styles.entrada}`}
           placeholder="nombre@correo.com"
           value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
+          onChange={(e) => {
+            limpiarError();
+            setCorreo(e.target.value);
+          }}
+          onFocus={limpiarError}
           autoComplete="email"
         />
       </div>
@@ -87,7 +141,11 @@ function LoginForm() {
             className={`input ${styles.entrada} ${styles.conOjo}`}
             placeholder="Tu contraseña"
             value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
+            onChange={(e) => {
+              limpiarError();
+              setContrasena(e.target.value);
+            }}
+            onFocus={limpiarError}
             autoComplete="current-password"
           />
           <button

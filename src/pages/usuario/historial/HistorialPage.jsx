@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import {
   IconoBilletera,
@@ -17,7 +17,8 @@ import FiltroActivo from './components/FiltroActivo.jsx';
 import TablaPagos from './components/TablaPagos.jsx';
 import { useUsuario } from '../context/UsuarioContext.jsx';
 import { formatearPesos } from '../formato.js';
-import { formatearFechaBogota } from '../../../utils/formatoMoneda.js';
+import { formatearFechaBogota, extraerFechaBogota } from '../../../utils/formatoMoneda.js';
+import { descargarCSV, generarComprobantePDF } from '../../../utils/descargas.js';
 import styles from './HistorialPage.module.css';
 
 function formatearTiempoTotal(minutos) {
@@ -34,30 +35,32 @@ function formatearFechaCorta(fechaIso) {
 }
 
 function HistorialPage() {
-  const { historialViajes, billetera } = useUsuario();
+  const { historialViajes, billetera, perfil } = useUsuario();
   const [tabActivo, setTabActivo] = useState('viajes'); // 'viajes' | 'pagos'
   const [desde, setDesde] = useState('');
   const [hasta, setHasta] = useState('');
   const [periodoMostrado, setPeriodoMostrado] = useState({ desde: '', hasta: '' });
   const [avisoDescarga, setAvisoDescarga] = useState('');
+  const [errorFiltro, setErrorFiltro] = useState('');
 
   // 1. Datos formateados de Viajes
   const listaViajes = historialViajes.map((v) => ({
     id: v.id,
     fechaHora: formatearFechaBogota(v.fechaInicio),
-    fecha: v.fechaInicio ? v.fechaInicio.slice(0, 10) : '',
+    fecha: extraerFechaBogota(v.fechaInicio),
     origen: v.origen,
     destino: v.destino,
-    duracion: v.duracionMin,
-    minutosExceso: v.minutosExceso,
-    costoExceso: v.costoExceso,
+    duracion: v.duracion ?? v.duracionMin ?? 0,
+    minutosExceso: v.minutosExceso ?? 0,
+    costoExceso: v.costoExceso ?? 0,
   }));
 
   // 2. Datos formateados de Pagos
-  const listaPagos = (billetera.movimientos || []).map((m) => ({
+  const movimientosPagos = billetera.movimientos?.length ? billetera.movimientos : [];
+  const listaPagos = movimientosPagos.map((m) => ({
     id: m.id,
     fechaHora: formatearFechaBogota(m.fecha),
-    fecha: m.fecha ? m.fecha.slice(0, 10) : '',
+    fecha: extraerFechaBogota(m.fecha),
     concepto: m.concepto,
     tipo:
       m.tipo === 'COBRO_EXCESO'
@@ -69,16 +72,26 @@ function HistorialPage() {
     estado: m.estado === 'PAGADO' ? 'Pagado' : 'Pendiente',
   }));
 
-  // Filtrado
-  const viajesFiltrados = listaViajes.filter(
-    (v) => (!periodoMostrado.desde || v.fecha >= periodoMostrado.desde) && (!periodoMostrado.hasta || v.fecha <= periodoMostrado.hasta)
-  );
+  // Filtrado de Viajes
+  const viajesFiltrados = listaViajes.filter((v) => {
+    if (periodoMostrado.desde && v.fecha < periodoMostrado.desde) return false;
+    if (periodoMostrado.hasta && v.fecha > periodoMostrado.hasta) return false;
+    return true;
+  });
 
-  const pagosFiltrados = listaPagos.filter(
-    (p) => (!periodoMostrado.desde || p.fecha >= periodoMostrado.desde) && (!periodoMostrado.hasta || p.fecha <= periodoMostrado.hasta)
-  );
+  // Filtrado de Pagos
+  const pagosFiltrados = listaPagos.filter((p) => {
+    if (periodoMostrado.desde && p.fecha < periodoMostrado.desde) return false;
+    if (periodoMostrado.hasta && p.fecha > periodoMostrado.hasta) return false;
+    return true;
+  });
 
   const handleConsultar = () => {
+    setErrorFiltro('');
+    if (desde && hasta && desde > hasta) {
+      setErrorFiltro('La fecha final (Hasta) no puede ser anterior a la fecha inicial (Desde).');
+      return;
+    }
     setPeriodoMostrado({ desde, hasta });
   };
 
@@ -86,6 +99,7 @@ function HistorialPage() {
     setDesde('');
     setHasta('');
     setPeriodoMostrado({ desde: '', hasta: '' });
+    setErrorFiltro('');
   };
 
   // Métricas
@@ -97,11 +111,93 @@ function HistorialPage() {
 
   const periodoTexto =
     periodoMostrado.desde && periodoMostrado.hasta
-      ? `${formatearFechaCorta(periodoMostrado.desde)} – ${formatearFechaCorta(periodoMostrado.hasta)}`
+      ? periodoMostrado.desde === periodoMostrado.hasta
+        ? `${formatearFechaCorta(periodoMostrado.desde)}`
+        : `${formatearFechaCorta(periodoMostrado.desde)} – ${formatearFechaCorta(periodoMostrado.hasta)}`
+      : periodoMostrado.desde
+      ? `Desde ${formatearFechaCorta(periodoMostrado.desde)}`
+      : periodoMostrado.hasta
+      ? `Hasta ${formatearFechaCorta(periodoMostrado.hasta)}`
       : 'Todos los registros históricos';
 
-  const simularDescarga = (formato) => {
-    setAvisoDescarga(`Generando reporte en formato ${formato.toUpperCase()}... Archivo listo para descarga.`);
+  const handleDescargarPagosCSV = () => {
+    const encabezados = ['ID', 'Fecha y hora', 'Concepto / Detalle', 'Tipo de pago', 'Monto (COP)', 'Estado'];
+    const filas = pagosFiltrados.map((p) => [
+      `#${p.id}`,
+      p.fechaHora,
+      p.concepto,
+      p.tipo,
+      p.monto,
+      p.estado,
+    ]);
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+    descargarCSV(`comprobante_pagos_stationbike_${fechaHoy}.csv`, encabezados, filas);
+    setAvisoDescarga('Descarga de comprobante en formato CSV completada con éxito.');
+    setTimeout(() => setAvisoDescarga(''), 3500);
+  };
+
+  const handleDescargarPagosPDF = () => {
+    generarComprobantePDF({
+      titulo: 'Comprobante Oficial de Historial de Pagos y Billetera',
+      usuario: perfil,
+      periodo: periodoTexto,
+      metricas: [
+        { etiqueta: 'Total transacciones', valor: pagosFiltrados.length },
+        { etiqueta: 'Total debitado / pagado', valor: `${formatearPesos(totalPagado)} COP` },
+        { etiqueta: 'Saldo actual billetera', valor: `${formatearPesos(billetera.saldo)} COP` },
+      ],
+      columnas: ['ID Transacción', 'Fecha y hora', 'Concepto / Detalle', 'Tipo de movimiento', 'Monto (COP)', 'Estado'],
+      filas: pagosFiltrados.map((p) => [
+        `#${p.id}`,
+        p.fechaHora,
+        p.concepto,
+        p.tipo,
+        `${formatearPesos(p.monto)} COP`,
+        p.estado,
+      ]),
+    });
+    setAvisoDescarga('Generando comprobante oficial para impresión o guardado como PDF...');
+    setTimeout(() => setAvisoDescarga(''), 3500);
+  };
+
+  const handleDescargarViajesCSV = () => {
+    const encabezados = ['ID Viaje', 'Fecha y hora', 'Origen', 'Destino', 'Duración (min)', 'Minutos exceso', 'Costo exceso (COP)'];
+    const filas = viajesFiltrados.map((v) => [
+      `#${v.id}`,
+      v.fechaHora,
+      v.origen,
+      v.destino,
+      v.duracion,
+      v.minutosExceso || 0,
+      v.costoExceso || 0,
+    ]);
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+    descargarCSV(`reporte_viajes_stationbike_${fechaHoy}.csv`, encabezados, filas);
+    setAvisoDescarga('Descarga de reporte de viajes en formato CSV completada con éxito.');
+    setTimeout(() => setAvisoDescarga(''), 3500);
+  };
+
+  const handleDescargarViajesPDF = () => {
+    generarComprobantePDF({
+      titulo: 'Reporte Oficial de Historial de Viajes',
+      usuario: perfil,
+      periodo: periodoTexto,
+      metricas: [
+        { etiqueta: 'Total recorridos', valor: totalRecorridos },
+        { etiqueta: 'Tiempo acumulado', valor: formatearTiempoTotal(tiempoTotal) },
+      ],
+      columnas: ['ID Viaje', 'Fecha y hora', 'Estación Origen', 'Estación Destino', 'Duración', 'Minutos Exceso', 'Costo Exceso'],
+      filas: viajesFiltrados.map((v) => [
+        `#${v.id}`,
+        v.fechaHora,
+        v.origen,
+        v.destino,
+        `${v.duracion} min`,
+        `${v.minutosExceso || 0} min`,
+        `${formatearPesos(v.costoExceso || 0)} COP`,
+      ]),
+    });
+    setAvisoDescarga('Generando reporte oficial de viajes para impresión o guardado como PDF...');
     setTimeout(() => setAvisoDescarga(''), 3500);
   };
 
@@ -119,13 +215,16 @@ function HistorialPage() {
           acciones={
             <SelectorHistorial
               activo={tabActivo}
-              onCambiar={(nuevoTab) => {
-                setTabActivo(nuevoTab);
-                handleLimpiar();
-              }}
+              onCambiar={(nuevoTab) => setTabActivo(nuevoTab)}
             />
           }
         />
+
+        {errorFiltro && (
+          <div className="alerta alerta--error" role="alert" style={{ marginBottom: 'var(--espacio-3)' }}>
+            ⚠️ {errorFiltro}
+          </div>
+        )}
 
         {avisoDescarga && (
           <div className="alerta alerta--exito" role="status" style={{ marginBottom: 'var(--espacio-3)' }}>
@@ -153,17 +252,20 @@ function HistorialPage() {
             />
 
             <section className={`tarjeta ${styles.tablaTarjeta}`}>
-              <TablaViajes viajes={viajesFiltrados} />
+              <TablaViajes
+                viajes={viajesFiltrados}
+                hayFiltro={Boolean(periodoMostrado.desde || periodoMostrado.hasta)}
+              />
 
               <div className={styles.pie}>
                 <p className={styles.resumen}>
                   Mostrando <strong>{viajesFiltrados.length}</strong> recorridos en el rango seleccionado
                 </p>
                 <div className={styles.descargas}>
-                  <button type="button" className="boton" onClick={() => simularDescarga('PDF')}>
+                  <button type="button" className="boton" onClick={handleDescargarViajesPDF}>
                     <IconoDocumento /> Descargar reporte PDF
                   </button>
-                  <button type="button" className="boton" onClick={() => simularDescarga('CSV')}>
+                  <button type="button" className="boton" onClick={handleDescargarViajesCSV}>
                     <IconoDescarga /> Descargar CSV
                   </button>
                 </div>
@@ -171,8 +273,8 @@ function HistorialPage() {
             </section>
 
             <FiltroActivo
-              texto="Si ningún viaje coincide, el sistema informará: «No hay registros para el rango seleccionado»."
-              estado={`ESTADO: ${viajesFiltrados.length} VIAJES ENCONTRADOS`}
+              texto={periodoTexto}
+              estado={`ESTADO: ${viajesFiltrados.length} ${viajesFiltrados.length === 1 ? 'VIAJE ENCONTRADO' : 'VIAJES ENCONTRADOS'}`}
             />
           </>
         ) : (
@@ -205,17 +307,20 @@ function HistorialPage() {
             </div>
 
             <section className={`tarjeta ${styles.tablaTarjeta}`}>
-              <TablaPagos pagos={pagosFiltrados} />
+              <TablaPagos
+                pagos={pagosFiltrados}
+                hayFiltro={Boolean(periodoMostrado.desde || periodoMostrado.hasta)}
+              />
 
               <div className={styles.pie}>
                 <p className={styles.resumen}>
                   Mostrando <strong>{pagosFiltrados.length}</strong> movimientos en el rango seleccionado
                 </p>
                 <div className={styles.descargas}>
-                  <button type="button" className="boton" onClick={() => simularDescarga('PDF')}>
+                  <button type="button" className="boton" onClick={handleDescargarPagosPDF}>
                     <IconoDocumento /> Descargar comprobante PDF
                   </button>
-                  <button type="button" className="boton" onClick={() => simularDescarga('CSV')}>
+                  <button type="button" className="boton" onClick={handleDescargarPagosCSV}>
                     <IconoDescarga /> Descargar CSV
                   </button>
                 </div>
@@ -223,8 +328,8 @@ function HistorialPage() {
             </section>
 
             <FiltroActivo
-              texto="Si ningún pago coincide, el sistema informará: «No hay registros para el rango seleccionado»."
-              estado={`ESTADO: ${pagosFiltrados.length} PAGOS ENCONTRADOS`}
+              texto={periodoTexto}
+              estado={`ESTADO: ${pagosFiltrados.length} ${pagosFiltrados.length === 1 ? 'PAGO ENCONTRADO' : 'PAGOS ENCONTRADOS'}`}
             />
           </>
         )}

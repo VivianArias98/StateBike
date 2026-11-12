@@ -33,3 +33,24 @@ export function formatearFechaBogota(fechaUtc, { conHora = true } = {}) {
   }
   return fecha.toLocaleString('es-CO', opciones);
 }
+
+// Extrae la fecha en formato "YYYY-MM-DD" en la zona horaria de Colombia (America/Bogota).
+// Permite comparar correctamente con los valores de los inputs date (desde / hasta).
+export function extraerFechaBogota(fechaRaw) {
+  if (!fechaRaw) return '';
+  const texto = String(fechaRaw).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
+    return texto;
+  }
+  const tieneZona = /([zZ]|[+-]\d{2}:\d{2})$/.test(texto);
+  const d = new Date(tieneZona ? texto : `${texto.replace(' ', 'T')}Z`);
+  if (Number.isNaN(d.getTime())) {
+    return texto.slice(0, 10);
+  }
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Bogota',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(d);
+}

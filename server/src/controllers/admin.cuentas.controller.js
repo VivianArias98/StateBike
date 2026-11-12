@@ -14,3 +14,12 @@ export async function reactivar(req, res) {
   res.json(resultado);
 }
 
+export async function consultarBilletera(req, res) {
+  const resultado = await cuentas.consultarBilleteraUsuario(req.params.id);
+  res.json(resultado);
+}
+
+export async function recargarSaldo(req, res) {
+  const resultado = await cuentas.recargarSaldoUsuario(req.usuario.id, req.params.id, req.body.monto);
+  res.json(resultado);
+}

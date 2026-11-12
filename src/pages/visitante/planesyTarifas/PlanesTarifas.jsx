@@ -90,7 +90,7 @@ function PlanesTarifas() {
   }
 
   return (
-    <VisitanteLayout itemActivo="Planes y tarifas" conUsuario>
+    <VisitanteLayout itemActivo="Planes y tarifas">
       <div className={styles.raiz}>
         <div className={styles.encabezado}>
           <div className={styles.encabezadoTexto}>

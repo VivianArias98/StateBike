@@ -1,6 +1,12 @@
-/* Se usa junto a la clase global "contexto-oscuro" (texto y bordes claros) */
+/* Se usa junto a la clase global "contexto-oscuro" (texto y bordes claros)
+   Fijado en la parte superior para mantenerse visible durante el desplazamiento. */
 .raiz {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
   background: var(--color-superficie-inversa);
+  border-bottom: 1px solid var(--color-borde-suave);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Base = celular: logo + botón de menú; el resto queda plegado */
