@@ -9,7 +9,7 @@ const TEXTOS = {
   error_interno: 'Error interno del servidor. Intenta de nuevo',
   sin_permisos: 'No tienes permisos para acceder a esta sección',
   correo_ya_registrado: 'El correo ya se encuentra registrado',
-  contrasena_debil: 'La contraseña no cumple los requisitos mínimos',
+  contrasena_debil: 'La contraseña debe tener mínimo 8 caracteres e incluir letras y números',
   correo_invalido: 'El correo electrónico no es válido',
   token_requerido: 'Debes iniciar sesión para continuar',
   token_expirado: 'Tu sesión expiró. Vuelve a iniciar sesión',
@@ -20,5 +20,12 @@ const TEXTOS = {
 };
 
 export function textoError(error) {
+  if (
+    error?.codigo === 'contrasena_debil' ||
+    error?.mensaje === 'La contraseña no cumple los requisitos' ||
+    error?.mensaje === 'La contraseña no cumple los requisitos mínimos'
+  ) {
+    return 'La contraseña debe tener mínimo 8 caracteres e incluir letras y números';
+  }
   return error?.mensaje || TEXTOS[error?.codigo] || TEXTOS.error_servidor;
 }

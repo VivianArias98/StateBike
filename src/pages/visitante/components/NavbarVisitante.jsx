@@ -1,6 +1,7 @@
 import Logo from '../../../components/Logo/Logo.jsx';
 import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
 import { Icono } from './IconosVisitante.jsx';
+import { leerSesion, rutaInicio } from '../../../utils/sesion.js';
 import styles from './NavbarVisitante.module.css';
 
 // Enlaces del navbar del visitante (mismo orden que el mockup)
@@ -12,8 +13,11 @@ const ENLACES = [
 ];
 
 // Componente de presentación: el estado del menú llega desde el layout.
-// conUsuario: muestra el icono de la persona a la derecha (Estaciones y Planes).
-function NavbarVisitante({ itemActivo, menuAbierto, onAlternarMenu, conUsuario = false }) {
+// Detecta automáticamente si hay sesión activa para mostrar acceso a su panel o los botones de Iniciar sesión / Registrarse.
+function NavbarVisitante({ itemActivo, menuAbierto, onAlternarMenu }) {
+  const sesion = leerSesion();
+  const usuario = sesion?.usuario;
+
   return (
     <header className={`contexto-oscuro ${styles.raiz}`}>
       <div className={styles.barra}>
@@ -58,10 +62,18 @@ function NavbarVisitante({ itemActivo, menuAbierto, onAlternarMenu, conUsuario =
         </nav>
 
         <div className={styles.acciones}>
-          {conUsuario ? (
-            <span className={styles.avatar} role="img" aria-label="Mi cuenta">
-              <Icono nombre="usuario" />
-            </span>
+          {usuario ? (
+            <a
+              href={rutaInicio(usuario.rol)}
+              className={`boton boton--s ${styles.pastilla}`}
+              title={`Sesión iniciada como ${usuario.nombre || 'Usuario'}`}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--espacio-2)' }}
+            >
+              <span className={styles.avatar} role="img" aria-hidden="true" style={{ width: '1.8rem', height: '1.8rem' }}>
+                <Icono nombre="usuario" />
+              </span>
+              <span>Mi cuenta</span>
+            </a>
           ) : (
             <>
               <a href="/login" className={`boton boton--s ${styles.pastilla}`}>

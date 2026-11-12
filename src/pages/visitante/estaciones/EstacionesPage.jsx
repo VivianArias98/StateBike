@@ -110,7 +110,7 @@ function EstacionesPage() {
   }
 
   return (
-    <VisitanteLayout itemActivo="Estaciones" conUsuario>
+    <VisitanteLayout itemActivo="Estaciones">
       <div className={styles.raiz}>
         <header>
           <h1 className={styles.titulo}>
