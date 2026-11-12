@@ -4,9 +4,15 @@ import styles from './TablaPagos.module.css';
 
 // Componente de presentación: dibuja la tabla de pagos recibida por props.
 // La lógica de filtrado vive en HistorialPagosPage.
-function TablaPagos({ pagos }) {
+function TablaPagos({ pagos, hayFiltro = false }) {
   if (pagos.length === 0) {
-    return <p className={styles.vacio}>No hay registros para el rango seleccionado.</p>;
+    return (
+      <p className={styles.vacio}>
+        {hayFiltro
+          ? 'No se encontraron registros de pagos ni recargas en el rango seleccionado.'
+          : 'Aún no tienes pagos ni recargas registradas en tu cuenta.'}
+      </p>
+    );
   }
 
   return (
@@ -24,16 +30,16 @@ function TablaPagos({ pagos }) {
         <tbody>
           {pagos.map((pago) => (
             <tr key={pago.id}>
-              <td>
+              <td className={styles.celdaFecha}>
                 <span className={`punto-vivo ${styles.punto}`} aria-hidden="true" />
                 <span className={styles.fecha}>{pago.fechaHora}</span>
               </td>
-              <td>{pago.concepto}</td>
-              <td>
+              <td className={styles.celdaConcepto}>{pago.concepto}</td>
+              <td className={styles.celdaTipo}>
                 <Etiqueta texto={pago.tipo} color={pago.tipo === 'Cobro por exceso' ? 'amarilla' : 'menta'} />
               </td>
               <td className={styles.monto}>{formatearPesos(pago.monto)} COP</td>
-              <td>
+              <td className={styles.celdaEstado}>
                 {pago.estado === 'Pendiente' ? (
                   <Etiqueta texto="Pendiente" color="amarilla" />
                 ) : (

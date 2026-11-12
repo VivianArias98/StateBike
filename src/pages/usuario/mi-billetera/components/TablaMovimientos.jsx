@@ -1,5 +1,7 @@
 import { formatearPesos } from '../../formato.js';
 import { formatearFechaBogota } from '../../../../utils/formatoMoneda.js';
+import { IconoDocumento, IconoDescarga } from '../../../../components/Iconos/Iconos.jsx';
+import { descargarCSV, generarComprobantePDF } from '../../../../utils/descargas.js';
 import styles from './TablaMovimientos.module.css';
 
 // Tipos que suman al saldo; el resto (compras de plan, cobros) restan
@@ -7,14 +9,78 @@ const TIPOS_INGRESO = ['RECARGA', 'TOPUP'];
 
 // Historial de movimientos de la billetera, del más reciente al más antiguo (HU_23).
 // El orden ya lo entrega el backend.
-function TablaMovimientos({ movimientos }) {
+function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
+  const handleDescargarCSV = () => {
+    const encabezados = ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo resultante'];
+    const filas = movimientos.map((m) => {
+      const ingreso = TIPOS_INGRESO.includes(String(m.tipo).toUpperCase());
+      return [
+        `#${m.id}`,
+        m.tipo,
+        m.concepto,
+        formatearFechaBogota(m.fecha),
+        (ingreso ? '+' : '-') + formatearPesos(m.monto) + ' COP',
+        m.saldoResultante != null ? formatearPesos(m.saldoResultante) + ' COP' : '—',
+      ];
+    });
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+    descargarCSV(`movimientos_billetera_stationbike_${fechaHoy}.csv`, encabezados, filas);
+  };
+
+  const handleDescargarPDF = () => {
+    generarComprobantePDF({
+      titulo: 'Comprobante Oficial de Movimientos de Billetera',
+      usuario: perfil,
+      periodo: 'Histórico completo registrado',
+      metricas: [
+        { etiqueta: 'Saldo disponible', valor: `${formatearPesos(saldo)} COP` },
+        { etiqueta: 'Total movimientos', valor: movimientos.length },
+      ],
+      columnas: ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo Resultante'],
+      filas: movimientos.map((m) => {
+        const ingreso = TIPOS_INGRESO.includes(String(m.tipo).toUpperCase());
+        return [
+          `#${m.id}`,
+          m.tipo,
+          m.concepto,
+          formatearFechaBogota(m.fecha),
+          (ingreso ? '+' : '-') + `${formatearPesos(m.monto)} COP`,
+          m.saldoResultante != null ? `${formatearPesos(m.saldoResultante)} COP` : '—',
+        ];
+      }),
+    });
+  };
+
   return (
     <section className={styles.raiz} aria-labelledby="movimientos-titulo">
       <div className={styles.cabecera}>
-        <h2 id="movimientos-titulo" className={styles.titulo}>
-          Historial de Movimientos
-        </h2>
-        <p className={styles.subtitulo}>Del más reciente al más antiguo</p>
+        <div>
+          <h2 id="movimientos-titulo" className={styles.titulo}>
+            Historial de Movimientos
+          </h2>
+          <p className={styles.subtitulo}>Del más reciente al más antiguo</p>
+        </div>
+
+        {movimientos.length > 0 && (
+          <div className={styles.accionesDescarga}>
+            <button
+              type="button"
+              className={styles.botonExportar}
+              onClick={handleDescargarPDF}
+              title="Descargar comprobante en PDF"
+            >
+              <IconoDocumento /> Descargar comprobante PDF
+            </button>
+            <button
+              type="button"
+              className={styles.botonExportar}
+              onClick={handleDescargarCSV}
+              title="Descargar movimientos en CSV"
+            >
+              <IconoDescarga /> Descargar CSV
+            </button>
+          </div>
+        )}
       </div>
 
       {movimientos.length === 0 ? (

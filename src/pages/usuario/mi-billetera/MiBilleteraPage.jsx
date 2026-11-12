@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import TarjetaSaldo from './components/TarjetaSaldo.jsx';
@@ -10,7 +10,7 @@ import styles from './MiBilleteraPage.module.css';
 // Mi billetera (HU_23): saldo, cobro pendiente y movimientos sincronizados con TunjaAPI.
 function MiBilleteraPage() {
   const navegar = useNavigate();
-  const { billetera, actualizarBilletera } = useUsuario();
+  const { billetera, actualizarBilletera, perfil } = useUsuario();
   const [sincronizando, setSincronizando] = useState(false);
 
   // 1. Sincronizar inmediatamente al entrar a la página
@@ -70,7 +70,11 @@ function MiBilleteraPage() {
             onPagar={() => navegar('/billetera/pagar')}
           />
         </div>
-        <TablaMovimientos movimientos={billetera.movimientos ?? []} />
+        <TablaMovimientos
+          movimientos={billetera.movimientos ?? []}
+          perfil={perfil}
+          saldo={billetera.saldo}
+        />
       </div>
     </UsuarioLayout>
   );

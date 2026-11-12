@@ -2,14 +2,33 @@
 
 .raiz {
   width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Ancho de las columnas */
-.colFecha    { width: 22%; }
-.colOrigen   { width: 26%; }
-.colDestino  { width: 24%; }
-.colDuracion { width: 13%; text-align: center; }
-.colRuta     { width: 15%; }
+.raiz table {
+  min-width: 52rem !important;
+  table-layout: auto !important;
+  border-collapse: collapse;
+}
+
+.raiz th,
+.raiz td {
+  height: auto;
+  min-height: var(--alto-fila);
+  vertical-align: middle;
+}
+
+/* Ancho y límites de las columnas */
+.colFecha    { width: 24%; min-width: 13.5rem; }
+.colOrigen   { width: 24%; min-width: 11rem; }
+.colDestino  { width: 22%; min-width: 11rem; }
+.colDuracion { width: 14%; min-width: 7rem; text-align: center; }
+.colRuta     { width: 16%; min-width: 8.5rem; }
+
+.celdaFecha {
+  white-space: nowrap;
+}
 
 .punto {
   margin-right: var(--espacio-2);

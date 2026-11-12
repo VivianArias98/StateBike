@@ -2,13 +2,67 @@
 
 .raiz {
   width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.colFecha    { width: 19%; }
-.colConcepto { width: 33%; }
-.colTipo     { width: 18%; }
-.colMonto    { width: 16%; text-align: right; }
-.colEstado   { width: 14%; text-align: center; }
+.raiz table {
+  min-width: 54rem !important; /* ~864px: garantiza espacio intocable para cada columna en móviles */
+  table-layout: auto !important;
+  border-collapse: collapse;
+}
+
+.raiz th,
+.raiz td {
+  height: auto;
+  min-height: var(--alto-fila);
+  vertical-align: middle;
+}
+
+.colFecha {
+  width: 25%;
+  min-width: 14.5rem;
+}
+
+.colConcepto {
+  width: 25%;
+  min-width: 12.5rem;
+}
+
+.colTipo {
+  width: 20%;
+  min-width: 11.5rem;
+}
+
+.colMonto {
+  width: 16%;
+  min-width: 9.5rem;
+  text-align: right;
+}
+
+.colEstado {
+  width: 14%;
+  min-width: 7.5rem;
+  text-align: center;
+}
+
+.celdaFecha {
+  white-space: nowrap;
+}
+
+.celdaConcepto {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.celdaTipo {
+  white-space: nowrap;
+}
+
+.celdaEstado {
+  text-align: center;
+  white-space: nowrap;
+}
 
 .punto {
   margin-right: var(--espacio-2);

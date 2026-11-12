@@ -5,7 +5,14 @@ import styles from './FiltroFechas.module.css';
 // idPrefijo evita ids repetidos cuando hay más de un filtro en la pantalla.
 function FiltroFechas({ idPrefijo = 'filtro', desde, hasta, onDesde, onHasta, onConsultar, onLimpiar }) {
   return (
-    <section className={`contexto-oscuro ${styles.raiz}`} aria-label="Filtrar por fechas">
+    <form
+      className={`contexto-oscuro ${styles.raiz}`}
+      aria-label="Filtrar por fechas"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onConsultar();
+      }}
+    >
       <div className={styles.campos}>
         <div className="campo">
           <label htmlFor={`${idPrefijo}-desde`}>Desde (fecha inicial)</label>
@@ -31,14 +38,14 @@ function FiltroFechas({ idPrefijo = 'filtro', desde, hasta, onDesde, onHasta, on
       </div>
 
       <div className={styles.acciones}>
-        <button type="button" className="boton boton--acento" onClick={onConsultar}>
+        <button type="submit" className="boton boton--acento">
           Consultar
         </button>
         <button type="button" className="boton" onClick={onLimpiar}>
           Limpiar
         </button>
       </div>
-    </section>
+    </form>
   );
 }
 

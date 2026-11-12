@@ -7,9 +7,15 @@ const MINUTOS_INCLUIDOS = 45;
 
 // Componente de presentación: solo dibuja la tabla de viajes recibidos por props.
 // La lógica de filtrado vive en HistorialPage.
-function TablaViajes({ viajes }) {
+function TablaViajes({ viajes, hayFiltro = false }) {
   if (viajes.length === 0) {
-    return <p className={styles.vacio}>No hay registros para el rango seleccionado.</p>;
+    return (
+      <p className={styles.vacio}>
+        {hayFiltro
+          ? 'No se encontraron viajes en el rango de fechas seleccionado.'
+          : 'Aún no has realizado ningún viaje en bicicleta. Cuando desbloquees una bicicleta en una estación, tus recorridos aparecerán registrados aquí.'}
+      </p>
+    );
   }
 
   return (
@@ -27,7 +33,7 @@ function TablaViajes({ viajes }) {
         <tbody>
           {viajes.map((viaje) => (
             <tr key={viaje.id}>
-              <td>
+              <td className={styles.celdaFecha}>
                 <span className={`punto-vivo ${styles.punto}`} aria-hidden="true" />
                 {viaje.fechaHora}
               </td>
