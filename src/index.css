@@ -278,6 +278,13 @@
        font-size: var(--texto-s);
        font-weight: 500;
        cursor: pointer;
+       touch-action: manipulation;
+       -webkit-tap-highlight-color: transparent;
+       transition: transform 0.12s ease, opacity 0.12s ease, background-color 0.15s ease;
+     }
+
+     .boton:active:not(:disabled) {
+       transform: scale(0.97);
      }
    
      /* Variantes: SIEMPRE después de .boton */

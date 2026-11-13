@@ -50,12 +50,6 @@ function MiPerfilPage() {
             </>
           }
           subtitulo="Gestión centralizada de credenciales, datos de identidad y acceso NFC a estaciones"
-          acciones={
-            <span className={styles.idPerfil}>
-              <span className={styles.punto} aria-hidden="true" />
-              ID: {perfil.id}
-            </span>
-          }
         />
 
         <section className={`tarjeta ${styles.aviso}`} aria-label="Reglas del perfil">
@@ -90,7 +84,6 @@ function MiPerfilPage() {
           />
           <TarjetaNfcPerfil
             estado={perfil.tarjeta?.estado ?? 'SIN VINCULAR'}
-            ultimos={perfil.tarjeta?.ultimosDigitos || '----'}
             titular={perfil.nombreCompleto || 'Usuario'}
             fechaVinculacion={perfil.tarjeta?.fechaVinculacion}
             procesando={procesandoTarjeta}

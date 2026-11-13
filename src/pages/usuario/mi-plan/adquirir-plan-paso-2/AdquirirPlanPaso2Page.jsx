@@ -32,7 +32,7 @@ function AdquirirPlanPaso2Page() {
           etiqueta="Paso 2 de 4"
           titulo="Adquirir Plan"
           subtitulo="Selecciona tu plan del catálogo y revisa el débito de tu billetera"
-          chip={`Tarjeta NFC •••• ${perfil?.tarjeta?.ultimosDigitos || '----'}`}
+          chip={perfil?.tarjeta ? 'Tarjeta NFC vinculada' : 'NFC: SIN VINCULAR'}
           conCheck
         />
         <BarraPasos pasos={BARRAS} />

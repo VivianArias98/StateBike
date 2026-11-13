@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../components/Logo/Logo.jsx';
 import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
@@ -38,6 +37,17 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
         </div>
 
         <div className={styles.accionesMovil}>
+          {viajeActivo && (
+            <NavLink
+              to="/viajes"
+              className={styles.badgeViajeMovil}
+              title={`Viaje activo en ${viajeActivo.bicicleta || 'bicicleta'}`}
+              aria-label="Ir a viaje activo"
+            >
+              <span className="punto-vivo" aria-hidden="true" />
+              <span>{viajeActivo.bicicleta || 'EN VIAJE'}</span>
+            </NavLink>
+          )}
           <BotonTema compacto />
           <button
             type="button"
@@ -82,9 +92,9 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
               </NavLink>
             )}
 
-            <p className={styles.nfc} title={`Tarjeta NFC: ${nfcActivo ? 'Activa' : 'Bloqueada'}`}>
+            <p className={styles.nfc} title={`Tarjeta NFC: ${nfcActivo ? 'Activa' : (perfil?.tarjeta ? 'Bloqueada' : 'Sin vincular')}`}>
               <span className={nfcActivo ? 'punto-vivo' : ''} style={{ backgroundColor: nfcActivo ? undefined : 'var(--color-peligro)' }} aria-hidden="true" />
-              NFC: {nfcActivo ? 'ACTIVO' : 'BLOQUEADA'} · <span className={styles.nfcId}>#{perfil?.tarjeta?.ultimosDigitos || '----'}</span>
+              NFC: {nfcActivo ? 'ACTIVA' : (perfil?.tarjeta ? 'BLOQUEADA' : 'SIN VINCULAR')}
             </p>
 
             <div className={styles.perfil}>

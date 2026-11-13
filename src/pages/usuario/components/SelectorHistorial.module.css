@@ -6,6 +6,7 @@
   padding: var(--espacio-1);
   background: var(--color-superficie-inversa);
   border-radius: var(--radio-pastilla);
+  box-shadow: var(--sombra-sm);
 }
 
 .opcion {
@@ -18,10 +19,18 @@
   font-size: var(--texto-s);
   font-weight: 600;
   cursor: pointer;
+  transition: all var(--transicion-suave);
+  user-select: none;
+}
+
+.opcion:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .opcionActiva,
 .opcionActiva:hover {
   background: var(--color-acento);
   color: var(--color-acento-texto);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(155, 234, 31, 0.35);
 }

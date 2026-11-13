@@ -32,7 +32,7 @@ function PasoNfc({ tarjeta, saldo, tienePlan, bloqueo, onVolver, onContinuar }) 
         <div className={styles.fila}>
           <div className={styles.dato}>
             <p className={styles.etiqueta}>Tarjeta</p>
-            <p className={styles.valorMono}>{tarjeta ? `•••• ${tarjeta.ultimosDigitos}` : 'SIN VINCULAR'}</p>
+            <p className={styles.valorMono}>{tarjeta ? 'VINCULADA' : 'SIN VINCULAR'}</p>
           </div>
           <div className={styles.dato}>
             <p className={styles.etiqueta}>Saldo disponible en billetera</p>

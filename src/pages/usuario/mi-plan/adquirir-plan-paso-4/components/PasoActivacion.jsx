@@ -14,11 +14,11 @@ import styles from './PasoActivacion.module.css';
 
 // Paso 4: plan activado (respuesta del backend), resumen de la suscripción y pasos para retirar la bicicleta.
 // Solo dibuja lo que recibe.
-function PasoActivacion({ mensaje, suscripcion, plan, ultimosDigitos, saldoRestante, onVerMapa }) {
+function PasoActivacion({ mensaje, suscripcion, plan, saldoRestante, onVerMapa }) {
   const pasosRetiro = [
     { titulo: 'Acércate a cualquier estación del sistema.', detalle: 'Busca un anclaje con bicicleta disponible.' },
     {
-      titulo: `Acerca tu tarjeta NFC${ultimosDigitos ? ` (•••• ${ultimosDigitos})` : ''} al lector del anclaje.`,
+      titulo: 'Acerca tu tarjeta NFC vinculada al lector del anclaje.',
       detalle: 'Sostén la tarjeta cerca del lector.',
     },
     { titulo: 'Retira la bicicleta cuando el anclaje se desbloquee.', detalle: 'El viaje inicia al retirarla.' },
@@ -61,12 +61,10 @@ function PasoActivacion({ mensaje, suscripcion, plan, ultimosDigitos, saldoResta
                 <IconoMedalla /> {suscripcion.nombre}
               </dd>
             </div>
-            {ultimosDigitos && (
-              <div className={styles.fila}>
-                <dt>Tarjeta NFC</dt>
-                <dd className={styles.chip}>•••• {ultimosDigitos}</dd>
-              </div>
-            )}
+            <div className={styles.fila}>
+              <dt>Tarjeta NFC</dt>
+              <dd className={styles.chip}>Vinculada y activa</dd>
+            </div>
             <div className={styles.fila}>
               <dt>Vigencia</dt>
               <dd className={styles.vigencia}>

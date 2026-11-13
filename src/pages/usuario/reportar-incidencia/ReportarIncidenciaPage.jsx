@@ -384,7 +384,7 @@ function ReportarIncidenciaPage() {
                     Titular: {perfil?.nombreCompleto || 'Usuario'}
                   </span>
                   <span style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
-                    Tarjeta asignada: {perfil?.tarjeta?.ultimosDigitos ? `•••• •••• •••• ${perfil.tarjeta.ultimosDigitos}` : 'Sin tarjeta física vinculada'}
+                    Tarjeta asignada: {perfil?.tarjeta ? 'Tarjeta física vinculada (•••• •••• •••• ••••)' : 'Sin tarjeta física vinculada'}
                   </span>
                 </div>
                 <span className={`insignia ${perfil?.tarjeta?.estado === 'ACTIVA' ? 'insignia--activa' : 'insignia--inactiva'}`}>

@@ -7,10 +7,22 @@
   height: 100%;
   min-width: 0;
   padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  box-shadow: var(--sombra-md);
+  transition: all var(--transicion-suave);
+}
+
+.raiz:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-hover);
+  border-color: var(--color-primario);
 }
 
 .destacada {
   border: 2px solid var(--color-acento);
+  box-shadow: 0 4px 20px rgba(155, 234, 31, 0.25);
 }
 
 .cabecera {
