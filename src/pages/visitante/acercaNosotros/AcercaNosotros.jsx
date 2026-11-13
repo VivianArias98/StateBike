@@ -13,7 +13,7 @@ import imgPorQueExistimos from './img/ciclistas.jpeg';
 import fotoVivian from './img/PO.jpeg';
 import fotoYeimy from './img/SM.jpg';
 import fotoTheofilo from './img/Dev1.jpeg';
-import fotoJoel from './img/Dev2.jpeg';
+import fotoJoel from './img/Dev2.jpg';
 import fotoJenifer from './img/QA.jpeg';
 
 // Contenido institucional (estático, no requiere inicio de sesión)
