@@ -6,6 +6,16 @@ import { IconoBicicleta, IconoUbicacion, IconoUsuario, IconoNfc } from '../../..
 import { Icono } from '../components/IconosVisitante.jsx';
 import styles from './AcercaNosotros.module.css';
 
+// Imágenes (carpeta ./img)
+import imgHero from './img/tunja1.jpg';
+import imgQuienesSomos from './img/tunja.png';
+import imgPorQueExistimos from './img/ciclistas.jpeg';
+import fotoVivian from './img/PO.jpeg';
+import fotoYeimy from './img/SM.jpg';
+import fotoTheofilo from './img/Dev1.jpeg';
+import fotoJoel from './img/Dev2.jpeg';
+import fotoJenifer from './img/QA.jpeg';
+
 // Contenido institucional (estático, no requiere inicio de sesión)
 const VALORES = [
   { codigo: 'VALOR_01', titulo: 'Accesibilidad', texto: 'Planes con precios claros para el bolsillo.', etiqueta: '[SIN_BARRERAS]', icono: <IconoUsuario /> },
@@ -15,11 +25,11 @@ const VALORES = [
 ];
 
 const EQUIPO = [
-  { iniciales: 'VA', nombre: 'Vivian María Arias Patiño', rol: 'PRODUCT & UX', cita: 'Piensa cada función desde lo que tú necesitas.' },
-  { iniciales: 'YM', nombre: 'Yeimy Andrea Martínez', rol: 'PROJECT LEAD', cita: 'Hace que todo el equipo avance junto y a tiempo.' },
-  { iniciales: 'TH', nombre: 'Theofilo Henrique Mendes de Brito', rol: 'CORE APP DEV', cita: 'Construye la app para que sea rápida y fácil de usar.' },
-  { iniciales: 'JE', nombre: 'Joel Esteban Báez Torres', rol: 'DATA & TELEMETRY', cita: 'Cuida que cada viaje quede bien registrado.' },
-  { iniciales: 'JP', nombre: 'Jenifer Pamela Nossa Gómez', rol: 'QA & VALIDATION', cita: 'Prueba todo antes de que llegue a tus manos.' },
+  { iniciales: 'VA', nombre: 'Vivian Arias', rol: 'Product Owner', foto: fotoVivian, cita: 'Define qué construir y por qué, siempre pensando en lo que tú necesitas.' },
+  { iniciales: 'YM', nombre: 'Yeimy Martínez', rol: 'Scrum Master', foto: fotoYeimy, cita: 'Hace que el equipo avance junto, sin obstáculos y a tiempo.' },
+  { iniciales: 'TH', nombre: 'Theofilo Mendes', rol: 'Lead Developer', foto: fotoTheofilo, cita: 'Programa cada detalle pensando en que la uses sin complicaciones.' },
+  { iniciales: 'JE', nombre: 'Joel Báez', rol: 'Junior Developer', foto: fotoJoel, cita: 'Da vida a cada función para que todo funcione sin fallos.' },
+  { iniciales: 'JP', nombre: 'Jenifer Nossa', rol: 'QA Engineer', foto: fotoJenifer, cita: 'Prueba todo antes de que llegue a tus manos.' },
 ];
 
 function AcercaNosotros() {
@@ -27,7 +37,7 @@ function AcercaNosotros() {
     <VisitanteLayout itemActivo="Acerca de nosotros">
       <div className={styles.raiz}>
         <header className={styles.encabezado}>
-          <span className={`insignia ${styles.chipProyecto}`}>PROYECTO TUNJA · 2025</span>
+          <span className={`insignia ${styles.chipProyecto}`}>TUNJA · 2040</span>
           <h1 className={styles.titulo}>Acerca de nosotros</h1>
           <p className={styles.subtitulo}>
             Conoce el propósito, la visión y el equipo detrás de StationBike en Tunja.
@@ -35,6 +45,7 @@ function AcercaNosotros() {
         </header>
 
         <section className={`contexto-oscuro ${styles.hero}`} aria-labelledby="titulo-hero">
+          <img src={imgHero} alt="" className={styles.heroImagen} />
           <div className={styles.heroTexto}>
             <span className="insignia insignia--activa">Tunja, Boyacá</span>
             <h2 id="titulo-hero" className={styles.heroTitulo}>
@@ -52,14 +63,16 @@ function AcercaNosotros() {
           <TarjetaSeccion
             titulo="Quiénes somos"
             icono={<IconoBicicleta />}
-            conImagen
+            imagen={imgQuienesSomos}
+            altImagen="Ciclista en una plaza del centro histórico de Tunja"
             texto="StationBike es un servicio de préstamo de bicicletas con tarjeta NFC en estaciones de Tunja. Nació para que moverse por la ciudad sea rápido, económico y sostenible."
             etiquetas={['SISTEMA: MICRO-MOVILIDAD NFC', 'COBERTURA: TUNJA URBANO']}
           />
           <TarjetaSeccion
             titulo="Por qué existimos"
             icono={<IconoNfc />}
-            conImagen
+            imagen={imgPorQueExistimos}
+            altImagen="Grupo de ciclistas recorriendo una vía de la ciudad"
             texto="En trayectos cortos, el bus y el taxi cuestan más y toman más tiempo de lo necesario. Queremos que una bicicleta esté siempre a unos pasos, lista para usar."
             etiquetas={['OPTIMIZACIÓN: TIEMPO & COSTO', 'MODELO: COMPARTIDO']}
           />
@@ -69,7 +82,7 @@ function AcercaNosotros() {
           <TarjetaSeccion
             etiqueta="MISIÓN"
             variante="negra"
-            marca="[ACTUAL_2025]"
+            marca="[ACTUAL_20]"
             titulo="Propósito operativo"
             texto="Ofrecer una forma práctica y accesible de recorrer Tunja en bicicleta, con estaciones cercanas, planes claros y un proceso de uso sencillo."
           />
@@ -102,7 +115,7 @@ function AcercaNosotros() {
         </section>
 
         <blockquote className={styles.cita}>
-          “Hecho en Tunja, para quienes se mueven por Tunja.”
+          “Muévete por Tunja”
         </blockquote>
 
         <section className={`tarjeta ${styles.contacto}`} aria-labelledby="titulo-contacto">

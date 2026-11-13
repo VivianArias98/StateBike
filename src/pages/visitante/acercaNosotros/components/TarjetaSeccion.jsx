@@ -2,8 +2,8 @@ import styles from './TarjetaSeccion.module.css';
 
 // Tarjeta de texto: "Quiénes somos", "Por qué existimos", "Misión", "Visión".
 // Props opcionales: icono, etiqueta (insignia), marca (texto técnico a la derecha),
-// conImagen (muestra un bloque para la fotografía), etiquetas (pie técnico).
-function TarjetaSeccion({ titulo, texto, icono, etiqueta, variante = 'activa', marca, conImagen = false, etiquetas = [] }) {
+// conImagen (bloque de relleno si no hay imagen), imagen/altImagen (fotografía), etiquetas (pie técnico).
+function TarjetaSeccion({ titulo, texto, icono, etiqueta, variante = 'activa', marca, imagen, altImagen = '', conImagen = false, etiquetas = [] }) {
   const claseEtiqueta = {
     activa: 'insignia--activa',
     negra: styles.etiquetaNegra,
@@ -25,7 +25,11 @@ function TarjetaSeccion({ titulo, texto, icono, etiqueta, variante = 'activa', m
 
       {etiqueta && <h2 className={styles.titulo}>{titulo}</h2>}
 
-      {conImagen && (
+      {imagen && (
+        <img src={imagen} alt={altImagen} className={styles.foto} loading="lazy" />
+      )}
+
+      {!imagen && conImagen && (
         <div className={styles.imagen} aria-hidden="true">
           {icono}
         </div>

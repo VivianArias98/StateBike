@@ -18,8 +18,8 @@ const BENEFICIOS = [
   },
   {
     icono: 'bici',
-    titulo: 'Flota 100% Eléctrica',
-    texto: 'Asistencia al pedaleo ideal para la topografía y pendientes de Tunja a 2.820 msnm.',
+    titulo: 'Bicicletas listas para rodar',
+    texto: 'Sin emisiones y pensadas para moverte por Tunja y sus pendientes a 2.820 msnm.',
   },
   {
     icono: 'escudo',
@@ -96,7 +96,7 @@ function PlanesTarifas() {
           <div className={styles.encabezadoTexto}>
             <span className={styles.eyebrow}>
               <span className={styles.punto} aria-hidden="true" />
-              {planes ? `${planes.length} OPCIONES DISPONIBLES · TUNJA 2025` : 'PLANES Y TARIFAS · TUNJA 2025'}
+              {planes ? `${planes.length} OPCIONES DISPONIBLES · TUNJA 2040` : 'PLANES Y TARIFAS · TUNJA 2040'}
             </span>
 
             <h1 className={`titulo-pagina ${styles.titulo}`}>Catálogo de Planes Tunja Bici</h1>
@@ -126,7 +126,7 @@ function PlanesTarifas() {
             <span>Aprobado por el Concejo y Secretaría de Tránsito y Transporte de Tunja.</span>
           </p>
           <p className={styles.version}>
-            TARIFAS-V2025.2 <span className={styles.redActiva}>• RED ACTIVA</span>
+            TARIFAS-V2040.2 <span className={styles.redActiva}>• RED ACTIVA</span>
           </p>
         </footer>
       </div>
