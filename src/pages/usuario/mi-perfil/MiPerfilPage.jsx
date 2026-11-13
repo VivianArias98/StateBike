@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import Etiqueta from '../../../components/Etiqueta/Etiqueta.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
@@ -16,15 +16,15 @@ function MiPerfilPage() {
   const [procesandoTarjeta, setProcesandoTarjeta] = useState(false);
 
   const guardarPerfil = async (datos) => {
-    try {
-      const res = actualizarPerfil({
-        nombreCompleto: datos.nombreCompleto,
-        telefono: datos.telefono,
-      });
-      setAviso(res.mensaje);
-    } catch (err) {
-      throw err;
-    }
+    const res = await actualizarPerfil({
+      nombreCompleto: datos.nombreCompleto,
+      telefono: datos.telefono,
+      contrasenaActual: datos.contrasenaActual,
+      nuevaContrasena: datos.nuevaContrasena,
+    });
+    const mensaje = res?.mensaje || 'PERFIL ACTUALIZADO CORRECTAMENTE';
+    setAviso(mensaje);
+    return res;
   };
 
   const cambiarEstadoTarjeta = async () => {
@@ -66,6 +66,21 @@ function MiPerfilPage() {
             Puedes editar tu nombre y teléfono. La fecha de nacimiento y el correo no se pueden modificar por políticas de seguridad de la red.
           </p>
         </section>
+
+        {aviso && (
+          <div className={styles.avisoExito} role="status">
+            <span className={styles.iconoExito} aria-hidden="true">✓</span>
+            <span className={styles.textoExito}>{aviso}</span>
+            <button
+              type="button"
+              className={styles.cerrarExito}
+              onClick={() => setAviso('')}
+              aria-label="Cerrar aviso"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         <div className={styles.contenido}>
           <FormularioDatos

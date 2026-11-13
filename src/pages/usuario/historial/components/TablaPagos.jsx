@@ -36,7 +36,16 @@ function TablaPagos({ pagos, hayFiltro = false }) {
               </td>
               <td className={styles.celdaConcepto}>{pago.concepto}</td>
               <td className={styles.celdaTipo}>
-                <Etiqueta texto={pago.tipo} color={pago.tipo === 'Cobro por exceso' ? 'amarilla' : 'menta'} />
+                <Etiqueta
+                  texto={pago.tipo}
+                  color={
+                    pago.tipo === 'Cobro por exceso'
+                      ? 'amarilla'
+                      : pago.tipo === 'Compra de plan'
+                      ? 'verde'
+                      : 'menta'
+                  }
+                />
               </td>
               <td className={styles.monto}>{formatearPesos(pago.monto)} COP</td>
               <td className={styles.celdaEstado}>

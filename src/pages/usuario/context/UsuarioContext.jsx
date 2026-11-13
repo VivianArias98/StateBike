@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { leerSesion, borrarSesion } from '../../../utils/sesion.js';
 
@@ -62,7 +62,7 @@ export function UsuarioProvider({ children }) {
   });
 
   const [billetera, setBilletera] = useState({
-    saldo: 0,
+    saldo: sesion?.usuario?.saldo ?? 0,
     tieneCobroPendiente: false,
     cobroPendiente: null,
     movimientos: [],
@@ -75,6 +75,7 @@ export function UsuarioProvider({ children }) {
 
   const [planesCatalogo, setPlanesCatalogo] = useState([]);
   const [estaciones, setEstaciones] = useState([]);
+  const [bicicletas, setBicicletas] = useState([]);
   const [viajeActivo, setViajeActivo] = useState(null);
   const [ultimoViaje, setUltimoViaje] = useState(null); // resumen del viaje recién devuelto
   const viajeIdRef = useRef(undefined); // undefined = todavía no se ha consultado
@@ -93,7 +94,7 @@ export function UsuarioProvider({ children }) {
     try {
       setErrorConexion('');
 
-      // 1. Estaciones públicas y Catálogo de Planes
+      // 1. Estaciones públicas y Catálogo de Planes (rutas públicas locales, no bloqueantes)
       const [estacionesRes, planesRes] = await Promise.all([
         fetch('/api/estaciones').then((r) => r.json()).catch(() => ({ estaciones: [] })),
         fetch('/api/planes').then((r) => r.json()).catch(() => ({ planes: [] })),
@@ -101,11 +102,20 @@ export function UsuarioProvider({ children }) {
 
       const listaEstaciones = Array.isArray(estacionesRes)
         ? estacionesRes
-        : estacionesRes.estaciones || [];
-      const listaPlanes = Array.isArray(planesRes) ? planesRes : planesRes.planes || [];
+        : estacionesRes?.estaciones || [];
+      const listaPlanes = Array.isArray(planesRes) ? planesRes : planesRes?.planes || [];
 
       setEstaciones(listaEstaciones);
       setPlanesCatalogo(listaPlanes);
+
+      // Bicicletas registradas (carga asíncrona segura para reporte de incidencias)
+      fetch('/api/bicicletas')
+        .then((r) => r.json())
+        .then((bRes) => {
+          const listaB = Array.isArray(bRes) ? bRes : bRes?.bicicletas || [];
+          setBicicletas(listaB);
+        })
+        .catch(() => {});
 
       // 2. Perfil y Tarjeta del usuario en sesión
       const [perfilRes, tarjetaRes] = await Promise.all([
@@ -355,28 +365,33 @@ export function UsuarioProvider({ children }) {
 
   // Reportar Incidencia (HU_6 -> POST /api/incidencias)
   const reportarIncidencia = async ({ tipo, bicicleta, estacion, descripcion }) => {
-    try {
-      const estObj = estaciones.find((e) => e.nombre === estacion || e.id === Number(estacion));
-      const cuerpo = {
-        tipo: tipo === 'nfc' ? 'TARJETA' : tipo === 'estacion' ? 'ANCLAJE' : tipo === 'bicicleta' ? 'BICICLETA' : 'OTRO',
-        codigoBicicleta: tipo === 'bicicleta' || tipo === 'otro' ? bicicleta : undefined,
-        estacionId: (tipo === 'estacion' || tipo === 'otro') && estObj ? estObj.id : undefined,
-        descripcion,
-      };
+    const estObj = estaciones.find((e) => e.nombre === estacion || e.id === Number(estacion));
+    const tipoMapeado =
+      tipo === 'nfc'
+        ? 'TARJETA'
+        : tipo === 'estacion'
+          ? 'ANCLAJE'
+          : tipo === 'bicicleta'
+            ? 'BICICLETA'
+            : 'OTRO';
 
-      const respuesta = await peticionAutenticada('/api/incidencias', {
-        method: 'POST',
-        body: JSON.stringify(cuerpo),
-      });
+    const cuerpo = {
+      tipo: tipoMapeado,
+      codigoBicicleta: tipo === 'bicicleta' && bicicleta ? bicicleta : undefined,
+      estacionId: (tipo === 'estacion' || (tipo === 'bicicleta' && estacion)) && estObj ? estObj.id : undefined,
+      descripcion,
+    };
 
-      await cargarDatosUsuario();
-      return {
-        mensaje: respuesta.mensaje || 'REPORTE ENVIADO CON ÉXITO',
-        incidencia: respuesta.incidencia,
-      };
-    } catch (err) {
-      throw err;
-    }
+    const respuesta = await peticionAutenticada('/api/incidencias', {
+      method: 'POST',
+      body: JSON.stringify(cuerpo),
+    });
+
+    await cargarDatosUsuario();
+    return {
+      mensaje: respuesta.mensaje || 'REPORTE ENVIADO CON ÉXITO',
+      incidencia: respuesta.incidencia,
+    };
   };
 
   return (
@@ -392,6 +407,7 @@ export function UsuarioProvider({ children }) {
         historialPagos,
         incidencias,
         estaciones,
+        bicicletas,
         planesCatalogo,
         cargarDatosUsuario,
         actualizarBilletera,
@@ -422,6 +438,7 @@ export function useUsuario() {
       plan: { tienePlan: false, planActivo: null },
       planesCatalogo: [],
       estaciones: [],
+      bicicletas: [],
       viajeActivo: null,
       historialViajes: [],
       historialPagos: [],
