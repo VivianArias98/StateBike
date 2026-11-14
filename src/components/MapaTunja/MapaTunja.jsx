@@ -52,6 +52,7 @@ function MapaTunja({
   ruta = [],
   ubicacionActual = null,
   onSeleccionar,
+  onSeleccionarEstacion,
   ayuda,
   leyendas = [],
   nota,
@@ -95,7 +96,14 @@ function MapaTunja({
               key={estacion.id}
               position={[estacion.lat, estacion.lng]}
               icon={crearIconoEstacion(estacion.bicicletas)}
-              interactive={false}
+              interactive={Boolean(onSeleccionarEstacion)}
+              eventHandlers={
+                onSeleccionarEstacion
+                  ? {
+                      click: () => onSeleccionarEstacion(estacion),
+                    }
+                  : undefined
+              }
             >
               <Tooltip
                 permanent

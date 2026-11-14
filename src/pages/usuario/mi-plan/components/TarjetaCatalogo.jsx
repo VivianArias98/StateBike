@@ -1,9 +1,7 @@
-import { IconoCheck } from '../../../../components/Iconos/Iconos.jsx';
+import { IconoCheck, IconoMedalla } from '../../../../components/Iconos/Iconos.jsx';
 import styles from './TarjetaCatalogo.module.css';
 
-// Tarjeta de un plan del catálogo de Mi Plan. Solo dibuja lo que recibe.
-// variante: 'primario' (lima), 'suave' (verde claro) o 'actual' (plan en uso).
-// deshabilitada: bloquea el botón (por defecto solo en la variante 'actual').
+// Tarjeta de un plan del catálogo de Mi Plan.
 function TarjetaCatalogo({
   encabezado,
   vigencia,
@@ -12,48 +10,66 @@ function TarjetaCatalogo({
   precio,
   unidad,
   detallePrecio,
-  caracteristicas,
+  caracteristicas = [],
   etiqueta,
   destacada = false,
+  esRecomendado = false,
   variante = 'suave',
   deshabilitada = variante === 'actual',
   accion,
   onAccion,
 }) {
   return (
-    <article className={`tarjeta ${styles.raiz} ${destacada ? styles.destacada : ''}`}>
-      {etiqueta && <span className={styles.etiqueta}>{etiqueta}</span>}
+    <article
+      className={`tarjeta ${styles.raiz} ${destacada ? styles.destacada : ''} ${
+        esRecomendado ? styles.recomendadaCard : ''
+      }`}
+    >
+      {etiqueta && (
+        <span
+          className={`${styles.etiqueta} ${
+            esRecomendado ? styles.etiquetaRecomendada : ''
+          }`}
+        >
+          {esRecomendado && (
+            <span className={styles.iconoMedalla} aria-hidden="true">
+              <IconoMedalla />
+            </span>
+          )}
+          <span>{etiqueta}</span>
+        </span>
+      )}
 
       <header className={styles.cabecera}>
-        <p className={styles.encabezado}>{encabezado}</p>
+        <h3 className={styles.encabezado}>{encabezado}</h3>
         {vigencia && <span className={styles.vigencia}>{vigencia}</span>}
       </header>
 
-      {nombre && <h3 className={styles.nombre}>{nombre}</h3>}
+      {nombre && <p className={styles.nombre}>{nombre}</p>}
       {descripcion && <p className={styles.descripcion}>{descripcion}</p>}
 
       <div className={styles.precioBloque}>
-        <p className={styles.precio}>
+        <div className={styles.precio}>
           <span className={styles.cifra}>{precio}</span>
           {unidad && <span className={styles.unidad}>{unidad}</span>}
-        </p>
+        </div>
         {detallePrecio && <p className={styles.detallePrecio}>{detallePrecio}</p>}
       </div>
 
       <ul className={styles.caracteristicas}>
         {caracteristicas.map((caracteristica) => (
           <li key={caracteristica}>
-            <span className={styles.check}>
+            <span className={styles.check} aria-hidden="true">
               <IconoCheck />
             </span>
-            {caracteristica}
+            <span>{caracteristica}</span>
           </li>
         ))}
       </ul>
 
       <button
         type="button"
-        className={`boton boton--bloque ${styles[variante]}`}
+        className={`boton boton--bloque ${styles[variante] || styles.suave}`}
         disabled={deshabilitada}
         onClick={onAccion}
       >

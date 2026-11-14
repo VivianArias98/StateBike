@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import { IconoAlerta, IconoFlecha, IconoCerrar } from '../../../../components/Iconos/Iconos.jsx';

@@ -1,6 +1,10 @@
 import { formatearPesos } from '../../formato.js';
 import { formatearFechaBogota } from '../../../../utils/formatoMoneda.js';
-import { IconoDocumento, IconoDescarga } from '../../../../components/Iconos/Iconos.jsx';
+import {
+  IconoDocumento,
+  IconoDescarga,
+  IconoBilletera,
+} from '../../../../components/Iconos/Iconos.jsx';
 import { descargarCSV, generarComprobantePDF } from '../../../../utils/descargas.js';
 import styles from './TablaMovimientos.module.css';
 
@@ -34,14 +38,18 @@ function clasificarTipoBilletera(tipo, concepto = '') {
 
 function esIngreso(tipo, concepto = '') {
   const conceptoLower = String(concepto).toLowerCase();
-  if (conceptoLower.includes('plan') || conceptoLower.includes('adquisición') || conceptoLower.includes('adquisicion') || conceptoLower.includes('exceso')) {
+  if (
+    conceptoLower.includes('plan') ||
+    conceptoLower.includes('adquisición') ||
+    conceptoLower.includes('adquisicion') ||
+    conceptoLower.includes('exceso')
+  ) {
     return false;
   }
   return TIPOS_INGRESO.includes(String(tipo).toUpperCase()) || conceptoLower.includes('recarga');
 }
 
-// Historial de movimientos de la billetera, del más reciente al más antiguo (HU_23).
-// El orden ya lo entrega el backend.
+// Historial de movimientos de la billetera (HU_23)
 function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
   const handleDescargarCSV = () => {
     const encabezados = ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo resultante'];
@@ -91,7 +99,9 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
           <h2 id="movimientos-titulo" className={styles.titulo}>
             Historial de Movimientos
           </h2>
-          <p className={styles.subtitulo}>Del más reciente al más antiguo</p>
+          <p className={styles.subtitulo}>
+            Registro cronológico ordenado del más reciente al más antiguo
+          </p>
         </div>
 
         {movimientos.length > 0 && (
@@ -102,7 +112,7 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
               onClick={handleDescargarPDF}
               title="Descargar comprobante en PDF"
             >
-              <IconoDocumento /> Descargar comprobante PDF
+              <IconoDocumento /> Descargar PDF
             </button>
             <button
               type="button"
@@ -117,7 +127,15 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
       </div>
 
       {movimientos.length === 0 ? (
-        <p className={styles.vacio}>No hay movimientos registrados</p>
+        <div className={styles.vacioContenedor}>
+          <div className={styles.vacioIcono} aria-hidden="true">
+            <IconoBilletera />
+          </div>
+          <p className={styles.vacioTitulo}>No hay movimientos registrados</p>
+          <p className={styles.vacioTexto}>
+            Tus recargas en taquilla y compras de planes se reflejarán automáticamente en esta tabla.
+          </p>
+        </div>
       ) : (
         <div className={`tabla ${styles.tabla}`}>
           <table>
@@ -138,18 +156,20 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
                 return (
                   <tr key={mov.id}>
                     <td>
-                      <span className={ingreso ? styles.tipoIngreso : styles.tipoEgreso}>{etiquetaTipo}</span>
+                      <span className={ingreso ? styles.tipoIngreso : styles.tipoEgreso}>
+                        {etiquetaTipo}
+                      </span>
                     </td>
                     <td>
                       <p className={styles.concepto}>{mov.concepto}</p>
-                      {pendiente && <p className={styles.pendiente}>PENDIENTE</p>}
+                      {pendiente && <span className={styles.pendiente}>PENDIENTE</span>}
                     </td>
-                    <td>{formatearFechaBogota(mov.fecha)}</td>
+                    <td className={styles.fecha}>{formatearFechaBogota(mov.fecha)}</td>
                     <td className={`${styles.derecha} ${ingreso ? styles.montoIngreso : styles.montoEgreso}`}>
                       {ingreso ? '+' : '-'}
                       {formatearPesos(mov.monto)}
                     </td>
-                    <td className={styles.derecha}>
+                    <td className={`${styles.derecha} ${styles.saldoResultante}`}>
                       {mov.saldoResultante !== null && mov.saldoResultante !== undefined
                         ? formatearPesos(mov.saldoResultante)
                         : '—'}

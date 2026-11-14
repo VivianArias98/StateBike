@@ -6,6 +6,10 @@
   gap: var(--espacio-5);
   min-width: 0;
   padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: 0 4px 18px var(--color-pista);
 }
 
 .cabecera {
@@ -25,19 +29,21 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--color-exito);
 }
 
 .pastilla {
   display: inline-flex;
   align-items: center;
-  min-height: 2.5rem;
-  padding: var(--espacio-2) var(--espacio-4);
-  background: var(--color-acento);
-  color: var(--color-acento-texto);
-  border-radius: var(--radio-m);
+  height: 2.25rem;
+  padding: 0 var(--espacio-3);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  border: 1px solid var(--color-exito);
+  border-radius: var(--radio-pastilla);
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
@@ -47,12 +53,13 @@
   flex-direction: column;
   border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-l);
+  background: var(--color-fondo-pagina);
 }
 
 .columna {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--espacio-2);
   min-width: 0;
   padding: var(--espacio-5);
 }
@@ -65,39 +72,50 @@
 .etiquetaCelda {
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-texto-suave);
 }
 
 .nombrePlan {
+  margin: 0;
   font-size: var(--texto-3xl);
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--color-texto);
+  line-height: 1.15;
 }
 
 .cifra {
+  margin: 0;
   font-size: var(--texto-4xl);
-  font-weight: 700;
+  font-weight: 800;
   font-family: var(--fuente-mono);
+  color: var(--color-texto);
 }
 
 .unidad {
   font-size: var(--texto-s);
   font-family: var(--fuente);
+  color: var(--color-texto-suave);
 }
 
 .texto,
 .ayuda {
+  margin: 0;
   font-size: var(--texto-s);
   color: var(--color-texto-suave);
+  line-height: 1.45;
 }
 
 .alDia {
+  margin: 0;
   display: flex;
   align-items: center;
   gap: var(--espacio-2);
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-exito);
+  font-size: var(--texto-s);
 }
 
 .check {
@@ -105,7 +123,7 @@
   color: var(--color-exito);
 }
 
-/* Paneles inferiores: verde del fondo de la interfaz con borde */
+/* Paneles inferiores */
 .dosColumnas {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -134,19 +152,21 @@
   flex-direction: column;
   gap: var(--espacio-1);
   padding: var(--espacio-3);
-  background: var(--color-fondo-pagina);
+  background: var(--color-superficie);
   border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-s);
 }
 
 .celdaDestacada {
   background: var(--color-acento-suave);
-  border-color: var(--color-acento);
+  border-color: var(--color-exito);
 }
 
 .valorCelda {
+  margin: 0;
   font-size: var(--texto-m);
   font-weight: 700;
+  color: var(--color-texto);
 }
 
 .leyendaBarra {
@@ -157,6 +177,7 @@
   gap: var(--espacio-2);
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
 }
 
 .pastillaConsumo {
@@ -181,20 +202,34 @@
 }
 
 .uidTitulo {
+  margin: 0;
   font-family: var(--fuente-mono);
-  font-size: var(--texto-l);
+  font-size: var(--texto-m);
+  font-weight: 700;
 }
 
 .accion {
   font-weight: 700;
+  min-height: 3rem;
 }
 
 .cancelar {
+  min-height: 3rem;
   color: var(--color-error-texto);
   border-color: var(--color-error-borde);
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.cancelar:hover {
+  background: var(--color-error-fondo);
 }
 
 @media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-6);
+  }
+
   .resumen {
     flex-direction: row;
   }

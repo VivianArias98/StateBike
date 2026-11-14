@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
@@ -6,6 +5,7 @@ import CatalogoPlanes from './components/CatalogoPlanes.jsx';
 import BannerSinPlan from './components/BannerSinPlan.jsx';
 import FlujoActivacion from './components/FlujoActivacion.jsx';
 import PlanActivo from './components/PlanActivo.jsx';
+import { IconoBilletera } from '../../../components/Iconos/Iconos.jsx';
 import { useUsuario } from '../context/UsuarioContext.jsx';
 import styles from './MiPlanPage.module.css';
 
@@ -18,7 +18,7 @@ const PASOS_ACTIVACION = [
 
 function MiPlanPage() {
   const navegar = useNavigate();
-  const { plan, planesCatalogo } = useUsuario();
+  const { plan, planesCatalogo = [] } = useUsuario();
 
   const adquirir = (planId) => navegar('/plan/adquirir', { state: planId ? { planId } : null });
 
@@ -26,8 +26,21 @@ function MiPlanPage() {
     <UsuarioLayout itemActivo="Mi plan">
       <div className={styles.raiz}>
         <EncabezadoPagina
+          etiqueta="Usuario / Suscripción / Mi Plan"
           titulo="Mi Plan"
-          subtitulo="Gestión de tu suscripción actual y catálogo de planes disponibles."
+          subtitulo="Gestión de tu suscripción actual y catálogo de planes disponibles para la red de Tunja."
+          acciones={
+            plan.tienePlan && plan.planActivo ? (
+              <span className={styles.badgePlanActivo}>
+                <span className="punto-vivo" aria-hidden="true" />
+                Plan {plan.planActivo.nombre}
+              </span>
+            ) : (
+              <span className={styles.badgeSinPlan}>
+                Sin suscripción activa
+              </span>
+            )
+          }
         />
 
         {plan.tienePlan && plan.planActivo ? (
@@ -66,7 +79,22 @@ function MiPlanPage() {
         </section>
 
         <div className={`tarjeta ${styles.nota}`}>
-          <button type="button" className="enlace" onClick={() => navegar('/billetera')}>
+          <div className={styles.notaTexto}>
+            <span className={styles.iconoBilletera} aria-hidden="true">
+              <IconoBilletera />
+            </span>
+            <div>
+              <strong className={styles.notaTitulo}>Saldo y recargas presenciales</strong>
+              <p className={styles.notaDescripcion}>
+                El pago de los planes se debita directamente de tu saldo de billetera, recargado en taquillas autorizadas por el administrador.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={`boton boton--secundario ${styles.botonBilletera}`}
+            onClick={() => navegar('/billetera')}
+          >
             Ver saldo en Mi Billetera →
           </button>
         </div>

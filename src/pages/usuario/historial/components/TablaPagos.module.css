@@ -7,8 +7,8 @@
 }
 
 .raiz table {
-  min-width: 54rem !important; /* ~864px: garantiza espacio intocable para cada columna en móviles */
-  table-layout: auto !important;
+  min-width: 54rem; /* ~864px: garantiza espacio intocable para cada columna en móviles */
+  table-layout: auto;
   border-collapse: collapse;
 }
 

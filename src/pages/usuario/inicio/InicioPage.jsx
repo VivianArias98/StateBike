@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
 import {
   IconoCalendario,
-  IconoCandado,
   IconoNfc,
   IconoReloj,
   IconoUbicacion,
   IconoBicicleta,
+  IconoAnclaje,
+  IconoBuscar,
+  IconoCerrar,
+  IconoCheck,
+  IconoDesbloqueo,
 } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import MetricaUsuario from '../components/MetricaUsuario.jsx';
@@ -19,10 +23,22 @@ const LEYENDAS = [{ id: 'numero', contenido: 'El número indica la cantidad de b
 
 function InicioPage() {
   const navigate = useNavigate();
-  const { perfil, plan, billetera, viajeActivo, estaciones = [] } = useUsuario();
+  const { perfil, plan, viajeActivo, estaciones = [] } = useUsuario();
   const [estacionSeleccionada, setEstacionSeleccionada] = useState(null);
+  const [busqueda, setBusqueda] = useState('');
 
-  const listaEstaciones = Array.isArray(estaciones) ? estaciones : [];
+  const listaEstaciones = useMemo(() => (Array.isArray(estaciones) ? estaciones : []), [estaciones]);
+
+  const estacionesFiltradas = useMemo(() => {
+    if (!busqueda.trim()) return listaEstaciones;
+    const q = busqueda.toLowerCase().trim();
+    return listaEstaciones.filter(
+      (est) =>
+        est.nombre?.toLowerCase().includes(q) ||
+        est.direccion?.toLowerCase().includes(q)
+    );
+  }, [listaEstaciones, busqueda]);
+
   const estacionActual = estacionSeleccionada || (listaEstaciones.length > 0 ? listaEstaciones[0] : null);
 
   const irADesbloquear = (estacion) => {
@@ -32,6 +48,13 @@ function InicioPage() {
   const primerNombre = perfil?.nombreCompleto ? perfil.nombreCompleto.split(' ')[0] : 'Ciudadano';
   const tarjetaNfc = perfil?.tarjeta;
   const nfcActivo = tarjetaNfc?.estado === 'ACTIVA';
+
+  const tienePlan = Boolean(plan?.tienePlan && plan?.planActivo);
+  const planNombre = tienePlan ? plan.planActivo.nombre : 'Sin plan activo';
+  const tiempoViaje = tienePlan ? (plan.planActivo.tiempoViajeMin || 0) : 0;
+  const viajesRestantes = tienePlan ? (plan.planActivo.viajesRestantesHoy ?? 0) : 0;
+  const viajesPorDia = tienePlan ? (plan.planActivo.viajesPorDia ?? 0) : 0;
+  const porcentajeViajes = viajesPorDia > 0 ? Math.min(100, Math.round((viajesRestantes / viajesPorDia) * 100)) : 0;
 
   return (
     <UsuarioLayout itemActivo="Inicio">
@@ -49,15 +72,26 @@ function InicioPage() {
         />
 
         {viajeActivo && (
-          <div className="tarjeta" style={{ borderColor: 'var(--color-primario)', background: 'var(--color-input-fondo)', marginBottom: 'var(--espacio-4)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--espacio-3)' }}>
-            <div>
-              <p style={{ margin: 0, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
-                <span className="punto-vivo" />
-                Tienes un viaje en curso activo con la bicicleta #{viajeActivo.bicicleta}
-              </p>
-              <p style={{ margin: 0, fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
-                Origen: {viajeActivo.estacionOrigen} · {viajeActivo.minutosTranscurridos} minutos transcurridos
-              </p>
+          <aside className={styles.bannerViaje} aria-label="Viaje en curso">
+            <div className={styles.bannerInfo}>
+              <div className={styles.bannerIcono} aria-hidden="true">
+                <IconoBicicleta />
+              </div>
+              <div className={styles.bannerTexto}>
+                <p className={styles.bannerTitulo}>
+                  <span className="punto-vivo" aria-hidden="true" />
+                  Tienes un viaje en curso activo con la bicicleta #{viajeActivo.bicicleta}
+                </p>
+                <p className={styles.bannerDetalle}>
+                  <span className={styles.bannerDetalleItem}>
+                    <IconoUbicacion /> Origen: {viajeActivo.estacionOrigen}
+                  </span>
+                  <span className={styles.bannerDetalleSeparador}>·</span>
+                  <span className={styles.bannerDetalleItem}>
+                    <IconoReloj /> {viajeActivo.minutosTranscurridos} minutos transcurridos
+                  </span>
+                </p>
+              </div>
             </div>
             <button
               type="button"
@@ -66,26 +100,99 @@ function InicioPage() {
             >
               Ver viaje en curso
             </button>
-          </div>
+          </aside>
         )}
 
         <div className={styles.metricas}>
           <MetricaUsuario
             etiqueta="Mi plan"
-            valor={plan?.tienePlan && plan?.planActivo ? plan.planActivo.nombre : 'Sin plan activo'}
-            detalle={plan?.tienePlan && plan?.planActivo ? `${plan.planActivo.tiempoViajeMin || 0} min incluidos por viaje` : 'Adquiere uno en Mi Plan'}
+            valor={
+              tienePlan ? (
+                <div className={styles.planValorWrapper}>
+                  <span>{planNombre}</span>
+                  <span className={styles.planBadgeActivo}>
+                    <span className="punto-vivo" aria-hidden="true" />
+                    Activo
+                  </span>
+                </div>
+              ) : (
+                'Sin plan activo'
+              )
+            }
+            detalle={
+              tienePlan ? (
+                <span className={styles.detalleConIcono}>
+                  <IconoReloj />
+                  <span>{tiempoViaje} min incluidos por viaje</span>
+                </span>
+              ) : (
+                'Adquiere una suscripción en Mi Plan'
+              )
+            }
             icono={<IconoCalendario />}
           />
+
           <MetricaUsuario
             etiqueta="Viajes restantes hoy"
-            valor={plan?.tienePlan && plan?.planActivo ? `${plan.planActivo.viajesRestantesHoy ?? 0} de ${plan.planActivo.viajesPorDia ?? 0}` : '0 viajes'}
+            valor={
+              tienePlan ? (
+                <div className={styles.contadorWrapper}>
+                  <span className={styles.cifraGrande}>{viajesRestantes}</span>
+                  <span className={styles.cifraSeparador}>/</span>
+                  <span className={styles.cifraTotal}>{viajesPorDia}</span>
+                  <span className={styles.cifraTexto}>hoy</span>
+                </div>
+              ) : (
+                '0 viajes'
+              )
+            }
+            extra={
+              tienePlan && viajesPorDia > 0 ? (
+                <div className={styles.barraViajes}>
+                  <div
+                    className={styles.barraViajesRelleno}
+                    style={{ width: `${porcentajeViajes}%` }}
+                    aria-hidden="true"
+                  />
+                </div>
+              ) : null
+            }
             detalle="Límite diario según tu suscripción"
             icono={<IconoReloj />}
           />
+
           <MetricaUsuario
             etiqueta="Tarjeta NFC"
-            valor={tarjetaNfc ? (nfcActivo ? 'ACTIVA' : 'BLOQUEADA') : 'Sin vincular'}
-            detalle={tarjetaNfc ? (nfcActivo ? 'Tarjeta vinculada · Lista para desbloqueo' : 'BLOQUEADA · No abre anclajes') : 'Sin tarjeta asignada'}
+            valor={
+              tarjetaNfc ? (
+                nfcActivo ? (
+                  <div className={styles.nfcPillActiva}>
+                    <span className={styles.nfcPuntoVivo} aria-hidden="true" />
+                    <span className={styles.nfcTexto}>ACTIVA</span>
+                  </div>
+                ) : (
+                  <div className={styles.nfcPillBloqueada}>
+                    <span className={styles.nfcTexto}>BLOQUEADA</span>
+                  </div>
+                )
+              ) : (
+                <div className={styles.nfcPillSinVincular}>
+                  <span className={styles.nfcTexto}>Sin vincular</span>
+                </div>
+              )
+            }
+            detalle={
+              <span className={styles.detalleConIcono}>
+                {tarjetaNfc && nfcActivo ? <IconoCheck /> : null}
+                <span>
+                  {tarjetaNfc
+                    ? (nfcActivo
+                        ? 'Tarjeta vinculada · Lista para desbloqueo'
+                        : 'BLOQUEADA · No abre anclajes')
+                    : 'Sin tarjeta asignada'}
+                </span>
+              </span>
+            }
             icono={<IconoNfc />}
           />
         </div>
@@ -105,46 +212,102 @@ function InicioPage() {
               <h2 id="estaciones-cercanas" className={styles.tituloLista}>
                 Estaciones de la red
               </h2>
-              <span className={styles.conteo}>{listaEstaciones.length} estaciones</span>
+              <span className={styles.conteo}>
+                {estacionesFiltradas.length} {estacionesFiltradas.length === 1 ? 'estación' : 'estaciones'}
+              </span>
+            </div>
+
+            <div className={styles.buscador}>
+              <span className={styles.iconoBuscador} aria-hidden="true">
+                <IconoBuscar />
+              </span>
+              <input
+                type="text"
+                className={styles.buscadorInput}
+                placeholder="Buscar estación por nombre o dirección..."
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                aria-label="Buscar estación"
+              />
+              {busqueda && (
+                <button
+                  type="button"
+                  className={styles.botonLimpiar}
+                  onClick={() => setBusqueda('')}
+                  aria-label="Borrar búsqueda"
+                >
+                  <IconoCerrar />
+                </button>
+              )}
             </div>
 
             <div className={styles.lista}>
-              {listaEstaciones.length === 0 ? (
-                <p style={{ padding: 'var(--espacio-4)', color: 'var(--color-texto-apagado)', textAlign: 'center' }}>
-                  No hay estaciones disponibles
-                </p>
+              {estacionesFiltradas.length === 0 ? (
+                <div className={styles.sinResultados}>
+                  <p className={styles.sinResultadosTexto}>
+                    {busqueda
+                      ? `No se encontraron estaciones para "${busqueda}"`
+                      : 'No hay estaciones disponibles'}
+                  </p>
+                  {busqueda && (
+                    <button
+                      type="button"
+                      className="boton boton--secundario"
+                      onClick={() => setBusqueda('')}
+                    >
+                      Ver todas las estaciones
+                    </button>
+                  )}
+                </div>
               ) : (
-                listaEstaciones.map((est) => {
+                estacionesFiltradas.map((est) => {
                   const seleccionada = (estacionActual?.id === est.id);
                   return (
-                    <div
+                    <article
                       key={est.id}
-                      className={`tarjeta ${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''}`}
+                      className={`${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''}`}
                       onClick={() => setEstacionSeleccionada(est)}
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e) => e.key === 'Enter' && setEstacionSeleccionada(est)}
-                      style={{
-                        cursor: 'pointer',
-                        border: seleccionada ? '2px solid var(--color-primario)' : undefined,
-                        padding: 'var(--espacio-3)',
-                        marginBottom: 'var(--espacio-2)',
-                      }}
+                      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setEstacionSeleccionada(est)}
+                      aria-pressed={seleccionada}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <h3 style={{ fontSize: 'var(--texto-s)', margin: 0 }}>{est.nombre}</h3>
-                        <span className="insignia insignia--activa" style={{ fontSize: 'var(--texto-xs)' }}>
+                      <div className={styles.itemCabecera}>
+                        <div className={styles.itemTituloZona}>
+                          <h3 className={styles.nombreEstacion}>{est.nombre}</h3>
+                          {seleccionada && (
+                            <span className={styles.chipSeleccionada}>
+                              <IconoCheck /> Seleccionada
+                            </span>
+                          )}
+                        </div>
+                        <span className={`insignia ${est.bicicletas > 0 ? 'insignia--activa' : 'insignia--neutra'}`}>
                           {est.bicicletas ?? 0} bicis
                         </span>
                       </div>
-                      <p style={{ fontSize: 'var(--texto-xs)', opacity: 0.7, margin: 'var(--espacio-1) 0' }}>
-                        {est.direccion}
+
+                      <p className={styles.direccionEstacion}>
+                        <span className={styles.iconoDireccion} aria-hidden="true">
+                          <IconoUbicacion />
+                        </span>
+                        <span>{est.direccion}</span>
                       </p>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--texto-xs)' }}>
-                        <span style={{ color: 'var(--color-exito)' }}>🚲 {est.bicicletas ?? 0} disponibles</span>
-                        <span style={{ opacity: 0.8 }}>🔒 {est.anclajesLibres ?? 0} anclajes libres</span>
+
+                      <div className={styles.itemStats}>
+                        <span className={styles.statDisponibles}>
+                          <span className={styles.statIcono} aria-hidden="true">
+                            <IconoBicicleta />
+                          </span>
+                          <strong>{est.bicicletas ?? 0}</strong> disponibles
+                        </span>
+                        <span className={styles.statAnclajes}>
+                          <span className={styles.statIcono} aria-hidden="true">
+                            <IconoAnclaje />
+                          </span>
+                          <strong>{est.anclajesLibres ?? 0}</strong> anclajes libres
+                        </span>
                       </div>
-                    </div>
+                    </article>
                   );
                 })
               )}
@@ -155,17 +318,17 @@ function InicioPage() {
               className={`boton boton--primario boton--bloque ${styles.accion}`}
               onClick={() => irADesbloquear(estacionSeleccionada)}
             >
-              <IconoCandado /> DESBLOQUEAR BICICLETA
+              <IconoDesbloqueo /> DESBLOQUEAR BICICLETA
             </button>
 
-            <p className={styles.ayuda}>
+            <div className={styles.ayuda}>
               <span className={styles.iconoAyuda} aria-hidden="true">
                 <IconoNfc />
               </span>
               <span>
                 También puedes acercar tu tarjeta física directamente al tótem del anclaje.
               </span>
-            </p>
+            </div>
           </section>
         </div>
       </div>

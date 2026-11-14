@@ -4,15 +4,33 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--espacio-4);
   height: 100%;
   min-width: 0;
   padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: 0 2px 8px var(--color-pista);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Plan seleccionado o recomendado: contorno lima */
+.raiz:hover {
+  border-color: var(--color-primario);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--color-pista);
+}
+
+/* Plan seleccionado o actual */
 .destacada {
-  border: 2px solid var(--color-acento);
+  border: 2px solid var(--color-primario);
+}
+
+/* Plan recomendado: realce visual */
+.recomendadaCard {
+  border: 2px solid var(--color-primario);
+  box-shadow: 0 4px 18px var(--color-pista);
+  background: var(--color-superficie);
 }
 
 /* Pastilla centrada sobre el borde superior */
@@ -21,16 +39,32 @@
   top: calc(var(--espacio-3) * -1);
   left: 50%;
   transform: translateX(-50%);
-  padding: var(--espacio-1) var(--espacio-4);
-  background: var(--color-acento);
-  color: var(--color-acento-texto);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: 0.2rem var(--espacio-3);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
   border-radius: var(--radio-pastilla);
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+  box-shadow: 0 2px 6px var(--color-pista);
+}
+
+.etiquetaRecomendada {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+}
+
+.iconoMedalla {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--texto-s);
 }
 
 .cabecera {
@@ -39,44 +73,50 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--espacio-2);
+  margin-top: var(--espacio-1);
 }
 
 .encabezado {
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-texto-suave);
+  margin: 0;
+  font-family: var(--fuente-titulo, var(--fuente));
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  color: var(--color-texto);
+  line-height: 1.2;
 }
 
 .vigencia {
   padding: var(--espacio-1) var(--espacio-3);
   background: var(--color-fondo-pagina);
   border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-s);
+  border-radius: var(--radio-pastilla);
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
   font-weight: 700;
+  color: var(--color-texto-suave);
 }
 
 .nombre {
-  font-size: var(--texto-xl);
+  margin: 0;
+  font-size: var(--texto-m);
   font-weight: 700;
+  color: var(--color-texto);
 }
 
 .descripcion {
+  margin: 0;
   font-size: var(--texto-s);
   color: var(--color-texto-suave);
 }
 
-/* Bloque del precio en verde claro */
+/* Bloque del precio */
 .precioBloque {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-1);
   padding: var(--espacio-3) var(--espacio-4);
   background: var(--color-acento-suave);
+  border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-m);
 }
 
@@ -88,18 +128,23 @@
 }
 
 .cifra {
-  font-size: var(--texto-4xl);
-  font-weight: 700;
+  font-size: var(--texto-3xl);
+  font-weight: 800;
+  color: var(--color-texto);
   line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .unidad {
+  font-family: var(--fuente-mono);
   font-size: var(--texto-s);
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-texto-suave);
 }
 
 .detallePrecio {
-  font-size: var(--texto-s);
+  margin: 0;
+  font-size: var(--texto-xs);
   color: var(--color-texto-suave);
 }
 
@@ -117,34 +162,67 @@
   display: flex;
   align-items: center;
   gap: var(--espacio-2);
+  color: var(--color-texto);
+  line-height: 1.35;
 }
 
 .check {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   color: var(--color-exito);
+  font-size: var(--texto-m);
 }
 
-/* Acción: lima (primario), verde claro (suave) o bloqueada (actual) */
+/* Acciones */
 .primario {
   margin-top: auto;
-  background: var(--color-acento);
-  color: var(--color-acento-texto);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
   font-weight: 700;
+  min-height: 3rem;
+  box-shadow: 0 2px 8px var(--color-pista);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.primario:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--color-pista);
 }
 
 .suave {
   margin-top: auto;
-  background: var(--color-acento-suave);
+  background: var(--color-superficie);
   color: var(--color-texto);
-  border-color: transparent;
+  border: 1px solid var(--color-borde);
   font-weight: 700;
+  min-height: 3rem;
+  transition: all 0.18s ease;
+}
+
+.suave:hover:not(:disabled) {
+  background: var(--color-fondo-pagina);
+  border-color: var(--color-primario);
+  transform: translateY(-1px);
 }
 
 .actual {
   margin-top: auto;
   background: var(--color-fondo-pagina);
   color: var(--color-texto-suave);
-  border-color: var(--color-borde-suave);
+  border: 1px dashed var(--color-borde-suave);
   font-weight: 700;
+  min-height: 3rem;
+  cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .recomendadaCard {
+    transform: scale(1.02);
+  }
+
+  .recomendadaCard:hover {
+    transform: scale(1.03) translateY(-2px);
+  }
 }

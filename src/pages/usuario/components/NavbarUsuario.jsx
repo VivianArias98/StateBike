@@ -1,19 +1,28 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../components/Logo/Logo.jsx';
 import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
-import { IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
+import {
+  IconoUsuario,
+  IconoMapa,
+  IconoBicicleta,
+  IconoBilletera,
+  IconoTarjeta,
+  IconoReloj,
+  IconoAlerta,
+} from '../../../components/Iconos/Iconos.jsx';
+import AvatarCiclista from '../../../components/AvataresCiclistas/AvatarCiclista.jsx';
 import { useUsuario } from '../context/UsuarioContext.jsx';
 import { borrarSesion } from '../../../utils/sesion.js';
 import styles from './NavbarUsuario.module.css';
 
 const ENLACES = [
-  { texto: 'Inicio', ruta: '/inicio' },
-  { texto: 'Viajes', ruta: '/viajes' },
-  { texto: 'Mi billetera', ruta: '/billetera' },
-  { texto: 'Mi plan', ruta: '/plan' },
-  { texto: 'Historial', ruta: '/historial' },
-  { texto: 'Reportar incidencia', ruta: '/incidencias' },
-  { texto: 'Mi perfil', ruta: '/perfil' },
+  { texto: 'Inicio', ruta: '/inicio', Icono: IconoMapa },
+  { texto: 'Viajes', ruta: '/viajes', Icono: IconoBicicleta },
+  { texto: 'Mi billetera', ruta: '/billetera', Icono: IconoBilletera },
+  { texto: 'Mi plan', ruta: '/plan', Icono: IconoTarjeta },
+  { texto: 'Historial', ruta: '/historial', Icono: IconoReloj },
+  { texto: 'Reportar incidencia', ruta: '/incidencias', Icono: IconoAlerta },
+  { texto: 'Mi perfil', ruta: '/perfil', Icono: IconoUsuario },
 ];
 
 function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
@@ -66,7 +75,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
           className={menuAbierto ? `${styles.panel} ${styles.panelAbierto}` : styles.panel}
         >
           <nav className={styles.menu} aria-label="Navegación principal de usuario">
-            {ENLACES.map(({ texto, ruta }) => (
+            {ENLACES.map(({ texto, ruta, Icono }) => (
               <NavLink
                 key={ruta}
                 to={ruta}
@@ -75,7 +84,12 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
                 }
                 onClick={() => menuAbierto && onAlternarMenu()}
               >
-                {texto}
+                {Icono && (
+                  <span className={styles.iconoEnlace} aria-hidden="true">
+                    <Icono />
+                  </span>
+                )}
+                <span>{texto}</span>
               </NavLink>
             ))}
           </nav>
@@ -93,13 +107,13 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
             )}
 
             <p className={styles.nfc} title={`Tarjeta NFC: ${nfcActivo ? 'Activa' : (perfil?.tarjeta ? 'Bloqueada' : 'Sin vincular')}`}>
-              <span className={nfcActivo ? 'punto-vivo' : ''} style={{ backgroundColor: nfcActivo ? undefined : 'var(--color-peligro)' }} aria-hidden="true" />
+              <span className={nfcActivo ? 'punto-vivo' : styles.puntoInactivo} aria-hidden="true" />
               NFC: {nfcActivo ? 'ACTIVA' : (perfil?.tarjeta ? 'BLOQUEADA' : 'SIN VINCULAR')}
             </p>
 
             <div className={styles.perfil}>
               <span className={styles.avatar} aria-hidden="true">
-                <IconoUsuario />
+                <AvatarCiclista id={perfil?.avatar} tamano="s" />
               </span>
               <div className={styles.datos}>
                 <p className={styles.nombreUsuario}>{perfil?.nombreCompleto || 'Usuario'}</p>

@@ -8,7 +8,7 @@ import ViajeEnCurso from './components/ViajeEnCurso.jsx';
 import ResumenViaje from './components/ResumenViaje.jsx';
 import styles from './ViajesPage.module.css';
 
-// El viaje lo inician y lo cierran en el tótem de la estación: esta pantalla solo lo acompaña
+// El viaje lo inician y lo cierran en el tótem de la estación: esta pantalla acompaña el ciclo del viaje
 function ViajesPage() {
   const navigate = useNavigate();
   const { perfil, plan, billetera, viajeActivo, ultimoViaje, descartarUltimoViaje, estaciones } =
@@ -24,6 +24,19 @@ function ViajesPage() {
           etiqueta="Usuario / Operación del servicio / Gestión de viajes"
           titulo="Viajes"
           subtitulo="Inicia y finaliza tu viaje acercando tu tarjeta NFC al tótem de una estación."
+          acciones={
+            viajeActivo ? (
+              <span className={styles.badgeEstadoActivo}>
+                <span className="punto-vivo" aria-hidden="true" />
+                Viaje en curso #{viajeActivo.bicicleta}
+              </span>
+            ) : (
+              <span className={styles.badgeEstadoEsperando}>
+                <span className="punto-vivo" aria-hidden="true" />
+                Esperando tótem NFC
+              </span>
+            )
+          }
         />
 
         {viajeActivo && (

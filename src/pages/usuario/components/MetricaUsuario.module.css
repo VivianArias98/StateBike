@@ -3,8 +3,20 @@
 .raiz {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  justify-content: space-between;
+  gap: var(--espacio-3);
   padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: 0 2px 6px var(--color-pista);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.raiz:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primario);
+  box-shadow: 0 6px 18px var(--color-pista);
 }
 
 .cabecera {
@@ -15,10 +27,11 @@
 }
 
 .etiqueta {
+  margin: 0;
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-texto-suave);
 }
@@ -28,31 +41,55 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--radio-s);
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: var(--radio-m);
   background: var(--color-acento-suave);
   color: var(--color-exito);
+  border: 1px solid var(--color-borde-suave);
   font-size: var(--texto-l);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.raiz:hover .icono {
+  transform: scale(1.08);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+}
+
+.cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
 }
 
 .valor {
   font-size: var(--texto-2xl);
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-texto);
+  letter-spacing: -0.01em;
+}
+
+.extra {
+  display: flex;
+  flex-direction: column;
 }
 
 .detalle {
+  margin: 0;
   font-size: var(--texto-xs);
   color: var(--color-texto-suave);
+  line-height: 1.4;
 }
 
 @media (min-width: 768px) {
   .raiz {
     padding: var(--espacio-5);
+    min-height: 9.75rem;
   }
 
   .valor {
-    font-size: var(--texto-4xl);
+    font-size: var(--texto-3xl);
   }
 }

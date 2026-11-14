@@ -22,7 +22,7 @@
 
 .destacada {
   border: 2px solid var(--color-acento);
-  box-shadow: 0 4px 20px rgba(155, 234, 31, 0.25);
+  box-shadow: 0 4px 20px var(--color-pista);
 }
 
 .cabecera {

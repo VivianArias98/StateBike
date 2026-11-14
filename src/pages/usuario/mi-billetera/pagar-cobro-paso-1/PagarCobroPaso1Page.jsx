@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import { IconoBilletera } from '../../../../components/Iconos/Iconos.jsx';
@@ -17,6 +17,9 @@ function PagarCobroPaso1Page() {
 
   const cobro = billetera?.cobroPendiente;
   const saldo = billetera?.saldo ?? 0;
+  const monto = cobro?.monto ?? 0;
+  const saldoSuficiente = saldo >= monto;
+  const falta = monto - saldo;
 
   const pagar = async () => {
     setPagando(true);
@@ -56,9 +59,9 @@ function PagarCobroPaso1Page() {
         </header>
 
         {!cobro ? (
-          <div className="tarjeta" style={{ textAlign: 'center', padding: 'var(--espacio-6)' }}>
-            <p style={{ fontSize: 'var(--texto-l)', fontWeight: 'bold' }}>No tienes cobros pendientes</p>
-            <p style={{ color: 'var(--color-texto-apagado)', marginBottom: 'var(--espacio-4)' }}>
+          <div className={`tarjeta ${styles.sinCobro}`}>
+            <p className={styles.sinCobroTitulo}>No tienes cobros pendientes</p>
+            <p className={styles.sinCobroTexto}>
               Tu cuenta se encuentra al día y libre de penalizaciones.
             </p>
             <button type="button" className="boton boton--primario" onClick={volver}>
@@ -98,6 +101,17 @@ function PagarCobroPaso1Page() {
                 el cobro pasará a <strong>PAGADO</strong> y podrá volver a retirar bicicletas.
               </p>
 
+              {!saldoSuficiente && (
+                <div className="mensaje-error" role="alert">
+                  <p>
+                    <strong>Saldo insuficiente para saldar el cobro.</strong> Le faltan {formatearPesos(falta)}.
+                  </p>
+                  <p className={styles.avisoRecargaAdmin}>
+                    Acércate a un punto de atención o estación autorizada para realizar la recarga.
+                  </p>
+                </div>
+              )}
+
               {error && (
                 <p className="mensaje-error" role="alert">
                   {error}
@@ -112,7 +126,7 @@ function PagarCobroPaso1Page() {
                   type="button"
                   className={`boton boton--bloque ${styles.confirmar}`}
                   onClick={pagar}
-                  disabled={pagando}
+                  disabled={pagando || !saldoSuficiente}
                 >
                   {pagando ? 'PAGANDO...' : `CONFIRMAR Y PAGAR ${formatearPesos(cobro.monto)} COP`}
                 </button>

@@ -6,8 +6,8 @@
   padding: 0.4rem 0.75rem;
   min-height: 2.25rem;
   border-radius: var(--radio-entero);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--color-borde-suave);
+  background: var(--color-sidebar-item);
   color: var(--color-texto-inverso);
   font-size: var(--texto-xs);
   font-weight: 600;
@@ -17,7 +17,7 @@
 }
 
 .botonTema:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--color-borde-suave);
   border-color: var(--color-primario);
   transform: translateY(-1px);
 }
