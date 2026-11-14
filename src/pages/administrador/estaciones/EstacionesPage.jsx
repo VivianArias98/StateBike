@@ -31,6 +31,8 @@ function EstacionesPage() {
 
   // Modal de confirmación para inactivar (HU_13)
   const [estacionAInactivar, setEstacionAInactivar] = useState(null);
+  // Modal de confirmación para activar
+  const [estacionAActivar, setEstacionAActivar] = useState(null);
 
   const cargarEstaciones = async () => {
     try {
@@ -185,6 +187,42 @@ function EstacionesPage() {
     }
   };
 
+  // Activar estación con confirmación
+  const handleSolicitarActivar = (id) => {
+    const estacion = estaciones.find((e) => e.id === id);
+    if (!estacion || estacion.estado !== 'INACTIVE') return;
+    setEstacionAActivar(estacion);
+  };
+
+  const handleConfirmarActivar = async () => {
+    if (!estacionAActivar) return;
+
+    try {
+      const token = leerToken();
+      const respuesta = await fetch(`/api/admin/estaciones/${estacionAActivar.id}/activar`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      const resJson = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        setAviso(resJson.mensaje || 'Error al activar la estación');
+        return;
+      }
+
+      setAviso('La estación ha sido activada de forma correcta');
+      await cargarEstaciones();
+    } catch {
+      setAviso('Error de conexión al activar la estación');
+    } finally {
+      setEstacionAActivar(null);
+    }
+  };
+
   // ---------- Qué se dibuja ----------
   if (vista === 'registrar') {
     return (
@@ -256,6 +294,7 @@ function EstacionesPage() {
           estaciones={estacionesFiltradas}
           onEditar={handleEditar}
           onInactivar={handleSolicitarInactivar}
+          onActivar={handleSolicitarActivar}
         />
       )}
 
@@ -286,6 +325,39 @@ function EstacionesPage() {
                 onClick={handleConfirmarInactivar}
               >
                 Confirmar inactivación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmación para activar estación */}
+      {estacionAActivar && (
+        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-activar-titulo">
+          <div className={styles.modalCaja}>
+            <h2 id="modal-activar-titulo" className={styles.modalTitulo}>
+              Activar estación
+            </h2>
+            <p className={styles.modalTexto}>
+              ¿Está seguro de que desea activar la estación <strong>{estacionAActivar.nombre}</strong>?
+            </p>
+            <p className={styles.modalTexto}>
+              La estación volverá a estar disponible en el mapa para retiros, devoluciones y anclajes en la red.
+            </p>
+            <div className={styles.modalAcciones}>
+              <button
+                type="button"
+                className="boton boton--secundario"
+                onClick={() => setEstacionAActivar(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="boton boton--primario"
+                onClick={handleConfirmarActivar}
+              >
+                Confirmar activación
               </button>
             </div>
           </div>

@@ -177,6 +177,46 @@
   flex-shrink: 0;
 }
 
+.botonAvatarAdmin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: var(--radio-circulo);
+  flex-shrink: 0;
+  transition: transform var(--transicion-rapida);
+}
+
+.botonAvatarAdmin:hover {
+  transform: scale(1.05);
+}
+
+.botonAvatarAdmin:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
+.insigniaLapiz {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px var(--color-pista);
+  border: 1.5px solid var(--color-superficie-inversa);
+}
+
 .datosAdmin {
   display: flex;
   flex-direction: column;
@@ -200,6 +240,31 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.linkCambiarAvatarAdmin {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 2px;
+  color: var(--color-primario);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity var(--transicion-rapida);
+  width: fit-content;
+}
+
+.linkCambiarAvatarAdmin:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.linkCambiarAvatarAdmin:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 1px;
 }
 
 .salir {

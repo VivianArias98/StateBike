@@ -2,7 +2,7 @@ import React from 'react';
 import EstadoBadge from './EstadoBadge.jsx';
 import styles from './EstacionesTable.module.css';
 
-function EstacionesTable({ estaciones, onEditar, onInactivar }) {
+function EstacionesTable({ estaciones, onEditar, onInactivar, onActivar }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
@@ -46,15 +46,25 @@ function EstacionesTable({ estaciones, onEditar, onInactivar }) {
                     >
                       Editar
                     </button>
-                    <button
-                      type="button"
-                      className={`boton ${styles.botonAccion}`}
-                      disabled={inactiva}
-                      onClick={() => onInactivar(estacion.id)}
-                      title={inactiva ? 'La estación ya está inactiva' : 'Inactivar estación si no tiene bicicletas'}
-                    >
-                      Inactivar
-                    </button>
+                    {inactiva ? (
+                      <button
+                        type="button"
+                        className={`boton boton--primario ${styles.botonAccion}`}
+                        onClick={() => onActivar(estacion.id)}
+                        title="Activar estación para habilitar retiros y devoluciones"
+                      >
+                        Activar
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className={`boton ${styles.botonAccion}`}
+                        onClick={() => onInactivar(estacion.id)}
+                        title="Inactivar estación si no tiene bicicletas"
+                      >
+                        Inactivar
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

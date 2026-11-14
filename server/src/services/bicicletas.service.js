@@ -64,3 +64,26 @@ export function inactivar(id) {
   repositorio.inactivar(id);
   return { mensaje: MENSAJES.bicicleta_inactivada, bicicleta: repositorio.buscarPorId(id) };
 }
+
+// Reactivar bicicleta inactiva asignándole un anclaje libre en una estación activa
+export function activar(id, datos = {}) {
+  const bicicleta = obtener(id);
+  if (bicicleta.estado !== "INACTIVA") throw new AppError(409, "bicicleta_ya_activa");
+
+  let anclaje;
+  const estacionId = datos?.estacionId ? Number(datos.estacionId) : null;
+
+  if (estacionId) {
+    const estacion = estaciones.buscarPorId(estacionId);
+    if (!estacion) throw new AppError(404, "estacion_no_encontrada");
+    if (estacion.estado !== "ACTIVE") throw new AppError(409, "estacion_inactiva");
+    anclaje = repositorio.primerAnclajeLibre(estacion.id);
+    if (!anclaje) throw new AppError(409, "estacion_sin_anclajes_libres");
+  } else {
+    anclaje = repositorio.primerAnclajeLibreCualquierEstacion();
+    if (!anclaje) throw new AppError(409, "sin_anclajes_disponibles");
+  }
+
+  repositorio.activar(id, anclaje.id);
+  return { mensaje: MENSAJES.bicicleta_activada, bicicleta: repositorio.buscarPorId(id) };
+}

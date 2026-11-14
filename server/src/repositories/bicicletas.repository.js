@@ -36,6 +36,20 @@ export function primerAnclajeLibre(estacionId) {
     .get(estacionId);
 }
 
+//El primer anclaje libre de cualquier estación activa
+export function primerAnclajeLibreCualquierEstacion() {
+  return db
+    .prepare(
+      `SELECT a.id, a.estacion_id
+       FROM anclajes a
+       JOIN estaciones e ON e.id = a.estacion_id
+       WHERE a.estado = 'LIBRE' AND e.estado = 'ACTIVE'
+       ORDER BY e.id, a.numero
+       LIMIT 1`
+    )
+    .get();
+}
+
 //Registra la bicicleta DISPONIBLE y ocupa el anclaje en una sola transacción
 export function crear(codigo, anclajeId) {
   const registrar = db.transaction(() => {
@@ -46,6 +60,15 @@ export function crear(codigo, anclajeId) {
     return Number(lastInsertRowid);
   });
   return registrar();
+}
+
+//Reactivar una bicicleta inactiva asignándole un anclaje libre y marcándola DISPONIBLE
+export function activar(id, anclajeId) {
+  const reactivar = db.transaction(() => {
+    db.prepare("UPDATE bicicletas SET estado = 'DISPONIBLE', anclaje_id = ? WHERE id = ?").run(anclajeId, id);
+    db.prepare("UPDATE anclajes SET estado = 'OCUPADO' WHERE id = ?").run(anclajeId);
+  });
+  reactivar();
 }
 
 export function cambiarEstado(id, estado) {
