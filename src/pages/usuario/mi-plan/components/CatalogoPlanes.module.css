@@ -3,7 +3,8 @@
 .rejilla {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-4);
+  gap: var(--espacio-5);
+  padding-top: var(--espacio-3);
 }
 
 @media (min-width: 768px) {

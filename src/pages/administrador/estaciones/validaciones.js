@@ -2,9 +2,9 @@ import { estaDentroDeTunja } from '../../../components/MapaTunja/limitesTunja.js
 
 export const MENSAJES = {
   vacios: 'Campos obligatorios vacíos',
-  descripcion: 'Descripción inválida (nombre máx. 70, dirección máx. 70)',
-  capacidad: 'Capacidad inválida',
-  ubicacion: 'Ubicación inválida',
+  descripcion: 'Descripción inválida (nombre máx 70, dirección máx 70)',
+  capacidad: 'Número inválido',
+  ubicacion: 'Ubicación Inválida',
   repetido: 'El nombre de la estación ya se encuentra registrado',
 };
 

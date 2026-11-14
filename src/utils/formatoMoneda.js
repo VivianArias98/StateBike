@@ -15,3 +15,42 @@ export function formatearFechaHora(iso) {
     minute: '2-digit',
   });
 }
+
+// El backend guarda las fechas en UTC con el formato "YYYY-MM-DD HH:MM:SS".
+// Convierte ese texto a la hora de Colombia. conHora=false muestra solo la fecha.
+// "2026-11-07 15:20:00" -> "07 nov 2026, 10:20 a. m."
+export function formatearFechaBogota(fechaUtc, { conHora = true } = {}) {
+  if (!fechaUtc) return '';
+  const texto = String(fechaUtc).trim();
+  const tieneZona = /([zZ]|[+-]\d{2}:\d{2})$/.test(texto);
+  const fecha = new Date(tieneZona ? texto : `${texto.replace(' ', 'T')}Z`);
+  if (Number.isNaN(fecha.getTime())) return '';
+
+  const opciones = { timeZone: 'America/Bogota', day: '2-digit', month: 'short', year: 'numeric' };
+  if (conHora) {
+    opciones.hour = '2-digit';
+    opciones.minute = '2-digit';
+  }
+  return fecha.toLocaleString('es-CO', opciones);
+}
+
+// Extrae la fecha en formato "YYYY-MM-DD" en la zona horaria de Colombia (America/Bogota).
+// Permite comparar correctamente con los valores de los inputs date (desde / hasta).
+export function extraerFechaBogota(fechaRaw) {
+  if (!fechaRaw) return '';
+  const texto = String(fechaRaw).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
+    return texto;
+  }
+  const tieneZona = /([zZ]|[+-]\d{2}:\d{2})$/.test(texto);
+  const d = new Date(tieneZona ? texto : `${texto.replace(' ', 'T')}Z`);
+  if (Number.isNaN(d.getTime())) {
+    return texto.slice(0, 10);
+  }
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Bogota',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(d);
+}

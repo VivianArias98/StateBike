@@ -1,0 +1,236 @@
+/* PasoResumenPago.module.css: base = celular */
+
+.columnas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+.resumen,
+.pago {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding-bottom: var(--espacio-4);
+  border-bottom: 1px solid var(--color-borde-suave);
+}
+
+.icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radio-m);
+  background: var(--color-acento-suave);
+  font-size: var(--texto-xl);
+}
+
+.titulo {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+}
+
+.subtitulo {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
+/* Filas de resumen: cada una sobre fondo verde claro */
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+}
+
+.fila dt {
+  color: var(--color-texto);
+}
+
+.fila dd {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.mono {
+  font-family: var(--fuente-mono);
+}
+
+.precioVerde {
+  color: var(--color-exito);
+  font-family: var(--fuente-mono);
+  font-weight: 700;
+}
+
+.chip {
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-superficie);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-mono);
+}
+
+.costo {
+  color: var(--color-error-texto);
+}
+
+/* Total a liquidar: bloque oscuro */
+.liquidacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+  background: var(--color-secundario);
+  color: var(--color-secundario-texto);
+  border-radius: var(--radio-l);
+}
+
+.tituloLiquidacion {
+  font-size: var(--texto-l);
+  font-weight: 800;
+}
+
+.totalCifra {
+  font-size: var(--texto-4xl);
+  font-weight: 800;
+  color: var(--color-acento);
+}
+
+.moneda {
+  font-size: var(--texto-s);
+  font-family: var(--fuente-mono);
+}
+
+/* Método de pago */
+.metodo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-l);
+}
+
+.metodoNombre {
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.metodoDetalle {
+  font-size: var(--texto-s);
+  color: var(--color-texto-suave);
+}
+
+.saldos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  font-size: var(--texto-s);
+}
+
+/* Los tres saldos van dentro de una sola tarjeta blanca */
+.saldoFila {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-1) 0;
+}
+
+.proyectado {
+  margin-top: var(--espacio-1);
+  padding-top: var(--espacio-3);
+  border-top: 1px solid var(--color-borde-suave);
+  font-size: var(--texto-m);
+  font-weight: 700;
+}
+
+.autorizacion {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  cursor: pointer;
+}
+
+.autorizacion input {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+  accent-color: var(--color-acento);
+}
+
+.registro {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.pagar {
+  gap: var(--espacio-2);
+  height: auto;
+  min-height: var(--alto-control);
+  white-space: normal;
+  padding: var(--espacio-3) var(--espacio-4);
+}
+
+.volver {
+  background: var(--color-acento-suave);
+  border: 1px solid var(--color-secundario);
+  color: var(--color-texto);
+  font-weight: 700;
+}
+
+@media (min-width: 1024px) {
+  .columnas {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .resumen,
+  .pago {
+    flex: 1 1 0;
+  }
+}

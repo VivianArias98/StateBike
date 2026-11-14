@@ -1,12 +1,13 @@
 import BarraProgreso from '../../../../components/BarraProgreso/BarraProgreso.jsx';
 import { IconoCheck } from '../../../../components/Iconos/Iconos.jsx';
 import { formatearPesos } from '../../formato.js';
+import { formatearFechaBogota } from '../../../../utils/formatoMoneda.js';
 import styles from './PlanActivo.module.css';
 
-// Estado del plan vigente: pagos, vigencia y consumo, hardware, condiciones y acciones.
-function PlanActivo({ plan, nfc, diasUsados, inicio, fin, pagado, onCancelar, onVerHistorial }) {
-  const diasRestantes = plan.dias - diasUsados;
-  const porcentaje = Math.round((diasUsados / plan.dias) * 100);
+// Plan vigente del usuario (HU_17): pago, vigencia con barra de días, tarjeta asociada,
+// condiciones congeladas al comprar y acciones. Solo dibuja; plan es la respuesta de GET /api/planes/mi-plan.
+function PlanActivo({ plan, onCancelar, onVerHistorial }) {
+  const { tarjeta } = plan;
 
   return (
     <section className={`tarjeta ${styles.raiz}`} aria-labelledby="plan-activo-titulo">
@@ -14,115 +15,111 @@ function PlanActivo({ plan, nfc, diasUsados, inicio, fin, pagado, onCancelar, on
         <p id="plan-activo-titulo" className={styles.estado}>
           <span className="punto-vivo" aria-hidden="true" /> Plan actualmente activo
         </p>
-        <span className="insignia insignia--activa">Estado: suscripción activa</span>
+        <span className={styles.pastilla}>Estado: {plan.estado}</span>
       </header>
 
       <div className={styles.resumen}>
-        <div className={styles.bloque}>
-          <div className={styles.filaEtiqueta}>
-            <p className={styles.etiqueta}>Tipo de suscripción</p>
-            <p className={styles.etiqueta}>Código: {plan.codigo}</p>
-          </div>
+        <div className={styles.columna}>
+          <p className={styles.etiqueta}>Tipo de suscripción</p>
           <h2 className={styles.nombrePlan}>{plan.nombre}</h2>
-          <p className={styles.texto}>Tarifa plana recurrente con balance prepago en ciclo regular</p>
         </div>
 
-        <div className={styles.bloque}>
+        <div className={styles.columna}>
           <p className={styles.etiqueta}>Estado de pagos</p>
           <p className={styles.cifra}>
-            {formatearPesos(pagado)} <span className={styles.unidad}>COP</span>
+            {formatearPesos(plan.costoBase)} <span className={styles.unidad}>COP</span>
           </p>
           <p className={styles.texto}>Debitado de Mi Billetera</p>
-          <p className={styles.alDia}>
-            <span className={styles.check} aria-hidden="true">
-              <IconoCheck />
-            </span>
-            Al día (Prepago debitado de Billetera)
-          </p>
-          <p className={styles.texto}>Sin saldos pendientes ni cobros por mora</p>
+          {plan.tieneCobroPendiente ? (
+            <p className={styles.texto}>
+              Tiene un pago pendiente por exceso de tiempo. Puede pagarlo en Mi Billetera con su saldo disponible o acudir a taquilla para recargar con el administrador.
+            </p>
+          ) : (
+            <p className={styles.alDia}>
+              <span className={styles.check} aria-hidden="true">
+                <IconoCheck />
+              </span>
+              Sin cobros pendientes
+            </p>
+          )}
         </div>
       </div>
 
       <div className={styles.dosColumnas}>
-        <section className={styles.subpanel} aria-labelledby="vigencia-titulo">
+        <section className={styles.panel} aria-labelledby="vigencia-titulo">
           <p id="vigencia-titulo" className={styles.etiqueta}>
-            Vigencia, consumo y cronograma
+            Vigencia y consumo
           </p>
           <div className={styles.celdas}>
-            <Celda etiqueta="Fecha de inicio" valor={inicio.fecha} detalle={inicio.hora} />
-            <Celda etiqueta="Fecha de fin" valor={fin.fecha} detalle={fin.hora} />
-            <Celda etiqueta="Días de uso" valor={`${diasUsados} días`} detalle="usados acumulado" />
-            <Celda etiqueta="Días restantes" valor={`${diasRestantes} días`} detalle="restantes vigentes" destacada />
+            <Celda etiqueta="Fecha de inicio" valor={formatearFechaBogota(plan.fechaInicio)} />
+            <Celda etiqueta="Fecha de fin" valor={formatearFechaBogota(plan.fechaFin)} />
+            <Celda etiqueta="Días de uso" valor={`${plan.diasUsados} días`} />
+            <Celda etiqueta="Días restantes" valor={`${plan.diasRestantes} días`} destacada />
           </div>
 
-          <BarraProgreso valor={diasUsados} maximo={plan.dias} etiqueta="Consumo del plan" />
+          <BarraProgreso valor={plan.diasUsados} maximo={plan.vigenciaDias} etiqueta="Consumo del plan" />
           <div className={styles.leyendaBarra}>
-            <span>
-              Día 1 ({diasUsados} días usados)
-            </span>
-            <span className="insignia insignia--neutra">Consumo actual [{porcentaje}%]</span>
-            <span>
-              Día {plan.dias} ({diasRestantes} días restantes)
-            </span>
+            <span>{plan.diasUsados} días usados</span>
+            <span className={styles.pastillaConsumo}>Consumo actual [{plan.porcentajeConsumo}%]</span>
+            <span>{plan.diasRestantes} días restantes</span>
           </div>
         </section>
 
-        <section className={styles.subpanel} aria-labelledby="hardware-titulo">
+        <section className={styles.panel} aria-labelledby="hardware-titulo">
           <p id="hardware-titulo" className={styles.etiqueta}>
-            Vinculación de hardware
+            Tarjeta asociada
           </p>
-          <p className={styles.texto}>Tarjeta NFC asociada:</p>
-          <div className={styles.uid}>
-            <p className={styles.uidTitulo}>
-              UID <strong>#{nfc}</strong>
-            </p>
-            <p className={styles.texto}>(Activa y habilitada para desanclaje de bicicletas)</p>
-          </div>
-          <p className={styles.sensor}>
-            <span className="punto-vivo" aria-hidden="true" /> Sensor terminal listo para validación en tótem
+          {tarjeta ? (
+            <div className={styles.uid}>
+              <p className={styles.uidTitulo}>
+                Tarjeta NFC <strong>(Vinculada)</strong>
+              </p>
+              <p className={styles.texto}>Estado: {tarjeta.estado}</p>
+            </div>
+          ) : (
+            <p className={styles.texto}>No tiene una tarjeta NFC vinculada</p>
+          )}
+          <p className={styles.texto}>
+            Viajes de hoy: {plan.viajesHoy} de {plan.viajesPorDia} ({plan.viajesRestantesHoy} disponibles)
           </p>
         </section>
       </div>
 
       <div className={styles.dosColumnas}>
-        <section className={styles.subpanel} aria-labelledby="condiciones-titulo">
-          <div className={styles.filaEtiqueta}>
-            <p id="condiciones-titulo" className={styles.etiqueta}>
-              Condiciones contratadas congeladas
-            </p>
-            <span className="insignia insignia--neutra">Protocolo: inmutable</span>
-          </div>
+        <section className={styles.panel} aria-labelledby="condiciones-titulo">
+          <p id="condiciones-titulo" className={styles.etiqueta}>
+            Condiciones contratadas
+          </p>
           <div className={styles.celdas}>
-            <Celda etiqueta="Límite por jornada" valor={`${plan.viajesDia} viajes por día`} />
-            <Celda etiqueta="Ventana de trayecto" valor={`${plan.minutosViaje} minutos máx.`} />
-            <Celda etiqueta="Minuto de exceso" valor="$100 COP / min" />
+            <Celda etiqueta="Viajes por día" valor={`${plan.viajesPorDia} viajes`} />
+            <Celda etiqueta="Tiempo por viaje" valor={`${plan.tiempoViajeMin} minutos máx.`} />
+            <Celda etiqueta="Minuto de exceso" valor={`${formatearPesos(plan.valorMinutoExceso)} COP / min`} />
           </div>
         </section>
 
-        <section className={styles.subpanel} aria-labelledby="acciones-titulo">
+        <section className={styles.panel} aria-labelledby="acciones-titulo">
           <p id="acciones-titulo" className={styles.etiqueta}>
-            Acciones de gestión disponibles
+            Acciones disponibles
           </p>
-          <button type="button" className="boton boton--bloque" onClick={onVerHistorial}>
+          <button type="button" className={`boton boton--bloque ${styles.accion}`} onClick={onVerHistorial}>
             Ver historial de viajes y pagos
           </button>
           <button type="button" className={`boton boton--bloque ${styles.cancelar}`} onClick={onCancelar}>
             Cancelar plan
           </button>
-          <p className={styles.ayuda}>Inicia el proceso de cancelación sin reembolso de vigencia restante.</p>
+          <p className={styles.ayuda}>La cancelación es inmediata y sin reembolso de la vigencia restante.</p>
         </section>
       </div>
     </section>
   );
 }
 
-// Celda de dato dentro de un subpanel
-function Celda({ etiqueta, valor, detalle, destacada = false }) {
+// Celda de dato dentro de un panel
+function Celda({ etiqueta, valor, destacada = false }) {
   return (
     <div className={destacada ? `${styles.celda} ${styles.celdaDestacada}` : styles.celda}>
       <p className={styles.etiquetaCelda}>{etiqueta}</p>
       <p className={styles.valorCelda}>{valor}</p>
-      {detalle && <p className={styles.detalleCelda}>{detalle}</p>}
     </div>
   );
 }

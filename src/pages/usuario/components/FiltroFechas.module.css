@@ -17,6 +17,34 @@
 
 .input {
   width: 100%;
+  height: var(--alto-control);
+  background: var(--color-input-fondo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+  padding: 0 var(--espacio-3);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.input::-webkit-datetime-edit,
+.input::-webkit-datetime-edit-fields-wrapper,
+.input::-webkit-datetime-edit-text,
+.input::-webkit-datetime-edit-month-field,
+.input::-webkit-datetime-edit-day-field,
+.input::-webkit-datetime-edit-year-field {
+  color: var(--color-texto);
+  font-weight: 600;
+}
+
+.input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.input:focus {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 1px;
 }
 
 .acciones {

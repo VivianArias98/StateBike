@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import Etiqueta from '../../../../components/Etiqueta/Etiqueta.jsx';
 import styles from './IncidenciasRecientes.module.css';
 
 // incidencias: [{ id, tipo, detalle, estado }]
 function IncidenciasRecientes({ incidencias, filtro }) {
+  const navigate = useNavigate();
   return (
     <section className={`tarjeta ${styles.raiz}`} aria-labelledby="titulo-incidencias">
       <header className={styles.cabecera}>
@@ -37,8 +39,11 @@ function IncidenciasRecientes({ incidencias, filtro }) {
 
       <footer className={styles.pie}>
         <span className={styles.nota}>Solo consulta operacional</span>
-        {/* Cuando exista React Router, este botón pasa a ser un <Link> */}
-        <button type="button" className={`enlace ${styles.enlace}`}>
+        <button
+          type="button"
+          className={`enlace ${styles.enlace}`}
+          onClick={() => navigate('/admin/incidencias')}
+        >
           Ver todas las incidencias abiertas →
         </button>
       </footer>

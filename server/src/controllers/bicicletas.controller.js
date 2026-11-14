@@ -18,3 +18,7 @@ export function modificar(req, res) {
 export function inactivar(req, res) {
   res.json(bicicletas.inactivar(idDe(req)));
 }
+
+export function activar(req, res) {
+  res.json(bicicletas.activar(idDe(req), req.body));
+}

@@ -23,6 +23,10 @@ export function existeCodigo(codigo) {
   return Boolean(db.prepare("SELECT 1 FROM bicicletas WHERE codigo = ?").get(codigo));
 }
 
+export function buscarPorCodigo(codigo) {
+  return db.prepare("SELECT * FROM bicicletas WHERE codigo = ? COLLATE NOCASE").get(codigo);
+}
+
 //El anclaje libre de menor número de la estación
 export function primerAnclajeLibre(estacionId) {
   return db
@@ -30,6 +34,20 @@ export function primerAnclajeLibre(estacionId) {
       "SELECT id FROM anclajes WHERE estacion_id = ? AND estado = 'LIBRE' ORDER BY numero LIMIT 1"
     )
     .get(estacionId);
+}
+
+//El primer anclaje libre de cualquier estación activa
+export function primerAnclajeLibreCualquierEstacion() {
+  return db
+    .prepare(
+      `SELECT a.id, a.estacion_id
+       FROM anclajes a
+       JOIN estaciones e ON e.id = a.estacion_id
+       WHERE a.estado = 'LIBRE' AND e.estado = 'ACTIVE'
+       ORDER BY e.id, a.numero
+       LIMIT 1`
+    )
+    .get();
 }
 
 //Registra la bicicleta DISPONIBLE y ocupa el anclaje en una sola transacción
@@ -42,6 +60,15 @@ export function crear(codigo, anclajeId) {
     return Number(lastInsertRowid);
   });
   return registrar();
+}
+
+//Reactivar una bicicleta inactiva asignándole un anclaje libre y marcándola DISPONIBLE
+export function activar(id, anclajeId) {
+  const reactivar = db.transaction(() => {
+    db.prepare("UPDATE bicicletas SET estado = 'DISPONIBLE', anclaje_id = ? WHERE id = ?").run(anclajeId, id);
+    db.prepare("UPDATE anclajes SET estado = 'OCUPADO' WHERE id = ?").run(anclajeId);
+  });
+  reactivar();
 }
 
 export function cambiarEstado(id, estado) {
@@ -61,4 +88,26 @@ export function inactivar(id) {
     }
   });
   inactivarBicicleta();
+}
+
+export function contarFlota() {
+  const fila = db
+    .prepare(
+      `SELECT
+         COUNT(*) AS total,
+         SUM(CASE WHEN estado = 'DISPONIBLE' THEN 1 ELSE 0 END) AS disponibles,
+         SUM(CASE WHEN estado = 'EN_USO' THEN 1 ELSE 0 END) AS enUso,
+         SUM(CASE WHEN estado = 'MANTENIMIENTO' THEN 1 ELSE 0 END) AS mantenimiento,
+         SUM(CASE WHEN estado = 'INACTIVA' THEN 1 ELSE 0 END) AS inactivas
+       FROM bicicletas`
+    )
+    .get();
+
+  return {
+    total: fila?.total ?? 0,
+    disponibles: fila?.disponibles ?? 0,
+    enUso: fila?.enUso ?? 0,
+    mantenimiento: fila?.mantenimiento ?? 0,
+    inactivas: fila?.inactivas ?? 0,
+  };
 }

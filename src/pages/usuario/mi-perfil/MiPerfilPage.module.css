@@ -6,23 +6,16 @@
   gap: var(--espacio-5);
 }
 
-.idPerfil {
-  padding: var(--espacio-2) var(--espacio-4);
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-pastilla);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-s);
-  font-weight: 700;
-}
-
+/* Banner de identidad: fondo de la interfaz y borde lima a la izquierda */
 .aviso {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espacio-3);
   padding: var(--espacio-4);
-  border-left: 2px solid var(--color-acento);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-left: 0.375rem solid var(--color-acento);
 }
 
 .iconoAviso {
@@ -44,8 +37,59 @@
   font-size: var(--texto-s);
 }
 
+.avisoExito {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  border: 1px solid var(--color-exito);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.iconoExito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-exito);
+  color: var(--color-superficie);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.textoExito {
+  flex: 1;
+}
+
+.cerrarExito {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0.8;
+}
+
+.cerrarExito:hover {
+  opacity: 1;
+}
+
+/* Botón "Centro de ayuda": fondo de la interfaz, texto normal en negrita */
 .ayuda {
+  gap: var(--espacio-2);
   margin-left: auto;
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  color: var(--color-texto);
+  font-weight: 700;
 }
 
 .contenido {
@@ -58,7 +102,7 @@
 @media (min-width: 1024px) {
   .contenido {
     display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    align-items: start;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: stretch;
   }
 }

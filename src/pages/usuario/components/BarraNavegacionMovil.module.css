@@ -1,0 +1,299 @@
+/* BarraNavegacionMovil.module.css: Menú flotante móvil (FAB) */
+
+.contenedorFlotante {
+  position: fixed;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  right: 1.25rem;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (min-width: 1024px) {
+  .contenedorFlotante {
+    display: none;
+  }
+}
+
+/* Telón de fondo al abrir el menú */
+.telon {
+  position: fixed;
+  inset: 0;
+  background: var(--color-pista);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1190;
+}
+
+/* Botón flotante de navegación (FAB) */
+.botonFlotante {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  height: var(--alto-control);
+  padding: 0 var(--espacio-4);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  box-shadow: 0 4px 18px var(--color-pista);
+  font-family: var(--fuente);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 1205;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.botonFlotante:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-acento);
+}
+
+.botonFlotante:active {
+  transform: scale(0.95);
+}
+
+.botonFlotanteActivo {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border-color: var(--color-borde);
+}
+
+.iconoFab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--texto-l);
+  color: var(--color-acento);
+}
+
+.botonFlotanteActivo .iconoFab {
+  color: var(--color-texto);
+}
+
+.etiquetaFab {
+  letter-spacing: 0.02em;
+}
+
+/* Punto de alerta en el botón si hay viaje en curso */
+.puntoAlertaFab {
+  position: absolute;
+  top: -0.2rem;
+  right: -0.2rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-primario);
+  border: 2px solid var(--color-superficie);
+  animation: pulsoFab 2s infinite ease-in-out;
+}
+
+@keyframes pulsoFab {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puntoAlertaFab {
+    animation: none;
+  }
+}
+
+/* Panel flotante de opciones */
+.panelFlotante {
+  position: fixed;
+  bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+  right: 1.25rem;
+  left: 1.25rem;
+  max-width: 25rem;
+  margin-left: auto;
+  max-height: calc(82vh - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  padding: var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  box-shadow: 0 8px 30px var(--color-pista);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  animation: aparecerMenu 0.22s ease-out;
+}
+
+@keyframes aparecerMenu {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelFlotante {
+    animation: none;
+  }
+}
+
+.cabeceraPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--espacio-2);
+  border-bottom: 1px solid var(--color-borde-suave);
+}
+
+.infoUsuarioMovil {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.subtituloPanel {
+  margin: 0;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tituloPanel {
+  margin: 0;
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  color: var(--color-texto);
+}
+
+.botonCerrar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--alto-control-s);
+  height: var(--alto-control-s);
+  border-radius: var(--radio-circulo);
+  border: 1px solid var(--color-borde-suave);
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-m);
+  cursor: pointer;
+}
+
+.botonCerrar:hover {
+  background: var(--color-superficie);
+  color: var(--color-texto);
+}
+
+/* Lista de navegación */
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+  text-decoration: none;
+  color: var(--color-texto);
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.item:hover {
+  transform: translateX(3px);
+  border-color: var(--color-primario);
+}
+
+.item:active {
+  transform: scale(0.98);
+}
+
+.itemActivo {
+  background: var(--color-acento-suave);
+  border-color: var(--color-primario);
+  color: var(--color-texto);
+}
+
+.iconoBox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radio-m);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  font-size: var(--texto-l);
+  color: var(--color-primario);
+}
+
+.itemActivo .iconoBox {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-color: var(--color-primario);
+}
+
+.puntoAlertaItem {
+  position: absolute;
+  top: -0.15rem;
+  right: -0.15rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-exito);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemTexto {
+  font-size: var(--texto-s);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.itemDesc {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badgeViajeEnCurso {
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}

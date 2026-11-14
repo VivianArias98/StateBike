@@ -10,6 +10,7 @@ const VIGENCIA_MS = 30_000;
 export async function autenticar(req, res, next) {
   const acceso = req.get("Authorization")?.replace(/^Bearer\s+/i, "");
   if (!acceso) throw new AppError(401, "token_requerido");
+  req.token = acceso;
 
   const guardado = cache.get(acceso);
   if (guardado && guardado.vence > Date.now()) {

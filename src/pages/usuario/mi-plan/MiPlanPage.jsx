@@ -1,122 +1,103 @@
+import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
-import PasosProgreso from '../components/PasosProgreso.jsx';
-import { formatearPesos } from '../formato.js';
-import { PLANES, USUARIO } from '../datos.js';
-import BannerSinPlan from './components/BannerSinPlan.jsx';
-import PlanActivo from './components/PlanActivo.jsx';
 import CatalogoPlanes from './components/CatalogoPlanes.jsx';
+import BannerSinPlan from './components/BannerSinPlan.jsx';
+import FlujoActivacion from './components/FlujoActivacion.jsx';
+import PlanActivo from './components/PlanActivo.jsx';
+import { IconoBilletera } from '../../../components/Iconos/Iconos.jsx';
+import { useUsuario } from '../context/UsuarioContext.jsx';
 import styles from './MiPlanPage.module.css';
 
-// Maqueta: cambia a false para ver el estado sin plan activo
-const TIENE_PLAN_ACTIVO = true;
-const PLAN_ACTIVO_ID = 'mensual';
-
-// Datos de ejemplo (solo maquetación). Después llegarán del backend.
-const SALDO_BILLETERA = 65000;
-const SUSCRIPCION = {
-  diasUsados: 12,
-  inicio: { fecha: '01/11/2026', hora: '08:30 COT' },
-  fin: { fecha: '01/12/2026', hora: '23:59 COT' },
-  pagado: 32000,
-};
-
 const PASOS_ACTIVACION = [
-  { titulo: 'Verificación NFC', detalle: `#${USUARIO.nfc}` },
-  { titulo: 'Selección de plan', detalle: 'En proceso' },
-  { titulo: 'Resumen compra', detalle: 'Débito saldo billetera' },
-  { titulo: 'Activación inmediata', detalle: 'Habilitación en docks' },
+  { titulo: 'Verificación NFC', detalle: 'Tarjeta activa vinculada', estado: 'pendiente' },
+  { titulo: 'Elegir plan', detalle: 'Del catálogo vigente', estado: 'pendiente' },
+  { titulo: 'Resumen compra', detalle: 'Débito saldo billetera', estado: 'pendiente' },
+  { titulo: 'Activación inmediata', detalle: 'Desde la fecha de pago', estado: 'pendiente' },
 ];
 
-// Mi plan: muestra el plan vigente con su consumo, o el flujo para adquirir uno
 function MiPlanPage() {
-  // Pendiente: navegar al flujo Adquirir plan, cancelar el plan y abrir el historial (React Router)
-  const adquirirPlan = () => {};
-  const cancelarPlan = () => {};
-  const verHistorial = () => {};
+  const navegar = useNavigate();
+  const { plan, planesCatalogo = [] } = useUsuario();
 
-  const planActivo = PLANES.find((plan) => plan.id === PLAN_ACTIVO_ID);
+  const adquirir = (planId) => navegar('/plan/adquirir', { state: planId ? { planId } : null });
 
   return (
     <UsuarioLayout itemActivo="Mi plan">
       <div className={styles.raiz}>
         <EncabezadoPagina
+          etiqueta="Usuario / Suscripción / Mi Plan"
           titulo="Mi Plan"
-          subtitulo={
-            TIENE_PLAN_ACTIVO
-              ? 'Gestión de tu suscripción actual y catálogo de planes disponibles'
-              : 'Gestión de suscripciones, condiciones de uso y acceso a bicicletas del sistema integrado.'
-          }
+          subtitulo="Gestión de tu suscripción actual y catálogo de planes disponibles para la red de Tunja."
           acciones={
-            /* Con plan activo, el estado va dentro de la tarjeta del plan */
-            TIENE_PLAN_ACTIVO ? null : (
-              <span className={styles.registro}>
-                Registro de ciclo: <strong>sin suscripción vigente</strong>
+            plan.tienePlan && plan.planActivo ? (
+              <span className={styles.badgePlanActivo}>
+                <span className="punto-vivo" aria-hidden="true" />
+                Plan {plan.planActivo.nombre}
+              </span>
+            ) : (
+              <span className={styles.badgeSinPlan}>
+                Sin suscripción activa
               </span>
             )
           }
         />
 
-        {TIENE_PLAN_ACTIVO ? (
-          <>
-            <PlanActivo
-              plan={planActivo}
-              nfc={USUARIO.nfc}
-              diasUsados={SUSCRIPCION.diasUsados}
-              inicio={SUSCRIPCION.inicio}
-              fin={SUSCRIPCION.fin}
-              pagado={SUSCRIPCION.pagado}
-              onCancelar={cancelarPlan}
-              onVerHistorial={verHistorial}
-            />
-
-            <section className={styles.seccion} aria-labelledby="catalogo-titulo">
-              <div className={styles.cabeceraSeccion}>
-                <div className={styles.textoSeccion}>
-                  <h2 id="catalogo-titulo" className={styles.tituloSeccion}>
-                    Catálogo de Planes Tunja Bici
-                  </h2>
-                  <p className={styles.descripcionSeccion}>
-                    Elige la modalidad que mejor responda a tu ritmo de movilidad por la ciudad
-                  </p>
-                </div>
-                <span className="insignia insignia--neutra">{PLANES.length} opciones disponibles</span>
-              </div>
-              <CatalogoPlanes planes={PLANES} planActualId={PLAN_ACTIVO_ID} onAdquirir={adquirirPlan} />
-            </section>
-          </>
+        {plan.tienePlan && plan.planActivo ? (
+          <PlanActivo
+            plan={plan.planActivo}
+            onCancelar={() => navegar('/plan/cancelar')}
+            onVerHistorial={() => navegar('/historial')}
+          />
         ) : (
           <>
-            <BannerSinPlan nfc={USUARIO.nfc} onAdquirir={adquirirPlan} />
-
-            <section className={`tarjeta ${styles.pasos}`} aria-label="Flujo de activación">
-              <PasosProgreso pasos={PASOS_ACTIVACION} pasoActual={1} etiqueta="Flujo de activación" />
-            </section>
-
-            <section className={styles.seccion} aria-labelledby="planes-titulo">
-              <div className={styles.textoSeccion}>
-                <h2 id="planes-titulo" className={styles.tituloSeccion}>
-                  Planes Disponibles
-                </h2>
-                <p className={styles.descripcionSeccion}>
-                  Selecciona la modalidad de suscripción que mejor se adapte a tus necesidades. La activación se
-                  reflejará de inmediato en tu tarjeta NFC vinculada.
-                </p>
-              </div>
-              <CatalogoPlanes planes={PLANES} onAdquirir={adquirirPlan} />
-
-              <div className={`tarjeta ${styles.nota}`}>
-                <p>
-                  * El valor de la suscripción se debita automáticamente del saldo de tu billetera al confirmar la
-                  compra.
-                </p>
-                <button type="button" className="enlace">
-                  Ver saldo en Mi Billetera ({formatearPesos(SALDO_BILLETERA)} COP) →
-                </button>
-              </div>
-            </section>
+            <BannerSinPlan
+              mensaje="No tienes un plan activo en este momento."
+              onAdquirir={() => adquirir()}
+            />
+            <FlujoActivacion pasos={PASOS_ACTIVACION} />
           </>
         )}
+
+        <section className={styles.seccion} aria-labelledby="planes-titulo">
+          <div className={styles.cabeceraSeccion}>
+            <div className={styles.textoSeccion}>
+              <h2 id="planes-titulo" className={styles.tituloSeccion}>
+                Planes Disponibles
+              </h2>
+              <p className={styles.descripcionSeccion}>
+                El valor del plan se descuenta del saldo de tu billetera y se activa de inmediato.
+              </p>
+            </div>
+          </div>
+
+          <CatalogoPlanes
+            planes={planesCatalogo}
+            puedeAdquirir={!plan.tienePlan}
+            onAdquirir={adquirir}
+          />
+        </section>
+
+        <div className={`tarjeta ${styles.nota}`}>
+          <div className={styles.notaTexto}>
+            <span className={styles.iconoBilletera} aria-hidden="true">
+              <IconoBilletera />
+            </span>
+            <div>
+              <strong className={styles.notaTitulo}>Saldo y recargas presenciales</strong>
+              <p className={styles.notaDescripcion}>
+                El pago de los planes se debita directamente de tu saldo de billetera, recargado en taquillas autorizadas por el administrador.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={`boton boton--secundario ${styles.botonBilletera}`}
+            onClick={() => navegar('/billetera')}
+          >
+            Ver saldo en Mi Billetera →
+          </button>
+        </div>
       </div>
     </UsuarioLayout>
   );

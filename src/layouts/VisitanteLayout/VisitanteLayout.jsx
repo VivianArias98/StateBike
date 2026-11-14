@@ -8,7 +8,7 @@ import styles from './VisitanteLayout.module.css';
 // Props:
 //   itemActivo → nombre del enlace del navbar que se marca como activo
 //   fondo      → 'claro' (verde, por defecto) | 'blanco' (pantalla del mapa)
-function VisitanteLayout({ children, itemActivo, fondo = 'claro', conUsuario = false }) {
+function VisitanteLayout({ children, itemActivo, fondo = 'claro' }) {
   // El estado del menú móvil vive aquí, no en la pantalla
   const [menuAbierto, setMenuAbierto] = useState(false);
 
@@ -19,7 +19,6 @@ function VisitanteLayout({ children, itemActivo, fondo = 'claro', conUsuario = f
     <div className={styles.raiz}>
       <NavbarVisitante
         itemActivo={itemActivo}
-        conUsuario={conUsuario}
         menuAbierto={menuAbierto}
         onAlternarMenu={() => setMenuAbierto((valor) => !valor)}
       />

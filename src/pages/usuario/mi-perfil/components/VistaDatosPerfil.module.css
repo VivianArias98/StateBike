@@ -1,0 +1,219 @@
+/* VistaDatosPerfil.module.css: base = celular */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: 0 2px 10px var(--color-pista);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding-bottom: var(--espacio-4);
+  border-bottom: 1px solid var(--color-borde-suave);
+}
+
+.textoCabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  flex-wrap: wrap;
+}
+
+.botonCambiarAvatar {
+  position: relative;
+  display: inline-flex;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radio-circulo);
+  transition: transform var(--transicion-rapida);
+  flex-shrink: 0;
+}
+
+.botonCambiarAvatar:hover {
+  transform: scale(1.05);
+}
+
+.insigniaCamara {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento);
+  color: var(--color-texto);
+  font-size: var(--texto-xs);
+  font-weight: 800;
+  border: 2px solid var(--color-superficie);
+  box-shadow: 0 1px 4px var(--color-pista);
+}
+
+.linkCambiarAvatar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  margin-top: var(--espacio-1);
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-foco);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transicion-rapida);
+}
+
+.linkCambiarAvatar:hover {
+  color: var(--color-acento-hover);
+}
+
+.iconoAvatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  border: 1px solid var(--color-borde-suave);
+  font-size: var(--texto-xl);
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  color: var(--color-texto);
+}
+
+.subtitulo {
+  margin: var(--espacio-1) 0 0;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+
+@media (min-width: 768px) {
+  .rejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.campoDato {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.filaEtiqueta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+}
+
+.etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-texto-suave);
+}
+
+.valor {
+  margin: var(--espacio-1) 0 0;
+  font-size: var(--texto-m);
+  font-weight: 700;
+  color: var(--color-texto);
+  word-break: break-word;
+}
+
+.notaSeguridad {
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+  margin-top: var(--espacio-1);
+}
+
+.seccionSeguridad {
+  padding: var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.cabeceraSeguridad {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+}
+
+.iconoCandado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radio-m);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-l);
+}
+
+.textoSeguridad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.claveMascara {
+  margin: var(--espacio-1) 0 0;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-l);
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--color-texto);
+}
+
+.pieAcciones {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: var(--espacio-2);
+}
+
+.botonEditarLargo {
+  height: var(--alto-control);
+  padding: 0 var(--espacio-5);
+  font-size: var(--texto-s);
+  font-weight: 700;
+}
+

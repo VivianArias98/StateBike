@@ -33,7 +33,7 @@ function EditarEstacionPage({ estacion, estaciones, onGuardar, onCancelar }) {
     setPunto({ lat, lng });
   };
 
-  const handleSubmit = (evento) => {
+  const handleSubmit = async (evento) => {
     evento.preventDefault();
 
     // El número de anclajes está bloqueado: no se valida
@@ -48,14 +48,17 @@ function EditarEstacionPage({ estacion, estaciones, onGuardar, onCancelar }) {
       return;
     }
 
-    // La estación conserva su identificador y su número de anclajes
-    onGuardar({
-      id: estacion.id,
-      nombre: valores.nombre.trim(),
-      direccion: valores.direccion.trim(),
-      lat: punto.lat,
-      lng: punto.lng,
-    });
+    try {
+      await onGuardar({
+        id: estacion.id,
+        nombre: valores.nombre.trim(),
+        direccion: valores.direccion.trim(),
+        lat: punto.lat,
+        lng: punto.lng,
+      });
+    } catch (err) {
+      setError(err.message || MENSAJES.repetido);
+    }
   };
 
   return (

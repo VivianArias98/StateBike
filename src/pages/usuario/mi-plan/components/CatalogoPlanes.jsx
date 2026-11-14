@@ -1,31 +1,49 @@
-import TarjetaPlan from '../../components/TarjetaPlan.jsx';
+import TarjetaCatalogo from './TarjetaCatalogo.jsx';
 import { formatearPesos } from '../../formato.js';
+import { caracteristicasPlan, textoVigencia } from '../planVista.js';
 import styles from './CatalogoPlanes.module.css';
 
-// Rejilla de planes. planActualId marca el plan vigente: no se puede volver a adquirir.
-function CatalogoPlanes({ planes, planActualId = null, onAdquirir }) {
+// Rejilla del catálogo de planes de Mi plan (HU_17).
+function CatalogoPlanes({ planes = [], puedeAdquirir, onAdquirir }) {
+  // Identificar el plan recomendado: preferir "Plan Mensual" o 30 días, o el segundo del catálogo
+  const idRecomendado = (() => {
+    const mensual = planes.find(
+      (p) => p.nombre?.toLowerCase().includes('mensual') || p.vigenciaDias === 30
+    );
+    if (mensual) return mensual.id;
+    return planes.length > 1 ? planes[1].id : planes[0]?.id;
+  })();
+
   return (
     <div className={styles.rejilla}>
       {planes.map((plan) => {
-        const esActual = plan.id === planActualId;
-        let insignia = null;
-        if (esActual) insignia = 'Tu plan actual';
-        else if (plan.recomendado) insignia = 'Recomendado';
+        const esActual = Boolean(plan.tuPlanActual);
+        const esRecomendado = !esActual && plan.id === idRecomendado;
+
+        let etiqueta = null;
+        if (esActual) {
+          etiqueta = 'TU PLAN ACTUAL';
+        } else if (esRecomendado) {
+          etiqueta = 'RECOMENDADO';
+        }
+
+        let accion = 'Adquirir plan';
+        if (esActual) accion = 'Plan activo - En uso';
 
         return (
-          <TarjetaPlan
+          <TarjetaCatalogo
             key={plan.id}
-            codigo={plan.codigo}
-            vigencia={plan.vigencia}
-            nombre={plan.nombre}
-            descripcion={plan.descripcion}
-            precio={formatearPesos(plan.precio)}
-            unidad={plan.unidad}
-            caracteristicas={plan.caracteristicas}
-            insignia={insignia}
-            destacada={esActual || plan.recomendado}
-            accion={esActual ? 'Plan activo - En uso' : 'Adquirir plan'}
-            accionDeshabilitada={esActual}
+            encabezado={plan.nombre}
+            vigencia={textoVigencia(plan.vigenciaDias)}
+            precio={formatearPesos(plan.costoBase)}
+            unidad="COP"
+            caracteristicas={caracteristicasPlan(plan)}
+            etiqueta={etiqueta}
+            destacada={esActual || esRecomendado}
+            esRecomendado={esRecomendado}
+            variante={esActual ? 'actual' : esRecomendado ? 'primario' : 'suave'}
+            deshabilitada={esActual || !puedeAdquirir}
+            accion={accion}
             onAccion={() => onAdquirir(plan.id)}
           />
         );

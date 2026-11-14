@@ -1,0 +1,77 @@
+/* Base = celular */
+.raiz {
+  padding: 0;
+  overflow: hidden;
+}
+
+.cabecera {
+  padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-fondo-pagina);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.titulo {
+  margin: 0;
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  font-size: var(--texto-m);
+}
+
+.negativo {
+  color: var(--color-error-texto);
+}
+
+.barra {
+  height: 0.5rem;
+  border-radius: var(--radio-pastilla);
+  background: var(--color-error-fondo);
+  overflow: hidden;
+}
+
+.barraRestante {
+  display: block;
+  height: 100%;
+  background: var(--color-acento);
+}
+
+.resultado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  border-radius: var(--radio-l);
+  background: var(--color-fondo-pagina);
+}
+
+.resultadoTitulo {
+  margin: 0;
+  font-weight: 800;
+}
+
+.resultadoValor {
+  margin: 0;
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  color: var(--color-exito);
+}
+
+.resultadoValor span {
+  font-size: var(--texto-s);
+}

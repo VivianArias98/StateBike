@@ -1,27 +1,47 @@
+import { useState } from 'react';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
 import Etiqueta from '../../../components/Etiqueta/Etiqueta.jsx';
+import Aviso from '../../../components/Avisos/Aviso.jsx';
 import { IconoInfo } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
+import VistaDatosPerfil from './components/VistaDatosPerfil.jsx';
 import FormularioDatos from './components/FormularioDatos.jsx';
 import TarjetaNfcPerfil from './components/TarjetaNfcPerfil.jsx';
+import { useUsuario } from '../context/UsuarioContext.jsx';
 import styles from './MiPerfilPage.module.css';
 
-// Datos de ejemplo (solo maquetación). Después llegarán del backend.
-const PERFIL = {
-  id: 'TNJ-08942',
-  nombre: 'Camila Rojas',
-  telefono: '300 123 4567',
-  documento: '1.049.876.543',
-  fechaNacimiento: '14/03/2001',
-  edad: 24,
-};
-
-const TARJETA = { referencia: 'TUN-4821', ultimos: '4821', titular: 'Camila Rojas', expira: '12/28' };
-
-// Perfil del usuario: datos personales, credenciales y tarjeta NFC
 function MiPerfilPage() {
-  // Pendiente: abrir el centro de ayuda (React Router)
-  const abrirAyuda = () => {};
+  const { perfil, actualizarPerfil, toggleBloqueoTarjeta } = useUsuario();
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [aviso, setAviso] = useState('');
+  const [errorTarjeta, setErrorTarjeta] = useState('');
+  const [procesandoTarjeta, setProcesandoTarjeta] = useState(false);
+
+  const guardarPerfil = async (datos) => {
+    const res = await actualizarPerfil({
+      nombreCompleto: datos.nombreCompleto,
+      telefono: datos.telefono,
+      contrasenaActual: datos.contrasenaActual,
+      nuevaContrasena: datos.nuevaContrasena,
+    });
+    const mensaje = res?.mensaje || 'PERFIL ACTUALIZADO CORRECTAMENTE';
+    setAviso(mensaje);
+    setModoEdicion(false);
+    return res;
+  };
+
+  const cambiarEstadoTarjeta = async () => {
+    setProcesandoTarjeta(true);
+    setErrorTarjeta('');
+    try {
+      const mensajeResultado = await toggleBloqueoTarjeta();
+      setAviso(mensajeResultado);
+    } catch (err) {
+      setErrorTarjeta(err.message);
+    } finally {
+      setProcesandoTarjeta(false);
+    }
+  };
 
   return (
     <UsuarioLayout itemActivo="Mi perfil">
@@ -33,32 +53,61 @@ function MiPerfilPage() {
             </>
           }
           subtitulo="Gestión centralizada de credenciales, datos de identidad y acceso NFC a estaciones"
-          acciones={<span className={styles.idPerfil}>ID: {PERFIL.id}</span>}
         />
 
-        <section className={`tarjeta ${styles.aviso}`} aria-label="Estado de la identidad">
-          <span className={styles.iconoAviso} aria-hidden="true">
-            <IconoInfo />
-          </span>
-          <p className={styles.textoAviso}>
-            <strong>Identidad verificada:</strong> Tus datos personales están validados con el Registro Municipal. Para
-            actualizar tu clave, usa una combinación alfanumérica segura.
-          </p>
-          <button type="button" className={`boton boton--s ${styles.ayuda}`} onClick={abrirAyuda}>
-            Centro de ayuda →
-          </button>
-        </section>
+        {modoEdicion && (
+          <section className={`tarjeta ${styles.aviso}`} aria-label="Reglas del perfil">
+            <span className={styles.iconoAviso} aria-hidden="true">
+              <IconoInfo />
+            </span>
+            <p className={styles.textoAviso}>
+              Puedes editar tu nombre y teléfono. La fecha de nacimiento y el correo no se pueden modificar por políticas de seguridad de la red.
+            </p>
+          </section>
+        )}
+
+        {aviso && (
+          <div className={styles.avisoExito} role="status">
+            <span className={styles.iconoExito} aria-hidden="true">✓</span>
+            <span className={styles.textoExito}>{aviso}</span>
+            <button
+              type="button"
+              className={styles.cerrarExito}
+              onClick={() => setAviso('')}
+              aria-label="Cerrar aviso"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         <div className={styles.contenido}>
-          <FormularioDatos perfil={PERFIL} />
+          {modoEdicion ? (
+            <FormularioDatos
+              key={`${perfil.nombreCompleto}-${perfil.telefono}`}
+              perfil={perfil}
+              onGuardar={guardarPerfil}
+              onCancelar={() => setModoEdicion(false)}
+            />
+          ) : (
+            <VistaDatosPerfil
+              perfil={perfil}
+              onEditar={() => setModoEdicion(true)}
+            />
+          )}
           <TarjetaNfcPerfil
-            referencia={TARJETA.referencia}
-            ultimos={TARJETA.ultimos}
-            titular={TARJETA.titular}
-            expira={TARJETA.expira}
+            estado={perfil.tarjeta?.estado ?? 'SIN VINCULAR'}
+            titular={perfil.nombreCompleto || 'Usuario'}
+            fechaVinculacion={perfil.tarjeta?.fechaVinculacion}
+            procesando={procesandoTarjeta}
+            error={errorTarjeta}
+            onBloquear={cambiarEstadoTarjeta}
+            onDesbloquear={cambiarEstadoTarjeta}
           />
         </div>
       </div>
+
+      <Aviso mensaje={aviso} onCerrar={() => setAviso('')} />
     </UsuarioLayout>
   );
 }

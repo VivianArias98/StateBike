@@ -2,7 +2,7 @@ import styles from './MetricaUsuario.module.css';
 
 // Tarjeta de cifra clave: etiqueta, valor destacado, detalle y un icono opcional.
 // Se usa en inicio, detalle de estación, historiales y mi plan.
-function MetricaUsuario({ etiqueta, valor, detalle, icono }) {
+function MetricaUsuario({ etiqueta, valor, detalle, icono, extra }) {
   return (
     <article className={`tarjeta ${styles.raiz}`}>
       <div className={styles.cabecera}>
@@ -13,8 +13,11 @@ function MetricaUsuario({ etiqueta, valor, detalle, icono }) {
           </span>
         )}
       </div>
-      <p className={styles.valor}>{valor}</p>
-      {detalle && <p className={styles.detalle}>{detalle}</p>}
+      <div className={styles.cuerpo}>
+        <div className={styles.valor}>{valor}</div>
+        {extra && <div className={styles.extra}>{extra}</div>}
+      </div>
+      {detalle && <div className={styles.detalle}>{detalle}</div>}
     </article>
   );
 }
