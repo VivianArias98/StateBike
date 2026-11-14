@@ -1,7 +1,7 @@
 import BicicletaEstadoBadge from './BicicletaEstadoBadge.jsx';
 import styles from './BicicletasTable.module.css';
 
-function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar }) {
+function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
@@ -43,19 +43,30 @@ function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar }) {
                         className={`boton boton--secundario ${styles.botonAccion}`}
                         disabled={deshabilitado}
                         onClick={() => onCambiarEstado(bicicleta.id, nuevoEstado)}
-                        title={enUso ? 'La bicicleta está en uso' : inactiva ? 'La bicicleta está inactiva' : undefined}
+                        title={enUso ? 'La bicicleta está en uso' : inactiva ? 'No se puede alternar el estado de una bicicleta inactiva' : undefined}
                       >
                         {textoBotonEstado}
                       </button>
-                      <button
-                        type="button"
-                        className={`boton ${styles.botonAccion}`}
-                        disabled={deshabilitado}
-                        onClick={() => onInactivar(bicicleta)}
-                        title={enUso ? 'La bicicleta está en uso' : inactiva ? 'La bicicleta está inactiva' : undefined}
-                      >
-                        Inactivar
-                      </button>
+                      {inactiva ? (
+                        <button
+                          type="button"
+                          className={`boton boton--primario ${styles.botonAccion}`}
+                          onClick={() => onActivar(bicicleta)}
+                          title="Activar bicicleta y asignarla a una estación con anclajes libres"
+                        >
+                          Activar
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={`boton ${styles.botonAccion}`}
+                          disabled={enUso}
+                          onClick={() => onInactivar(bicicleta)}
+                          title={enUso ? 'La bicicleta está en uso' : 'Inactivar bicicleta y liberar su anclaje'}
+                        >
+                          Inactivar
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

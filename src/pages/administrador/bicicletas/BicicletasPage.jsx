@@ -25,6 +25,8 @@ function BicicletasPage() {
   const [aviso, setAviso] = useState('');
   const [cargando, setCargando] = useState(false);
   const [bicicletaAInactivar, setBicicletaAInactivar] = useState(null);
+  const [bicicletaAActivar, setBicicletaAActivar] = useState(null);
+  const [estacionSeleccionada, setEstacionSeleccionada] = useState('');
 
   const cargarBicicletas = async (termino = '') => {
     try {
@@ -193,6 +195,59 @@ function BicicletasPage() {
     }
   };
 
+  // Activar bicicleta inactiva asignándole un anclaje
+  const handleSolicitarActivar = (bici) => {
+    if (bici.estado !== 'INACTIVA') return;
+    if (estacionesDisponibles.length > 0) {
+      setEstacionSeleccionada(String(estacionesDisponibles[0].id));
+    } else {
+      setEstacionSeleccionada('');
+    }
+    setBicicletaAActivar(bici);
+  };
+
+  const handleConfirmarActivar = async () => {
+    if (!bicicletaAActivar) return;
+
+    setCargando(true);
+    try {
+      const token = leerToken();
+      const respuesta = await fetch(`/api/admin/bicicletas/${bicicletaAActivar.id}/activar`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          estacionId: estacionSeleccionada ? Number(estacionSeleccionada) : undefined,
+        }),
+      });
+
+      const resJson = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        if (resJson.error === 'estacion_sin_anclajes_libres') {
+          setAviso('La estación seleccionada no tiene anclajes libres');
+        } else if (resJson.error === 'sin_anclajes_disponibles') {
+          setAviso('No hay estaciones con anclajes libres para ubicar la bicicleta');
+        } else {
+          setAviso(resJson.mensaje || 'Error al activar la bicicleta');
+        }
+        return;
+      }
+
+      setAviso('BICICLETA ACTIVADA CORRECTAMENTE');
+      await cargarBicicletas(busqueda);
+      await cargarEstaciones();
+    } catch {
+      setAviso('Error de conexión al activar la bicicleta');
+    } finally {
+      setCargando(false);
+      setBicicletaAActivar(null);
+    }
+  };
+
   return (
     <AdminLayout itemActivo="Bicicletas">
       <AdminEncabezado
@@ -222,6 +277,7 @@ function BicicletasPage() {
             bicicletas={bicicletas}
             onCambiarEstado={handleCambiarEstado}
             onInactivar={handleSolicitarInactivar}
+            onActivar={handleSolicitarActivar}
           />
         </div>
 
@@ -261,6 +317,65 @@ function BicicletasPage() {
                 onClick={handleConfirmarInactivar}
               >
                 Confirmar inactivación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmación para activar bicicleta */}
+      {bicicletaAActivar && (
+        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-activar-bici-titulo">
+          <div className={styles.modalCaja}>
+            <h2 id="modal-activar-bici-titulo" className={styles.modalTitulo}>
+              Activar bicicleta
+            </h2>
+            <p className={styles.modalTexto}>
+              ¿Está seguro de que desea reactivar la bicicleta <strong>{bicicletaAActivar.codigo}</strong>?
+            </p>
+
+            {estacionesDisponibles.length > 0 ? (
+              <div className="campo" style={{ marginTop: 'var(--espacio-3)', marginBottom: 'var(--espacio-3)' }}>
+                <label htmlFor="estacion-activar-select" style={{ fontWeight: 700, fontSize: 'var(--texto-s)' }}>
+                  Estación de destino (con anclajes libres):
+                </label>
+                <select
+                  id="estacion-activar-select"
+                  className="input"
+                  value={estacionSeleccionada}
+                  onChange={(e) => setEstacionSeleccionada(e.target.value)}
+                >
+                  {estacionesDisponibles.map((est) => {
+                    const libres = est.anclajesLibres ?? (est.anclajes - (est.anclajesOcupados || 0));
+                    return (
+                      <option key={est.id} value={est.id}>
+                        {est.nombre} ({libres} anclajes libres)
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            ) : (
+              <p className="mensaje-error" style={{ margin: 'var(--espacio-3) 0' }}>
+                No hay estaciones activas con anclajes libres en este momento. Debe liberar un anclaje antes de reactivar.
+              </p>
+            )}
+
+            <div className={styles.modalAcciones}>
+              <button
+                type="button"
+                className="boton boton--secundario"
+                onClick={() => setBicicletaAActivar(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="boton boton--primario"
+                onClick={handleConfirmarActivar}
+                disabled={estacionesDisponibles.length === 0}
+              >
+                Confirmar activación
               </button>
             </div>
           </div>

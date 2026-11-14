@@ -14,6 +14,8 @@ import {
 } from '../../components/Iconos/Iconos.jsx';
 import { cerrarSesion } from '../../utils/auth.js';
 import { leerSesion } from '../../utils/sesion.js';
+import AvatarAdmin from '../../components/AvataresAdmin/AvatarAdmin.jsx';
+import ModalSelectorAvatarAdmin from '../../components/AvataresAdmin/ModalSelectorAvatarAdmin.jsx';
 import styles from './AdminLayout.module.css';
 
 // Módulos oficiales del Rol Administrador (Gestión Central Tunja)
@@ -28,13 +30,25 @@ const MENU = [
   { nombre: 'Billetera', ruta: '/admin/billetera', icono: <IconoBilletera /> },
 ];
 
+const CLAVE_AVATAR_ADMIN_PREFIJO = 'stationbike.avatar_admin_';
+
 function AdminLayout({ itemActivo, children }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const navigate = useNavigate();
 
   const sesion = leerSesion();
+  const adminId = sesion?.usuario?.id || 'admin';
   const nombreAdmin = sesion?.usuario?.nombreCompleto || 'Administrador';
   const correoAdmin = sesion?.usuario?.correo || sesion?.usuario?.email || 'admin@stationbike.com';
+
+  const [avatarAdmin, setAvatarAdmin] = useState(() => {
+    try {
+      return localStorage.getItem(CLAVE_AVATAR_ADMIN_PREFIJO + adminId) || 'admin-mujer-1';
+    } catch {
+      return 'admin-mujer-1';
+    }
+  });
+  const [modalAvatarAbierto, setModalAvatarAbierto] = useState(false);
 
   const handleCerrarSesion = async () => {
     await cerrarSesion();
@@ -108,12 +122,26 @@ function AdminLayout({ itemActivo, children }) {
             </div>
 
             <div className={styles.tarjetaPerfil}>
-              <div className={styles.avatarAdmin}>
-                <IconoUsuario />
-              </div>
+              <button
+                type="button"
+                className={styles.botonAvatarAdmin}
+                onClick={() => setModalAvatarAbierto(true)}
+                title="Cambiar avatar ejecutivo de administración"
+                aria-label="Cambiar avatar ejecutivo de administración"
+              >
+                <AvatarAdmin id={avatarAdmin} tamano="m" />
+                <span className={styles.insigniaLapiz} aria-hidden="true">✎</span>
+              </button>
               <div className={styles.datosAdmin}>
                 <p className={styles.nombreAdmin}>{nombreAdmin}</p>
                 <p className={styles.correoAdmin}>{correoAdmin}</p>
+                <button
+                  type="button"
+                  className={styles.linkCambiarAvatarAdmin}
+                  onClick={() => setModalAvatarAbierto(true)}
+                >
+                  Cambiar avatar
+                </button>
               </div>
             </div>
 
@@ -136,6 +164,18 @@ function AdminLayout({ itemActivo, children }) {
           <span style={{ opacity: 0.7 }}>v2.0</span>
         </footer>
       </div>
+
+      <ModalSelectorAvatarAdmin
+        abierto={modalAvatarAbierto}
+        avatarActual={avatarAdmin}
+        onCerrar={() => setModalAvatarAbierto(false)}
+        onSeleccionar={(nuevoId) => {
+          setAvatarAdmin(nuevoId);
+          try {
+            localStorage.setItem(CLAVE_AVATAR_ADMIN_PREFIJO + adminId, nuevoId);
+          } catch {}
+        }}
+      />
     </div>
   );
 }

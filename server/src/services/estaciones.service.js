@@ -112,3 +112,11 @@ export function inactivar(id) {
   repositorio.cambiarEstado(id, "INACTIVE");
   return { mensaje: MENSAJES.estacion_inactivada, estacion: repositorio.buscarPorId(id) };
 }
+
+export function activar(id) {
+  const estacion = obtener(id);
+  if (estacion.estado === "ACTIVE") throw new AppError(409, "estacion_activa");
+
+  repositorio.cambiarEstado(id, "ACTIVE");
+  return { mensaje: MENSAJES.estacion_activada, estacion: repositorio.buscarPorId(id) };
+}

@@ -98,7 +98,6 @@ function ModalSelectorAvatar({ avatarActual, abierto, onCerrar, onSeleccionar })
                 )}
                 <AvatarCiclista id={avatar.id} tamano="l" />
                 <h3 className={styles.nombreAvatar}>{avatar.nombre}</h3>
-                <p className={styles.descripcionAvatar}>{avatar.descripcion}</p>
               </button>
             );
           })}
