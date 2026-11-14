@@ -31,14 +31,18 @@ export function validarLogin({ correo, contrasena }) {
 }
 
 export function validarRegistro(datos) {
-  const { nombreCompleto, fechaNacimiento, correo, contrasena, confirmacion, aceptaTerminos } = datos;
+  const { nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion, aceptaTerminos } = datos;
 
-  if ([nombreCompleto, fechaNacimiento, correo, contrasena, confirmacion].some(vacio)) {
+  if ([nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion].some(vacio)) {
     return 'Hay campos obligatorios vacíos';
   }
   const email = correo.trim();
   if (email.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(email)) {
     return 'Correo inválido';
+  }
+  const telLimpio = String(telefono ?? '').trim();
+  if (!/^\+?\d{7,15}$/.test(telLimpio)) {
+    return 'El número de teléfono o celular no es válido';
   }
   if (
     contrasena.length < LARGO_MIN_CONTRASENA ||

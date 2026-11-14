@@ -13,10 +13,12 @@
     max-width: 120rem;
     margin: 0 auto;
     padding: var(--espacio-5) var(--espacio-4);
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
   
   @media (min-width: 1024px) {
     .contenido {
       padding: var(--espacio-6) var(--espacio-7);
+      padding-bottom: var(--espacio-6);
     }
   }

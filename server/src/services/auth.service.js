@@ -53,15 +53,19 @@ function respuestaSesion(sesion, perfil) {
 
 // HU_7: el orden de las validaciones sigue el flujo normal
 export async function registrar(datos = {}) {
-  const { nombreCompleto, fechaNacimiento, correo, contrasena, confirmacion, aceptaTerminos } = datos;
+  const { nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion, aceptaTerminos } = datos;
 
-  if ([nombreCompleto, fechaNacimiento, correo, contrasena, confirmacion].some(vacio)) {
+  if ([nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion].some(vacio)) {
     throw new AppError(400, "campos_vacios");
   }
 
   const email = correo.trim();
   if (email.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(email)) {
     throw new AppError(400, "correo_invalido");
+  }
+  const telLimpio = String(telefono).trim();
+  if (!/^\+?\d{7,15}$/.test(telLimpio)) {
+    throw new AppError(400, "telefono_invalido");
   }
   if (contrasena.length < LARGO_MIN_CONTRASENA) throw new AppError(400, "contrasena_debil");
   if (contrasena !== confirmacion) throw new AppError(400, "contrasenas_no_coinciden");
@@ -87,6 +91,7 @@ export async function registrar(datos = {}) {
     fechaNacimiento,
     correo: respuesta.usuario.email,
     nombre: respuesta.usuario.nombre,
+    telefono: telLimpio,
   });
 
   // La HU manda a iniciar sesión: no se devuelven tokens

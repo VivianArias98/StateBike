@@ -39,10 +39,19 @@ export function reportar(usuarioId, datos = {}) {
   let finalBicicletaId = null;
   if (bicicletaId) {
     const b = bicicletasRepo.buscarPorId(Number(bicicletaId));
-    if (b) finalBicicletaId = b.id;
-  } else if (codigoBicicleta) {
-    const b = bicicletasRepo.buscarPorCodigo(codigoBicicleta);
-    if (b) finalBicicletaId = b.id;
+    if (b) {
+      finalBicicletaId = b.id;
+    } else {
+      throw new AppError(404, "bicicleta_no_encontrada");
+    }
+  } else if (codigoBicicleta && String(codigoBicicleta).trim() !== "") {
+    const codigoStr = String(codigoBicicleta).trim();
+    const b = bicicletasRepo.buscarPorCodigo(codigoStr);
+    if (b) {
+      finalBicicletaId = b.id;
+    } else {
+      throw new AppError(404, "bicicleta_no_encontrada");
+    }
   }
 
   let finalEstacionId = null;
@@ -51,8 +60,8 @@ export function reportar(usuarioId, datos = {}) {
     if (e) finalEstacionId = e.id;
   }
 
-  // Precondición HU_6: Indicar bicicleta o estación salvo para tarjeta NFC
-  if (tipoNormalizado !== "TARJETA" && !finalBicicletaId && !finalEstacionId) {
+  // Precondición HU_6: Indicar bicicleta o estación para daños mecánicos o fallas de estación
+  if (tipoNormalizado !== "TARJETA" && tipoNormalizado !== "OTRO" && !finalBicicletaId && !finalEstacionId) {
     throw new AppError(400, "indique_recurso");
   }
 

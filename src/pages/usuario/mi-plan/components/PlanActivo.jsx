@@ -70,7 +70,7 @@ function PlanActivo({ plan, onCancelar, onVerHistorial }) {
           {tarjeta ? (
             <div className={styles.uid}>
               <p className={styles.uidTitulo}>
-                Tarjeta NFC <strong>•••• {tarjeta.ultimosDigitos}</strong>
+                Tarjeta NFC <strong>(Vinculada)</strong>
               </p>
               <p className={styles.texto}>Estado: {tarjeta.estado}</p>
             </div>

@@ -5,12 +5,12 @@ import styles from './PasoResumenPago.module.css';
 
 // Paso 3: revisar las condiciones del plan y autorizar el débito de la billetera.
 // Solo dibuja; la compra la hace la página con onConfirmar.
-function PasoResumenPago({ plan, ultimosDigitos, saldo, autorizado, pagando, error, onAutorizar, onModificar, onConfirmar }) {
+function PasoResumenPago({ plan, saldo, autorizado, pagando, error, onAutorizar, onModificar, onConfirmar }) {
   const saldoProyectado = saldo - plan.costoBase;
   const filas = [
     { etiqueta: 'Plan seleccionado:', valor: plan.nombre },
     { etiqueta: 'Costo del plan:', valor: `${formatearPesos(plan.costoBase)} COP`, destacado: true },
-    { etiqueta: 'Tarjeta NFC asociada:', valor: `•••• ${ultimosDigitos}`, chip: true },
+    { etiqueta: 'Tarjeta NFC asociada:', valor: 'Vinculada y activa', chip: true },
     { etiqueta: 'Vigencia del plan:', valor: `${textoVigencia(plan.vigenciaDias)} desde el pago` },
     { etiqueta: 'Viajes por día:', valor: `${plan.viajesPorDia}` },
     { etiqueta: 'Tiempo límite por viaje:', valor: `${plan.tiempoViajeMin} minutos` },

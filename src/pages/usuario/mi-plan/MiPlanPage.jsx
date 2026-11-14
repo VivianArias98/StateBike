@@ -18,7 +18,7 @@ const PASOS_ACTIVACION = [
 
 function MiPlanPage() {
   const navegar = useNavigate();
-  const { plan, perfil, planesCatalogo } = useUsuario();
+  const { plan, planesCatalogo } = useUsuario();
 
   const adquirir = (planId) => navegar('/plan/adquirir', { state: planId ? { planId } : null });
 
@@ -40,7 +40,6 @@ function MiPlanPage() {
           <>
             <BannerSinPlan
               mensaje="No tienes un plan activo en este momento."
-              ultimosDigitos={perfil?.tarjeta?.ultimosDigitos || '----'}
               onAdquirir={() => adquirir()}
             />
             <FlujoActivacion pasos={PASOS_ACTIVACION} />

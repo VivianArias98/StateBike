@@ -15,6 +15,8 @@ const TEXTOS = {
   token_expirado: 'Tu sesión expiró. Vuelve a iniciar sesión',
   refresco_invalido: 'Tu sesión ya no es válida. Vuelve a iniciar sesión',
   fecha_invalida: 'La fecha de nacimiento no es válida',
+  telefono_invalido: 'El número de teléfono o celular no es válido',
+  bicicleta_no_encontrada: 'La bicicleta indicada no existe en el sistema',
   monto_fuera_rango: 'El monto debe estar entre $100 y $500.000 COP',
   recarga_supera_maximo: 'La recarga supera el saldo máximo permitido de $2.000.000 COP',
   sin_conexion: 'No se pudo conectar con el servidor. Intenta de nuevo',

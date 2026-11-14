@@ -50,27 +50,28 @@
 }
 
 .tablaContenedor {
-  overflow-x: auto;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radio-l);
   border: 1px solid var(--color-borde);
 }
 
 .tablaIncidencias table {
-  min-width: 82rem;
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+  min-width: 88rem !important;
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
 }
 
-.colId { width: 4.5rem; }
-.colTipo { width: 10.5rem; white-space: nowrap; }
-.colRecurso { width: 12rem; white-space: nowrap; }
-.colUsuario { width: 13rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.colFecha { width: 8.5rem; white-space: nowrap; }
-.colEstado { width: 8rem; text-align: center; }
-.colDescripcion { width: 18rem; }
-.colObservacion { width: 16rem; }
-.colAcciones { width: 11rem; text-align: right; }
+.colId { min-width: 4rem; width: 4.5rem; white-space: nowrap; }
+.colTipo { min-width: 14rem; white-space: normal; word-break: break-word; }
+.colRecurso { min-width: 13rem; white-space: normal; word-break: break-word; }
+.colUsuario { min-width: 13rem; word-break: break-word; }
+.colFecha { min-width: 11.5rem; white-space: nowrap; }
+.colEstado { min-width: 8rem; text-align: center; white-space: nowrap; }
+.colDescripcion { min-width: 18rem; }
+.colObservacion { min-width: 16rem; }
+.colAcciones { min-width: 11rem; text-align: right; white-space: nowrap; }
 
 .descripcionTexto {
   font-size: var(--texto-s);

@@ -30,6 +30,7 @@ const CAMPOS_VACIOS = {
   nombreCompleto: '',
   fechaNacimiento: '',
   correo: '',
+  telefono: '',
   contrasena: '',
   confirmacion: '',
   aceptaTerminos: false,
@@ -86,6 +87,8 @@ function RegistroForm() {
         document.getElementById('nacimiento-dia')?.focus();
       } else if (!datos.correo.trim()) {
         document.getElementById('correo')?.focus();
+      } else if (!datos.telefono.trim()) {
+        document.getElementById('telefono')?.focus();
       } else if (!datos.contrasena) {
         document.getElementById('password')?.focus();
       } else if (!datos.confirmacion) {
@@ -100,6 +103,7 @@ function RegistroForm() {
         nombreCompleto: datos.nombreCompleto.trim(),
         fechaNacimiento: datos.fechaNacimiento,
         correo: datos.correo.trim(),
+        telefono: datos.telefono.trim(),
         contrasena: datos.contrasena,
         confirmacion: datos.confirmacion,
         aceptaTerminos: datos.aceptaTerminos,
@@ -187,6 +191,20 @@ function RegistroForm() {
           onChange={(e) => cambiar('correo', e.target.value)}
           onFocus={() => { if (error) setError(''); }}
           autoComplete="email"
+        />
+      </div>
+
+      <div className={`campo ${styles.campo}`}>
+        <label htmlFor="telefono" className={styles.etiqueta}>Teléfono celular</label>
+        <input
+          id="telefono"
+          type="tel"
+          className={`input ${styles.entrada}`}
+          placeholder="Ej: 3001234567"
+          value={datos.telefono}
+          onChange={(e) => cambiar('telefono', e.target.value)}
+          onFocus={() => { if (error) setError(''); }}
+          autoComplete="tel"
         />
       </div>
 

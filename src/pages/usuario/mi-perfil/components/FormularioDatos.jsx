@@ -28,11 +28,18 @@ function FormularioDatos({ perfil, onGuardar }) {
   const [mostrarNueva, setMostrarNueva] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState('');
+  const [mensajeExito, setMensajeExito] = useState('');
+
+  const limpiarAvisos = () => {
+    if (error) setError('');
+    if (mensajeExito) setMensajeExito('');
+  };
 
   const guardar = async (evento) => {
     evento.preventDefault();
     setGuardando(true);
     setError('');
+    setMensajeExito('');
 
     const datos = { nombreCompleto: nombre, telefono };
     if (claveNueva) {
@@ -41,9 +48,10 @@ function FormularioDatos({ perfil, onGuardar }) {
     }
 
     try {
-      await onGuardar(datos);
+      const res = await onGuardar(datos);
       setClaveActual('');
       setClaveNueva('');
+      setMensajeExito(res?.mensaje || 'PERFIL ACTUALIZADO CORRECTAMENTE');
     } catch (errorApi) {
       setError(mensajeError(errorApi));
     } finally {
@@ -58,6 +66,7 @@ function FormularioDatos({ perfil, onGuardar }) {
     setClaveActual('');
     setClaveNueva('');
     setError('');
+    setMensajeExito('');
   };
 
   const longitud = claveNueva.length;
@@ -79,7 +88,10 @@ function FormularioDatos({ perfil, onGuardar }) {
             id="perfil-nombre"
             className="input"
             value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            onChange={(e) => {
+              limpiarAvisos();
+              setNombre(e.target.value);
+            }}
             autoComplete="name"
           />
         </div>
@@ -91,7 +103,10 @@ function FormularioDatos({ perfil, onGuardar }) {
             className="input"
             type="tel"
             value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
+            onChange={(e) => {
+              limpiarAvisos();
+              setTelefono(e.target.value);
+            }}
             autoComplete="tel"
           />
         </div>
@@ -140,7 +155,10 @@ function FormularioDatos({ perfil, onGuardar }) {
                 type={mostrarActual ? 'text' : 'password'}
                 className={`input ${styles.inputConBoton}`}
                 value={claveActual}
-                onChange={(e) => setClaveActual(e.target.value)}
+                onChange={(e) => {
+                  limpiarAvisos();
+                  setClaveActual(e.target.value);
+                }}
                 autoComplete="current-password"
               />
               <button
@@ -164,7 +182,10 @@ function FormularioDatos({ perfil, onGuardar }) {
                 className={`input ${styles.inputConBoton}`}
                 placeholder={`Mínimo ${LONGITUD_MINIMA} caracteres, letras y números`}
                 value={claveNueva}
-                onChange={(e) => setClaveNueva(e.target.value)}
+                onChange={(e) => {
+                  limpiarAvisos();
+                  setClaveNueva(e.target.value);
+                }}
                 autoComplete="new-password"
               />
               <button
@@ -190,6 +211,28 @@ function FormularioDatos({ perfil, onGuardar }) {
       {error && (
         <p className="mensaje-error" role="alert">
           {error}
+        </p>
+      )}
+
+      {mensajeExito && (
+        <p
+          className="mensaje-exito"
+          role="status"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--espacio-2)',
+            padding: 'var(--espacio-3) var(--espacio-4)',
+            background: 'var(--color-acento-suave)',
+            color: 'var(--color-exito)',
+            border: '1px solid var(--color-exito)',
+            borderRadius: 'var(--radio-m)',
+            fontSize: 'var(--texto-s)',
+            fontWeight: 600,
+            margin: 0,
+          }}
+        >
+          <IconoCheck /> {mensajeExito}
         </p>
       )}
 

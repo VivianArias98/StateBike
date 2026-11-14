@@ -20,7 +20,7 @@ function AdquirirPlanPaso4Page() {
 
   if (!state?.respuesta) return <Navigate to="/plan" replace />;
 
-  const { respuesta, plan, saldoRestante, tarjeta } = state;
+  const { respuesta, plan, saldoRestante } = state;
 
   return (
     <UsuarioLayout itemActivo="Mi plan">
@@ -36,7 +36,6 @@ function AdquirirPlanPaso4Page() {
           mensaje={respuesta.mensaje}
           suscripcion={respuesta.suscripcion}
           plan={plan}
-          ultimosDigitos={tarjeta?.ultimosDigitos}
           saldoRestante={saldoRestante}
           onVerMapa={() => navegar('/inicio')}
         />

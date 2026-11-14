@@ -11,6 +11,10 @@
   flex-direction: column;
   padding: 0;
   overflow: hidden;
+  box-shadow: var(--sombra-md);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-l);
+  background: var(--color-superficie);
 }
 
 .pie {
@@ -18,6 +22,7 @@
   flex-direction: column;
   gap: var(--espacio-3);
   padding: var(--espacio-4) var(--espacio-5);
+  background: var(--color-fondo-pagina);
   border-top: 1px solid var(--color-borde-suave);
 }
 

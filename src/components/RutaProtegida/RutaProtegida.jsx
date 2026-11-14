@@ -4,12 +4,16 @@ import { leerSesion, borrarSesion, rutaInicio } from '../../utils/sesion.js';
 import { obtenerUsuarioActual } from '../../utils/auth.js';
 
 // Deja pasar solo a usuarios con sesión válida y del rol indicado.
-// Confirma la sesión con el servidor (/auth/me) una vez al entrar.
+// Confirma la sesión con el servidor (/auth/me) en segundo plano una vez al entrar.
 function RutaProtegida({ rol, children }) {
   const ubicacion = useLocation();
-  const [estado, setEstado] = useState('verificando');
   const sesion = leerSesion();
   const rolSesion = sesion?.usuario?.rol;
+  const esRolValido = Boolean(sesion?.usuario && rolSesion === rol);
+
+  // Si ya tenemos una sesión local válida con el rol correspondiente, iniciamos en 'ok'
+  // para evitar pantallas en verde/en blanco y renderizar el panel inmediatamente.
+  const [estado, setEstado] = useState(() => (esRolValido ? 'ok' : 'verificando'));
 
   useEffect(() => {
     let activo = true;
@@ -42,13 +46,27 @@ function RutaProtegida({ rol, children }) {
   if (!sesion?.usuario || estado === 'fuera') {
     return <Navigate to="/login" replace state={{ desde: ubicacion.pathname }} />;
   }
-  if (rolSesion !== rol) {
+  if (rolSesion !== rol || estado === 'rol_distinto') {
     return <Navigate to={rutaInicio(rolSesion)} replace />;
   }
-  if (estado === 'rol_distinto') {
-    return <Navigate to={rutaInicio(rolSesion)} replace />;
+  if (estado !== 'ok') {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          gap: 'var(--espacio-3)',
+          color: 'var(--color-texto)',
+        }}
+      >
+        <span className="punto-vivo" style={{ width: '1.25rem', height: '1.25rem' }} aria-hidden="true" />
+        <p style={{ fontSize: 'var(--texto-s)', fontWeight: 600 }}>Cargando...</p>
+      </div>
+    );
   }
-  if (estado !== 'ok') return null;
   return children;
 }
 
