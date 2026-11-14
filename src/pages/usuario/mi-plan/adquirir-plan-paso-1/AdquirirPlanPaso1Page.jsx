@@ -33,7 +33,7 @@ function AdquirirPlanPaso1Page() {
         <CabeceraAdquirir
           titulo="Adquirir Plan"
           subtitulo="Paso 1: Verificación de Tarjeta NFC"
-          chip={tarjeta ? `NFC: ${tarjeta.estado} · •••• ${tarjeta.ultimosDigitos}` : 'NFC: SIN VINCULAR'}
+          chip={tarjeta ? `NFC: ${tarjeta.estado}` : 'NFC: SIN VINCULAR'}
         />
         <BarraPasos pasos={BARRAS} />
 

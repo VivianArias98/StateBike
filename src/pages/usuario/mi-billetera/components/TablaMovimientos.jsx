@@ -7,16 +7,49 @@ import styles from './TablaMovimientos.module.css';
 // Tipos que suman al saldo; el resto (compras de plan, cobros) restan
 const TIPOS_INGRESO = ['RECARGA', 'TOPUP'];
 
+function clasificarTipoBilletera(tipo, concepto = '') {
+  const tipoUpper = String(tipo || '').toUpperCase();
+  const conceptoLower = String(concepto).toLowerCase();
+
+  if (
+    tipoUpper === 'COMPRA_PLAN' ||
+    tipoUpper === 'PLAN' ||
+    conceptoLower.includes('plan') ||
+    conceptoLower.includes('adquisición') ||
+    conceptoLower.includes('adquisicion')
+  ) {
+    return 'Compra de plan';
+  }
+  if (tipoUpper === 'COBRO_EXCESO' || conceptoLower.includes('exceso')) {
+    return 'Cobro por exceso';
+  }
+  if (tipoUpper === 'RECARGA' || tipoUpper === 'TOPUP' || conceptoLower.includes('recarga')) {
+    return 'Recarga de saldo';
+  }
+  if (tipoUpper === 'COBRO' || tipoUpper === 'CHARGE') {
+    return 'Cobro de servicio';
+  }
+  return tipo || 'Movimiento';
+}
+
+function esIngreso(tipo, concepto = '') {
+  const conceptoLower = String(concepto).toLowerCase();
+  if (conceptoLower.includes('plan') || conceptoLower.includes('adquisición') || conceptoLower.includes('adquisicion') || conceptoLower.includes('exceso')) {
+    return false;
+  }
+  return TIPOS_INGRESO.includes(String(tipo).toUpperCase()) || conceptoLower.includes('recarga');
+}
+
 // Historial de movimientos de la billetera, del más reciente al más antiguo (HU_23).
 // El orden ya lo entrega el backend.
 function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
   const handleDescargarCSV = () => {
     const encabezados = ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo resultante'];
     const filas = movimientos.map((m) => {
-      const ingreso = TIPOS_INGRESO.includes(String(m.tipo).toUpperCase());
+      const ingreso = esIngreso(m.tipo, m.concepto);
       return [
         `#${m.id}`,
-        m.tipo,
+        clasificarTipoBilletera(m.tipo, m.concepto),
         m.concepto,
         formatearFechaBogota(m.fecha),
         (ingreso ? '+' : '-') + formatearPesos(m.monto) + ' COP',
@@ -38,10 +71,10 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
       ],
       columnas: ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo Resultante'],
       filas: movimientos.map((m) => {
-        const ingreso = TIPOS_INGRESO.includes(String(m.tipo).toUpperCase());
+        const ingreso = esIngreso(m.tipo, m.concepto);
         return [
           `#${m.id}`,
-          m.tipo,
+          clasificarTipoBilletera(m.tipo, m.concepto),
           m.concepto,
           formatearFechaBogota(m.fecha),
           (ingreso ? '+' : '-') + `${formatearPesos(m.monto)} COP`,
@@ -99,12 +132,13 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
             </thead>
             <tbody>
               {movimientos.map((mov) => {
-                const ingreso = TIPOS_INGRESO.includes(String(mov.tipo).toUpperCase());
+                const ingreso = esIngreso(mov.tipo, mov.concepto);
+                const etiquetaTipo = clasificarTipoBilletera(mov.tipo, mov.concepto);
                 const pendiente = mov.estado === 'PENDIENTE';
                 return (
                   <tr key={mov.id}>
                     <td>
-                      <span className={ingreso ? styles.tipoIngreso : styles.tipoEgreso}>{mov.tipo}</span>
+                      <span className={ingreso ? styles.tipoIngreso : styles.tipoEgreso}>{etiquetaTipo}</span>
                     </td>
                     <td>
                       <p className={styles.concepto}>{mov.concepto}</p>

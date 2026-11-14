@@ -57,20 +57,45 @@ function HistorialPage() {
 
   // 2. Datos formateados de Pagos
   const movimientosPagos = billetera.movimientos?.length ? billetera.movimientos : [];
-  const listaPagos = movimientosPagos.map((m) => ({
-    id: m.id,
-    fechaHora: formatearFechaBogota(m.fecha),
-    fecha: extraerFechaBogota(m.fecha),
-    concepto: m.concepto,
-    tipo:
-      m.tipo === 'COBRO_EXCESO'
-        ? 'Cobro por exceso'
-        : m.tipo === 'COMPRA_PLAN'
-        ? 'Compra de plan'
-        : 'Recarga de saldo',
-    monto: m.monto,
-    estado: m.estado === 'PAGADO' ? 'Pagado' : 'Pendiente',
-  }));
+  const listaPagos = movimientosPagos.map((m) => {
+    let tipoFormateado = 'Recarga de saldo';
+    const tipoUpper = String(m.tipo || '').toUpperCase();
+    const conceptoLower = String(m.concepto || '').toLowerCase();
+
+    if (
+      tipoUpper === 'COMPRA_PLAN' ||
+      tipoUpper === 'PLAN' ||
+      conceptoLower.includes('plan') ||
+      conceptoLower.includes('adquisición') ||
+      conceptoLower.includes('adquisicion')
+    ) {
+      tipoFormateado = 'Compra de plan';
+    } else if (
+      tipoUpper === 'COBRO_EXCESO' ||
+      tipoUpper === 'EXCESO' ||
+      conceptoLower.includes('exceso')
+    ) {
+      tipoFormateado = 'Cobro por exceso';
+    } else if (
+      tipoUpper === 'RECARGA' ||
+      tipoUpper === 'TOPUP' ||
+      conceptoLower.includes('recarga')
+    ) {
+      tipoFormateado = 'Recarga de saldo';
+    } else if (tipoUpper === 'COBRO' || tipoUpper === 'CHARGE') {
+      tipoFormateado = 'Cobro de servicio';
+    }
+
+    return {
+      id: m.id,
+      fechaHora: formatearFechaBogota(m.fecha),
+      fecha: extraerFechaBogota(m.fecha),
+      concepto: m.concepto,
+      tipo: tipoFormateado,
+      monto: m.monto,
+      estado: m.estado === 'PAGADO' ? 'Pagado' : 'Pendiente',
+    };
+  });
 
   // Filtrado de Viajes
   const viajesFiltrados = listaViajes.filter((v) => {

@@ -55,15 +55,15 @@ function BotonTema({ compacto = false, texto = false, className = '', style = {}
       className={`${styles.botonTema} ${compacto ? styles.compacto : ''} ${className}`}
       onClick={alternarTema}
       style={style}
-      title={esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      title={esOscuro ? 'Modo Oscuro activo (clic para cambiar a modo claro)' : 'Modo Claro activo (clic para cambiar a modo oscuro)'}
       aria-label={esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
     >
       <span className={styles.icono}>
-        {esOscuro ? <IconoSol /> : <IconoLuna />}
+        {esOscuro ? <IconoLuna /> : <IconoSol />}
       </span>
       {texto && (
         <span className={styles.etiqueta}>
-          {esOscuro ? 'Modo Claro' : 'Modo Oscuro'}
+          {esOscuro ? 'Modo Oscuro' : 'Modo Claro'}
         </span>
       )}
     </button>

@@ -89,6 +89,94 @@
   letter-spacing: 0.04em;
 }
 
+.chipsContenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.etiquetaChips {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.chip:hover {
+  background: var(--color-input-fondo);
+  border-color: var(--color-texto);
+}
+
+.chipActivo {
+  background: var(--color-acento-suave);
+  border-color: var(--color-exito);
+  color: var(--color-exito);
+  font-weight: 700;
+}
+
+.tarjetaNfcInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-input-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-m);
+}
+
+.datosNfc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.tituloNfc {
+  font-size: var(--texto-s);
+  font-weight: 700;
+  font-family: var(--fuente-mono);
+}
+
+.avisoSeguridad {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  border-left: 4px solid var(--color-primario);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-xs);
+  line-height: 1.5;
+  color: var(--color-texto);
+}
+
+.iconoInfo {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primario);
+}
+
 @media (min-width: 768px) {
   .seccion {
     padding: var(--espacio-6);

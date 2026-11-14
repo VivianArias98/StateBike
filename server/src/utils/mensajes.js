@@ -28,6 +28,7 @@ export const MENSAJES = {
     codigo_bicicleta_duplicado: "El código de la bicicleta ya se encuentra registrado",
     estacion_sin_anclajes_libres: "La estación no tiene anclajes libres",
     bicicleta_registrada: "REGISTRO DE BICICLETA EXITOSO",
+    bicicleta_no_encontrada: "La bicicleta indicada no existe en el sistema",
     bicicleta_en_uso: "La bicicleta está en uso",
     bicicleta_actualizada: "BICICLETA ACTUALIZADA CORRECTAMENTE",
     bicicleta_inactivada: "BICICLETA INACTIVADA CORRECTAMENTE",

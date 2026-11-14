@@ -68,7 +68,6 @@ function AdquirirPlanPaso3Page() {
 
         <PasoResumenPago
           plan={plan}
-          ultimosDigitos={perfil?.tarjeta?.ultimosDigitos || '----'}
           saldo={billetera.saldo}
           autorizado={autorizado}
           pagando={pagando}

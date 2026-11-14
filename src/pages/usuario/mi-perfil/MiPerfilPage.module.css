@@ -6,28 +6,6 @@
   gap: var(--espacio-5);
 }
 
-.idPerfil {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  padding: var(--espacio-2) var(--espacio-4);
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-pastilla);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-s);
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.punto {
-  flex-shrink: 0;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: var(--color-exito);
-  border-radius: var(--radio-circulo);
-}
-
 /* Banner de identidad: fondo de la interfaz y borde lima a la izquierda */
 .aviso {
   display: flex;
@@ -57,6 +35,51 @@
   flex: 1;
   min-width: 0;
   font-size: var(--texto-s);
+}
+
+.avisoExito {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  border: 1px solid var(--color-exito);
+  border-radius: var(--radio-m);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.iconoExito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-exito);
+  color: var(--color-superficie);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.textoExito {
+  flex: 1;
+}
+
+.cerrarExito {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0.8;
+}
+
+.cerrarExito:hover {
+  opacity: 1;
 }
 
 /* Botón "Centro de ayuda": fondo de la interfaz, texto normal en negrita */

@@ -16,7 +16,6 @@ const ESTADOS = { ACTIVA: 'ACTIVA', BLOQUEADA: 'BLOQUEADA', SIN_VINCULAR: 'SIN V
 // Solo dibuja; la llamada al backend la hace la página con onBloquear / onDesbloquear.
 function TarjetaNfcPerfil({
   estado,
-  ultimos,
   titular,
   fechaVinculacion,
   procesando,
@@ -66,8 +65,8 @@ function TarjetaNfcPerfil({
           </div>
 
           <div>
-            <p className={styles.etiquetaNumero}>Últimos dígitos</p>
-            <p className={styles.numero}>•••• •••• {ultimos}</p>
+            <p className={styles.etiquetaNumero}>Identificador de tarjeta</p>
+            <p className={styles.numero}>•••• •••• •••• ••••</p>
           </div>
 
           <div className={styles.filaInferior}>

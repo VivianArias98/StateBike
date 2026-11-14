@@ -51,14 +51,42 @@ export async function consultarPagos(usuarioId, token, { desde, hasta } = {}) {
   }
 
   // Mapear movimientos de TunjaAPI
-  const pagos = movimientosTunja.map((m) => ({
-    id: m.id || `mov-${Math.random()}`,
-    fecha: m.fecha || m.created_at || m.creado || new Date().toISOString(),
-    tipo: m.tipo || (m.monto >= 0 ? "RECARGA" : "COBRO"),
-    concepto: m.concepto || (m.tipo === "TOPUP" ? "Recarga de saldo en billetera" : "Cobro del servicio"),
-    monto: Math.abs(m.monto || 0),
-    estado: "PAGADO",
-  }));
+  const pagos = movimientosTunja.map((m) => {
+    let tipo = m.tipo;
+    const concepto = String(m.concepto || "");
+    const conceptoLower = concepto.toLowerCase();
+
+    if (!tipo || tipo === "COBRO" || tipo === "CHARGE") {
+      if (
+        conceptoLower.includes("plan") ||
+        conceptoLower.includes("adquisición") ||
+        conceptoLower.includes("adquisicion")
+      ) {
+        tipo = "COMPRA_PLAN";
+      } else if (conceptoLower.includes("exceso")) {
+        tipo = "COBRO_EXCESO";
+      } else if (m.monto >= 0 || tipo === "TOPUP") {
+        tipo = "RECARGA";
+      } else {
+        tipo = "COBRO";
+      }
+    }
+
+    return {
+      id: m.id || `mov-${Math.random()}`,
+      fecha: m.fecha || m.created_at || m.creado || new Date().toISOString(),
+      tipo,
+      concepto:
+        m.concepto ||
+        (tipo === "RECARGA"
+          ? "Recarga de saldo en billetera"
+          : tipo === "COMPRA_PLAN"
+          ? "Compra de plan"
+          : "Cobro del servicio"),
+      monto: Math.abs(m.monto || 0),
+      estado: "PAGADO",
+    };
+  });
 
   // Incluir suscripciones registradas en SQLite si no están en TunjaAPI
   const suscripciones = db

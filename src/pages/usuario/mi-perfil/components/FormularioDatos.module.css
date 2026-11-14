@@ -107,6 +107,13 @@
   color: var(--color-texto);
   font-size: var(--texto-l);
   cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transicion-rapida), color var(--transicion-rapida);
+}
+
+.botonOjo:hover {
+  opacity: 1;
+  color: var(--color-foco);
 }
 
 .fuerza {

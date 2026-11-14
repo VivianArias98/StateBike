@@ -8,10 +8,13 @@ export function buscar(usuarioId) {
 }
 
 // INSERT OR IGNORE: si el perfil ya existe no pasa nada
-export function crear(usuarioId, { fechaNacimiento = null, correo = null, nombre = null } = {}) {
+export function crear(
+  usuarioId,
+  { fechaNacimiento = null, correo = null, nombre = null, telefono = null } = {}
+) {
   db.prepare(
-    "INSERT OR IGNORE INTO perfiles (usuario_id, fecha_nacimiento, correo, nombre) VALUES (?, ?, ?, ?)"
-  ).run(usuarioId, fechaNacimiento, correo, nombre);
+    "INSERT OR IGNORE INTO perfiles (usuario_id, fecha_nacimiento, correo, nombre, telefono) VALUES (?, ?, ?, ?, ?)"
+  ).run(usuarioId, fechaNacimiento, correo, nombre, telefono);
 }
 
 //Usuarios creados desde otro proyecto no tienen perfil local todavía

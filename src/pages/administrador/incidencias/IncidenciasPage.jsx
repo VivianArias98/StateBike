@@ -5,6 +5,7 @@ import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoAlerta } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
 import { leerSesion } from '../../../utils/sesion.js';
+import { formatearFechaBogota } from '../../../utils/formatoMoneda.js';
 import styles from './IncidenciasPage.module.css';
 
 const MAPA_TIPOS = {
@@ -61,13 +62,14 @@ function IncidenciasPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     cargarIncidencias(filtroEstado);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtroEstado]);
 
   const abrirModalAtender = (inc) => {
     setIncidenciaAAtender(inc);
-    setObservacionInput(inc.observacion || '');
+    setObservacionInput(inc.observacionAdmin || inc.observacion || '');
     setErrorObservacion('');
   };
 
@@ -204,7 +206,9 @@ function IncidenciasPage() {
                       ? `Bicicleta #${inc.codigoBicicleta}`
                       : inc.nombreEstacion
                       ? `Estación ${inc.nombreEstacion}`
-                      : 'Tarjeta / General';
+                      : inc.tipo === 'TARJETA'
+                      ? 'Tarjeta NFC'
+                      : 'Novedad general';
 
                     const esAbierta = inc.estado === 'ABIERTA';
                     const esAtendida = inc.estado === 'ATENDIDA';
@@ -215,12 +219,12 @@ function IncidenciasPage() {
                         <td className={styles.colId} style={{ fontWeight: 700 }}>#{inc.id}</td>
                         <td className={styles.colTipo}>{tipoTexto}</td>
                         <td className={styles.colRecurso} style={{ fontWeight: 600 }}>{recursoTexto}</td>
-                        <td className={styles.colUsuario} title={`${inc.nombreUsuario || ''} (${inc.correoUsuario || ''})`}>
-                          <div>{inc.nombreUsuario || 'Usuario'}</div>
+                        <td className={styles.colUsuario} title={`${inc.reportadoPor || inc.nombreUsuario || ''} (${inc.correoUsuario || ''})`}>
+                          <div>{inc.reportadoPor || inc.nombreUsuario || 'Usuario'}</div>
                           <small style={{ opacity: 0.7 }}>{inc.correoUsuario || ''}</small>
                         </td>
                         <td className={styles.colFecha} style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
-                          {inc.creado?.slice(0, 16) || '—'}
+                          {formatearFechaBogota(inc.fechaCreacion || inc.creado) || '—'}
                         </td>
                         <td className={styles.colEstado}>
                           {esAbierta && (
@@ -245,9 +249,9 @@ function IncidenciasPage() {
                           </div>
                         </td>
                         <td className={styles.colObservacion}>
-                          {inc.observacion ? (
+                          {(inc.observacionAdmin || inc.observacion) ? (
                             <div className={styles.observacionTexto}>
-                              {inc.observacion}
+                              {inc.observacionAdmin || inc.observacion}
                             </div>
                           ) : (
                             <span style={{ opacity: 0.5, fontSize: 'var(--texto-xs)' }}>Sin atención</span>
@@ -370,7 +374,7 @@ function IncidenciasPage() {
               <div style={{ backgroundColor: 'var(--color-input-fondo)', padding: 'var(--espacio-3)', borderRadius: 'var(--radio-s)' }}>
                 <p style={{ margin: 0, fontSize: 'var(--texto-xs)', fontWeight: 600 }}>Observación registrada:</p>
                 <p style={{ margin: 'var(--espacio-1) 0 0', fontSize: 'var(--texto-xs)', opacity: 0.9 }}>
-                  {incidenciaACerrar.observacion}
+                  {incidenciaACerrar.observacionAdmin || incidenciaACerrar.observacion || 'Sin observación previa'}
                 </p>
               </div>
               <p style={{ fontSize: 'var(--texto-xs)', opacity: 0.8, margin: 0 }}>

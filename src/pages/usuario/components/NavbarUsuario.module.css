@@ -193,6 +193,31 @@
   gap: var(--espacio-2);
 }
 
+.badgeViajeMovil {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  height: var(--alto-control-s);
+  padding: 0 var(--espacio-3);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  animation: pulsoBadge 2.2s infinite ease-in-out;
+}
+
+@keyframes pulsoBadge {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
 @media (min-width: 1024px) {
   .accionesMovil {
     display: none;

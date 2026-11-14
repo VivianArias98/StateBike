@@ -11,7 +11,7 @@ function EsperaTotem({ tarjeta, plan, cobroPendiente, estaciones, onPagarCobro }
   const datos = [
     {
       etiqueta: 'Tarjeta NFC',
-      valor: tarjeta?.ultimosDigitos ? `•••• ${tarjeta.ultimosDigitos} · ${tarjeta.estado}` : 'Sin vincular',
+      valor: tarjeta?.estado ? `Tarjeta ${tarjeta.estado}` : 'Sin vincular',
     },
     { etiqueta: 'Plan', valor: plan ? plan.nombre : 'Sin plan activo' },
     ...(plan
