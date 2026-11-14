@@ -114,21 +114,40 @@ export function generarComprobantePDF({
     .cabecera {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       border-bottom: 2px solid #153019;
       padding-bottom: 16px;
       margin-bottom: 20px;
     }
-    .logo-marca h1 {
-      font-size: 20pt;
+    .logo-bloque {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-vector {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .logo-titulos {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .subtitulo-institucional {
+      font-size: 8.5pt;
+      color: #555555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin: 0;
+    }
+    .documento-titulo {
+      font-size: 15pt;
       font-weight: 900;
       color: #153019;
-      letter-spacing: -0.5px;
-    }
-    .logo-marca p {
-      font-size: 9pt;
-      color: #555555;
-      margin-top: 2px;
+      letter-spacing: -0.3px;
+      margin: 0;
     }
     .folio {
       text-align: right;
@@ -238,10 +257,26 @@ export function generarComprobantePDF({
   </div>
 
   <div class="cabecera">
-    <div class="logo-marca">
-      <h1>StationBike</h1>
-      <p>${subtitulo}</p>
-      <p style="font-weight: 700; color: #153019; margin-top: 4px;">${titulo}</p>
+    <div class="logo-bloque">
+      <div class="logo-vector" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 130" width="115" height="92" role="img" aria-label="Logo StationBike">
+          <circle cx="35" cy="45" r="30" fill="none" stroke="#5FD34A" stroke-width="9" />
+          <circle cx="125" cy="45" r="30" fill="none" stroke="#153019" stroke-width="9" />
+          <line x1="55" y1="45" x2="95" y2="15" stroke="#153019" stroke-width="7" stroke-linecap="round" />
+          <line x1="95" y1="15" x2="105" y2="45" stroke="#153019" stroke-width="7" stroke-linecap="round" />
+          <line x1="75" y1="30" x2="120" y2="30" stroke="#153019" stroke-width="6" stroke-linecap="round" />
+          <rect x="65" y="10" width="18" height="5" rx="2" fill="#153019" />
+          <rect x="98" y="8" width="16" height="5" rx="2" fill="#153019" />
+          <text x="5" y="118" font-family="'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="24" font-weight="900" font-style="italic">
+            <tspan fill="#153019">Station </tspan>
+            <tspan fill="#5FD34A">Bike</tspan>
+          </text>
+        </svg>
+      </div>
+      <div class="logo-titulos">
+        <p class="subtitulo-institucional">${subtitulo}</p>
+        <h1 class="documento-titulo">${titulo}</h1>
+      </div>
     </div>
     <div class="folio">
       <strong>Folio digital:</strong>

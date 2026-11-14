@@ -4,6 +4,15 @@ import { leerSesion, borrarSesion } from '../../../utils/sesion.js';
 
 const UsuarioContext = createContext(null);
 const INTERVALO_VIAJE_MS = 5000; // cada cuánto se consulta si hay un viaje en curso
+const CLAVE_AVATAR_PREFIJO = 'stationbike.avatar_';
+
+function obtenerAvatarGuardado(usuarioId) {
+  try {
+    return localStorage.getItem(CLAVE_AVATAR_PREFIJO + (usuarioId || 'default')) || 'mujer-casco-1';
+  } catch {
+    return 'mujer-casco-1';
+  }
+}
 
 function leerToken() {
   try {
@@ -59,6 +68,7 @@ export function UsuarioProvider({ children }) {
     telefono: '',
     fechaNacimiento: '',
     tarjeta: null,
+    avatar: obtenerAvatarGuardado(sesion?.usuario?.id),
   });
 
   const [billetera, setBilletera] = useState({
@@ -124,14 +134,16 @@ export function UsuarioProvider({ children }) {
       ]);
 
       if (perfilRes) {
-        setPerfil({
+        setPerfil((prev) => ({
+          ...prev,
           id: perfilRes.id,
           nombreCompleto: perfilRes.nombreCompleto || perfilRes.nombre,
           correo: perfilRes.correo || perfilRes.email,
           telefono: perfilRes.telefono || '',
           fechaNacimiento: perfilRes.fechaNacimiento || '',
           tarjeta: tarjetaRes?.tarjeta || perfilRes.tarjeta || null,
-        });
+          avatar: prev?.avatar || obtenerAvatarGuardado(perfilRes.id),
+        }));
       }
 
       // 3. Billetera y Movimientos
@@ -271,6 +283,19 @@ export function UsuarioProvider({ children }) {
       throw err;
     }
   };
+
+  // Cambiar avatar ciclista del usuario (HU_1)
+  const cambiarAvatar = useCallback((nuevoAvatarId) => {
+    setPerfil((prev) => {
+      const idUsuario = prev?.id || sesion?.usuario?.id || 'default';
+      try {
+        localStorage.setItem(CLAVE_AVATAR_PREFIJO + idUsuario, nuevoAvatarId);
+      } catch {
+        // almacenamiento no disponible
+      }
+      return { ...prev, avatar: nuevoAvatarId };
+    });
+  }, [sesion?.usuario?.id]);
 
   // Bloquear / Desbloquear Tarjeta NFC (HU_1 -> PATCH /api/tarjeta/bloquear / desbloquear)
   const toggleBloqueoTarjeta = async () => {
@@ -412,6 +437,7 @@ export function UsuarioProvider({ children }) {
         cargarDatosUsuario,
         actualizarBilletera,
         actualizarPerfil,
+        cambiarAvatar,
         toggleBloqueoTarjeta,
         recargarSaldo,
         pagarCobroPendiente,
@@ -446,6 +472,7 @@ export function useUsuario() {
       cargarDatosUsuario: async () => {},
       actualizarBilletera: async () => {},
       actualizarPerfil: async () => {},
+      cambiarAvatar: () => {},
       toggleBloqueoTarjeta: async () => {},
       recargarSaldo: async () => {},
       pagarCobroPendiente: async () => {},

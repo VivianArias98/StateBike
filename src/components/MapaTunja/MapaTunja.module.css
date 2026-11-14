@@ -60,6 +60,15 @@
   color: var(--color-texto);
   font-size: var(--texto-s);
   font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+  box-shadow: 0 2px 6px var(--color-pista);
+}
+
+.estacion:hover {
+  transform: scale(1.15);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
 }
 
 /* Punto elegido por el administrador */

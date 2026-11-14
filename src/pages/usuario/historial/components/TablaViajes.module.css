@@ -7,8 +7,8 @@
 }
 
 .raiz table {
-  min-width: 52rem !important;
-  table-layout: auto !important;
+  min-width: 52rem;
+  table-layout: auto;
   border-collapse: collapse;
 }
 

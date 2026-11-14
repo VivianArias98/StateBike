@@ -74,6 +74,32 @@
   border: 2px solid var(--color-acento);
 }
 
+.planRecomendado {
+  border: 2px solid var(--color-primario);
+  box-shadow: 0 4px 16px var(--color-pista);
+}
+
+.etiquetaRecomendada {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-3);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.iconoMedalla {
+  display: inline-flex;
+  align-items: center;
+}
+
 .cabeceraPlan {
   display: flex;
   align-items: flex-start;
@@ -215,6 +241,24 @@
   font-size: var(--texto-xs);
   font-weight: 700;
   color: var(--color-exito);
+}
+
+.errorSaldo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.errorTitulo {
+  margin: 0;
+  font-weight: 700;
+}
+
+.errorAvisoAdmin {
+  margin: 0;
+  font-size: var(--texto-xs);
+  line-height: 1.4;
+  opacity: 0.95;
 }
 
 .resumenTotal {

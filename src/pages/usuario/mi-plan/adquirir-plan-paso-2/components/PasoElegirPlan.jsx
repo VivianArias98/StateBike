@@ -1,12 +1,25 @@
-import { IconoBilletera, IconoCheck, IconoFlecha } from '../../../../../components/Iconos/Iconos.jsx';
+import { IconoBilletera, IconoCheck, IconoFlecha, IconoMedalla } from '../../../../../components/Iconos/Iconos.jsx';
 import { formatearPesos } from '../../../formato.js';
 import { caracteristicasPlan } from '../../planVista.js';
 import styles from './PasoElegirPlan.module.css';
 
 // Tarjeta de un plan del catálogo. El botón se pinta según esté seleccionado o no.
-function TarjetaPlanFlujo({ plan, seleccionado, onElegir }) {
+function TarjetaPlanFlujo({ plan, seleccionado, esRecomendado, onElegir }) {
   return (
-    <article className={`tarjeta ${styles.plan} ${seleccionado ? styles.planSeleccionado : ''}`}>
+    <article
+      className={`tarjeta ${styles.plan} ${seleccionado ? styles.planSeleccionado : ''} ${
+        esRecomendado ? styles.planRecomendado : ''
+      }`}
+    >
+      {esRecomendado && (
+        <span className={styles.etiquetaRecomendada}>
+          <span className={styles.iconoMedalla} aria-hidden="true">
+            <IconoMedalla />
+          </span>
+          <span>RECOMENDADO</span>
+        </span>
+      )}
+
       <header className={styles.cabeceraPlan}>
         <h3 className={styles.nombrePlan}>{plan.nombre}</h3>
       </header>
@@ -24,7 +37,13 @@ function TarjetaPlanFlujo({ plan, seleccionado, onElegir }) {
 
       <button
         type="button"
-        className={seleccionado ? 'boton boton--acento' : `boton ${styles.botonSuave}`}
+        className={
+          seleccionado
+            ? 'boton boton--acento'
+            : esRecomendado
+            ? 'boton boton--primario'
+            : `boton ${styles.botonSuave}`
+        }
         onClick={() => onElegir(plan.id)}
         aria-pressed={seleccionado}
       >
@@ -47,6 +66,15 @@ function PasoElegirPlan({ planes, planElegido, saldo, onElegir, onVolver, onCont
   const saldoProyectado = plan ? saldo - plan.costoBase : saldo;
   const alcanza = Boolean(plan) && saldoProyectado >= 0;
 
+  // Identificar el plan recomendado: preferir "Plan Mensual" o 30 días, o el segundo del catálogo
+  const idRecomendado = (() => {
+    const mensual = planes.find(
+      (p) => p.nombre?.toLowerCase().includes('mensual') || p.vigenciaDias === 30
+    );
+    if (mensual) return mensual.id;
+    return planes.length > 1 ? planes[1].id : planes[0]?.id;
+  })();
+
   return (
     <div className={styles.raiz}>
       <div className={styles.columnas}>
@@ -62,7 +90,13 @@ function PasoElegirPlan({ planes, planElegido, saldo, onElegir, onVolver, onCont
 
           <div className={styles.rejilla}>
             {planes.map((item) => (
-              <TarjetaPlanFlujo key={item.id} plan={item} seleccionado={item.id === planElegido} onElegir={onElegir} />
+              <TarjetaPlanFlujo
+                key={item.id}
+                plan={item}
+                seleccionado={item.id === planElegido}
+                esRecomendado={item.id === idRecomendado}
+                onElegir={onElegir}
+              />
             ))}
           </div>
 
@@ -85,7 +119,9 @@ function PasoElegirPlan({ planes, planElegido, saldo, onElegir, onVolver, onCont
               </span>
               <p>Saldo en Mi Billetera</p>
             </div>
-            <p className={styles.saldoTexto}>Débito directo del saldo disponible en tu cuenta.</p>
+            <p className={styles.saldoTexto}>
+              Débito directo del saldo disponible en tu cuenta. Las recargas son registradas de forma presencial por el administrador en taquillas.
+            </p>
 
             {plan && (
               <dl className={styles.cuentas}>
@@ -112,10 +148,14 @@ function PasoElegirPlan({ planes, planElegido, saldo, onElegir, onVolver, onCont
           </div>
 
           {plan && !alcanza && (
-            <p className="mensaje-error" role="alert">
-              Saldo insuficiente para adquirir el plan. Le faltan {formatearPesos(-saldoProyectado)}. Recargue su saldo
-              en MI BILLETERA
-            </p>
+            <div className={`mensaje-error ${styles.errorSaldo}`} role="alert">
+              <p className={styles.errorTitulo}>
+                Saldo insuficiente para adquirir el plan. Le faltan {formatearPesos(-saldoProyectado)}.
+              </p>
+              <p className={styles.errorAvisoAdmin}>
+                Acércate a un punto de atención o estación autorizada para que el administrador registre tu recarga.
+              </p>
+            </div>
           )}
 
           {plan && (

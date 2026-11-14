@@ -4,14 +4,19 @@
   display: flex;
   flex-direction: column;
   gap: var(--espacio-4);
-  padding: var(--espacio-4);
+  padding: var(--espacio-5);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: 0 2px 8px var(--color-pista);
 }
 
 .etiqueta {
+  margin: 0;
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-texto-suave);
 }
@@ -31,8 +36,15 @@
   gap: var(--espacio-3);
   min-width: 0;
   padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-fondo-pagina);
   border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-m);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.paso:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-primario);
 }
 
 .hecho,
@@ -50,24 +62,27 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: var(--radio-circulo);
-  background: var(--color-fondo-pagina);
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
   color: var(--color-texto-suave);
   font-family: var(--fuente-mono);
-  font-size: var(--texto-s);
-  font-weight: 700;
+  font-size: var(--texto-xs);
+  font-weight: 800;
 }
 
 .hecho .numero {
   background: var(--color-secundario);
   color: var(--color-secundario-texto);
+  border-color: var(--color-secundario);
 }
 
 .activo .numero {
-  background: var(--color-superficie-inversa);
-  color: var(--color-texto-inverso);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-color: var(--color-primario);
 }
 
 .texto {
@@ -78,30 +93,35 @@
 }
 
 .titulo {
-  font-size: var(--texto-m);
+  margin: 0;
+  font-size: var(--texto-s);
   font-weight: 700;
+  color: var(--color-texto);
 }
 
 .detalle {
+  margin: 0;
   display: flex;
   align-items: center;
   gap: var(--espacio-1);
-  font-size: var(--texto-s);
+  font-size: var(--texto-xs);
   color: var(--color-texto-suave);
 }
 
 .hecho .detalle,
 .activo .detalle {
-  color: var(--color-acento-texto);
+  color: var(--color-texto);
+  font-weight: 600;
 }
 
 .check {
   display: inline-flex;
   color: var(--color-exito);
+  font-size: var(--texto-s);
 }
 
 .hecho .check {
-  color: var(--color-acento-texto);
+  color: var(--color-exito);
 }
 
 @media (min-width: 768px) {
