@@ -2,8 +2,6 @@ import { Icono } from '../../components/IconosVisitante.jsx';
 import styles from './TarjetaPlan.module.css';
 import { formatearCOP } from '../../../../utils/formatoMoneda.js';
 
-// Tarjeta de un plan del catálogo. El plan "actual" lleva borde verde,
-// etiqueta "TU PLAN ACTUAL" y un estado en lugar del botón de compra.
 function TarjetaPlan({ plan }) {
   const { codigo, dias, nombre, descripcion, precio, unidad, lineas, actual, valorMinutoExceso } = plan;
 

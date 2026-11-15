@@ -36,7 +36,6 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [enviando, setEnviando] = useState(false);
 
-  // El mensaje de error permanece visible durante 4 segundos y luego desaparece automáticamente
   useEffect(() => {
     if (!error) return undefined;
     const temporizador = setTimeout(() => {

@@ -30,7 +30,6 @@ const BENEFICIOS = [
 
 const plural = (cantidad, singular, plural_) => (cantidad === 1 ? singular : plural_);
 
-// Convierte un plan del backend a los datos que muestra la tarjeta.
 function aVistaPlan(plan) {
   const dias = Number(plan.vigenciaDias);
   return {
@@ -96,7 +95,7 @@ function PlanesTarifas() {
           <div className={styles.encabezadoTexto}>
             <span className={styles.eyebrow}>
               <span className={styles.punto} aria-hidden="true" />
-              {planes ? `${planes.length} OPCIONES DISPONIBLES · TUNJA 2040` : 'PLANES Y TARIFAS · TUNJA 2040'}
+              {planes ? `${planes.length} OPCIONES DISPONIBLES · TUNJA 2040` : 'TUNJA 2040'}
             </span>
 
             <h1 className={`titulo-pagina ${styles.titulo}`}>Catálogo de Planes Tunja Bici</h1>
@@ -126,7 +125,7 @@ function PlanesTarifas() {
             <span>Aprobado por el Concejo y Secretaría de Tránsito y Transporte de Tunja.</span>
           </p>
           <p className={styles.version}>
-            TARIFAS-V2040.2 <span className={styles.redActiva}>• RED ACTIVA</span>
+            <span className={styles.redActiva}>RED ACTIVA</span>
           </p>
         </footer>
       </div>

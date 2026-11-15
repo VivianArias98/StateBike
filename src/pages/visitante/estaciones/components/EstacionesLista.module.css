@@ -27,8 +27,6 @@
   border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-s);
 }
-
-/* Resumen: tres cifras de la red en tarjetas blancas */
 .resumen {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -59,7 +57,6 @@
   opacity: 0.75;
 }
 
-/* Tarjeta NFC al final de la lista */
 .nfc {
   display: flex;
   align-items: center;

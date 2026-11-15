@@ -1,5 +1,3 @@
-/* Usar con: className={styles.raiz}
-   El fondo oscuro lo pone RegistroPage.module.css. */
 .raiz {
   box-sizing: border-box;
   padding: var(--espacio-5);

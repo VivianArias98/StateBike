@@ -16,12 +16,12 @@ import fotoTheofilo from './img/Dev1.jpeg';
 import fotoJoel from './img/Dev2.jpg';
 import fotoJenifer from './img/QA.jpeg';
 
-// Contenido institucional (estático, no requiere inicio de sesión)
+// Contenido institucional
 const VALORES = [
-  { codigo: 'VALOR_01', titulo: 'Accesibilidad', texto: 'Planes con precios claros para el bolsillo.', etiqueta: '[SIN_BARRERAS]', icono: <IconoUsuario /> },
-  { codigo: 'VALOR_02', titulo: 'Sostenibilidad', texto: 'Menos trayectos en vehículo, más movilidad limpia.', etiqueta: '[CERO_EMISIONES]', icono: <IconoBicicleta /> },
-  { codigo: 'VALOR_03', titulo: 'Transparencia', texto: 'Sin cobros ocultos.', etiqueta: '[TARIFA_LINEAL]', icono: <IconoUbicacion /> },
-  { codigo: 'VALOR_04', titulo: 'Confianza', texto: 'Bicicletas y estaciones en buen estado, con reportes atendidos por el equipo.', etiqueta: '[SOPORTE_ACTIVO]', icono: <IconoNfc /> },
+  { titulo: 'Accesibilidad', texto: 'Planes con precios claros para el bolsillo.', icono: <IconoUsuario /> },
+  { titulo: 'Sostenibilidad', texto: 'Menos trayectos en vehículo, más movilidad limpia.', icono: <IconoBicicleta /> },
+  { titulo: 'Transparencia', texto: 'Sin cobros ocultos.', icono: <IconoUbicacion /> },
+  { titulo: 'Confianza', texto: 'Bicicletas y estaciones en buen estado, con reportes atendidos por el equipo.', icono: <IconoNfc /> },
 ];
 
 const EQUIPO = [
@@ -37,7 +37,6 @@ function AcercaNosotros() {
     <VisitanteLayout itemActivo="Acerca de nosotros">
       <div className={styles.raiz}>
         <header className={styles.encabezado}>
-          <span className={`insignia ${styles.chipProyecto}`}>TUNJA · 2040</span>
           <h1 className={styles.titulo}>Acerca de nosotros</h1>
           <p className={styles.subtitulo}>
             Conoce el propósito, la visión y el equipo detrás de StationBike en Tunja.
@@ -56,7 +55,6 @@ function AcercaNosotros() {
               solares inteligentes y tecnología NFC sin contacto.
             </p>
           </div>
-          <span className={styles.heroMarca}>[ RED URBANA TUNJA ]</span>
         </section>
 
         <section className={styles.dosColumnas} aria-label="Quiénes somos y por qué existimos">
@@ -66,7 +64,7 @@ function AcercaNosotros() {
             imagen={imgQuienesSomos}
             altImagen="Ciclista en una plaza del centro histórico de Tunja"
             texto="StationBike es un servicio de préstamo de bicicletas con tarjeta NFC en estaciones de Tunja. Nació para que moverse por la ciudad sea rápido, económico y sostenible."
-            etiquetas={['SISTEMA: MICRO-MOVILIDAD NFC', 'COBERTURA: TUNJA URBANO']}
+            etiquetas={['Bicicletas con tarjeta NFC', 'Estaciones en Tunja']}
           />
           <TarjetaSeccion
             titulo="Por qué existimos"
@@ -74,22 +72,20 @@ function AcercaNosotros() {
             imagen={imgPorQueExistimos}
             altImagen="Grupo de ciclistas recorriendo una vía de la ciudad"
             texto="En trayectos cortos, el bus y el taxi cuestan más y toman más tiempo de lo necesario. Queremos que una bicicleta esté siempre a unos pasos, lista para usar."
-            etiquetas={['OPTIMIZACIÓN: TIEMPO & COSTO', 'MODELO: COMPARTIDO']}
+            etiquetas={['Ahorra tiempo y dinero', 'Bicicletas compartidas']}
           />
         </section>
 
         <section className={styles.dosColumnas} aria-label="Misión y visión">
           <TarjetaSeccion
-            etiqueta="MISIÓN"
+            etiqueta="Misión"
             variante="negra"
-            marca="[ACTUAL_20]"
             titulo="Propósito operativo"
             texto="Ofrecer una forma práctica y accesible de recorrer Tunja en bicicleta, con estaciones cercanas, planes claros y un proceso de uso sencillo."
           />
           <TarjetaSeccion
-            etiqueta="VISIÓN"
+            etiqueta="Visión"
             variante="verdeClaro"
-            marca="[ALCANCE_FUTURO]"
             titulo="Proyección de impacto"
             texto="Ser la red de bicicletas compartidas preferida de Tunja, con estaciones en los puntos de mayor movimiento de la ciudad."
           />
@@ -97,7 +93,7 @@ function AcercaNosotros() {
 
         <section className={styles.valores} aria-label="Nuestros valores">
           {VALORES.map((valor) => (
-            <TarjetaValor key={valor.codigo} {...valor} />
+            <TarjetaValor key={valor.titulo} {...valor} />
           ))}
         </section>
 
@@ -122,14 +118,11 @@ function AcercaNosotros() {
           <div>
             <span className={styles.canal}>
               <span className={styles.canalIcono} aria-hidden="true"><Icono nombre="sobre" /></span>
-              CANAL INSTITUCIONAL DIRECTO
+              Contáctanos
             </span>
             <p id="titulo-contacto" className={styles.contactoTexto}>
               Correo: <a href="mailto:stationbike@gmail.com" className={styles.correo}>stationbike@gmail.com</a>
               {' · '}Ciudad: Tunja, Boyacá.
-            </p>
-            <p className={styles.nota}>
-              Contenido institucional estático · No requiere inicio de sesión para consulta.
             </p>
           </div>
 

@@ -11,7 +11,6 @@ import styles from './EstacionesPage.module.css';
 
 const ESPERA_BUSQUEDA_MS = 300;
 
-// Convierte una estación del backend a los campos que usan la lista y el mapa.
 function aVistaEstacion(estacion) {
   return {
     id: estacion.id,
@@ -26,7 +25,7 @@ function aVistaEstacion(estacion) {
 
 function EstacionesPage() {
   const [busqueda, setBusqueda] = useState('');
-  // Red completa: alimenta el mapa y el resumen.
+
   const [red, setRed] = useState(null);
   const [errorRed, setErrorRed] = useState('');
   // Resultados de la búsqueda (consulta con ?q=).

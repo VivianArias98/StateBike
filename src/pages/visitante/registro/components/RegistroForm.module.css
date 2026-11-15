@@ -1,4 +1,3 @@
-/* Usar con: className={styles.raiz}. El fondo lo pone RegistroPage.module.css. */
 .raiz {
   box-sizing: border-box;
   padding: var(--espacio-5);
@@ -30,7 +29,6 @@
   font-weight: 400;
 }
 
-/* Campos verde oscuro, un poco más oscuros que la tarjeta */
 .entrada {
   height: var(--alto-control);
   background: var(--color-campo-oscuro);
@@ -200,7 +198,6 @@
   opacity: 0.8;
 }
 
-/* Casilla verde oscuro, no blanca */
 .casilla {
   appearance: none;
   flex-shrink: 0;

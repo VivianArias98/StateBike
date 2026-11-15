@@ -108,12 +108,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--espacio-4);
-}
-
-.etiquetaSeccion {
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  opacity: 0.7;
+  /* Al saltar desde los botones de la cabecera, deja un respiro arriba */
+  scroll-margin-top: var(--espacio-6);
 }
 
 .encabezadoSeccion {
@@ -276,5 +272,129 @@
 
   .llamada {
     padding: var(--espacio-7);
+  }
+}
+
+/* ========== Dinamismo (solo CSS, no cambia la estructura) ========== */
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entrada suave de cada bloque.
+   "backwards" evita que la animación bloquee los efectos hover después. */
+.cabeceraGuia,
+.encabezadoSeccion,
+.llamada {
+  animation: aparecer 0.6s ease backwards;
+}
+
+/* Las tarjetas aparecen en cascada, una tras otra */
+.grillaPasos > *,
+.grillaReglas > *,
+.grillaPreguntas > * {
+  animation: aparecer 0.5s ease backwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.grillaPasos > *:nth-child(2),
+.grillaReglas > *:nth-child(2),
+.grillaPreguntas > *:nth-child(2) { animation-delay: 0.06s; }
+
+.grillaPasos > *:nth-child(3),
+.grillaReglas > *:nth-child(3),
+.grillaPreguntas > *:nth-child(3) { animation-delay: 0.12s; }
+
+.grillaPasos > *:nth-child(4),
+.grillaReglas > *:nth-child(4),
+.grillaPreguntas > *:nth-child(4) { animation-delay: 0.18s; }
+
+.grillaPasos > *:nth-child(5),
+.grillaReglas > *:nth-child(5),
+.grillaPreguntas > *:nth-child(5) { animation-delay: 0.24s; }
+
+.grillaPasos > *:nth-child(6),
+.grillaReglas > *:nth-child(6),
+.grillaPreguntas > *:nth-child(6) { animation-delay: 0.3s; }
+
+.grillaPasos > *:nth-child(7),
+.grillaReglas > *:nth-child(7),
+.grillaPreguntas > *:nth-child(7) { animation-delay: 0.36s; }
+
+.grillaPasos > *:nth-child(8),
+.grillaReglas > *:nth-child(8) { animation-delay: 0.42s; }
+
+/* Las tarjetas se elevan al pasar el mouse */
+.grillaPasos > *:hover,
+.grillaReglas > *:hover,
+.grillaPreguntas > *:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Datos de la cabecera: el ícono crece un poco */
+.dato {
+  transition: background-color 0.2s ease;
+}
+
+.dato:hover {
+  background: var(--color-borde-suave);
+}
+
+.datoIcono {
+  transition: transform 0.25s ease;
+}
+
+.dato:hover .datoIcono {
+  transform: scale(1.1) rotate(-4deg);
+}
+
+/* Botones: se levantan al pasar el mouse y se hunden al presionar */
+.acciones a {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.acciones a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.acciones a:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Quien prefiere menos movimiento en su sistema no ve animaciones */
+@media (prefers-reduced-motion: reduce) {
+  .cabeceraGuia,
+  .encabezadoSeccion,
+  .llamada,
+  .grillaPasos > *,
+  .grillaReglas > *,
+  .grillaPreguntas > * {
+    animation: none;
+  }
+
+  .grillaPasos > *,
+  .grillaReglas > *,
+  .grillaPreguntas > *,
+  .datoIcono,
+  .acciones a {
+    transition: none;
+  }
+
+  .grillaPasos > *:hover,
+  .grillaReglas > *:hover,
+  .grillaPreguntas > *:hover,
+  .dato:hover .datoIcono,
+  .acciones a:hover {
+    transform: none;
   }
 }

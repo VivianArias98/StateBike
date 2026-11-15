@@ -44,7 +44,6 @@ function EstacionesLista({
           onChange={(evento) => onBuscar(evento.target.value)}
         />
 
-        <span className={styles.atajo} aria-hidden="true">CMD+K</span>
       </div>
 
       {resumen.length > 0 && (

@@ -1,6 +1,5 @@
 import styles from './TarjetaPersona.module.css';
 
-// Tarjeta de integrante del equipo. Si no hay foto se muestran las iniciales.
 function TarjetaPersona({ iniciales, nombre, rol, cita, foto }) {
   return (
     <article className={`tarjeta ${styles.raiz}`}>
