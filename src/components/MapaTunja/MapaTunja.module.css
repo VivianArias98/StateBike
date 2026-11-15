@@ -153,3 +153,164 @@
   border-radius: var(--radio-l);
   font-size: var(--texto-xs);
 }
+
+/* Controles flotantes en la esquina superior derecha del mapa */
+.controlesFlotantes {
+  position: absolute;
+  top: var(--espacio-3);
+  right: var(--espacio-3);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.botonGps {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  box-shadow: 0 2px 8px var(--color-pista);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.botonGps:hover {
+  transform: translateY(-1px);
+  background: var(--color-etiqueta-menta);
+  border-color: var(--color-primario);
+}
+
+.botonGpsActivo {
+  border-color: var(--color-primario);
+  background: var(--color-etiqueta-menta);
+  color: var(--color-secundario);
+}
+
+.botonGpsTexto {
+  font-size: var(--texto-xs);
+  white-space: nowrap;
+}
+
+/* Marcador con onda para ubicación en tiempo real */
+.actualContenedor {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+}
+
+.actualOnda {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento);
+  opacity: 0.7;
+  animation: pulsoOnda 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.actualCentro {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radio-circulo);
+  background: var(--color-primario);
+  border: 2.5px solid var(--color-superficie);
+  box-shadow: 0 0 8px var(--color-primario);
+}
+
+@keyframes pulsoOnda {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* Estilo de la estación más cercana */
+.estacionMasCercana {
+  position: relative;
+  border: 3px solid var(--color-primario) !important;
+  background: var(--color-etiqueta-menta) !important;
+  color: var(--color-secundario) !important;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px var(--color-primario) !important;
+}
+
+.badgeCercanaEstrella {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  font-size: 10px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radio-circulo);
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-superficie);
+  box-shadow: 0 1px 4px var(--color-pista);
+}
+
+.etiquetaCercana {
+  border: 1px solid var(--color-primario) !important;
+  color: var(--color-acento) !important;
+  font-weight: 700 !important;
+}
+
+/* Tooltip de la ubicación del usuario */
+.etiquetaUbicacionActual {
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-superficie-inversa);
+  color: var(--color-texto-inverso);
+  border: 1px solid var(--color-primario);
+  border-radius: var(--radio-s);
+  box-shadow: 0 2px 8px var(--color-pista);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.etiquetaUbicacionActual::before {
+  display: none;
+}
+
+.etiquetaUbicacionTexto {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.etiquetaDistanciaSub {
+  font-size: 10px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* Línea punteada que conecta al usuario con la estación más cercana */
+.lineaCercana {
+  fill: none;
+  stroke: var(--color-primario);
+  stroke-width: 3px;
+  stroke-dasharray: 6, 8;
+  stroke-opacity: 0.9;
+  animation: lineaAnimada 1.2s linear infinite;
+}
+
+@keyframes lineaAnimada {
+  to {
+    stroke-dashoffset: -14;
+  }
+}

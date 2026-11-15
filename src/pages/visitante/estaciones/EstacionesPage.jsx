@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import VisitanteLayout from '../../../layouts/VisitanteLayout/VisitanteLayout.jsx';
 import EstacionesLista from './components/EstacionesLista.jsx';
@@ -6,6 +6,11 @@ import { Icono } from '../components/IconosVisitante.jsx';
 import MapaTunja from '../../../components/MapaTunja/MapaTunja.jsx';
 import { obtenerEstaciones } from '../../../utils/catalogo.js';
 import { textoError } from '../../../utils/mensajesError.js';
+import useUbicacionTiempoReal from '../../../hooks/useUbicacionTiempoReal.js';
+import {
+  enriquecerEstacionesConDistancia,
+  ordenarEstacionesPorCercania,
+} from '../../../utils/geolocalizacion.js';
 
 import styles from './EstacionesPage.module.css';
 
@@ -34,6 +39,14 @@ function EstacionesPage() {
   const [errorBusqueda, setErrorBusqueda] = useState('');
   const [buscando, setBuscando] = useState(false);
   const [seleccionadaId, setSeleccionadaId] = useState(null);
+
+  // Hook de geolocalización en tiempo real
+  const {
+    ubicacion,
+    cargando: cargandoUbicacion,
+    error: errorUbicacion,
+    activar: activarUbicacion,
+  } = useUbicacionTiempoReal({ autoActivar: true });
 
   useEffect(() => {
     let activo = true;
@@ -82,10 +95,24 @@ function EstacionesPage() {
   const origen = buscar ? resultados : red;
   const errorActivo = buscar ? errorBusqueda : errorRed;
 
-  const estacionesLista = (origen?.estaciones ?? []).map(aVistaEstacion);
-  const estacionesMapa = (red?.estaciones ?? [])
-    .filter((estacion) => estacion.lat != null && estacion.lng != null)
-    .map(aVistaEstacion);
+  // Enriquecer estaciones con distancias y ordenarlas por cercanía si hay GPS activo
+  const estacionesLista = useMemo(() => {
+    const base = (origen?.estaciones ?? []).map(aVistaEstacion);
+    const enriquecidas = enriquecerEstacionesConDistancia(base, ubicacion);
+    return ubicacion ? ordenarEstacionesPorCercania(enriquecidas) : enriquecidas;
+  }, [origen, ubicacion]);
+
+  const estacionesMapa = useMemo(() => {
+    const base = (red?.estaciones ?? [])
+      .filter((estacion) => estacion.lat != null && estacion.lng != null)
+      .map(aVistaEstacion);
+    return enriquecerEstacionesConDistancia(base, ubicacion);
+  }, [red, ubicacion]);
+
+  // Estación más cercana de la red
+  const estacionMasCercana = useMemo(() => {
+    return estacionesLista.find((est) => est.esMasCercana) ?? null;
+  }, [estacionesLista]);
 
   const totalBicis = (red?.estaciones ?? []).reduce((suma, e) => suma + (e.bicicletas ?? 0), 0);
   const totalAnclajes = (red?.estaciones ?? []).reduce((suma, e) => suma + (e.anclajesLibres ?? 0), 0);
@@ -96,8 +123,12 @@ function EstacionesPage() {
     { valor: String(totalAnclajes), etiqueta: 'ANCLAJES LIBRES' },
   ];
 
+  // Si no se ha elegido una estación manual, priorizar la estación más cercana
   const seleccionada =
-    estacionesLista.find((estacion) => estacion.id === seleccionadaId) ?? estacionesLista[0] ?? null;
+    estacionesLista.find((estacion) => estacion.id === seleccionadaId) ??
+    estacionMasCercana ??
+    estacionesLista[0] ??
+    null;
 
   function mensajeVacio() {
     if (buscar && buscando) return 'Buscando estaciones…';
@@ -118,8 +149,7 @@ function EstacionesPage() {
           </h1>
 
           <p className={styles.subtitulo}>
-            Mira dónde hay bicicletas listas para retirar y espacios
-            libres para devolverlas.
+            Mira dónde hay bicicletas listas para retirar, espacios libres para devolverlas y la estación más cercana a ti en tiempo real.
           </p>
         </header>
 
@@ -135,27 +165,43 @@ function EstacionesPage() {
             seleccionadaId={seleccionada?.id ?? null}
             onSeleccionar={setSeleccionadaId}
             mensajeVacio={mensajeVacio()}
+            ubicacion={ubicacion}
+            cargandoUbicacion={cargandoUbicacion}
+            errorUbicacion={errorUbicacion}
+            activarUbicacion={activarUbicacion}
+            estacionMasCercana={estacionMasCercana}
           />
 
           <div className={styles.columnaMapa}>
             <MapaTunja
               titulo={null}
               estaciones={estacionesMapa}
-              nota="El número indica la cantidad de bicicletas disponibles."
+              ubicacionActual={ubicacion}
+              idEstacionMasCercana={estacionMasCercana?.id}
+              distanciaMasCercanaTexto={estacionMasCercana?.distanciaTexto}
+              onActivarUbicacion={activarUbicacion}
+              onSeleccionarEstacion={(est) => setSeleccionadaId(est.id)}
+              nota="El número indica la cantidad de bicicletas disponibles. El punto con halo muestra tu ubicación exacta."
             />
 
             {seleccionada && (
               <div className={styles.panelEstacion}>
                 <div className={styles.infoEstacion}>
-                  <span className={styles.codigoEstacion}>Estación {seleccionada.id}</span>
+                  <div className={styles.codigoYTag}>
+                    <span className={styles.codigoEstacion}>Estación {seleccionada.id}</span>
+                    {seleccionada.esMasCercana && (
+                      <span className={styles.tagCercanaPanel}>★ MÁS CERCANA</span>
+                    )}
+                  </div>
                   <span className={styles.nombreEstacion}>{seleccionada.nombre}</span>
                   <span className={styles.metaEstacion}>
                     {seleccionada.bicicletas} bicicletas · {seleccionada.anclajes} anclajes libres
+                    {seleccionada.distanciaTexto ? ` · a ${seleccionada.distanciaTexto} de ti` : ''}
                   </span>
                 </div>
 
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${seleccionada.lat},${seleccionada.lng}`}
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${seleccionada.lat},${seleccionada.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`boton boton--primario ${styles.botonLlegar}`}

@@ -13,10 +13,16 @@ import {
   IconoCerrar,
   IconoCheck,
   IconoDesbloqueo,
+  IconoGps,
 } from '../../../components/Iconos/Iconos.jsx';
 import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import MetricaUsuario from '../components/MetricaUsuario.jsx';
 import { useUsuario } from '../context/UsuarioContext.jsx';
+import useUbicacionTiempoReal from '../../../hooks/useUbicacionTiempoReal.js';
+import {
+  enriquecerEstacionesConDistancia,
+  ordenarEstacionesPorCercania,
+} from '../../../utils/geolocalizacion.js';
 import styles from './InicioPage.module.css';
 
 const LEYENDAS = [{ id: 'numero', contenido: 'El número indica la cantidad de bicicletas disponibles' }];
@@ -27,19 +33,45 @@ function InicioPage() {
   const [estacionSeleccionada, setEstacionSeleccionada] = useState(null);
   const [busqueda, setBusqueda] = useState('');
 
+  // Geolocalización en tiempo real
+  const {
+    ubicacion,
+    cargando: cargandoUbicacion,
+    error: errorUbicacion,
+    activar: activarUbicacion,
+  } = useUbicacionTiempoReal({ autoActivar: true });
+
   const listaEstaciones = useMemo(() => (Array.isArray(estaciones) ? estaciones : []), [estaciones]);
 
+  // Enriquecer estaciones con distancias geodésicas en tiempo real
+  const estacionesConDistancia = useMemo(() => {
+    return enriquecerEstacionesConDistancia(listaEstaciones, ubicacion);
+  }, [listaEstaciones, ubicacion]);
+
+  // Estación más cercana calculada
+  const estacionMasCercana = useMemo(() => {
+    return estacionesConDistancia.find((est) => est.esMasCercana) ?? null;
+  }, [estacionesConDistancia]);
+
+  // Ordenar por distancia si el usuario tiene geolocalización activa
+  const estacionesOrdenadas = useMemo(() => {
+    return ubicacion ? ordenarEstacionesPorCercania(estacionesConDistancia) : estacionesConDistancia;
+  }, [estacionesConDistancia, ubicacion]);
+
   const estacionesFiltradas = useMemo(() => {
-    if (!busqueda.trim()) return listaEstaciones;
+    if (!busqueda.trim()) return estacionesOrdenadas;
     const q = busqueda.toLowerCase().trim();
-    return listaEstaciones.filter(
+    return estacionesOrdenadas.filter(
       (est) =>
         est.nombre?.toLowerCase().includes(q) ||
         est.direccion?.toLowerCase().includes(q)
     );
-  }, [listaEstaciones, busqueda]);
+  }, [estacionesOrdenadas, busqueda]);
 
-  const estacionActual = estacionSeleccionada || (listaEstaciones.length > 0 ? listaEstaciones[0] : null);
+  const estacionActual =
+    estacionSeleccionada ||
+    estacionMasCercana ||
+    (estacionesOrdenadas.length > 0 ? estacionesOrdenadas[0] : null);
 
   const irADesbloquear = (estacion) => {
     navigate('/viajes', { state: { estacionId: estacion?.id || estacionActual?.id } });
@@ -62,7 +94,7 @@ function InicioPage() {
         <EncabezadoPagina
           etiqueta="Usuario / Inicio y estaciones / Pantalla principal"
           titulo={`Hola, ${primerNombre}`}
-          subtitulo="Consulta las estaciones de Tunja y encuentra una bicicleta disponible para tu próximo recorrido."
+          subtitulo="Consulta las estaciones de Tunja, mira cuál está más cerca de ti en tiempo real y encuentra una bicicleta disponible."
           acciones={
             <span className={styles.red}>
               <span className="punto-vivo" aria-hidden="true" />
@@ -201,9 +233,14 @@ function InicioPage() {
           <div className={styles.mapa}>
             <MapaTunja
               titulo={null}
-              estaciones={listaEstaciones}
+              estaciones={estacionesConDistancia}
+              ubicacionActual={ubicacion}
+              idEstacionMasCercana={estacionMasCercana?.id}
+              distanciaMasCercanaTexto={estacionMasCercana?.distanciaTexto}
+              onActivarUbicacion={activarUbicacion}
               leyendas={LEYENDAS}
               onSeleccionarEstacion={(est) => setEstacionSeleccionada(est)}
+              nota="El número indica la cantidad de bicicletas disponibles. El punto con halo muestra tu ubicación en tiempo real."
             />
           </div>
 
@@ -216,6 +253,43 @@ function InicioPage() {
                 {estacionesFiltradas.length} {estacionesFiltradas.length === 1 ? 'estación' : 'estaciones'}
               </span>
             </div>
+
+            {/* Banner de estado de geolocalización en tiempo real */}
+            {ubicacion ? (
+              <div className={styles.bannerUbicacion} role="status">
+                <span className={styles.puntoVivo} aria-hidden="true" />
+                <div className={styles.bannerUbicacionTexto}>
+                  <span className={styles.bannerUbicacionTitulo}>Ubicación en tiempo real activa</span>
+                  <span className={styles.bannerUbicacionSub}>
+                    {estacionMasCercana
+                      ? `Estación más cercana: ${estacionMasCercana.nombre} (a ${estacionMasCercana.distanciaTexto})`
+                      : 'Calculando estación más cercana…'}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.bannerUbicacionPrompt}>
+                <div className={styles.bannerUbicacionPromptIcono} aria-hidden="true">
+                  <IconoGps />
+                </div>
+                <div className={styles.bannerUbicacionTexto}>
+                  <span className={styles.bannerUbicacionTitulo}>Estaciones más cercanas</span>
+                  <span className={styles.bannerUbicacionSub}>
+                    {errorUbicacion || 'Activa tu ubicación para ver cuál estación te queda más cerca.'}
+                  </span>
+                </div>
+                {activarUbicacion && (
+                  <button
+                    type="button"
+                    className={`boton boton--secundario ${styles.botonActivarGps}`}
+                    onClick={activarUbicacion}
+                    disabled={cargandoUbicacion}
+                  >
+                    {cargandoUbicacion ? 'Ubicando…' : 'Activar GPS'}
+                  </button>
+                )}
+              </div>
+            )}
 
             <div className={styles.buscador}>
               <span className={styles.iconoBuscador} aria-hidden="true">
@@ -262,10 +336,12 @@ function InicioPage() {
               ) : (
                 estacionesFiltradas.map((est) => {
                   const seleccionada = (estacionActual?.id === est.id);
+                  const esCercana = est.esMasCercana;
+
                   return (
                     <article
                       key={est.id}
-                      className={`${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''}`}
+                      className={`${styles.itemEstacion} ${seleccionada ? styles.itemSeleccionado : ''} ${esCercana ? styles.itemMasCercano : ''}`}
                       onClick={() => setEstacionSeleccionada(est)}
                       role="button"
                       tabIndex={0}
@@ -274,16 +350,31 @@ function InicioPage() {
                     >
                       <div className={styles.itemCabecera}>
                         <div className={styles.itemTituloZona}>
-                          <h3 className={styles.nombreEstacion}>{est.nombre}</h3>
+                          <div className={styles.nombreYTagCercana}>
+                            <h3 className={styles.nombreEstacion}>{est.nombre}</h3>
+                            {esCercana && (
+                              <span className={styles.chipMasCercana}>
+                                ★ Más cercana
+                              </span>
+                            )}
+                          </div>
                           {seleccionada && (
                             <span className={styles.chipSeleccionada}>
                               <IconoCheck /> Seleccionada
                             </span>
                           )}
                         </div>
-                        <span className={`insignia ${est.bicicletas > 0 ? 'insignia--activa' : 'insignia--neutra'}`}>
-                          {est.bicicletas ?? 0} bicis
-                        </span>
+
+                        <div className={styles.insigniasCabecera}>
+                          {est.distanciaTexto && (
+                            <span className={`${styles.chipDistancia} ${esCercana ? styles.chipDistanciaCercana : ''}`}>
+                              <IconoUbicacion /> {est.distanciaTexto}
+                            </span>
+                          )}
+                          <span className={`insignia ${est.bicicletas > 0 ? 'insignia--activa' : 'insignia--neutra'}`}>
+                            {est.bicicletas ?? 0} bicis
+                          </span>
+                        </div>
                       </div>
 
                       <p className={styles.direccionEstacion}>
