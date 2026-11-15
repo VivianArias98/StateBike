@@ -10,6 +10,7 @@ const TEXTOS = {
   sin_permisos: 'No tienes permisos para acceder a esta sección',
   correo_ya_registrado: 'El correo ya se encuentra registrado',
   contrasena_debil: 'La contraseña debe tener mínimo 8 caracteres e incluir letras y números',
+  contrasena_actual_incorrecta: 'La contraseña actual es incorrecta',
   correo_invalido: 'El correo electrónico no es válido',
   token_requerido: 'Debes iniciar sesión para continuar',
   token_expirado: 'Tu sesión expiró. Vuelve a iniciar sesión',

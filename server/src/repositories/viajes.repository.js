@@ -60,6 +60,7 @@ export function listarPorUsuario(usuarioId, { desde, hasta } = {}) {
       v.duracion_min AS duracion,
       v.minutos_exceso AS minutosExceso,
       v.valor_cobrado AS valorCobrado,
+      v.valor_cobrado AS costoExceso,
       v.estado,
       v.estado_cobro AS estadoCobro,
       eo.nombre AS origen,

@@ -74,20 +74,28 @@ export async function editarPerfil(usuarioId, datos = {}, token) {
     }
   }
 
+  let tokenActual = token;
+  let nuevoAcceso = null;
+  let nuevoRefresco = null;
+
   // Cambio opcional de contraseña
   if (nuevaContrasena) {
     if (typeof nuevaContrasena !== "string" || nuevaContrasena.length < LARGO_MIN_CONTRASENA) {
       throw new AppError(400, "contrasena_debil");
     }
-    if (token && contrasenaActual) {
-      try {
-        await tunja("/auth/change-password", {
-          metodo: "POST",
-          cuerpo: { contrasenaActual, nuevaContrasena },
-          token,
-        });
-      } catch (err) {
-        if (err instanceof AppError) throw err;
+    if (!contrasenaActual) {
+      throw new AppError(400, "campos_vacios");
+    }
+    if (tokenActual) {
+      const resPassword = await tunja("/auth/password", {
+        metodo: "POST",
+        cuerpo: { actual: contrasenaActual, nueva: nuevaContrasena },
+        token: tokenActual,
+      });
+      if (resPassword?.acceso) {
+        tokenActual = resPassword.acceso;
+        nuevoAcceso = resPassword.acceso;
+        nuevoRefresco = resPassword.refresco;
       }
     }
   }
@@ -99,23 +107,24 @@ export async function editarPerfil(usuarioId, datos = {}, token) {
   });
 
   // Actualizar TunjaAPI si hay token
-  if (token && nuevoNombre) {
+  if (tokenActual && nuevoNombre) {
     try {
       await tunja("/users/me", {
         metodo: "PUT",
         cuerpo: { nombre: nuevoNombre },
-        token,
+        token: tokenActual,
       });
     } catch {
       // Si la API externa no lo soporta en este endpoint, SQLite conserva la actualización
     }
   }
 
-  const actualizado = await consultarPerfil(usuarioId, token);
+  const actualizado = await consultarPerfil(usuarioId, tokenActual);
 
   return {
     mensaje: MENSAJES.perfil_actualizado,
     usuario: actualizado,
+    ...(nuevoAcceso && { acceso: nuevoAcceso, refresco: nuevoRefresco }),
   };
 }
 

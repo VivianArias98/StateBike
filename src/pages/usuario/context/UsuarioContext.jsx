@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { leerSesion, borrarSesion } from '../../../utils/sesion.js';
+import { leerSesion, guardarSesion, borrarSesion } from '../../../utils/sesion.js';
 
 const UsuarioContext = createContext(null);
 const INTERVALO_VIAJE_MS = 5000; // cada cuánto se consulta si hay un viaje en curso
@@ -276,6 +276,17 @@ export function UsuarioProvider({ children }) {
         method: 'PUT',
         body: JSON.stringify(cuerpo),
       });
+
+      if (respuesta?.acceso && respuesta?.refresco) {
+        const sesionActual = leerSesion();
+        if (sesionActual) {
+          guardarSesion({
+            ...sesionActual,
+            acceso: respuesta.acceso,
+            refresco: respuesta.refresco,
+          });
+        }
+      }
 
       await cargarDatosUsuario();
       return { exito: true, mensaje: respuesta.mensaje || 'PERFIL ACTUALIZADO CORRECTAMENTE' };
