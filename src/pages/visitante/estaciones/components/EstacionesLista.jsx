@@ -26,6 +26,11 @@ function EstacionesLista({
   seleccionadaId,
   onSeleccionar,
   mensajeVacio = 'No encontramos estaciones con ese nombre.',
+  ubicacion = null,
+  cargandoUbicacion = false,
+  errorUbicacion = null,
+  activarUbicacion,
+  estacionMasCercana = null,
 }) {
   return (
     <section
@@ -46,6 +51,43 @@ function EstacionesLista({
 
       </div>
 
+      {/* Banner de estado de geolocalización en tiempo real */}
+      {ubicacion ? (
+        <div className={styles.bannerGpsActivo} role="status">
+          <span className={styles.puntoVivo} aria-hidden="true" />
+          <div className={styles.bannerGpsContenido}>
+            <span className={styles.bannerGpsTitulo}>Ubicación en tiempo real activa</span>
+            <span className={styles.bannerGpsDetalle}>
+              {estacionMasCercana
+                ? `Estación más cercana: ${estacionMasCercana.nombre} (a ${estacionMasCercana.distanciaTexto})`
+                : 'Calculando estación más cercana…'}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.bannerGpsPrompt}>
+          <div className={styles.bannerGpsIcono} aria-hidden="true">
+            <Icono nombre="gps" />
+          </div>
+          <div className={styles.bannerGpsContenido}>
+            <span className={styles.bannerGpsTitulo}>¿Cuál estación te queda más cerca?</span>
+            <span className={styles.bannerGpsDetalle}>
+              {errorUbicacion || 'Activa tu GPS para ordenar las estaciones por cercanía.'}
+            </span>
+          </div>
+          {activarUbicacion && (
+            <button
+              type="button"
+              className={`boton boton--secundario ${styles.botonActivarGps}`}
+              onClick={activarUbicacion}
+              disabled={cargandoUbicacion}
+            >
+              {cargandoUbicacion ? 'Ubicando…' : 'Activar GPS'}
+            </button>
+          )}
+        </div>
+      )}
+
       {resumen.length > 0 && (
         <ul className={styles.resumen} aria-label="Resumen de la red">
           {resumen.map((item) => (
@@ -60,18 +102,24 @@ function EstacionesLista({
       <ul className={styles.lista}>
         {estaciones.map((estacion) => {
           const activa = estacion.id === seleccionadaId;
+          const esCercana = estacion.esMasCercana;
 
           return (
             <li key={estacion.id}>
               <button
                 type="button"
                 aria-pressed={activa}
-                className={`${styles.tarjeta} ${activa ? styles.activa : ''}`}
+                className={`${styles.tarjeta} ${activa ? styles.activa : ''} ${esCercana ? styles.tarjetaMasCercana : ''}`}
                 onClick={() => onSeleccionar(estacion.id)}
               >
                 <span className={styles.cabecera}>
-                  <span className={styles.nombre}>
-                    {estacion.nombre}
+                  <span className={styles.nombreContenedor}>
+                    <span className={styles.nombre}>
+                      {estacion.nombre}
+                    </span>
+                    {esCercana && (
+                      <span className={styles.badgeCercanaPill}>★ Más cercana</span>
+                    )}
                   </span>
 
                   <span className={styles.iconoEstacion} aria-hidden="true">
@@ -93,6 +141,13 @@ function EstacionesLista({
                     <Icono nombre="candado" />
                     {estacion.anclajes} anclajes libres
                   </span>
+
+                  {estacion.distanciaTexto && (
+                    <span className={`${styles.distanciaPill} ${esCercana ? styles.distanciaMasCercanaPill : ''}`}>
+                      <Icono nombre="gps" />
+                      a {estacion.distanciaTexto}
+                    </span>
+                  )}
                 </span>
               </button>
             </li>

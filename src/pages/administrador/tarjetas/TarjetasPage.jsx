@@ -56,12 +56,15 @@ function TarjetasPage() {
   };
 
   useEffect(() => {
-    cargarUsuarios();
-  }, []);
+    const timer = setTimeout(() => {
+      cargarUsuarios(busqueda.trim());
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [busqueda]);
 
   const handleBuscar = (e) => {
     e.preventDefault();
-    cargarUsuarios(busqueda);
+    cargarUsuarios(busqueda.trim());
   };
 
   const abrirModalVincular = (usuario) => {
@@ -191,7 +194,7 @@ function TarjetasPage() {
           <input
             type="search"
             className={`input ${styles.inputBuscador}`}
-            placeholder="Buscar usuario por correo o nombre..."
+            placeholder="Buscar por nombre, correo, ID o tarjeta..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Buscar usuario"

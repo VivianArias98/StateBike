@@ -7,8 +7,8 @@
 }
 
 .raiz table {
-  min-width: 52rem !important;
-  table-layout: auto !important;
+  min-width: 58rem;
+  table-layout: auto;
   border-collapse: collapse;
 }
 
@@ -19,12 +19,13 @@
   vertical-align: middle;
 }
 
-/* Ancho y límites de las columnas */
-.colFecha    { width: 24%; min-width: 13.5rem; }
-.colOrigen   { width: 24%; min-width: 11rem; }
-.colDestino  { width: 22%; min-width: 11rem; }
-.colDuracion { width: 14%; min-width: 7rem; text-align: center; }
-.colRuta     { width: 16%; min-width: 8.5rem; }
+/* Ancho y límites de las columnas ordenadas según requerimiento */
+.colInicio   { width: 22%; min-width: 12.5rem; }
+.colOrigen   { width: 18%; min-width: 10rem; }
+.colFin      { width: 22%; min-width: 12.5rem; }
+.colDestino  { width: 18%; min-width: 10rem; }
+.colDuracion { width: 10%; min-width: 6.5rem; text-align: center; }
+.colExceso   { width: 10%; min-width: 7.5rem; text-align: center; }
 
 .celdaFecha {
   white-space: nowrap;
@@ -48,13 +49,28 @@
 }
 
 .destino {
-  color: var(--color-texto-suave);
+  color: var(--color-texto);
+  font-weight: 500;
 }
 
-.enlaceRuta {
-  font-size: var(--texto-s);
-  font-weight: 600;
+.badgeExceso {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--color-etiqueta-amarilla);
+  color: var(--color-etiqueta-texto);
+  border: 1px solid var(--color-etiqueta-borde);
+  border-radius: var(--radio-s);
+  font-weight: 700;
+  font-size: var(--texto-xs);
   white-space: nowrap;
+}
+
+.sinExceso {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 500;
+  opacity: 0.75;
 }
 
 .vacio {

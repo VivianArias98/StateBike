@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
+import EncabezadoPagina from '../components/EncabezadoPagina.jsx';
 import TarjetaSaldo from './components/TarjetaSaldo.jsx';
 import TarjetaCobroPendiente from './components/TarjetaCobroPendiente.jsx';
 import TablaMovimientos from './components/TablaMovimientos.jsx';
@@ -44,24 +45,23 @@ function MiBilleteraPage() {
   return (
     <UsuarioLayout itemActivo="Mi billetera">
       <div className={styles.raiz}>
-        <header className={styles.cabecera}>
-          <div className={styles.encabezadoTexto}>
-            <h1 className={styles.titulo}>Mi Billetera</h1>
-            <p className={styles.subtitulo}>
-              Consulta tu saldo disponible, cobros pendientes y registro de movimientos de tu cuenta.
-            </p>
-          </div>
-          <button
-            type="button"
-            className={styles.botonSincronizar}
-            onClick={handleRefrescarManual}
-            disabled={sincronizando}
-            title="Sincronizar saldo con TunjaAPI en vivo"
-          >
-            <span className={sincronizando ? styles.girando : ''}>↻</span>
-            <span>{sincronizando ? 'Sincronizando...' : 'Actualizar saldo'}</span>
-          </button>
-        </header>
+        <EncabezadoPagina
+          etiqueta="Usuario / Billetera / Estado de cuenta"
+          titulo="Mi Billetera"
+          subtitulo="Consulta tu saldo disponible, cobros pendientes y registro de movimientos de tu cuenta."
+          acciones={
+            <button
+              type="button"
+              className={styles.botonSincronizar}
+              onClick={handleRefrescarManual}
+              disabled={sincronizando}
+              title="Sincronizar saldo con TunjaAPI en vivo"
+            >
+              <span className={sincronizando ? styles.girando : ''} aria-hidden="true">↻</span>
+              <span>{sincronizando ? 'Sincronizando...' : 'Actualizar saldo'}</span>
+            </button>
+          }
+        />
 
         <div className={styles.principales}>
           <TarjetaSaldo saldo={billetera.saldo} />
@@ -70,6 +70,7 @@ function MiBilleteraPage() {
             onPagar={() => navegar('/billetera/pagar')}
           />
         </div>
+
         <TablaMovimientos
           movimientos={billetera.movimientos ?? []}
           perfil={perfil}

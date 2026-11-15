@@ -92,13 +92,14 @@
 .beneficios {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-3);
+  gap: var(--espacio-4);
 }
 
+/* Franja inferior: aprobación de tarifas */
 .franja {
   display: flex;
-  flex-direction: column;
-  gap: var(--espacio-2);
+  align-items: center;
+  justify-content: center;
   padding: var(--espacio-4) var(--espacio-5);
   background: var(--color-borde-suave);
   border-radius: var(--radio-m);
@@ -147,12 +148,11 @@
 
   .beneficios {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-4);
   }
 
   .franja {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: var(--espacio-4) var(--espacio-5);
   }
 }

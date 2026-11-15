@@ -35,6 +35,7 @@ function aVistaPlan(plan) {
   return {
     id: plan.id,
     dias: `${dias} ${plural(dias, 'DÍA', 'DÍAS')}`,
+    vigenciaDias: dias,
     nombre: plan.nombre,
     precio: formatearCOP(plan.costoBase),
     unidad: 'COP',
@@ -71,6 +72,16 @@ function PlanesTarifas() {
     };
   }, []);
 
+  // Identificar el plan recomendado: preferir "Plan Mensual" o 30 días, o el segundo del catálogo (igual que en usuario)
+  const idRecomendado = (() => {
+    if (!planes || planes.length === 0) return null;
+    const mensual = planes.find(
+      (p) => String(p.nombre).toLowerCase().includes('mensual') || p.vigenciaDias === 30
+    );
+    if (mensual) return mensual.id;
+    return planes.length > 1 ? planes[1].id : planes[0]?.id;
+  })();
+
   function contenidoPlanes() {
     if (error) {
       return <p className={styles.vacio} role="alert">{error}</p>;
@@ -85,7 +96,13 @@ function PlanesTarifas() {
         </p>
       );
     }
-    return planes.map((plan) => <TarjetaPlan key={plan.id} plan={plan} />);
+    return planes.map((plan) => (
+      <TarjetaPlan
+        key={plan.id}
+        plan={plan}
+        esRecomendado={plan.id === idRecomendado}
+      />
+    ));
   }
 
   return (
@@ -123,9 +140,6 @@ function PlanesTarifas() {
           <p className={styles.aprobacion}>
             <Icono nombre="escudo" />
             <span>Aprobado por el Concejo y Secretaría de Tránsito y Transporte de Tunja.</span>
-          </p>
-          <p className={styles.version}>
-            <span className={styles.redActiva}>RED ACTIVA</span>
           </p>
         </footer>
       </div>

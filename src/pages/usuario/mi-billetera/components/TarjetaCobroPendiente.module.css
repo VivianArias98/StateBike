@@ -2,65 +2,184 @@
 .raiz {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--espacio-4);
   padding: var(--espacio-5);
   background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
+  border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-l);
+  box-shadow: 0 4px 16px var(--color-pista);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.raiz:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--color-pista);
 }
 
 .alerta {
-  border-color: var(--color-error-borde);
+  border: 2px solid var(--color-error-borde);
+  background: var(--color-superficie);
+}
+
+.cabeceraSinCobro {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.iconoSinCobro {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  font-size: var(--texto-xl);
+  border: 1px solid var(--color-exito);
+  flex-shrink: 0;
 }
 
 .etiqueta {
+  margin: 0;
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-texto-suave);
+}
+
+.sinCobroTitulo {
+  margin: 2px 0 0;
+  font-size: var(--texto-m);
+  font-weight: 800;
+  color: var(--color-texto);
+}
+
+.sinCobroDescripcion {
+  margin: 0;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-suave);
+  line-height: 1.5;
+}
+
+.avisoTranquilidad {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-exito);
+  align-self: flex-start;
+}
+
+.puntoVerde {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-primario);
+}
+
+/* Alerta de cobro pendiente */
+.cabeceraAlerta {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.iconoAlertaBox {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-error-fondo);
+  color: var(--color-error-texto);
+  font-size: var(--texto-xl);
+  border: 1px solid var(--color-error-borde);
+  flex-shrink: 0;
 }
 
 .etiquetaAlerta {
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-error-texto);
 }
 
-.sinCobro {
-  font-size: var(--texto-m);
-  font-weight: 700;
+.montoContenedor {
+  display: flex;
+  align-items: baseline;
+  gap: var(--espacio-1);
+  margin-top: 2px;
 }
 
 .monto {
-  font-size: var(--texto-xl);
+  font-size: var(--texto-3xl);
   font-weight: 800;
   color: var(--color-error-texto);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .moneda {
+  font-family: var(--fuente-mono);
   font-size: var(--texto-s);
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-error-texto);
 }
 
 .concepto {
   padding: var(--espacio-3);
   background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
   border-radius: var(--radio-m);
 }
 
+.etiquetaConcepto {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-texto-suave);
+}
+
 .textoConcepto {
-  margin-top: var(--espacio-1);
-  font-size: var(--texto-s);
+  margin: var(--espacio-1) 0 0;
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--color-texto);
 }
 
 .mensaje {
-  font-size: var(--texto-s);
+  margin: 0;
+  font-size: var(--texto-xs);
   color: var(--color-error-texto);
 }
 
-.boton {
+.botonPagar {
   margin-top: auto;
-  background: var(--color-superficie);
-  color: var(--color-error-texto);
-  border: 1px solid var(--color-error-borde);
+  gap: var(--espacio-2);
+  min-height: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 768px) {
+  .raiz {
+    padding: var(--espacio-6);
+  }
+
+  .monto {
+    font-size: var(--texto-4xl);
+  }
 }

@@ -115,6 +115,33 @@
   color: var(--color-secundario-texto);
 }
 
+.sinCobro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--espacio-6);
+  gap: var(--espacio-3);
+}
+
+.sinCobroTitulo {
+  margin: 0;
+  font-size: var(--texto-l);
+  font-weight: 700;
+}
+
+.sinCobroTexto {
+  margin: 0 0 var(--espacio-2);
+  color: var(--color-texto-suave);
+}
+
+.avisoRecargaAdmin {
+  margin: var(--espacio-1) 0 0;
+  font-size: var(--texto-xs);
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
 @media (min-width: 768px) {
   .titulo {
     font-size: var(--texto-3xl);

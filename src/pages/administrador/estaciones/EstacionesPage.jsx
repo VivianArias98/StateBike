@@ -7,16 +7,8 @@ import Aviso from '../../../components/Avisos/Aviso.jsx';
 import EstacionesTable from './components/EstacionesTable.jsx';
 import RegistrarEstacionPage from './RegistrarEstacionPage.jsx';
 import EditarEstacionPage from './EditarEstacionPage.jsx';
+import { pedirAutenticado } from '../../../utils/auth.js';
 import styles from './EstacionesPage.module.css';
-
-function leerToken() {
-  try {
-    const sesion = JSON.parse(localStorage.getItem('stationbike.sesion'));
-    return sesion?.acceso || null;
-  } catch {
-    return null;
-  }
-}
 
 function EstacionesPage() {
   const navigate = useNavigate();
@@ -31,29 +23,19 @@ function EstacionesPage() {
 
   // Modal de confirmación para inactivar (HU_13)
   const [estacionAInactivar, setEstacionAInactivar] = useState(null);
+  // Modal de confirmación para activar
+  const [estacionAActivar, setEstacionAActivar] = useState(null);
 
   const cargarEstaciones = async () => {
     try {
-      const token = leerToken();
-      const respuesta = await fetch('/api/admin/estaciones', {
-        headers: {
-          Accept: 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
-
-      if (!respuesta.ok) {
-        if (respuesta.status === 401 || respuesta.status === 403) {
-          navigate('/login');
-          return;
-        }
-        throw new Error('Error al cargar estaciones');
-      }
-
-      const datos = await respuesta.json();
+      const datos = await pedirAutenticado('/admin/estaciones');
       const lista = Array.isArray(datos) ? datos : (datos.estaciones || []);
       setEstaciones(lista);
     } catch (error) {
+      if (error.status === 401 || error.status === 403) {
+        navigate('/login');
+        return;
+      }
       console.error(error);
       setAviso('No se pudo conectar con el servidor');
     } finally {
@@ -90,59 +72,50 @@ function EstacionesPage() {
   // ---------- Acciones con la API ----------
   // Registrar (HU_11)
   const handleGuardarNueva = async (datos) => {
-    const token = leerToken();
-    const respuesta = await fetch('/api/admin/estaciones', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify(datos),
-    });
-
-    const resJson = await respuesta.json().catch(() => ({}));
-
-    if (!respuesta.ok) {
-      if (resJson.error === 'nombre_estacion_duplicado') {
+    try {
+      await pedirAutenticado('/admin/estaciones', {
+        metodo: 'POST',
+        cuerpo: datos,
+      });
+      await cargarEstaciones();
+    } catch (err) {
+      if (err.status === 401 || err.status === 403) {
+        navigate('/login');
+        return;
+      }
+      if (err.codigo === 'nombre_estacion_duplicado') {
         throw new Error('El nombre de la estación ya se encuentra registrado');
       }
-      throw new Error(resJson.mensaje || 'Error al registrar estación');
+      throw new Error(err.mensaje || 'Error al registrar estación');
     }
-
-    await cargarEstaciones();
   };
 
   // Editar (HU_12)
   const handleActualizar = async (datos) => {
-    const token = leerToken();
-    const respuesta = await fetch(`/api/admin/estaciones/${datos.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify({
-        nombre: datos.nombre,
-        direccion: datos.direccion,
-        lat: datos.lat,
-        lng: datos.lng,
-      }),
-    });
+    try {
+      const resJson = await pedirAutenticado(`/admin/estaciones/${datos.id}`, {
+        metodo: 'PUT',
+        cuerpo: {
+          nombre: datos.nombre,
+          direccion: datos.direccion,
+          lat: datos.lat,
+          lng: datos.lng,
+        },
+      });
 
-    const resJson = await respuesta.json().catch(() => ({}));
-
-    if (!respuesta.ok) {
-      if (resJson.error === 'nombre_estacion_duplicado') {
+      setAviso(resJson?.mensaje || 'Estación modificada con éxito');
+      await cargarEstaciones();
+      handleVolver();
+    } catch (err) {
+      if (err.status === 401 || err.status === 403) {
+        navigate('/login');
+        return;
+      }
+      if (err.codigo === 'nombre_estacion_duplicado') {
         throw new Error('El nombre de la estación ya se encuentra registrado');
       }
-      throw new Error(resJson.mensaje || 'Error al modificar estación');
+      throw new Error(err.mensaje || 'Error al modificar estación');
     }
-
-    setAviso('Estación modificada con éxito');
-    await cargarEstaciones();
-    handleVolver();
   };
 
   // Inactivar con confirmación (HU_13)
@@ -156,32 +129,50 @@ function EstacionesPage() {
     if (!estacionAInactivar) return;
 
     try {
-      const token = leerToken();
-      const respuesta = await fetch(`/api/admin/estaciones/${estacionAInactivar.id}/inactivar`, {
-        method: 'PATCH',
-        headers: {
-          Accept: 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+      await pedirAutenticado(`/admin/estaciones/${estacionAInactivar.id}/inactivar`, {
+        metodo: 'PATCH',
       });
-
-      const resJson = await respuesta.json().catch(() => ({}));
-
-      if (!respuesta.ok) {
-        if (resJson.error === 'estacion_con_bicicletas') {
-          setAviso('La estación tiene bicicletas asignadas, reubíquelas antes de inactivar');
-        } else {
-          setAviso(resJson.mensaje || 'Error al inactivar la estación');
-        }
-        return;
-      }
-
       setAviso('La estación ha sido inactivada de forma correcta');
       await cargarEstaciones();
-    } catch {
-      setAviso('Error de conexión al inactivar la estación');
+    } catch (err) {
+      if (err.status === 401 || err.status === 403) {
+        navigate('/login');
+        return;
+      }
+      if (err.codigo === 'estacion_con_bicicletas') {
+        setAviso('La estación tiene bicicletas asignadas, reubíquelas antes de inactivar');
+      } else {
+        setAviso(err.mensaje || 'Error al inactivar la estación');
+      }
     } finally {
       setEstacionAInactivar(null);
+    }
+  };
+
+  // Activar estación con confirmación
+  const handleSolicitarActivar = (id) => {
+    const estacion = estaciones.find((e) => e.id === id);
+    if (!estacion || estacion.estado !== 'INACTIVE') return;
+    setEstacionAActivar(estacion);
+  };
+
+  const handleConfirmarActivar = async () => {
+    if (!estacionAActivar) return;
+
+    try {
+      await pedirAutenticado(`/admin/estaciones/${estacionAActivar.id}/activar`, {
+        metodo: 'PATCH',
+      });
+      setAviso('La estación ha sido activada de forma correcta');
+      await cargarEstaciones();
+    } catch (err) {
+      if (err.status === 401 || err.status === 403) {
+        navigate('/login');
+        return;
+      }
+      setAviso(err.mensaje || 'Error al activar la estación');
+    } finally {
+      setEstacionAActivar(null);
     }
   };
 
@@ -256,6 +247,7 @@ function EstacionesPage() {
           estaciones={estacionesFiltradas}
           onEditar={handleEditar}
           onInactivar={handleSolicitarInactivar}
+          onActivar={handleSolicitarActivar}
         />
       )}
 
@@ -286,6 +278,39 @@ function EstacionesPage() {
                 onClick={handleConfirmarInactivar}
               >
                 Confirmar inactivación
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmación para activar estación */}
+      {estacionAActivar && (
+        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-activar-titulo">
+          <div className={styles.modalCaja}>
+            <h2 id="modal-activar-titulo" className={styles.modalTitulo}>
+              Activar estación
+            </h2>
+            <p className={styles.modalTexto}>
+              ¿Está seguro de que desea activar la estación <strong>{estacionAActivar.nombre}</strong>?
+            </p>
+            <p className={styles.modalTexto}>
+              La estación volverá a estar disponible en el mapa para retiros, devoluciones y anclajes en la red.
+            </p>
+            <div className={styles.modalAcciones}>
+              <button
+                type="button"
+                className="boton boton--secundario"
+                onClick={() => setEstacionAActivar(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="boton boton--primario"
+                onClick={handleConfirmarActivar}
+              >
+                Confirmar activación
               </button>
             </div>
           </div>

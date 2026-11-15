@@ -31,7 +31,9 @@ function PlanActivo({ plan, onCancelar, onVerHistorial }) {
           </p>
           <p className={styles.texto}>Debitado de Mi Billetera</p>
           {plan.tieneCobroPendiente ? (
-            <p className={styles.texto}>Tiene un pago pendiente por exceso de tiempo. Recargue su saldo para continuar</p>
+            <p className={styles.texto}>
+              Tiene un pago pendiente por exceso de tiempo. Puede pagarlo en Mi Billetera con su saldo disponible o acudir a taquilla para recargar con el administrador.
+            </p>
           ) : (
             <p className={styles.alDia}>
               <span className={styles.check} aria-hidden="true">

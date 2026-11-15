@@ -1,0 +1,42 @@
+/* AvatarAdmin.module.css: base = celular */
+
+.contenedor {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: var(--radio-circulo);
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--color-superficie);
+  box-shadow: 0 1px 3px var(--color-pista);
+  border: 1.5px solid var(--color-borde-suave);
+  transition: transform var(--transicion-rapida), border-color var(--transicion-rapida);
+}
+
+.contenedor svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tamanoS {
+  width: 2rem;
+  height: 2rem;
+}
+
+.tamanoM {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.tamanoL {
+  width: 4rem;
+  height: 4rem;
+}
+
+.tamanoXl {
+  width: 5.5rem;
+  height: 5.5rem;
+}
+

@@ -2,7 +2,8 @@ import * as tarjetas from "../services/tarjetas.service.js";
 
 // Administrador (HU_18)
 export async function listarUsuarios(req, res) {
-  res.json(await tarjetas.listarUsuarios(req.query.q));
+  const busqueda = req.query.q ?? req.query.busqueda ?? "";
+  res.json(await tarjetas.listarUsuarios(busqueda));
 }
 
 export async function vincular(req, res) {

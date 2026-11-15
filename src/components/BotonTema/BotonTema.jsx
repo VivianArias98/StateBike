@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTema } from '../../context/TemaContext.jsx';
 import styles from './BotonTema.module.css';
 

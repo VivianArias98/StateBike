@@ -18,6 +18,7 @@ const MAPA_TIPOS = {
 function IncidenciasPage() {
   const navigate = useNavigate();
   const [incidencias, setIncidencias] = useState([]);
+  const [todasIncidencias, setTodasIncidencias] = useState([]);
   const [filtroEstado, setFiltroEstado] = useState('TODAS');
   const [cargando, setCargando] = useState(false);
   const [aviso, setAviso] = useState('');
@@ -35,24 +36,28 @@ function IncidenciasPage() {
     try {
       const sesion = leerSesion();
       const token = sesion?.acceso;
-      const query = estado && estado !== 'TODAS' ? `?estado=${encodeURIComponent(estado)}` : '';
-      const respuesta = await fetch(`/api/admin/incidencias${query}`, {
-        headers: {
-          Accept: 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const headers = {
+        Accept: 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
 
-      if (!respuesta.ok) {
-        if (respuesta.status === 401 || respuesta.status === 403) {
+      const query = estado && estado !== 'TODAS' ? `?estado=${encodeURIComponent(estado)}` : '';
+      const [resFiltro, resTodas] = await Promise.all([
+        fetch(`/api/admin/incidencias${query}`, { headers }),
+        fetch('/api/admin/incidencias', { headers }),
+      ]);
+
+      if (!resFiltro.ok || !resTodas.ok) {
+        if (resFiltro.status === 401 || resFiltro.status === 403 || resTodas.status === 401 || resTodas.status === 403) {
           navigate('/login');
           return;
         }
         throw new Error('Error al cargar la lista de incidencias');
       }
 
-      const datos = await respuesta.json();
-      setIncidencias(datos.incidencias || []);
+      const [datosFiltro, datosTodas] = await Promise.all([resFiltro.json(), resTodas.json()]);
+      setIncidencias(datosFiltro.incidencias || []);
+      setTodasIncidencias(datosTodas.incidencias || []);
     } catch (error) {
       console.error(error);
       setAviso('No se pudo conectar con el servidor para obtener las incidencias');
@@ -146,6 +151,20 @@ function IncidenciasPage() {
     }
   };
 
+  const conteos = {
+    TODAS: todasIncidencias.length,
+    ABIERTA: todasIncidencias.filter((i) => i.estado === 'ABIERTA').length,
+    ATENDIDA: todasIncidencias.filter((i) => i.estado === 'ATENDIDA').length,
+    CERRADA: todasIncidencias.filter((i) => i.estado === 'CERRADA').length,
+  };
+
+  const OPCIONES_FILTRO = [
+    { id: 'TODAS', label: 'Todas', clasePunto: null },
+    { id: 'ABIERTA', label: 'Abiertas', clasePunto: styles.puntoAbierta },
+    { id: 'ATENDIDA', label: 'Atendidas', clasePunto: styles.puntoAtendida },
+    { id: 'CERRADA', label: 'Cerradas', clasePunto: styles.puntoCerrada },
+  ];
+
   return (
     <AdminLayout itemActivo="Incidencias">
       <div className={styles.raiz}>
@@ -155,15 +174,18 @@ function IncidenciasPage() {
           subtitulo="Supervisión, atención técnica obligatoria y cierre formal de fallas en bicicletas, estaciones y tarjetas."
           icono={<IconoAlerta />}
           acciones={
-            <div className={styles.filtrosBarra} role="group" aria-label="Filtrar por estado">
-              {['TODAS', 'ABIERTA', 'ATENDIDA', 'CERRADA'].map((estado) => (
+            <div className={styles.filtrosBarra} role="group" aria-label="Filtrar incidencias por estado">
+              {OPCIONES_FILTRO.map((opcion) => (
                 <button
-                  key={estado}
+                  key={opcion.id}
                   type="button"
-                  className={`${styles.filtroBoton} ${filtroEstado === estado ? styles.filtroActivo : ''}`}
-                  onClick={() => setFiltroEstado(estado)}
+                  className={`${styles.filtroBoton} ${filtroEstado === opcion.id ? styles.filtroActivo : ''}`}
+                  onClick={() => setFiltroEstado(opcion.id)}
+                  title={`Filtrar por ${opcion.label}`}
                 >
-                  {estado}
+                  {opcion.clasePunto && <span className={`${styles.puntoEstado} ${opcion.clasePunto}`} aria-hidden="true" />}
+                  <span>{opcion.label}</span>
+                  <span className={styles.conteoPill}>{conteos[opcion.id] ?? 0}</span>
                 </button>
               ))}
             </div>

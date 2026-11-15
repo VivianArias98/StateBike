@@ -1,13 +1,19 @@
 import MapaTunja from '../../../../components/MapaTunja/MapaTunja.jsx';
 import BarraProgreso from '../../../../components/BarraProgreso/BarraProgreso.jsx';
 import ListaDatos from '../../components/ListaDatos.jsx';
+import {
+  IconoBicicleta,
+  IconoUbicacion,
+  IconoReloj,
+  IconoAlerta,
+  IconoNfc,
+} from '../../../../components/Iconos/Iconos.jsx';
 import { formatearPesos } from '../../formato.js';
 import styles from './ViajeEnCurso.module.css';
 
 const dosDigitos = (n) => String(n).padStart(2, '0');
 
 // Viaje en curso: cronómetro, tiempo incluido y mapa con la estación de salida marcada
-// segundos: tiempo transcurrido (lo calcula la página con useCronometro)
 function ViajeEnCurso({ viaje, segundos, estaciones, onReportar }) {
   const minutosIncluidos = viaje.minutosIncluidos;
 
@@ -23,18 +29,34 @@ function ViajeEnCurso({ viaje, segundos, estaciones, onReportar }) {
   });
 
   const datos = [
-    { etiqueta: 'Estación de salida', valor: viaje.estacionOrigen },
-    { etiqueta: 'Hora de inicio', valor: horaInicio },
-    { etiqueta: 'Tiempo incluido', valor: `${minutosIncluidos} min` },
     {
-      etiqueta: 'Exceso por minuto',
-      valor: `${formatearPesos(viaje.valorMinutoExceso)} (tope ${formatearPesos(viaje.topeExceso)})`,
+      etiqueta: 'Estación de salida',
+      valor: (
+        <span className={styles.valorConIcono}>
+          <IconoUbicacion />
+          <span>{viaje.estacionOrigen}</span>
+        </span>
+      ),
     },
     {
-      etiqueta: 'Exceso actual',
+      etiqueta: 'Hora de inicio',
       valor: (
-        <span className={minutosExceso > 0 ? styles.excedido : undefined}>
-          {minutosExceso} min · {formatearPesos(valorExceso)}
+        <span className={styles.valorConIcono}>
+          <IconoReloj />
+          <span>{horaInicio}</span>
+        </span>
+      ),
+    },
+    { etiqueta: 'Tiempo incluido', valor: `${minutosIncluidos} min` },
+    {
+      etiqueta: 'Tarifa de exceso',
+      valor: `${formatearPesos(viaje.valorMinutoExceso)}/min (tope ${formatearPesos(viaje.topeExceso)})`,
+    },
+    {
+      etiqueta: 'Exceso acumulado',
+      valor: (
+        <span className={minutosExceso > 0 ? styles.excedidoBadge : styles.sinExcesoBadge}>
+          {minutosExceso > 0 ? `+${minutosExceso} min · ${formatearPesos(valorExceso)}` : '$0 COP (0 min)'}
         </span>
       ),
     },
@@ -53,14 +75,24 @@ function ViajeEnCurso({ viaje, segundos, estaciones, onReportar }) {
           <span className="insignia insignia--activa">
             <span className="punto-vivo" aria-hidden="true" /> VIAJE EN CURSO
           </span>
-          <h2 className={styles.bicicleta}>Bicicleta {viaje.bicicleta}</h2>
+          <h2 className={styles.bicicleta}>
+            <span className={styles.bicicletaIcono} aria-hidden="true">
+              <IconoBicicleta />
+            </span>
+            <span>Bicicleta #{viaje.bicicleta}</span>
+          </h2>
         </div>
 
-        <div className={`contexto-oscuro ${styles.cronometro}`}>
+        <div className={`contexto-oscuro ${styles.cronometro} ${minutosExceso > 0 ? styles.cronometroExceso : ''}`}>
           <span className={styles.cronometroEtiqueta}>Tiempo transcurrido</span>
           <span className={styles.digitos} role="timer">
             {dosDigitos(Math.floor(segundos / 60))}:{dosDigitos(segundos % 60)}
           </span>
+          {minutosExceso > 0 && (
+            <span className={styles.alertaExceso}>
+              Exceso: +{minutosExceso} min ({formatearPesos(valorExceso)})
+            </span>
+          )}
         </div>
 
         <BarraProgreso
@@ -69,14 +101,25 @@ function ViajeEnCurso({ viaje, segundos, estaciones, onReportar }) {
           etiqueta="Progreso del tiempo incluido en el viaje"
         />
 
-        <ListaDatos datos={datos} />
+        <div className={styles.datosWrapper}>
+          <ListaDatos datos={datos} />
+        </div>
 
-        <p className={styles.instruccion}>
-          Para finalizar el viaje, encaje la bicicleta en un anclaje libre y acerque su tarjeta NFC al lector.
-        </p>
+        <div className={styles.instruccionCard}>
+          <span className={styles.instruccionIcono} aria-hidden="true">
+            <IconoNfc />
+          </span>
+          <p className={styles.instruccionTexto}>
+            Para finalizar el viaje, encaje la bicicleta en un anclaje libre de cualquier estación física y acerque su tarjeta NFC al lector del tótem.
+          </p>
+        </div>
 
-        <button type="button" className="boton boton--secundario" onClick={onReportar}>
-          REPORTAR INCIDENCIA
+        <button
+          type="button"
+          className={`boton boton--secundario ${styles.botonReportar}`}
+          onClick={onReportar}
+        >
+          <IconoAlerta /> REPORTAR INCIDENCIA
         </button>
       </section>
 

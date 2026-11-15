@@ -1,19 +1,197 @@
+/* ResumenViaje.module.css: base = celular */
 .raiz {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacio-4);
-    max-width: 40rem;
-  }
-  
-  .titulo {
-    margin: 0;
-    font-size: var(--texto-xl);
-    font-weight: 700;
-  }
-  
-  .acciones {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  max-width: 44rem;
+  margin: 0 auto;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-l);
+  box-shadow: 0 4px 18px var(--color-pista);
+  padding: var(--espacio-6);
+}
+
+.cabeceraExito {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-3);
+  text-align: center;
+}
+
+.iconoExito {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-acento-suave);
+  color: var(--color-exito);
+  font-size: 2rem;
+  border: 2px solid var(--color-exito);
+  box-shadow: 0 4px 12px var(--color-pista);
+}
+
+.titulo {
+  margin: 0;
+  font-size: var(--texto-2xl);
+  font-weight: 800;
+  color: var(--color-texto);
+  line-height: 1.25;
+}
+
+/* Recorrido Origen -> Destino */
+.rutaCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.rutaPunto {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.puntoSalida {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-primario);
+  border: 2px solid var(--color-superficie);
+  box-shadow: 0 0 0 2px var(--color-primario);
+  flex-shrink: 0;
+}
+
+.puntoLlegada {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-exito);
+  border: 2px solid var(--color-superficie);
+  box-shadow: 0 0 0 2px var(--color-exito);
+  flex-shrink: 0;
+}
+
+.rutaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.rutaEtiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-texto-suave);
+}
+
+.rutaNombre {
+  font-size: var(--texto-m);
+  color: var(--color-texto);
+}
+
+.rutaSeparador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-l);
+  padding-left: var(--espacio-1);
+}
+
+/* Métricas del viaje */
+.metricasGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espacio-3);
+}
+
+.metricaItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-m);
+  text-align: center;
+}
+
+.metricaEtiqueta {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-texto-suave);
+}
+
+.metricaValor {
+  font-size: var(--texto-lg, 1.125rem);
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.metricaValorDestacado {
+  font-size: var(--texto-lg, 1.125rem);
+  font-weight: 800;
+  color: var(--color-exito);
+}
+
+.valorExceso {
+  color: var(--color-error-texto);
+  font-weight: 700;
+}
+
+/* Aviso de cobro o incidencia */
+.avisoCard {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-error-fondo);
+  border: 1px solid var(--color-error-borde);
+  border-radius: var(--radio-m);
+  color: var(--color-error-texto);
+  font-size: var(--texto-s);
+  font-weight: 600;
+}
+
+.avisoIcono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--texto-l);
+}
+
+.avisoTexto {
+  flex: 1;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+}
+
+@media (min-width: 640px) {
+  .rutaCard {
+    flex-direction: row;
     align-items: center;
-    gap: var(--espacio-3);
+    justify-content: space-between;
   }
+
+  .rutaSeparador {
+    padding: 0;
+  }
+}

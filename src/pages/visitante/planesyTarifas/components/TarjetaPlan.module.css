@@ -16,11 +16,22 @@
   padding-top: calc(var(--espacio-5) + var(--espacio-2));
 }
 
-.etiquetaActual {
+/* Plan recomendado: realce visual, borde verde y medalla centrada arriba */
+.recomendado {
+  border: 2px solid var(--color-primario);
+  padding-top: calc(var(--espacio-5) + var(--espacio-2));
+  box-shadow: 0 4px 18px var(--color-pista);
+}
+
+.etiquetaActual,
+.etiquetaRecomendado {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
   padding: var(--espacio-1) var(--espacio-4);
   background: var(--color-primario);
   color: var(--color-primario-texto);
@@ -29,6 +40,20 @@
   font-size: var(--texto-xs);
   font-weight: 700;
   white-space: nowrap;
+  box-shadow: 0 2px 6px var(--color-pista);
+}
+
+.iconoMedalla {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+.iconoMedalla svg {
+  width: 100%;
+  height: 100%;
 }
 
 .cabecera {

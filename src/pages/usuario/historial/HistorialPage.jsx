@@ -35,7 +35,7 @@ function formatearFechaCorta(fechaIso) {
 }
 
 function HistorialPage() {
-  const { historialViajes, billetera, perfil } = useUsuario();
+  const { historialViajes, historialPagos, billetera, perfil } = useUsuario();
   const [tabActivo, setTabActivo] = useState('viajes'); // 'viajes' | 'pagos'
   const [desde, setDesde] = useState('');
   const [hasta, setHasta] = useState('');
@@ -46,17 +46,23 @@ function HistorialPage() {
   // 1. Datos formateados de Viajes
   const listaViajes = historialViajes.map((v) => ({
     id: v.id,
+    fechaHoraInicio: formatearFechaBogota(v.fechaInicio),
+    fechaHoraFin: v.fechaFin ? formatearFechaBogota(v.fechaFin) : 'En curso',
     fechaHora: formatearFechaBogota(v.fechaInicio),
     fecha: extraerFechaBogota(v.fechaInicio),
     origen: v.origen,
     destino: v.destino,
     duracion: v.duracion ?? v.duracionMin ?? 0,
-    minutosExceso: v.minutosExceso ?? 0,
-    costoExceso: v.costoExceso ?? 0,
+    minutosExceso: v.minutosExceso ?? v.minutos_exceso ?? 0,
+    costoExceso: v.costoExceso ?? v.valorCobrado ?? v.valor_cobrado ?? 0,
+    valorCobrado: v.valorCobrado ?? v.costoExceso ?? v.valor_cobrado ?? 0,
+    estadoCobro: v.estadoCobro ?? v.estado_cobro,
   }));
 
   // 2. Datos formateados de Pagos
-  const movimientosPagos = billetera.movimientos?.length ? billetera.movimientos : [];
+  const movimientosPagos = historialPagos?.length
+    ? historialPagos
+    : (billetera.movimientos?.length ? billetera.movimientos : []);
   const listaPagos = movimientosPagos.map((m) => {
     let tipoFormateado = 'Recarga de saldo';
     const tipoUpper = String(m.tipo || '').toUpperCase();
@@ -186,11 +192,21 @@ function HistorialPage() {
   };
 
   const handleDescargarViajesCSV = () => {
-    const encabezados = ['ID Viaje', 'Fecha y hora', 'Origen', 'Destino', 'Duración (min)', 'Minutos exceso', 'Costo exceso (COP)'];
+    const encabezados = [
+      'ID Viaje',
+      'Fecha y hora inicio',
+      'Origen',
+      'Fecha y hora fin',
+      'Destino',
+      'Duración (min)',
+      'Minutos exceso',
+      'Costo exceso (COP)',
+    ];
     const filas = viajesFiltrados.map((v) => [
       `#${v.id}`,
-      v.fechaHora,
+      v.fechaHoraInicio || v.fechaHora,
       v.origen,
+      v.fechaHoraFin || '—',
       v.destino,
       v.duracion,
       v.minutosExceso || 0,
@@ -203,6 +219,9 @@ function HistorialPage() {
   };
 
   const handleDescargarViajesPDF = () => {
+    const totalCobroExceso = viajesFiltrados.reduce((suma, v) => suma + (Number(v.costoExceso) || 0), 0);
+    const totalMinutosExceso = viajesFiltrados.reduce((suma, v) => suma + (Number(v.minutosExceso) || 0), 0);
+
     generarComprobantePDF({
       titulo: 'Reporte Oficial de Historial de Viajes',
       usuario: perfil,
@@ -210,12 +229,24 @@ function HistorialPage() {
       metricas: [
         { etiqueta: 'Total recorridos', valor: totalRecorridos },
         { etiqueta: 'Tiempo acumulado', valor: formatearTiempoTotal(tiempoTotal) },
+        { etiqueta: 'Cobro total exceso', valor: `${formatearPesos(totalCobroExceso)} COP` },
+        { etiqueta: 'Minutos de exceso', valor: `${totalMinutosExceso} min` },
       ],
-      columnas: ['ID Viaje', 'Fecha y hora', 'Estación Origen', 'Estación Destino', 'Duración', 'Minutos Exceso', 'Costo Exceso'],
+      columnas: [
+        'ID Viaje',
+        'Fecha y hora inicio',
+        'Origen',
+        'Fecha y hora fin',
+        'Destino',
+        'Duración',
+        'Minutos Exceso',
+        'Costo Exceso',
+      ],
       filas: viajesFiltrados.map((v) => [
         `#${v.id}`,
-        v.fechaHora,
+        v.fechaHoraInicio || v.fechaHora,
         v.origen,
+        v.fechaHoraFin || '—',
         v.destino,
         `${v.duracion} min`,
         `${v.minutosExceso || 0} min`,

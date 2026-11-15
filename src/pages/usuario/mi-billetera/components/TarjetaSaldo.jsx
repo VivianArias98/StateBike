@@ -1,24 +1,36 @@
+import { IconoBilletera, IconoUbicacion } from '../../../../components/Iconos/Iconos.jsx';
 import { formatearPesos } from '../../formato.js';
 import styles from './TarjetaSaldo.module.css';
 
-// Saldo disponible de la billetera (HU_23): modelo de recarga en taquilla presencial
+// Saldo disponible de la billetera (HU_23): modelo de recarga en taquilla presencial administrada
 function TarjetaSaldo({ saldo }) {
   return (
     <section className={styles.raiz} aria-label="Saldo disponible">
-      <p className={styles.etiqueta}>SALDO DISPONIBLE</p>
-      <p className={styles.monto}>
-        {formatearPesos(saldo)} <span className={styles.moneda}>COP</span>
-      </p>
+      <div className={styles.cabecera}>
+        <div className={styles.iconoBilletera} aria-hidden="true">
+          <IconoBilletera />
+        </div>
+        <div>
+          <span className={styles.etiqueta}>SALDO DISPONIBLE</span>
+          <div className={styles.badgeEnVivo}>
+            <span className="punto-vivo" aria-hidden="true" />
+            <span>Billetera activa</span>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.montoContenedor}>
+        <span className={styles.monto}>{formatearPesos(saldo)}</span>
+        <span className={styles.moneda}>COP</span>
+      </div>
+
       <p className={styles.descripcion}>
         Saldo disponible para adquirir planes de viaje y saldar cobros por minutos de exceso.
       </p>
 
       <div className={styles.avisoPresencial}>
         <div className={styles.iconoPunto} aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
+          <IconoUbicacion />
         </div>
         <div className={styles.contenidoAviso}>
           <p className={styles.tituloAviso}>Recargas presenciales en taquilla</p>

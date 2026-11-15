@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import BarraProgreso from '../../../../components/BarraProgreso/BarraProgreso.jsx';
 import { IconoCandado, IconoCheck, IconoOjo } from '../../../../components/Iconos/Iconos.jsx';
+import AvatarCiclista from '../../../../components/AvataresCiclistas/AvatarCiclista.jsx';
+import ModalSelectorAvatar from '../../../../components/AvataresCiclistas/ModalSelectorAvatar.jsx';
+import { useUsuario } from '../../context/UsuarioContext.jsx';
 import { formatearFechaCorta } from '../../formato.js';
 import { mensajeError } from '../../../../utils/mensajeError.js';
 import styles from './FormularioDatos.module.css';
@@ -19,7 +22,9 @@ function calcularEdad(fechaNacimiento) {
 
 // Formulario del perfil (HU_1): nombre y teléfono editables, correo y nacimiento de solo lectura,
 // y cambio de contraseña. Los campos viven aquí; el envío lo hace la página con onGuardar.
-function FormularioDatos({ perfil, onGuardar }) {
+function FormularioDatos({ perfil, onGuardar, onCancelar }) {
+  const { cambiarAvatar } = useUsuario();
+  const [modalAvatarAbierto, setModalAvatarAbierto] = useState(false);
   const [nombre, setNombre] = useState(perfil.nombreCompleto ?? '');
   const [telefono, setTelefono] = useState(perfil.telefono ?? '');
   const [claveActual, setClaveActual] = useState('');
@@ -59,7 +64,7 @@ function FormularioDatos({ perfil, onGuardar }) {
     }
   };
 
-  // Vuelve a los valores que tiene guardados el servidor
+  // Vuelve a los valores que tiene guardados el servidor y cancela la edición
   const cancelar = () => {
     setNombre(perfil.nombreCompleto ?? '');
     setTelefono(perfil.telefono ?? '');
@@ -67,6 +72,7 @@ function FormularioDatos({ perfil, onGuardar }) {
     setClaveNueva('');
     setError('');
     setMensajeExito('');
+    if (onCancelar) onCancelar();
   };
 
   const longitud = claveNueva.length;
@@ -75,9 +81,23 @@ function FormularioDatos({ perfil, onGuardar }) {
   return (
     <form className={`tarjeta ${styles.raiz}`} onSubmit={guardar}>
       <header className={styles.cabecera}>
-        <div className={styles.textoCabecera}>
-          <h2 className={styles.titulo}>Datos de usuario</h2>
-          <p className={styles.subtitulo}>Información de contacto y credenciales de acceso</p>
+        <div className={styles.bloqueCabeceraAvatar}>
+          <button
+            type="button"
+            className={styles.botonAvatar}
+            onClick={() => setModalAvatarAbierto(true)}
+            title="Cambiar avatar ciclista"
+            aria-label="Cambiar avatar ciclista"
+          >
+            <AvatarCiclista id={perfil.avatar || 'mujer-casco-1'} tamano="m" />
+            <span className={styles.lapiz} aria-hidden="true">
+              ✎
+            </span>
+          </button>
+          <div className={styles.textoCabecera}>
+            <h2 className={styles.titulo}>Datos de usuario</h2>
+            <p className={styles.subtitulo}>Información de contacto y credenciales de acceso</p>
+          </div>
         </div>
       </header>
 
@@ -215,23 +235,7 @@ function FormularioDatos({ perfil, onGuardar }) {
       )}
 
       {mensajeExito && (
-        <p
-          className="mensaje-exito"
-          role="status"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--espacio-2)',
-            padding: 'var(--espacio-3) var(--espacio-4)',
-            background: 'var(--color-acento-suave)',
-            color: 'var(--color-exito)',
-            border: '1px solid var(--color-exito)',
-            borderRadius: 'var(--radio-m)',
-            fontSize: 'var(--texto-s)',
-            fontWeight: 600,
-            margin: 0,
-          }}
-        >
+        <p className={styles.mensajeExito} role="status">
           <IconoCheck /> {mensajeExito}
         </p>
       )}
@@ -244,6 +248,13 @@ function FormularioDatos({ perfil, onGuardar }) {
           Cancelar
         </button>
       </div>
+
+      <ModalSelectorAvatar
+        abierto={modalAvatarAbierto}
+        avatarActual={perfil.avatar || 'mujer-casco-1'}
+        onCerrar={() => setModalAvatarAbierto(false)}
+        onSeleccionar={cambiarAvatar}
+      />
     </form>
   );
 }

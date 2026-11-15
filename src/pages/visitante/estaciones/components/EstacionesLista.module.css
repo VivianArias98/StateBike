@@ -44,6 +44,134 @@
   border-radius: var(--radio-m);
 }
 
+/* Banner de estado de geolocalización en tiempo real */
+.bannerGpsActivo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-etiqueta-menta);
+  border: 1px solid var(--color-primario);
+  border-radius: var(--radio-m);
+}
+
+.puntoVivo {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-primario);
+  box-shadow: 0 0 0 3px var(--color-acento-suave);
+  flex-shrink: 0;
+  animation: pulsoVivo 1.8s ease-in-out infinite;
+}
+
+@keyframes pulsoVivo {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.bannerGpsContenido {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bannerGpsTitulo {
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-secundario);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.bannerGpsDetalle {
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+}
+
+.bannerGpsPrompt {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px dashed var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.bannerGpsIcono {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto);
+  flex-shrink: 0;
+}
+
+.bannerGpsIcono svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.botonActivarGps {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: var(--espacio-1) var(--espacio-3);
+  font-size: var(--texto-xs);
+  border-radius: var(--radio-pastilla);
+}
+
+/* Tarjeta individual con soporte para la más cercana */
+.nombreContenedor {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  flex-wrap: wrap;
+}
+
+.badgeCercanaPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--espacio-2);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.tarjetaMasCercana {
+  border-color: var(--color-primario);
+  background: var(--color-fondo-pagina);
+}
+
+.distanciaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: 2px var(--espacio-2);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.distanciaPill svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.distanciaMasCercanaPill {
+  background: var(--color-etiqueta-menta);
+  border-color: var(--color-primario);
+  color: var(--color-secundario);
+  font-weight: 700;
+}
+
 .resumenValor {
   font-size: var(--texto-2xl);
   font-weight: 700;

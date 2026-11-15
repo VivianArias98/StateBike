@@ -63,11 +63,29 @@
   gap: var(--espacio-1);
 }
 
+.codigoYTag {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
 .codigoEstacion {
   font-family: var(--fuente-mono);
   font-size: var(--texto-xs);
   color: var(--color-texto);
   opacity: 0.7;
+}
+
+.tagCercanaPanel {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--espacio-2);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .nombreEstacion {

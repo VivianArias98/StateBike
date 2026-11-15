@@ -1,52 +1,37 @@
-/* Mi billetera. Base = celular; 768px amplía a dos columnas */
+/* MiBilleteraPage.module.css: base = celular */
 .raiz {
   display: flex;
   flex-direction: column;
   gap: var(--espacio-5);
-}
-
-.cabecera {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-2);
-}
-
-.encabezadoTexto {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espacio-1);
-}
-
-.titulo {
-  font-size: var(--texto-xl);
-  font-weight: 800;
-  line-height: 1.1;
-}
-
-.subtitulo {
-  font-size: var(--texto-s);
-  color: var(--color-texto-suave);
+  width: 100%;
 }
 
 .botonSincronizar {
-  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: var(--espacio-2);
-  padding: var(--espacio-1) var(--espacio-3);
+  height: var(--alto-control-s);
+  padding: 0 var(--espacio-3);
   background: var(--color-superficie);
   color: var(--color-texto);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-m);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
   font-size: var(--texto-xs);
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 1px 3px var(--color-pista);
   transition: all 0.2s ease;
 }
 
-.botonSincronizar:hover {
+.botonSincronizar:hover:not(:disabled) {
   border-color: var(--color-primario);
-  color: var(--color-primario);
+  color: var(--color-exito);
+  transform: translateY(-1px);
+}
+
+.botonSincronizar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .girando {
@@ -70,17 +55,8 @@
 }
 
 @media (min-width: 768px) {
-  .cabecera {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .botonSincronizar {
-    align-self: center;
-  }
-
   .principales {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-5);
   }
 }

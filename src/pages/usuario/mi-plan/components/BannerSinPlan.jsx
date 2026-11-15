@@ -2,7 +2,6 @@ import { IconoCandado, IconoFlecha } from '../../../../components/Iconos/Iconos.
 import styles from './BannerSinPlan.module.css';
 
 // Aviso cuando el usuario no tiene un plan activo (HU_17), con la acción para adquirir uno.
-// mensaje llega del backend: "No tiene un plan activo" o "Su plan ha vencido".
 function BannerSinPlan({ mensaje, onAdquirir }) {
   return (
     <section className={`tarjeta ${styles.raiz}`} aria-labelledby="sin-plan-titulo">
@@ -21,7 +20,7 @@ function BannerSinPlan({ mensaje, onAdquirir }) {
         </p>
       </div>
 
-      <button type="button" className={`boton boton--acento ${styles.accion}`} onClick={onAdquirir}>
+      <button type="button" className={`boton boton--primario ${styles.accion}`} onClick={onAdquirir}>
         + Adquirir plan <IconoFlecha />
       </button>
     </section>
