@@ -1,7 +1,6 @@
 import { Icono } from '../../components/IconosVisitante.jsx';
 import styles from './TarjetaBeneficio.module.css';
 
-// Beneficio del servicio: icono en caja verde, título y texto corto.
 function TarjetaBeneficio({ icono, titulo, texto }) {
   return (
     <article className={styles.raiz}>

@@ -88,7 +88,6 @@ function ComoUsarServicio() {
         </section>
 
         <section id="pasos" className={styles.bloque} aria-labelledby="titulo-pasos">
-          <span className={styles.etiquetaSeccion}>[ RUTA DE USO ]</span>
           <div className={styles.encabezadoSeccion}>
             <h2 id="titulo-pasos" className={styles.tituloSeccion}>Pasos para utilizar el sistema</h2>
             <span className="insignia insignia--neutra">08 ETAPAS SECUENCIALES</span>
@@ -102,7 +101,6 @@ function ComoUsarServicio() {
         </section>
 
         <section id="reglas" className={styles.bloque} aria-labelledby="titulo-reglas">
-          <span className={styles.etiquetaSeccion}>[ POLÍTICAS DEL SERVICIO ]</span>
           <div className={styles.encabezadoSeccion}>
             <h2 id="titulo-reglas" className={styles.tituloSeccion}>
               Reglas importantes y condiciones de operación
@@ -118,7 +116,6 @@ function ComoUsarServicio() {
         </section>
 
         <section className={styles.bloque} aria-labelledby="titulo-preguntas">
-          <span className={styles.etiquetaSeccion}>[ CENTRO DE RESOLUCIÓN ]</span>
           <div className={styles.encabezadoSeccion}>
             <h2 id="titulo-preguntas" className={styles.tituloSeccion}>Preguntas frecuentes</h2>
             <span className="insignia insignia--neutra">RESPUESTAS RÁPIDAS</span>

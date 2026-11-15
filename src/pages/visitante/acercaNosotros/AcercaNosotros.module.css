@@ -1,4 +1,3 @@
-/* Base = celular: todo en una columna. Desde 768px y 1024px se agregan columnas. */
 .raiz {
   display: flex;
   flex-direction: column;
@@ -30,9 +29,11 @@
 
 /* Bloque principal oscuro: la clase global contexto-oscuro pone el texto claro */
 .hero {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--espacio-4);
   min-height: 16rem;
   padding: var(--espacio-5);
@@ -41,7 +42,26 @@
   border-radius: var(--radio-l);
 }
 
+.heroImagen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Degradado para que el texto se lea sobre la foto */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.15) 70%);
+}
+
 .heroTexto {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -58,13 +78,6 @@
   max-width: 36rem;
   font-size: var(--texto-s);
   opacity: 0.85;
-}
-
-.heroMarca {
-  align-self: flex-end;
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  opacity: 0.7;
 }
 
 .dosColumnas,
@@ -120,13 +133,6 @@
   text-decoration: underline;
 }
 
-.nota {
-  margin-top: var(--espacio-2);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  opacity: 0.7;
-}
-
 @media (min-width: 768px) {
   .titulo {
     font-size: var(--texto-4xl);
@@ -149,7 +155,24 @@
   }
 
   .hero {
+    justify-content: flex-start;
+    min-height: 24rem;
     padding: var(--espacio-7);
+  }
+
+  /* En pantallas anchas el texto va arriba, sobre el cielo.
+     El degradado parte de la esquina superior izquierda y deja libre el resto de la foto */
+  .hero::after {
+    background: linear-gradient(
+      to bottom right,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.5) 35%,
+      rgba(0, 0, 0, 0) 65%
+    );
+  }
+
+  .heroTexto {
+    max-width: 28rem;
   }
 
   .contacto {
@@ -170,32 +193,17 @@
   }
 
   .heroTitulo {
-    font-size: var(--texto-4xl);
+    font-size: var(--texto-3xl);
   }
 }
 
-/* Chips y botones con los colores y la forma del mockup */
-.chipProyecto {
-  height: auto;
-  padding: var(--espacio-1) var(--espacio-3);
-  background: var(--color-borde-suave);
-  color: var(--color-texto);
-  border: 1px solid var(--color-borde-suave);
-  border-radius: var(--radio-s);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-}
-
+/* Contacto */
 .canal {
   display: inline-flex;
   align-items: center;
   gap: var(--espacio-2);
-  font-family: var(--fuente-mono);
-  font-size: var(--texto-xs);
+  font-size: var(--texto-m);
   font-weight: 700;
-  letter-spacing: 0.04em;
   color: var(--color-texto);
 }
 

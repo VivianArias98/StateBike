@@ -1,4 +1,3 @@
-/* Usar con: className={styles.raiz}. Solo borde, sin relleno. */
 .raiz {
   box-sizing: border-box;
   height: 100%;
@@ -96,7 +95,6 @@
   }
 }
 
-/* Mensaje de éxito tras crear la cuenta */
 .mensajeExito {
   padding: var(--espacio-3) var(--espacio-4);
   background: var(--color-acento-suave);

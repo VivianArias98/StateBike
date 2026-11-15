@@ -1,4 +1,3 @@
-/* Usar con: className={`contexto-oscuro ${styles.raiz}`} */
 .raiz {
   display: flex;
   flex-direction: column;

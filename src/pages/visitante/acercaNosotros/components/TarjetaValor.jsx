@@ -1,6 +1,5 @@
 import styles from './TarjetaValor.module.css';
 
-// Tarjeta pequeña de valor: código, título, texto y etiqueta técnica.
 function TarjetaValor({ codigo, titulo, texto, etiqueta, icono }) {
   return (
     <article className={`tarjeta ${styles.raiz}`}>

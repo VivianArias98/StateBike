@@ -53,7 +53,6 @@ function RegistroForm() {
   const contrasenasNoCoinciden =
     datos.confirmacion.length > 0 && datos.contrasena !== datos.confirmacion;
 
-  // El mensaje de error permanece visible durante 4 segundos y luego desaparece automáticamente
   useEffect(() => {
     if (!error) return undefined;
     const temporizador = setTimeout(() => {
@@ -80,7 +79,6 @@ function RegistroForm() {
     if (errorLocal) {
       setError(errorLocal);
 
-      // Enfocar automáticamente el primer campo vacío para guiar al usuario
       if (!datos.nombreCompleto.trim()) {
         document.getElementById('nombre')?.focus();
       } else if (!datos.fechaNacimiento) {

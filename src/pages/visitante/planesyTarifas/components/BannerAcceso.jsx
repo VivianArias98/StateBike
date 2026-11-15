@@ -1,7 +1,6 @@
 import { Icono } from '../../components/IconosVisitante.jsx';
 import styles from './BannerAcceso.module.css';
 
-// Banner de acceso: invita a registrarse o iniciar sesión para comprar un plan.
 function BannerAcceso() {
   return (
     <section className={styles.raiz} aria-labelledby="titulo-banner-acceso">

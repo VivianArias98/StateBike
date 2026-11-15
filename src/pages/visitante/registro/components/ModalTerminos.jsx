@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import styles from './ModalTerminos.module.css';
 
 function ModalTerminos({ abierto, onCerrar, onAceptar }) {
-  // Cerrar con la tecla Escape
+ 
   useEffect(() => {
     function manejarTecla(e) {
       if (e.key === 'Escape') onCerrar();
     }
     if (abierto) {
       document.addEventListener('keydown', manejarTecla);
-      // Evitar scroll del fondo mientras el modal está abierto
+     
       document.body.style.overflow = 'hidden';
     }
     return () => {

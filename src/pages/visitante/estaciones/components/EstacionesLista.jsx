@@ -49,7 +49,6 @@ function EstacionesLista({
           onChange={(evento) => onBuscar(evento.target.value)}
         />
 
-        <span className={styles.atajo} aria-hidden="true">CMD+K</span>
       </div>
 
       {/* Banner de estado de geolocalización en tiempo real */}

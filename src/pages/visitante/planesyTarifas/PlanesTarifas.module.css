@@ -1,4 +1,3 @@
-/* Base = celular: una columna. 768px: dos columnas. 1024px: cuatro planes. */
 .raiz {
   display: flex;
   flex-direction: column;
@@ -51,7 +50,6 @@
   opacity: 0.8;
 }
 
-/* Botón de alternar: píldora blanca con icono de intercambio */
 .alternar {
   display: inline-flex;
   align-items: center;

@@ -3,7 +3,7 @@ import styles from './TarjetaRegla.module.css';
 
 // Tarjeta de "Reglas importantes y condiciones de operación".
 // tono: 'oscuro' (chip negro), 'verde' (chip verde claro) o 'alerta' (chip rojo claro).
-function TarjetaRegla({ numero, etiqueta, titulo, texto, dato, icono, tono = 'verde' }) {
+function TarjetaRegla({ etiqueta, titulo, texto, dato, icono, tono = 'verde' }) {
   const claseChip = {
     oscuro: styles.chipOscuro,
     verde: styles.chipVerde,
@@ -18,8 +18,6 @@ function TarjetaRegla({ numero, etiqueta, titulo, texto, dato, icono, tono = 've
           <Icono nombre={icono} />
         </span>
       </div>
-
-      <span className={styles.codigo}>[ {numero} ]</span>
 
       <h3 className={styles.titulo}>{titulo}</h3>
       <p className={styles.texto}>{texto}</p>
