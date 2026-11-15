@@ -28,6 +28,7 @@ const TRAZOS = {
   cuadricula: [['rect', { x: 3, y: 3, width: 7, height: 7, rx: 1 }], ['rect', { x: 14, y: 3, width: 7, height: 7, rx: 1 }], ['rect', { x: 3, y: 14, width: 7, height: 7, rx: 1 }], ['rect', { x: 14, y: 14, width: 7, height: 7, rx: 1 }]],
   candadoAbierto: [['rect', { x: 5, y: 11, width: 14, height: 10, rx: 2 }], ['path', { d: 'M8 11V7a4 4 0 0 1 7.8-1.2' }]],
   medalla: [['circle', { cx: 12, cy: 9, r: 5.5 }], ['path', { d: 'M8.5 13.5 7 21l5-2.5 5 2.5-1.5-7.5' }]],
+  gps: [['circle', { cx: 12, cy: 12, r: 3 }], ['path', { d: 'M12 2v3M12 19v3M2 12h3M19 12h3' }], ['circle', { cx: 12, cy: 12, r: 7 }]],
 };
 
 export function Icono({ nombre, className = '' }) {

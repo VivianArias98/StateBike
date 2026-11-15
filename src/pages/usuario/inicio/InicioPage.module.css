@@ -331,6 +331,70 @@
   color: var(--color-texto);
 }
 
+/* Banner de geolocalización en tiempo real para usuario */
+.bannerUbicacion {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-etiqueta-menta);
+  border: 1px solid var(--color-primario);
+  border-radius: var(--radio-m);
+}
+
+.bannerUbicacionTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bannerUbicacionTitulo {
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--color-secundario);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.bannerUbicacionSub {
+  font-size: var(--texto-xs);
+  color: var(--color-texto);
+}
+
+.bannerUbicacionPrompt {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--color-superficie);
+  border: 1px dashed var(--color-borde-suave);
+  border-radius: var(--radio-m);
+}
+
+.bannerUbicacionPromptIcono {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-fondo-pagina);
+  color: var(--color-texto);
+  flex-shrink: 0;
+}
+
+.bannerUbicacionPromptIcono svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.botonActivarGps {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: var(--espacio-1) var(--espacio-3);
+  font-size: var(--texto-xs);
+  border-radius: var(--radio-pastilla);
+}
+
 /* Lista scrollable de estaciones */
 .lista {
   display: flex;
@@ -373,6 +437,10 @@
   box-shadow: 0 2px 10px var(--color-pista);
 }
 
+.itemMasCercano {
+  border-color: var(--color-primario);
+}
+
 .itemCabecera {
   display: flex;
   align-items: flex-start;
@@ -385,6 +453,56 @@
   flex-direction: column;
   gap: var(--espacio-1);
   min-width: 0;
+}
+
+.nombreYTagCercana {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  flex-wrap: wrap;
+}
+
+.chipMasCercana {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--espacio-2);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  border-radius: var(--radio-pastilla);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.insigniasCabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  flex-shrink: 0;
+}
+
+.chipDistancia {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: 2px var(--espacio-2);
+  background: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  border-radius: var(--radio-pastilla);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.chipDistancia svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.chipDistanciaCercana {
+  background: var(--color-etiqueta-menta);
+  border-color: var(--color-primario);
+  color: var(--color-secundario);
+  font-weight: 700;
 }
 
 .nombreEstacion {
