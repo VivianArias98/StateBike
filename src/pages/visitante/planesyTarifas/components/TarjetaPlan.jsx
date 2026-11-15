@@ -4,15 +4,25 @@ import { formatearCOP } from '../../../../utils/formatoMoneda.js';
 
 // Tarjeta de un plan del catálogo. El plan "actual" lleva borde verde,
 // etiqueta "TU PLAN ACTUAL" y un estado en lugar del botón de compra.
-function TarjetaPlan({ plan }) {
+// El plan "recomendado" lleva realce visual con borde verde y medalla "RECOMENDADO".
+function TarjetaPlan({ plan, esRecomendado = false }) {
   const { codigo, dias, nombre, descripcion, precio, unidad, lineas, actual, valorMinutoExceso } = plan;
+  const recomendado = !actual && (esRecomendado || plan.esRecomendado);
 
   return (
     <article
-      className={`${styles.raiz} ${actual ? styles.actual : ''}`}
+      className={`${styles.raiz} ${actual ? styles.actual : ''} ${recomendado ? styles.recomendado : ''}`}
       aria-label={`${nombre}, ${precio} ${unidad}`}
     >
       {actual && <span className={styles.etiquetaActual}>TU PLAN ACTUAL</span>}
+      {recomendado && (
+        <span className={styles.etiquetaRecomendado}>
+          <span className={styles.iconoMedalla} aria-hidden="true">
+            <Icono nombre="medalla" />
+          </span>
+          <span>RECOMENDADO</span>
+        </span>
+      )}
 
       <header className={styles.cabecera}>
         {codigo && <span className={styles.codigo}>{codigo}</span>}
@@ -23,7 +33,7 @@ function TarjetaPlan({ plan }) {
       {descripcion && <p className={styles.descripcion}>{descripcion}</p>}
 
       <p className={styles.precio}>
-        <span className={actual ? styles.precioVerde : ''}>{precio}</span>
+        <span className={actual || recomendado ? styles.precioVerde : ''}>{precio}</span>
         <span className={styles.unidad}>{unidad}</span>
       </p>
 
