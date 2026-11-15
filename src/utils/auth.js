@@ -50,7 +50,7 @@ export async function pedirAutenticado(ruta, opciones = {}) {
   try {
     return await pedir(ruta, { ...opciones, token: sesion.acceso });
   } catch (error) {
-    if (error.codigo !== 'token_expirado') throw error;
+    if (error.codigo !== 'token_expirado' && error.codigo !== 'token_invalido') throw error;
     const nueva = await refrescarSesion();
     return pedir(ruta, { ...opciones, token: nueva.acceso });
   }
