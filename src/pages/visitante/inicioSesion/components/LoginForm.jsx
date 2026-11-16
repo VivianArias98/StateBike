@@ -166,10 +166,6 @@ function LoginForm() {
         {enviando ? 'Ingresando…' : 'Ingresar'}
       </button>
 
-      <a href="#" className={`enlace ${styles.enlaceDerecha}`}>
-        ¿Olvidaste tu contraseña?
-      </a>
-
       <p className={styles.alterno}>
         ¿Primera vez? <Link to="/registro" className="enlace">Crear cuenta</Link>
       </p>

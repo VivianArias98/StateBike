@@ -130,7 +130,16 @@
 }
 
 .correo {
-  text-decoration: underline;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  transition: background-size 0.3s ease;
+}
+
+.correo:hover {
+  background-size: 100% 2px;
 }
 
 @media (min-width: 768px) {
@@ -215,6 +224,7 @@
   background: var(--color-superficie-inversa);
   color: var(--color-texto-inverso);
   border-radius: var(--radio-xs);
+  transition: transform 0.3s ease;
 }
 
 .canalIcono svg {
@@ -237,4 +247,119 @@
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-decoration: none;
+}
+
+/* ---------- Dinamismo sutil (sin exagerar) ---------- */
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomFoto {
+  from {
+    opacity: 0.5;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Entrada de cada bloque. "backwards" solo aplica antes de empezar,
+   así el hover no queda bloqueado por la animación */
+.raiz > * {
+  animation: subir 0.6s ease backwards;
+}
+
+.valores > *,
+.equipo > * {
+  animation: subir 0.5s ease backwards;
+}
+
+.heroImagen {
+  animation: zoomFoto 1.6s ease backwards;
+}
+
+.heroTexto {
+  animation: subir 0.8s 0.2s ease backwards;
+}
+
+/* Donde el navegador soporta animaciones ligadas al scroll, cada bloque
+   aparece al entrar en pantalla */
+@supports (animation-timeline: view()) {
+  .raiz > *,
+  .valores > *,
+  .equipo > * {
+    animation: subir linear backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 30%;
+  }
+}
+
+/* Tarjetas: se elevan un poco al pasar el mouse */
+.valores > *,
+.equipo > *,
+.cita,
+.contacto {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.valores > *:hover,
+.equipo > *:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.contacto:hover .canalIcono {
+  transform: rotate(-6deg) scale(1.08);
+}
+
+.botonVerde {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.botonVerde:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.botonVerde:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .raiz > *,
+  .valores > *,
+  .equipo > *,
+  .heroImagen,
+  .heroTexto {
+    animation: none;
+  }
+
+  .valores > *,
+  .equipo > *,
+  .cita,
+  .contacto,
+  .canalIcono,
+  .botonVerde,
+  .correo {
+    transition: none;
+  }
+
+  .valores > *:hover,
+  .equipo > *:hover,
+  .contacto:hover .canalIcono,
+  .botonVerde:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }
