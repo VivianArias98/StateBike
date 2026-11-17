@@ -134,12 +134,12 @@ function EstacionesLista({
                 <span className={styles.estado}>
                   <span className={styles.pastilla}>
                     <Icono nombre="bici" />
-                    {estacion.bicicletas} bicicletas disponibles
+                    {estacion.bicicletas} {estacion.bicicletas === 1 ? 'bicicleta disponible' : 'bicicletas disponibles'}
                   </span>
 
                   <span className={styles.anclajes}>
                     <Icono nombre="candado" />
-                    {estacion.anclajes} anclajes libres
+                    {estacion.anclajes} {estacion.anclajes === 1 ? 'anclaje libre' : 'anclajes libres'}
                   </span>
 
                   {estacion.distanciaTexto && (

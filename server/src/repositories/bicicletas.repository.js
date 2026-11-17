@@ -90,6 +90,35 @@ export function inactivar(id) {
   inactivarBicicleta();
 }
 
+// Reubica una bicicleta a un nuevo anclaje en una sola transacción
+export function reubicar(id, nuevoAnclajeId) {
+  const trasladar = db.transaction(() => {
+    const bici = db.prepare("SELECT anclaje_id FROM bicicletas WHERE id = ?").get(id);
+    const anclajeViejoId = bici?.anclaje_id;
+
+    if (anclajeViejoId) {
+      db.prepare("UPDATE anclajes SET estado = 'LIBRE' WHERE id = ?").run(anclajeViejoId);
+    }
+    db.prepare("UPDATE anclajes SET estado = 'OCUPADO' WHERE id = ?").run(nuevoAnclajeId);
+    db.prepare("UPDATE bicicletas SET anclaje_id = ? WHERE id = ?").run(nuevoAnclajeId, id);
+  });
+  trasladar();
+}
+
+// Lista todas las bicicletas ancladas en una estación específica
+export function listarPorEstacion(estacionId) {
+  return db
+    .prepare(
+      `SELECT b.id, b.codigo, b.estado, e.id AS estacionId, e.nombre AS estacion, a.id AS anclajeId, a.codigo AS anclaje
+       FROM bicicletas b
+       JOIN anclajes a ON a.id = b.anclaje_id
+       JOIN estaciones e ON e.id = a.estacion_id
+       WHERE e.id = ?
+       ORDER BY b.id`
+    )
+    .all(estacionId);
+}
+
 export function contarFlota() {
   const fila = db
     .prepare(

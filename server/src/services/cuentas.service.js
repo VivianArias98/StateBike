@@ -57,7 +57,7 @@ export async function editarPerfil(usuarioId, datos = {}, token) {
     if (typeof nombreCompleto !== "string" || nombreCompleto.trim() === "") {
       throw new AppError(400, "campos_vacios");
     }
-    nuevoNombre = nombreCompleto.trim();
+    nuevoNombre = nombreCompleto.trim().replace(/\s+/g, " ");
     if (nuevoNombre.length > LARGO_MAX_NOMBRE) {
       throw new AppError(400, "campos_vacios");
     }
@@ -65,7 +65,7 @@ export async function editarPerfil(usuarioId, datos = {}, token) {
 
   let nuevoTelefono = null;
   if (telefono !== undefined && telefono !== null) {
-    const telStr = String(telefono).trim();
+    const telStr = String(telefono).trim().replace(/\s+/g, "");
     if (telStr !== "") {
       if (!/^\+?\d{7,15}$/.test(telStr)) {
         throw new AppError(400, "telefono_invalido");
@@ -78,18 +78,21 @@ export async function editarPerfil(usuarioId, datos = {}, token) {
   let nuevoAcceso = null;
   let nuevoRefresco = null;
 
-  // Cambio opcional de contraseña
-  if (nuevaContrasena) {
-    if (typeof nuevaContrasena !== "string" || nuevaContrasena.length < LARGO_MIN_CONTRASENA) {
+  // Cambio opcional de contraseña normalizando espacios accidentales
+  const pwdActual = typeof contrasenaActual === "string" ? contrasenaActual.trim() : "";
+  const pwdNueva = typeof nuevaContrasena === "string" ? nuevaContrasena.trim() : "";
+
+  if (pwdNueva) {
+    if (pwdNueva.length < LARGO_MIN_CONTRASENA) {
       throw new AppError(400, "contrasena_debil");
     }
-    if (!contrasenaActual) {
+    if (!pwdActual) {
       throw new AppError(400, "campos_vacios");
     }
     if (tokenActual) {
       const resPassword = await tunja("/auth/password", {
         metodo: "POST",
-        cuerpo: { actual: contrasenaActual, nueva: nuevaContrasena },
+        cuerpo: { actual: pwdActual, nueva: pwdNueva },
         token: tokenActual,
       });
       if (resPassword?.acceso) {

@@ -87,3 +87,80 @@ export function activar(id, datos = {}) {
   repositorio.activar(id, anclaje.id);
   return { mensaje: MENSAJES.bicicleta_activada, bicicleta: repositorio.buscarPorId(id) };
 }
+
+// Reubica una bicicleta a otra estación activa con anclajes disponibles
+export function reubicar(id, datos = {}) {
+  const bicicleta = obtener(id);
+  if (bicicleta.estado === "EN_USO") throw new AppError(409, "bicicleta_en_uso");
+  if (bicicleta.estado === "INACTIVA") throw new AppError(409, "bicicleta_inactiva");
+
+  const estacionDestinoId = datos?.estacionId ? Number(datos.estacionId) : null;
+  if (!estacionDestinoId) throw new AppError(400, "campos_obligatorios_vacios");
+
+  if (bicicleta.estacionId === estacionDestinoId) {
+    throw new AppError(400, "misma_estacion_origen_destino", {
+      mensaje: "La bicicleta ya se encuentra en esta estación",
+    });
+  }
+
+  const estacionDestino = estaciones.buscarPorId(estacionDestinoId);
+  if (!estacionDestino) throw new AppError(404, "estacion_no_encontrada");
+  if (estacionDestino.estado !== "ACTIVE") throw new AppError(409, "estacion_inactiva");
+
+  const anclaje = repositorio.primerAnclajeLibre(estacionDestino.id);
+  if (!anclaje) throw new AppError(409, "estacion_sin_anclajes_libres");
+
+  repositorio.reubicar(id, anclaje.id);
+
+  return {
+    mensaje: "BICICLETA REUBICADA EXITOSAMENTE",
+    bicicleta: repositorio.buscarPorId(id),
+  };
+}
+
+// Reubica todas las bicicletas de una estación hacia otra estación activa
+export function reubicarTodas(estacionOrigenId, datos = {}) {
+  const origenId = Number(estacionOrigenId);
+  const estacionDestinoId = datos?.estacionDestinoId ? Number(datos.estacionDestinoId) : null;
+  if (!estacionDestinoId) throw new AppError(400, "campos_obligatorios_vacios");
+
+  if (origenId === estacionDestinoId) {
+    throw new AppError(400, "misma_estacion_origen_destino", {
+      mensaje: "La estación de origen y destino no pueden ser la misma",
+    });
+  }
+
+  const estacionDestino = estaciones.buscarPorId(estacionDestinoId);
+  if (!estacionDestino) throw new AppError(404, "estacion_no_encontrada");
+  if (estacionDestino.estado !== "ACTIVE") throw new AppError(409, "estacion_inactiva");
+
+  const bicis = repositorio.listarPorEstacion(origenId);
+  if (bicis.length === 0) {
+    return { mensaje: "La estación no tiene bicicletas para reubicar", reubicadas: 0 };
+  }
+
+  const bicisAReubicar = bicis.filter((b) => b.estado !== "EN_USO");
+  if (bicisAReubicar.length === 0) {
+    throw new AppError(409, "bicicleta_en_uso", {
+      mensaje: "Todas las bicicletas de esta estación están actualmente en uso",
+    });
+  }
+
+  if (estacionDestino.anclajesLibres < bicisAReubicar.length) {
+    throw new AppError(409, "estacion_sin_anclajes_suficientes", {
+      mensaje: `La estación ${estacionDestino.nombre} solo tiene ${estacionDestino.anclajesLibres} anclaje(s) libre(s) y se requieren ${bicisAReubicar.length}`,
+    });
+  }
+
+  for (const b of bicisAReubicar) {
+    const anclajeLibre = repositorio.primerAnclajeLibre(estacionDestino.id);
+    if (anclajeLibre) {
+      repositorio.reubicar(b.id, anclajeLibre.id);
+    }
+  }
+
+  return {
+    mensaje: `Se reubicaron ${bicisAReubicar.length} bicicleta(s) a la estación ${estacionDestino.nombre}`,
+    reubicadas: bicisAReubicar.length,
+  };
+}

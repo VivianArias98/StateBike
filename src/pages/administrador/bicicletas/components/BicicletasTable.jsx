@@ -1,7 +1,7 @@
 import BicicletaEstadoBadge from './BicicletaEstadoBadge.jsx';
 import styles from './BicicletasTable.module.css';
 
-function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar }) {
+function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar, onReubicar }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
@@ -47,6 +47,16 @@ function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar }
                       >
                         {textoBotonEstado}
                       </button>
+                      {!inactiva && !enUso && (
+                        <button
+                          type="button"
+                          className={`boton boton--secundario ${styles.botonAccion}`}
+                          onClick={() => onReubicar && onReubicar(bicicleta)}
+                          title="Reubicar esta bicicleta a otra estación"
+                        >
+                          Reubicar
+                        </button>
+                      )}
                       {inactiva ? (
                         <button
                           type="button"

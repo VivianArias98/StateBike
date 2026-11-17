@@ -135,7 +135,7 @@ export async function consultarBilletera(usuarioId, token) {
           destino: cobroPendiente.destino,
           minutosExceso: cobroPendiente.minutos_exceso,
           monto: cobroPendiente.valor_cobrado,
-          mensaje: "Tiene un pago pendiente por exceso de tiempo. Recargue su saldo para continuar",
+          mensaje: "Tiene un pago pendiente por exceso de tiempo. Recargue su saldo en taquilla con el administrador para continuar",
         }
       : null,
     movimientos,

@@ -30,6 +30,69 @@ function formatearAVisual(fechaBackend) {
   return `${d} / ${m} / ${a}`;
 }
 
+// Reconoce y normaliza fechas en cualquier formato común (ISO, latino, solo dígitos, etc.)
+function parsearCualquierFecha(texto, anioActual) {
+  if (!texto || typeof texto !== 'string') return null;
+  const limpio = texto.trim();
+
+  let dia = null;
+  let mes = null;
+  let anio = null;
+
+  // 1. Formato ISO: YYYY-MM-DD o YYYY/MM/DD o YYYY.MM.DD
+  const matchIso = limpio.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
+  if (matchIso) {
+    anio = Number(matchIso[1]);
+    mes = Number(matchIso[2]);
+    dia = Number(matchIso[3]);
+  }
+
+  // 2. Formato latino: DD/MM/YYYY o DD-MM-YYYY o DD.MM.YYYY o DD / MM / YYYY
+  if (!anio) {
+    const matchLatino = limpio.match(/^(\d{1,2})[\s\-/.]+?(\d{1,2})[\s\-/.]+?(\d{4})$/);
+    if (matchLatino) {
+      dia = Number(matchLatino[1]);
+      mes = Number(matchLatino[2]);
+      anio = Number(matchLatino[3]);
+    }
+  }
+
+  // 3. Formato solo dígitos: 8 dígitos
+  if (!anio) {
+    const digitos = limpio.replace(/\D/g, '');
+    if (digitos.length === 8) {
+      const primeros4 = Number(digitos.slice(0, 4));
+      const ultimos4 = Number(digitos.slice(4, 8));
+      if (primeros4 >= 1900 && primeros4 <= anioActual) {
+        anio = primeros4;
+        mes = Number(digitos.slice(4, 6));
+        dia = Number(digitos.slice(6, 8));
+      } else if (ultimos4 >= 1900 && ultimos4 <= anioActual) {
+        dia = Number(digitos.slice(0, 2));
+        mes = Number(digitos.slice(2, 4));
+        anio = ultimos4;
+      }
+    }
+  }
+
+  if (!dia || !mes || !anio) return null;
+  if (anio < 1900 || anio > anioActual) return null;
+  if (mes < 1 || mes > 12) return null;
+  const diasEnMes = new Date(anio, mes, 0).getDate();
+  if (dia < 1 || dia > diasEnMes) return null;
+
+  const dStr = String(dia).padStart(2, '0');
+  const mStr = String(mes).padStart(2, '0');
+
+  return {
+    dia,
+    mes,
+    anio,
+    fechaIso: `${anio}-${mStr}-${dStr}`,
+    textoVisual: `${dStr} / ${mStr} / ${anio}`,
+  };
+}
+
 function SelectorFechaNacimiento({ valor = '', onChange, onFocus, id = 'nacimiento' }) {
   const anioActual = new Date().getFullYear();
   const anioMayorEdad = anioActual - 18; // ej. 2008
@@ -109,6 +172,38 @@ function SelectorFechaNacimiento({ valor = '', onChange, onFocus, id = 'nacimien
     }
   }
 
+  // Manejo de pegado directo en el campo (H-15: procesar formatos ISO, latinos o numéricos)
+  function manejarPegado(e) {
+    onFocus?.();
+    const textoPegado = e.clipboardData?.getData('text') || '';
+    if (!textoPegado) return;
+
+    const fechaValida = parsearCualquierFecha(textoPegado, anioActual);
+    if (fechaValida) {
+      e.preventDefault();
+      setAvisoFormato('');
+      setTextoInput(fechaValida.textoVisual);
+      setAnioVista(fechaValida.anio);
+      setMesVista(fechaValida.mes - 1);
+      onChange(fechaValida.fechaIso);
+      return;
+    }
+
+    const digitos = textoPegado.replace(/\D/g, '').slice(0, 8);
+    if (digitos.length === 8) {
+      const parsedDigitos = parsearCualquierFecha(digitos, anioActual);
+      if (parsedDigitos) {
+        e.preventDefault();
+        setAvisoFormato('');
+        setTextoInput(parsedDigitos.textoVisual);
+        setAnioVista(parsedDigitos.anio);
+        setMesVista(parsedDigitos.mes - 1);
+        onChange(parsedDigitos.fechaIso);
+        return;
+      }
+    }
+  }
+
   // Manejo de entrada de teclado con máscara inteligente (DD / MM / AAAA)
   function manejarCambioTexto(e) {
     onFocus?.();
@@ -116,8 +211,18 @@ function SelectorFechaNacimiento({ valor = '', onChange, onFocus, id = 'nacimien
     const entrada = e.target.value;
     const previo = textoInput;
 
-    // Si el usuario está borrando hacia atrás
-    if (entrada.length < previo.length) {
+    // Si pegaron o cambiaron todo el contenido por una fecha reconocible
+    const fechaDetectada = parsearCualquierFecha(entrada, anioActual);
+    if (fechaDetectada) {
+      setTextoInput(fechaDetectada.textoVisual);
+      setAnioVista(fechaDetectada.anio);
+      setMesVista(fechaDetectada.mes - 1);
+      onChange(fechaDetectada.fechaIso);
+      return;
+    }
+
+    // Si el usuario está borrando hacia atrás (el nuevo texto es prefijo del anterior pero más corto)
+    if (entrada.length < previo.length && previo.startsWith(entrada)) {
       setTextoInput(entrada);
       if (valor) onChange('');
       return;
@@ -156,7 +261,7 @@ function SelectorFechaNacimiento({ valor = '', onChange, onFocus, id = 'nacimien
     // Solo permitir números (máximo 8 dígitos: DDMMAAAA)
     const digitos = entrada.replace(/\D/g, '').slice(0, 8);
 
-    let formateado = '';
+    let formateado;
     if (digitos.length === 0) {
       formateado = '';
     } else if (digitos.length === 1) {
@@ -284,6 +389,7 @@ function SelectorFechaNacimiento({ valor = '', onChange, onFocus, id = 'nacimien
           placeholder="DD / MM / AAAA"
           value={textoInput}
           onChange={manejarCambioTexto}
+          onPaste={manejarPegado}
           onKeyDown={manejarKeyDown}
           onFocus={onFocus}
           autoComplete="bday"

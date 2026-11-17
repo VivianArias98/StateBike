@@ -12,5 +12,7 @@ router.post("/", controlador.registrar);
 router.put("/:id", controlador.modificar);
 router.patch("/:id/activar", controlador.activar);
 router.patch("/:id/inactivar", controlador.inactivar);
+router.patch("/:id/reubicar", controlador.reubicar);
+router.patch("/estacion/:estacionId/reubicar-todas", controlador.reubicarTodas);
 
 export default router;

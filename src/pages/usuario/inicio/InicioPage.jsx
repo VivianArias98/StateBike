@@ -389,13 +389,13 @@ function InicioPage() {
                           <span className={styles.statIcono} aria-hidden="true">
                             <IconoBicicleta />
                           </span>
-                          <strong>{est.bicicletas ?? 0}</strong> disponibles
+                          <strong>{est.bicicletas ?? 0}</strong> {est.bicicletas === 1 ? 'disponible' : 'disponibles'}
                         </span>
                         <span className={styles.statAnclajes}>
                           <span className={styles.statIcono} aria-hidden="true">
                             <IconoAnclaje />
                           </span>
-                          <strong>{est.anclajesLibres ?? 0}</strong> anclajes libres
+                          <strong>{est.anclajesLibres ?? 0}</strong> {est.anclajesLibres === 1 ? 'anclaje libre' : 'anclajes libres'}
                         </span>
                       </div>
                     </article>

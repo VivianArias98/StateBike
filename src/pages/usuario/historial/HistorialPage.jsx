@@ -152,9 +152,8 @@ function HistorialPage() {
       : 'Todos los registros históricos';
 
   const handleDescargarPagosCSV = () => {
-    const encabezados = ['ID', 'Fecha y hora', 'Concepto / Detalle', 'Tipo de pago', 'Monto (COP)', 'Estado'];
+    const encabezados = ['Fecha y hora', 'Concepto / Detalle', 'Tipo de pago', 'Monto (COP)', 'Estado'];
     const filas = pagosFiltrados.map((p) => [
-      `#${p.id}`,
       p.fechaHora,
       p.concepto,
       p.tipo,
@@ -177,9 +176,8 @@ function HistorialPage() {
         { etiqueta: 'Total debitado / pagado', valor: `${formatearPesos(totalPagado)} COP` },
         { etiqueta: 'Saldo actual billetera', valor: `${formatearPesos(billetera.saldo)} COP` },
       ],
-      columnas: ['ID Transacción', 'Fecha y hora', 'Concepto / Detalle', 'Tipo de movimiento', 'Monto (COP)', 'Estado'],
+      columnas: ['Fecha y hora', 'Concepto / Detalle', 'Tipo de movimiento', 'Monto (COP)', 'Estado'],
       filas: pagosFiltrados.map((p) => [
-        `#${p.id}`,
         p.fechaHora,
         p.concepto,
         p.tipo,
@@ -193,7 +191,6 @@ function HistorialPage() {
 
   const handleDescargarViajesCSV = () => {
     const encabezados = [
-      'ID Viaje',
       'Fecha y hora inicio',
       'Origen',
       'Fecha y hora fin',
@@ -203,7 +200,6 @@ function HistorialPage() {
       'Costo exceso (COP)',
     ];
     const filas = viajesFiltrados.map((v) => [
-      `#${v.id}`,
       v.fechaHoraInicio || v.fechaHora,
       v.origen,
       v.fechaHoraFin || '—',
@@ -233,7 +229,6 @@ function HistorialPage() {
         { etiqueta: 'Minutos de exceso', valor: `${totalMinutosExceso} min` },
       ],
       columnas: [
-        'ID Viaje',
         'Fecha y hora inicio',
         'Origen',
         'Fecha y hora fin',
@@ -243,7 +238,6 @@ function HistorialPage() {
         'Costo Exceso',
       ],
       filas: viajesFiltrados.map((v) => [
-        `#${v.id}`,
         v.fechaHoraInicio || v.fechaHora,
         v.origen,
         v.fechaHoraFin || '—',

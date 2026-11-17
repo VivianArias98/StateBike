@@ -38,6 +38,22 @@ function EstacionesPage() {
   const [errorBusqueda, setErrorBusqueda] = useState('');
   const [buscando, setBuscando] = useState(false);
   const [seleccionadaId, setSeleccionadaId] = useState(null);
+  const [mostrarModalAviso, setMostrarModalAviso] = useState(false);
+
+  // Cerrar modal de aviso al presionar Escape
+  useEffect(() => {
+    function manejarTeclaEscape(e) {
+      if (e.key === 'Escape' && mostrarModalAviso) {
+        setMostrarModalAviso(false);
+      }
+    }
+    if (mostrarModalAviso) {
+      window.addEventListener('keydown', manejarTeclaEscape);
+    }
+    return () => {
+      window.removeEventListener('keydown', manejarTeclaEscape);
+    };
+  }, [mostrarModalAviso]);
 
   // Hook de geolocalización en tiempo real
   const {
@@ -194,24 +210,116 @@ function EstacionesPage() {
                   </div>
                   <span className={styles.nombreEstacion}>{seleccionada.nombre}</span>
                   <span className={styles.metaEstacion}>
-                    {seleccionada.bicicletas} bicicletas · {seleccionada.anclajes} anclajes libres
+                    {seleccionada.bicicletas} {seleccionada.bicicletas === 1 ? 'bicicleta' : 'bicicletas'} · {seleccionada.anclajes} {seleccionada.anclajes === 1 ? 'anclaje libre' : 'anclajes libres'}
                     {seleccionada.distanciaTexto ? ` · a ${seleccionada.distanciaTexto} de ti` : ''}
                   </span>
                 </div>
 
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${seleccionada.lat},${seleccionada.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`boton boton--primario ${styles.botonLlegar}`}
-                >
-                  <Icono nombre="flechaDerecha" />
-                  Cómo llegar
-                </a>
+                <div className={styles.accionesPanel}>
+                  <button
+                    type="button"
+                    className={`boton boton--primario ${styles.botonUsarBici}`}
+                    onClick={() => setMostrarModalAviso(true)}
+                    title="Usar una bicicleta de esta estación"
+                  >
+                    <Icono nombre="bici" />
+                    <span>Usar bicicleta</span>
+                  </button>
+
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${seleccionada.lat},${seleccionada.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`boton boton--secundario ${styles.botonLlegar}`}
+                  >
+                    <Icono nombre="flechaDerecha" />
+                    <span>Cómo llegar</span>
+                  </a>
+                </div>
               </div>
             )}
           </div>
         </section>
+
+        {/* Modal de aviso según requerimiento HU_9:
+            "Si el visitante intenta interactuar con una bicicleta:
+             'Para usar una bicicleta debe registrarse e iniciar sesión'" */}
+        {mostrarModalAviso && (
+          <div
+            className={styles.modalOverlay}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setMostrarModalAviso(false);
+            }}
+            role="presentation"
+          >
+            <div
+              className={styles.modalCaja}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="titulo-aviso-bicicleta"
+            >
+              <button
+                type="button"
+                className={styles.botonCerrarModal}
+                onClick={() => setMostrarModalAviso(false)}
+                aria-label="Cerrar aviso"
+              >
+                <Icono nombre="cancelar" />
+              </button>
+
+              <div className={styles.modalCabecera}>
+                <div className={styles.modalIconoContenedor} aria-hidden="true">
+                  <Icono nombre="bici" />
+                </div>
+                <h2 id="titulo-aviso-bicicleta" className={styles.modalTitulo}>
+                  Para usar una bicicleta debe registrarse e iniciar sesión
+                </h2>
+              </div>
+
+              <div className={styles.modalCuerpo}>
+                <p className={styles.modalTexto}>
+                  Para retirar y usar una bicicleta en la estación{' '}
+                  <strong>{seleccionada?.nombre}</strong> o en cualquier punto del sistema StationBike,
+                  debes contar con una cuenta activa y un plan vigente.
+                </p>
+
+                {seleccionada && (
+                  <div className={styles.modalEstadoEstacion}>
+                    <span className={styles.modalEstacionNombre}>{seleccionada.nombre}</span>
+                    <span className={styles.modalEstacionBicis}>
+                      {seleccionada.bicicletas}{' '}
+                      {seleccionada.bicicletas === 1 ? 'bicicleta disponible' : 'bicicletas disponibles'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.modalAcciones}>
+                <a
+                  href="/login"
+                  className="boton boton--primario"
+                  style={{ textDecoration: 'none' }}
+                >
+                  Iniciar sesión
+                </a>
+                <a
+                  href="/registro"
+                  className="boton boton--secundario"
+                  style={{ textDecoration: 'none' }}
+                >
+                  Registrarse
+                </a>
+                <button
+                  type="button"
+                  className="boton boton--fantasma"
+                  onClick={() => setMostrarModalAviso(false)}
+                >
+                  Volver al mapa
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </VisitanteLayout>
   );

@@ -44,14 +44,16 @@ function RegistroForm() {
   const [enviando, setEnviando] = useState(false);
   const [modalTerminosAbierto, setModalTerminosAbierto] = useState(false);
 
-  // Estados de validación en tiempo real para la contraseña
-  const tiene8Caracteres = datos.contrasena.length >= 8;
-  const tieneLetra = /[a-zA-Z]/.test(datos.contrasena);
-  const tieneNumero = /[0-9]/.test(datos.contrasena);
+  // Estados de validación en tiempo real para la contraseña (normalizada sin espacios accidentales)
+  const pwdLimpia = datos.contrasena.trim();
+  const confLimpia = datos.confirmacion.trim();
+  const tiene8Caracteres = pwdLimpia.length >= 8;
+  const tieneLetra = /[a-zA-Z]/.test(pwdLimpia);
+  const tieneNumero = /[0-9]/.test(pwdLimpia);
   const contrasenasCoinciden =
-    datos.confirmacion.length > 0 && datos.contrasena === datos.confirmacion;
+    confLimpia.length > 0 && pwdLimpia === confLimpia;
   const contrasenasNoCoinciden =
-    datos.confirmacion.length > 0 && datos.contrasena !== datos.confirmacion;
+    confLimpia.length > 0 && pwdLimpia !== confLimpia;
 
   useEffect(() => {
     if (!error) return undefined;
@@ -81,15 +83,15 @@ function RegistroForm() {
 
       if (!datos.nombreCompleto.trim()) {
         document.getElementById('nombre')?.focus();
-      } else if (!datos.fechaNacimiento) {
+      } else if (!datos.fechaNacimiento.trim()) {
         document.getElementById('nacimiento-dia')?.focus();
       } else if (!datos.correo.trim()) {
         document.getElementById('correo')?.focus();
       } else if (!datos.telefono.trim()) {
         document.getElementById('telefono')?.focus();
-      } else if (!datos.contrasena) {
+      } else if (!datos.contrasena.trim()) {
         document.getElementById('password')?.focus();
-      } else if (!datos.confirmacion) {
+      } else if (!datos.confirmacion.trim()) {
         document.getElementById('confirmar')?.focus();
       }
       return;
@@ -98,12 +100,12 @@ function RegistroForm() {
     setEnviando(true);
     try {
       const respuesta = await registrar({
-        nombreCompleto: datos.nombreCompleto.trim(),
-        fechaNacimiento: datos.fechaNacimiento,
-        correo: datos.correo.trim(),
-        telefono: datos.telefono.trim(),
-        contrasena: datos.contrasena,
-        confirmacion: datos.confirmacion,
+        nombreCompleto: datos.nombreCompleto.trim().replace(/\s+/g, ' '),
+        fechaNacimiento: datos.fechaNacimiento.trim(),
+        correo: datos.correo.trim().toLowerCase(),
+        telefono: datos.telefono.trim().replace(/\s+/g, ''),
+        contrasena: datos.contrasena.trim(),
+        confirmacion: datos.confirmacion.trim(),
         aceptaTerminos: datos.aceptaTerminos,
       });
       navegar('/login', {

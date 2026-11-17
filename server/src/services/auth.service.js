@@ -9,8 +9,26 @@ const LARGO_MAX_CORREO = 100;   // Cuenta.correo VARCHAR(100)
 const LARGO_MIN_CONTRASENA = 8; // mismo mínimo que exige TunjaAPI
 const EDAD_MINIMA = 18;
 
-// Vacío o solo espacios en blanco
-const vacio = (valor) => typeof valor !== "string" || valor.trim() === "";
+// Normalizadores de campos para registro e inicio de sesión
+function normalizarTexto(valor) {
+  if (typeof valor !== "string") return "";
+  return valor.trim();
+}
+
+function normalizarEspaciosMultiples(valor) {
+  if (typeof valor !== "string") return "";
+  return valor.trim().replace(/\s+/g, " ");
+}
+
+function normalizarCorreo(valor) {
+  if (typeof valor !== "string") return "";
+  return valor.trim().toLowerCase();
+}
+
+function normalizarTelefono(valor) {
+  if (typeof valor !== "string" && typeof valor !== "number") return "";
+  return String(valor).trim().replace(/\s+/g, "");
+}
 
 function esFechaValida(texto) {
   if (!FORMATO_FECHA.test(texto)) return false;
@@ -51,20 +69,31 @@ function respuestaSesion(sesion, perfil) {
   };
 }
 
-// HU_7: el orden de las validaciones sigue el flujo normal
+// HU_7: el orden de las validaciones sigue el flujo normal con normalización exhaustiva
 export async function registrar(datos = {}) {
-  const { nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion, aceptaTerminos } = datos;
+  const nombreCompleto = normalizarEspaciosMultiples(datos.nombreCompleto);
+  const fechaNacimiento = normalizarTexto(datos.fechaNacimiento);
+  const correo = normalizarCorreo(datos.correo);
+  const telefono = normalizarTelefono(datos.telefono);
+  const contrasena = normalizarTexto(datos.contrasena);
+  const confirmacion = normalizarTexto(datos.confirmacion);
+  const aceptaTerminos = datos.aceptaTerminos;
 
-  if ([nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion].some(vacio)) {
+  if (
+    !nombreCompleto ||
+    !fechaNacimiento ||
+    !correo ||
+    !telefono ||
+    !contrasena ||
+    !confirmacion
+  ) {
     throw new AppError(400, "campos_vacios");
   }
 
-  const email = correo.trim();
-  if (email.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(email)) {
+  if (correo.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(correo)) {
     throw new AppError(400, "correo_invalido");
   }
-  const telLimpio = String(telefono).trim();
-  if (!/^\+?\d{7,15}$/.test(telLimpio)) {
+  if (!/^\+?\d{7,15}$/.test(telefono)) {
     throw new AppError(400, "telefono_invalido");
   }
   if (contrasena.length < LARGO_MIN_CONTRASENA) throw new AppError(400, "contrasena_debil");
@@ -78,7 +107,7 @@ export async function registrar(datos = {}) {
   try {
     respuesta = await tunja("/auth/register", {
       metodo: "POST",
-      cuerpo: { email, contrasena, nombre: nombreCompleto.trim(), perfil: "general" },
+      cuerpo: { email: correo, contrasena, nombre: nombreCompleto, perfil: "general" },
     });
   } catch (error) {
     if (error.codigo === "email_en_uso") throw new AppError(409, "correo_ya_registrado");
@@ -91,7 +120,7 @@ export async function registrar(datos = {}) {
     fechaNacimiento,
     correo: respuesta.usuario.email,
     nombre: respuesta.usuario.nombre,
-    telefono: telLimpio,
+    telefono,
   });
 
   // La HU manda a iniciar sesión: no se devuelven tokens
@@ -101,31 +130,34 @@ export async function registrar(datos = {}) {
   };
 }
 
-// HU_8
+// HU_8: Iniciar sesión con normalización preventiva de correo y contraseña
 export async function iniciarSesion(datos = {}) {
-  const { correo, contrasena } = datos;
-  if (vacio(correo) || vacio(contrasena)) throw new AppError(400, "campos_vacios");
+  const correo = normalizarCorreo(datos.correo);
+  const contrasena = normalizarTexto(datos.contrasena);
+
+  if (!correo || !contrasena) throw new AppError(400, "campos_vacios");
 
   // TunjaAPI responde credenciales_invalidas (sin decir cuál falló) y usuario_inactivo
   const sesion = await tunja("/auth/login", {
     metodo: "POST",
-    cuerpo: { email: correo.trim(), contrasena },
+    cuerpo: { email: correo, contrasena },
   });
 
   const perfil = perfiles.obtenerOCrear(sesion.usuario.id);
   perfiles.actualizarContacto(sesion.usuario.id, sesion.usuario.email, sesion.usuario.nombre);
   perfiles.registrarAcceso(sesion.usuario.id);
   return respuestaSesion(sesion, perfil);
-  
 }
 
 export async function refrescar(refresco) {
-  if (vacio(refresco)) throw new AppError(401, "refresco_invalido");
-  const sesion = await tunja("/auth/refresh", { metodo: "POST", cuerpo: { refresco } });
+  const tokenRefresco = normalizarTexto(refresco);
+  if (!tokenRefresco) throw new AppError(401, "refresco_invalido");
+  const sesion = await tunja("/auth/refresh", { metodo: "POST", cuerpo: { refresco: tokenRefresco } });
   return respuestaSesion(sesion, perfiles.obtenerOCrear(sesion.usuario.id));
 }
 
 export async function cerrarSesion(refresco) {
-  if (vacio(refresco)) return;
-  await tunja("/auth/logout", { metodo: "POST", cuerpo: { refresco } });
+  const tokenRefresco = normalizarTexto(refresco);
+  if (!tokenRefresco) return;
+  await tunja("/auth/logout", { metodo: "POST", cuerpo: { refresco: tokenRefresco } });
 }

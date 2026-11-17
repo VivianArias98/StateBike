@@ -19,8 +19,6 @@ import InicioPage from './pages/usuario/inicio/InicioPage.jsx';
 import ViajesPage from './pages/usuario/viajes/ViajesPage.jsx';
 import MiPerfilPage from './pages/usuario/mi-perfil/MiPerfilPage.jsx';
 import MiBilleteraPage from './pages/usuario/mi-billetera/MiBilleteraPage.jsx';
-import RecargarSaldoPaso1Page from './pages/usuario/mi-billetera/recargar-saldo-paso-1/RecargarSaldoPaso1Page.jsx';
-import RecargarSaldoPaso2Page from './pages/usuario/mi-billetera/recargar-saldo-paso-2/RecargarSaldoPaso2Page.jsx';
 import PagarCobroPaso1Page from './pages/usuario/mi-billetera/pagar-cobro-paso-1/PagarCobroPaso1Page.jsx';
 import PagarCobroPaso2Page from './pages/usuario/mi-billetera/pagar-cobro-paso-2/PagarCobroPaso2Page.jsx';
 import MiPlanPage from './pages/usuario/mi-plan/MiPlanPage.jsx';
@@ -70,8 +68,6 @@ function App() {
             <Route path="/viajes" element={<ViajesPage />} />
             <Route path="/perfil" element={<MiPerfilPage />} />
             <Route path="/billetera" element={<MiBilleteraPage />} />
-            <Route path="/billetera/recargar" element={<RecargarSaldoPaso1Page />} />
-            <Route path="/billetera/recargar/comprobante" element={<RecargarSaldoPaso2Page />} />
             <Route path="/billetera/pagar" element={<PagarCobroPaso1Page />} />
             <Route path="/billetera/pagar/comprobante" element={<PagarCobroPaso2Page />} />
             <Route path="/plan" element={<MiPlanPage />} />

@@ -52,11 +52,10 @@ function esIngreso(tipo, concepto = '') {
 // Historial de movimientos de la billetera (HU_23)
 function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
   const handleDescargarCSV = () => {
-    const encabezados = ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo resultante'];
+    const encabezados = ['Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo resultante'];
     const filas = movimientos.map((m) => {
       const ingreso = esIngreso(m.tipo, m.concepto);
       return [
-        `#${m.id}`,
         clasificarTipoBilletera(m.tipo, m.concepto),
         m.concepto,
         formatearFechaBogota(m.fecha),
@@ -77,11 +76,10 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
         { etiqueta: 'Saldo disponible', valor: `${formatearPesos(saldo)} COP` },
         { etiqueta: 'Total movimientos', valor: movimientos.length },
       ],
-      columnas: ['ID', 'Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo Resultante'],
+      columnas: ['Tipo', 'Concepto', 'Fecha y hora', 'Monto', 'Saldo Resultante'],
       filas: movimientos.map((m) => {
         const ingreso = esIngreso(m.tipo, m.concepto);
         return [
-          `#${m.id}`,
           clasificarTipoBilletera(m.tipo, m.concepto),
           m.concepto,
           formatearFechaBogota(m.fecha),

@@ -57,7 +57,7 @@ function LoginForm() {
       setError(errorLocal);
       if (!correo.trim()) {
         document.getElementById('correo')?.focus();
-      } else if (!contrasena) {
+      } else if (!contrasena.trim()) {
         document.getElementById('password')?.focus();
       }
       return;
@@ -65,7 +65,7 @@ function LoginForm() {
 
     setEnviando(true);
     try {
-      const usuario = await iniciarSesion(correo.trim(), contrasena);
+      const usuario = await iniciarSesion(correo.trim(), contrasena.trim());
       navegar(ubicacion.state?.desde ?? rutaInicio(usuario.rol), { replace: true });
     } catch (e) {
       console.error('Error al iniciar sesión:', e);

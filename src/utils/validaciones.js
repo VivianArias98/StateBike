@@ -6,8 +6,6 @@ const TIENE_LETRAS = /[a-zA-Z]/;
 const TIENE_NUMEROS = /[0-9]/;
 const EDAD_MINIMA = 18;
 
-const vacio = (valor) => typeof valor !== 'string' || valor.trim() === '';
-
 function esMayorDeEdad(fechaTexto) {
   const [anio, mes, dia] = fechaTexto.split('-').map(Number);
   const hoy = new Date();
@@ -26,24 +24,40 @@ function esFechaValida(fechaTexto) {
 
 // Devuelve el mensaje del primer error o null si todo está bien.
 export function validarLogin({ correo, contrasena }) {
-  if (vacio(correo) || vacio(contrasena)) return 'Hay campos obligatorios vacíos';
+  const c = typeof correo === 'string' ? correo.trim() : '';
+  const p = typeof contrasena === 'string' ? contrasena.trim() : '';
+  if (!c || !p) return 'Hay campos obligatorios vacíos';
   return null;
 }
 
-export function validarRegistro(datos) {
-  const { nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion, aceptaTerminos } = datos;
+export function validarRegistro(datos = {}) {
+  const nombreCompleto = typeof datos.nombreCompleto === 'string' ? datos.nombreCompleto.trim().replace(/\s+/g, ' ') : '';
+  const fechaNacimiento = typeof datos.fechaNacimiento === 'string' ? datos.fechaNacimiento.trim() : '';
+  const correo = typeof datos.correo === 'string' ? datos.correo.trim().toLowerCase() : '';
+  const telefono = typeof datos.telefono === 'string' || typeof datos.telefono === 'number' ? String(datos.telefono).trim().replace(/\s+/g, '') : '';
+  const contrasena = typeof datos.contrasena === 'string' ? datos.contrasena.trim() : '';
+  const confirmacion = typeof datos.confirmacion === 'string' ? datos.confirmacion.trim() : '';
+  const aceptaTerminos = datos.aceptaTerminos;
 
-  if ([nombreCompleto, fechaNacimiento, correo, telefono, contrasena, confirmacion].some(vacio)) {
+  if (
+    !nombreCompleto ||
+    !fechaNacimiento ||
+    !correo ||
+    !telefono ||
+    !contrasena ||
+    !confirmacion
+  ) {
     return 'Hay campos obligatorios vacíos';
   }
-  const email = correo.trim();
-  if (email.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(email)) {
+
+  if (correo.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(correo)) {
     return 'Correo inválido';
   }
-  const telLimpio = String(telefono ?? '').trim();
-  if (!/^\+?\d{7,15}$/.test(telLimpio)) {
+
+  if (!/^\+?\d{7,15}$/.test(telefono)) {
     return 'El número de teléfono o celular no es válido';
   }
+
   if (
     contrasena.length < LARGO_MIN_CONTRASENA ||
     !TIENE_LETRAS.test(contrasena) ||
@@ -51,6 +65,7 @@ export function validarRegistro(datos) {
   ) {
     return 'La contraseña debe tener mínimo 8 caracteres e incluir letras y números';
   }
+
   if (contrasena !== confirmacion) return 'Las contraseñas no coinciden';
   if (!esFechaValida(fechaNacimiento)) return 'La fecha de nacimiento no es válida';
   if (!esMayorDeEdad(fechaNacimiento)) return 'Debe ser mayor de edad para poder crear una cuenta';

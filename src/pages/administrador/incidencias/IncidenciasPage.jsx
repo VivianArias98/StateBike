@@ -280,7 +280,7 @@ function IncidenciasPage() {
                           )}
                         </td>
                         <td className={styles.colAcciones}>
-                          <div style={{ display: 'flex', gap: 'var(--espacio-2)', justifyContent: 'flex-end', whiteSpace: 'nowrap' }}>
+                          <div className={styles.accionesGrupo}>
                             {esAbierta && (
                               <button
                                 type="button"

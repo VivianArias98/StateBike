@@ -26,7 +26,9 @@ function BicicletasPage() {
   const [cargando, setCargando] = useState(false);
   const [bicicletaAInactivar, setBicicletaAInactivar] = useState(null);
   const [bicicletaAActivar, setBicicletaAActivar] = useState(null);
+  const [bicicletaAReubicar, setBicicletaAReubicar] = useState(null);
   const [estacionSeleccionada, setEstacionSeleccionada] = useState('');
+  const [estacionDestinoReubicar, setEstacionDestinoReubicar] = useState('');
 
   const cargarBicicletas = async (termino = '') => {
     try {
@@ -248,6 +250,59 @@ function BicicletasPage() {
     }
   };
 
+  // Reubicar bicicleta a otra estación activa con anclajes libres
+  const handleSolicitarReubicar = (bici) => {
+    if (bici.estado === 'EN_USO' || bici.estado === 'INACTIVA') return;
+    const destinos = estacionesDisponibles.filter((est) => est.id !== bici.estacionId);
+    if (destinos.length > 0) {
+      setEstacionDestinoReubicar(String(destinos[0].id));
+    } else {
+      setEstacionDestinoReubicar('');
+    }
+    setBicicletaAReubicar(bici);
+  };
+
+  const handleConfirmarReubicar = async (e) => {
+    e.preventDefault();
+    if (!bicicletaAReubicar || !estacionDestinoReubicar) return;
+
+    setCargando(true);
+    try {
+      const token = leerToken();
+      const respuesta = await fetch(`/api/admin/bicicletas/${bicicletaAReubicar.id}/reubicar`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          estacionId: Number(estacionDestinoReubicar),
+        }),
+      });
+
+      const resJson = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        if (resJson.error === 'estacion_sin_anclajes_libres') {
+          setAviso('La estación seleccionada ya no tiene anclajes libres');
+        } else {
+          setAviso(resJson.mensaje || 'Error al reubicar la bicicleta');
+        }
+        return;
+      }
+
+      setAviso(resJson.mensaje || 'BICICLETA REUBICADA EXITOSAMENTE');
+      await cargarBicicletas(busqueda);
+      await cargarEstaciones();
+    } catch {
+      setAviso('Error de conexión al reubicar la bicicleta');
+    } finally {
+      setCargando(false);
+      setBicicletaAReubicar(null);
+    }
+  };
+
   return (
     <AdminLayout itemActivo="Bicicletas">
       <AdminEncabezado
@@ -278,6 +333,7 @@ function BicicletasPage() {
             onCambiarEstado={handleCambiarEstado}
             onInactivar={handleSolicitarInactivar}
             onActivar={handleSolicitarActivar}
+            onReubicar={handleSolicitarReubicar}
           />
         </div>
 
@@ -378,6 +434,80 @@ function BicicletasPage() {
                 Confirmar activación
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para reubicar bicicleta */}
+      {bicicletaAReubicar && (
+        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-reubicar-bici-titulo">
+          <div className={styles.modalCaja}>
+            <h2 id="modal-reubicar-bici-titulo" className={styles.modalTitulo}>
+              Reubicar bicicleta
+            </h2>
+            <p className={styles.modalTexto}>
+              Seleccione la estación de destino para la bicicleta <strong>{bicicletaAReubicar.codigo}</strong> (actualmente en <em>{bicicletaAReubicar.estacion || 'sin estación'}</em>):
+            </p>
+
+            {estacionesDisponibles.filter((est) => est.id !== bicicletaAReubicar.estacionId).length > 0 ? (
+              <form onSubmit={handleConfirmarReubicar}>
+                <div className="campo" style={{ marginTop: 'var(--espacio-3)', marginBottom: 'var(--espacio-3)' }}>
+                  <label htmlFor="estacion-reubicar-select" style={{ fontWeight: 700, fontSize: 'var(--texto-s)' }}>
+                    Estación de destino (con anclajes libres):
+                  </label>
+                  <select
+                    id="estacion-reubicar-select"
+                    className="input"
+                    value={estacionDestinoReubicar}
+                    onChange={(e) => setEstacionDestinoReubicar(e.target.value)}
+                  >
+                    {estacionesDisponibles
+                      .filter((est) => est.id !== bicicletaAReubicar.estacionId)
+                      .map((est) => {
+                        const libres = est.anclajesLibres ?? (est.anclajes - (est.anclajesOcupados || 0));
+                        return (
+                          <option key={est.id} value={est.id}>
+                            {est.nombre} ({libres} anclajes libres)
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>
+
+                <div className={styles.modalAcciones}>
+                  <button
+                    type="button"
+                    className="boton boton--secundario"
+                    onClick={() => setBicicletaAReubicar(null)}
+                    disabled={cargando}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="boton boton--primario"
+                    disabled={cargando || !estacionDestinoReubicar}
+                  >
+                    {cargando ? 'Reubicando...' : 'Confirmar reubicación'}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div>
+                <p className="mensaje-error" style={{ margin: 'var(--espacio-3) 0' }}>
+                  No hay otras estaciones activas con anclajes libres disponibles para reubicar esta bicicleta.
+                </p>
+                <div className={styles.modalAcciones}>
+                  <button
+                    type="button"
+                    className="boton boton--secundario"
+                    onClick={() => setBicicletaAReubicar(null)}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
