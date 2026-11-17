@@ -6,13 +6,15 @@ function EstacionesTable({ estaciones, onEditar, onInactivar, onActivar }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
+        <caption className="sr-only">Listado de estaciones del sistema</caption>
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Capacidad / Disponibilidad</th>
-            <th style={{ textAlign: 'center' }}>Estado</th>
-            <th style={{ textAlign: 'right' }}>Acciones</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Dirección</th>
+            <th scope="col" style={{ textAlign: 'center' }}>Bicicletas</th>
+            <th scope="col" style={{ textAlign: 'center' }}>Anclajes libres</th>
+            <th scope="col" style={{ textAlign: 'center' }}>Estado</th>
+            <th scope="col" style={{ textAlign: 'right' }}>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -25,13 +27,8 @@ function EstacionesTable({ estaciones, onEditar, onInactivar, onActivar }) {
               <tr key={estacion.id}>
                 <td className={styles.nombreCelda}>{estacion.nombre}</td>
                 <td className={styles.direccionCelda}>{estacion.direccion}</td>
-                <td>
-                  <div className={styles.capacidadBadge}>
-                    <span style={{ color: 'var(--color-secundario)' }}>🚲 {bicis} bicis</span>
-                    <span>·</span>
-                    <span style={{ opacity: 0.75 }}>🔒 {anclajes} anclajes</span>
-                  </div>
-                </td>
+                <td className={styles.numeroCelda}>{bicis}</td>
+                <td className={styles.numeroCelda}>{anclajes}</td>
                 <td style={{ textAlign: 'center' }}>
                   <EstadoBadge estado={estacion.estado} />
                 </td>
@@ -43,9 +40,15 @@ function EstacionesTable({ estaciones, onEditar, onInactivar, onActivar }) {
                       disabled={inactiva}
                       onClick={() => onEditar(estacion.id)}
                       title={inactiva ? 'No se puede editar una estación inactiva' : 'Editar nombre, dirección y coordenadas'}
+                      aria-describedby={inactiva ? `motivo-inactiva-${estacion.id}` : undefined}
                     >
                       Editar
                     </button>
+                    {inactiva && (
+                      <span id={`motivo-inactiva-${estacion.id}`} className="sr-only">
+                        No se puede editar una estación inactiva
+                      </span>
+                    )}
                     {inactiva ? (
                       <button
                         type="button"

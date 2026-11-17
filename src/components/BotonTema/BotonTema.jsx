@@ -48,6 +48,9 @@ function IconoLuna() {
 function BotonTema({ compacto = false, texto = false, className = '', style = {} }) {
   const { alternarTema, esOscuro } = useTema();
 
+  const etiquetaVisible = esOscuro ? 'Modo Oscuro' : 'Modo Claro';
+  const accionAria = esOscuro ? 'Modo Oscuro, cambiar a modo claro' : 'Modo Claro, cambiar a modo oscuro';
+
   return (
     <button
       type="button"
@@ -55,14 +58,14 @@ function BotonTema({ compacto = false, texto = false, className = '', style = {}
       onClick={alternarTema}
       style={style}
       title={esOscuro ? 'Modo Oscuro activo (clic para cambiar a modo claro)' : 'Modo Claro activo (clic para cambiar a modo oscuro)'}
-      aria-label={esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      aria-label={texto ? accionAria : (esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro')}
     >
       <span className={styles.icono}>
         {esOscuro ? <IconoLuna /> : <IconoSol />}
       </span>
       {texto && (
         <span className={styles.etiqueta}>
-          {esOscuro ? 'Modo Oscuro' : 'Modo Claro'}
+          {etiquetaVisible}
         </span>
       )}
     </button>

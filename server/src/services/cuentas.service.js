@@ -135,25 +135,39 @@ export async function editarPerfil(usuarioId, datos = {}, token) {
  * Listado de cuentas de usuario para el administrador (HU_21).
  * Filtra por correo o nombre si se indica un término de búsqueda.
  */
-export function listarCuentas({ busqueda = "" } = {}) {
+export async function listarCuentas({ busqueda = "" } = {}) {
   const usuarios = perfilesRepo.listarUsuarios({ busqueda });
 
+  const usuariosConSaldo = await Promise.all(
+    usuarios.map(async (u) => {
+      let saldo;
+      try {
+        const resp = await tunja(`/users/${u.usuarioId}/wallet`);
+        saldo = resp?.saldo ?? 0;
+      } catch {
+        saldo = 0;
+      }
+      return {
+        id: u.usuarioId,
+        nombreCompleto: u.nombre,
+        correo: u.correo,
+        rol: u.rol,
+        fechaNacimiento: u.fechaNacimiento,
+        telefono: u.telefono,
+        ultimoAcceso: u.ultimoAcceso,
+        saldo,
+        tarjeta: u.uid
+          ? {
+              estado: u.estadoTarjeta,
+              ultimosDigitos: u.uid.slice(-4),
+            }
+          : null,
+      };
+    })
+  );
+
   return {
-    usuarios: usuarios.map((u) => ({
-      id: u.usuarioId,
-      nombreCompleto: u.nombre,
-      correo: u.correo,
-      rol: u.rol,
-      fechaNacimiento: u.fechaNacimiento,
-      telefono: u.telefono,
-      ultimoAcceso: u.ultimoAcceso,
-      tarjeta: u.uid
-        ? {
-            estado: u.estadoTarjeta,
-            ultimosDigitos: u.uid.slice(-4),
-          }
-        : null,
-    })),
+    usuarios: usuariosConSaldo,
   };
 }
 
@@ -240,7 +254,7 @@ export async function consultarBilleteraUsuario(usuarioId) {
     throw new AppError(404, "usuario_no_encontrado");
   }
 
-  let saldo = 0;
+  let saldo;
   try {
     const resp = await tunja(`/users/${idObjetivo}/wallet`);
     saldo = resp?.saldo ?? 0;
@@ -278,7 +292,7 @@ export async function recargarSaldoUsuario(adminId, usuarioId, monto) {
     });
   }
 
-  let saldoActual = 0;
+  let saldoActual;
   try {
     const billetera = await tunja(`/users/${idObjetivo}/wallet`);
     saldoActual = billetera?.saldo ?? 0;

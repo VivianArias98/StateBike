@@ -128,6 +128,14 @@ function Icono({ children }) {
     );
   }
 
+  export function IconoFlechaIzquierda() {
+    return (
+      <Icono>
+        <path d="M15 18l-6-6 6-6" />
+      </Icono>
+    );
+  }
+
   export function IconoTarjeta() {
     return (
       <Icono>

@@ -259,7 +259,7 @@ function HistorialPage() {
           titulo={tabActivo === 'viajes' ? 'Historial de Viajes' : 'Historial de Pagos y Billetera'}
           subtitulo={
             tabActivo === 'viajes'
-              ? 'Consulta de recorridos realizados, tiempos acumulados y detalle de estaciones en Tunja Bici.'
+              ? 'Consulta de recorridos realizados, tiempos acumulados y detalle de estaciones en StationBike.'
               : 'Registro detallado de recargas de saldo, planes adquiridos y cobros por exceso.'
           }
           acciones={
@@ -309,7 +309,7 @@ function HistorialPage() {
 
               <div className={styles.pie}>
                 <p className={styles.resumen}>
-                  Mostrando <strong>{viajesFiltrados.length}</strong> recorridos en el rango seleccionado
+                  Mostrando <strong>{viajesFiltrados.length}</strong> {viajesFiltrados.length === 1 ? 'recorrido' : 'recorridos'} en el rango seleccionado
                 </p>
                 <div className={styles.descargas}>
                   <button type="button" className="boton" onClick={handleDescargarViajesPDF}>

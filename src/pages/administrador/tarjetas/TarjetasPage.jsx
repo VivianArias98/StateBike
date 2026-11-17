@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoNfc } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
 import { leerSesion } from '../../../utils/sesion.js';
 import styles from './TarjetasPage.module.css';
 
@@ -22,6 +23,21 @@ function TarjetasPage() {
   const [guardando, setGuardando] = useState(false);
 
   const [usuarioADesvincular, setUsuarioADesvincular] = useState(null);
+
+  const modalVincularRef = useRef(null);
+  const modalDesvincularRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(usuarioAVincular),
+    onCerrar: () => setUsuarioAVincular(null),
+    contenedorRef: modalVincularRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(usuarioADesvincular),
+    onCerrar: () => setUsuarioADesvincular(null),
+    contenedorRef: modalDesvincularRef,
+  });
 
   const cargarUsuarios = async (termino = '') => {
     setCargando(true);
@@ -190,7 +206,7 @@ function TarjetasPage() {
           </div>
         )}
 
-        <form onSubmit={handleBuscar} className={styles.barraBusqueda}>
+        <div className={styles.barraBusqueda}>
           <input
             type="search"
             className={`input ${styles.inputBuscador}`}
@@ -199,9 +215,6 @@ function TarjetasPage() {
             onChange={(e) => setBusqueda(e.target.value)}
             aria-label="Buscar usuario"
           />
-          <button type="submit" className="boton boton--secundario" disabled={cargando}>
-            Buscar
-          </button>
           {busqueda && (
             <button
               type="button"
@@ -214,19 +227,20 @@ function TarjetasPage() {
               Limpiar
             </button>
           )}
-        </form>
+        </div>
 
         <section className="tarjeta" aria-label="Listado de usuarios y tarjetas" style={{ padding: 0, overflow: 'hidden' }}>
           <div className={`tabla ${styles.tablaContenedor} ${styles.tablaTarjetas}`}>
             <table>
+              <caption className="sr-only">Listado de usuarios y vinculación de tarjetas NFC</caption>
               <thead>
                 <tr>
-                  <th className={styles.colId}>ID</th>
-                  <th className={styles.colUsuario}>Usuario</th>
-                  <th className={styles.colCorreo}>Correo</th>
-                  <th className={styles.colEstado}>Estado Tarjeta</th>
-                  <th className={styles.colDigitos}>Últimos Dígitos</th>
-                  <th className={styles.colAcciones}>Acciones</th>
+                  <th scope="col" className={styles.colId}>ID</th>
+                  <th scope="col" className={styles.colUsuario}>Usuario</th>
+                  <th scope="col" className={styles.colCorreo}>Correo</th>
+                  <th scope="col" className={styles.colEstado}>Estado Tarjeta</th>
+                  <th scope="col" className={styles.colDigitos}>Últimos Dígitos</th>
+                  <th scope="col" className={styles.colAcciones}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -298,11 +312,23 @@ function TarjetasPage() {
           </div>
         </section>
 
-        {/* Modal de Vinculación */}
+        {/* Modal de Vinculación (RQ-22, RT-01) */}
         {usuarioAVincular && (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true">
-            <div className={styles.modalCaja}>
-              <h2 className={styles.modalTitulo}>Vincular Tarjeta NFC</h2>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-vincular-tarjeta-titulo"
+            onClick={() => setUsuarioAVincular(null)}
+          >
+            <div
+              ref={modalVincularRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-vincular-tarjeta-titulo" className={styles.modalTitulo}>
+                Vincular Tarjeta NFC
+              </h2>
               <p className={styles.modalTexto}>
                 Asignando tarjeta física para: <strong>{usuarioAVincular.nombreCompleto}</strong> (
                 {usuarioAVincular.correo})
@@ -357,11 +383,23 @@ function TarjetasPage() {
           </div>
         )}
 
-        {/* Modal de Desvinculación */}
+        {/* Modal de Desvinculación (RQ-22, RT-01) */}
         {usuarioADesvincular && (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true">
-            <div className={styles.modalCaja}>
-              <h2 className={styles.modalTitulo}>Confirmar Desvinculación</h2>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-desvincular-tarjeta-titulo"
+            onClick={() => setUsuarioADesvincular(null)}
+          >
+            <div
+              ref={modalDesvincularRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-desvincular-tarjeta-titulo" className={styles.modalTitulo}>
+                Confirmar Desvinculación
+              </h2>
               <p className={styles.modalTexto}>
                 ¿Está seguro de desvincular la tarjeta NFC actual de <strong>{usuarioADesvincular.nombreCompleto}</strong>?
               </p>

@@ -18,13 +18,14 @@ function TablaPagos({ pagos, hayFiltro = false }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
+        <caption className="sr-only">Historial de pagos y transacciones</caption>
         <thead>
           <tr>
-            <th className={styles.colFecha}>Fecha y hora</th>
-            <th className={styles.colConcepto}>Concepto / detalle</th>
-            <th className={styles.colTipo}>Tipo de pago</th>
-            <th className={styles.colMonto}>Monto (COP)</th>
-            <th className={styles.colEstado}>Estado</th>
+            <th scope="col" className={styles.colFecha}>Fecha y hora</th>
+            <th scope="col" className={styles.colConcepto}>Concepto / detalle</th>
+            <th scope="col" className={styles.colTipo}>Tipo de pago</th>
+            <th scope="col" className={styles.colMonto}>Monto (COP)</th>
+            <th scope="col" className={styles.colEstado}>Estado</th>
           </tr>
         </thead>
         <tbody>

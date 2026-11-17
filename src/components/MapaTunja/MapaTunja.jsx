@@ -21,12 +21,14 @@ const iconoActual = L.divIcon({
   iconAnchor: [14, 14],
 });
 
-function crearIconoEstacion(bicicletas, esMasCercana = false) {
+function crearIconoEstacion(bicicletas, esMasCercana = false, nombre = '') {
+  const bicis = String(Number(bicicletas) || 0);
+  const textoAccesible = nombre ? `${nombre} · ${bicis} bicicletas disponibles` : `${bicis} bicicletas disponibles`;
   return L.divIcon({
     className: `${styles.estacion} ${esMasCercana ? styles.estacionMasCercana : ''}`,
     html: esMasCercana
-      ? `<span class="${styles.badgeCercanaEstrella}" aria-hidden="true">★</span><span class="${styles.estacionNumero}">${String(Number(bicicletas) || 0)}</span>`
-      : `<span class="${styles.estacionNumero}">${String(Number(bicicletas) || 0)}</span>`,
+      ? `<span class="${styles.badgeCercanaEstrella}" aria-hidden="true">★</span><span class="${styles.estacionNumero}" aria-label="${textoAccesible}">${bicis}</span>`
+      : `<span class="${styles.estacionNumero}" aria-label="${textoAccesible}">${bicis}</span>`,
     iconSize: esMasCercana ? [40, 40] : [36, 36],
     iconAnchor: esMasCercana ? [20, 20] : [18, 18],
   });
@@ -193,7 +195,9 @@ function MapaTunja({
               <Marker
                 key={estacion.id}
                 position={[estacion.lat, estacion.lng]}
-                icon={crearIconoEstacion(estacion.bicicletas, esCercana)}
+                icon={crearIconoEstacion(estacion.bicicletas, esCercana, estacion.nombre)}
+                title={`${estacion.nombre} · ${estacion.bicicletas} bicicletas disponibles`}
+                alt={`${estacion.nombre} · ${estacion.bicicletas} bicicletas disponibles`}
                 interactive={Boolean(onSeleccionarEstacion)}
                 zIndexOffset={esCercana ? 500 : 0}
                 eventHandlers={

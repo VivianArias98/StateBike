@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoCalendario } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
 import PlanesTable from './components/PlanesTable.jsx';
 import PlanForm from './components/PlanForm.jsx';
 import styles from './PlanesTarifasPage.module.css';
@@ -21,8 +22,17 @@ function PlanesTarifasPage() {
   const navigate = useNavigate();
   const [planes, setPlanes] = useState([]);
   const [planEditando, setPlanEditando] = useState(null);
+  const [planAInactivar, setPlanAInactivar] = useState(null);
   const [aviso, setAviso] = useState('');
   const [cargando, setCargando] = useState(false);
+
+  const modalInactivarRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(planAInactivar),
+    onCerrar: () => setPlanAInactivar(null),
+    contenedorRef: modalInactivarRef,
+  });
 
   const cargarPlanes = async () => {
     try {
@@ -124,6 +134,20 @@ function PlanesTarifasPage() {
   const handleEditar = (plan) => {
     setPlanEditando(plan);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      const campoNombre = document.getElementById('plan-nombre');
+      if (campoNombre) {
+        campoNombre.focus();
+        campoNombre.select?.();
+      }
+    }, 50);
+  };
+
+  const handleConfirmarInactivar = async () => {
+    if (!planAInactivar) return;
+    const plan = planAInactivar;
+    setPlanAInactivar(null);
+    await handleCambiarEstado(plan.id, 'INACTIVO');
   };
 
   const handleCancelarEdicion = () => {
@@ -149,6 +173,7 @@ function PlanesTarifasPage() {
           planes={planes}
           onEditar={handleEditar}
           onCambiarEstado={handleCambiarEstado}
+          onSolicitarInactivar={(plan) => setPlanAInactivar(plan)}
         />
         <PlanForm
           planEditando={planEditando}
@@ -157,6 +182,49 @@ function PlanesTarifasPage() {
           cargando={cargando}
         />
       </div>
+
+      {/* Modal accesible de confirmación para inactivar plan (RQ-20, RT-01) */}
+      {planAInactivar && (
+        <div
+          className={styles.modalFondo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-inactivar-plan-titulo"
+          onClick={() => setPlanAInactivar(null)}
+        >
+          <div
+            ref={modalInactivarRef}
+            className={styles.modalCaja}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 id="modal-inactivar-plan-titulo" className={styles.modalTitulo}>
+              Inactivar plan
+            </h2>
+            <p className={styles.modalTexto}>
+              ¿Está seguro de que desea inactivar el plan <strong>{planAInactivar.nombre}</strong>?
+            </p>
+            <p className={styles.modalTexto}>
+              Los usuarios que ya tengan este plan adquirido mantendrán su vigencia hasta vencer, pero no podrá ser seleccionado ni adquirido por nuevos usuarios.
+            </p>
+            <div className={styles.modalAcciones}>
+              <button
+                type="button"
+                className="boton boton--secundario"
+                onClick={() => setPlanAInactivar(null)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className={`boton ${styles.botonPeligro}`}
+                onClick={handleConfirmarInactivar}
+              >
+                Inactivar plan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Aviso mensaje={aviso} onCerrar={() => setAviso('')} />
     </AdminLayout>

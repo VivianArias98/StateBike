@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoUsuario } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
 import { leerSesion } from '../../../utils/sesion.js';
+import { formatearFechaBogota } from '../../../utils/formatoMoneda.js';
 import styles from './CuentasPage.module.css';
 
 function CuentasPage() {
@@ -17,6 +19,21 @@ function CuentasPage() {
   const [usuarioAInactivar, setUsuarioAInactivar] = useState(null);
   const [usuarioAReactivar, setUsuarioAReactivar] = useState(null);
   const [procesando, setProcesando] = useState(false);
+
+  const modalInactivarRef = useRef(null);
+  const modalReactivarRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(usuarioAInactivar),
+    onCerrar: () => setUsuarioAInactivar(null),
+    contenedorRef: modalInactivarRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(usuarioAReactivar),
+    onCerrar: () => setUsuarioAReactivar(null),
+    contenedorRef: modalReactivarRef,
+  });
 
   const sesionActual = leerSesion();
   const idAdminActual = sesionActual?.usuario?.id;
@@ -175,16 +192,17 @@ function CuentasPage() {
         <section className="tarjeta" aria-label="Listado de cuentas" style={{ padding: 0, overflow: 'hidden' }}>
           <div className={`tabla ${styles.tablaContenedor} ${styles.tablaCuentas}`}>
             <table>
+              <caption className="sr-only">Listado de cuentas de usuario del sistema</caption>
               <thead>
                 <tr>
-                  <th className={styles.colId}>ID</th>
-                  <th className={styles.colNombre}>Nombre Completo</th>
-                  <th className={styles.colCorreo}>Correo Electrónico</th>
-                  <th className={styles.colRol}>Rol</th>
-                  <th className={styles.colTelefono}>Teléfono</th>
-                  <th className={styles.colTarjeta}>Tarjeta NFC</th>
-                  <th className={styles.colAcceso}>Último Acceso</th>
-                  <th className={styles.colAcciones}>Acciones</th>
+                  <th scope="col" className={styles.colId}>ID</th>
+                  <th scope="col" className={styles.colNombre}>Nombre Completo</th>
+                  <th scope="col" className={styles.colCorreo}>Correo Electrónico</th>
+                  <th scope="col" className={styles.colRol}>Rol</th>
+                  <th scope="col" className={styles.colTelefono}>Teléfono</th>
+                  <th scope="col" className={styles.colTarjeta}>Tarjeta NFC</th>
+                  <th scope="col" className={styles.colAcceso}>Último Acceso</th>
+                  <th scope="col" className={styles.colAcciones}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -241,7 +259,7 @@ function CuentasPage() {
                           )}
                         </td>
                         <td className={styles.colAcceso} style={{ fontSize: 'var(--texto-xs)', opacity: 0.8 }}>
-                          {u.ultimoAcceso?.slice(0, 16) || 'Sin accesos'}
+                          {formatearFechaBogota(u.ultimoAcceso) || 'Sin accesos'}
                         </td>
                         <td className={styles.colAcciones}>
                           <div className={styles.accionesCelda}>
@@ -282,9 +300,19 @@ function CuentasPage() {
 
         {/* Modal de Confirmación para Inactivar Cuenta */}
         {usuarioAInactivar && (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true">
-            <div className={styles.modalCaja}>
-              <h2 className={styles.modalTitulo}>Inactivar Cuenta de Usuario</h2>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-inactivar-cuenta-titulo"
+            onClick={() => setUsuarioAInactivar(null)}
+          >
+            <div
+              ref={modalInactivarRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-inactivar-cuenta-titulo" className={styles.modalTitulo}>Inactivar Cuenta de Usuario</h2>
               <p className={styles.modalTexto}>
                 ¿Está seguro de inactivar la cuenta de <strong>{usuarioAInactivar.nombreCompleto}</strong> ({usuarioAInactivar.correo})?
               </p>
@@ -316,9 +344,19 @@ function CuentasPage() {
 
         {/* Modal de Confirmación para Reactivar Cuenta */}
         {usuarioAReactivar && (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true">
-            <div className={styles.modalCaja}>
-              <h2 className={styles.modalTitulo}>Reactivar Cuenta de Usuario</h2>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-reactivar-cuenta-titulo"
+            onClick={() => setUsuarioAReactivar(null)}
+          >
+            <div
+              ref={modalReactivarRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-reactivar-cuenta-titulo" className={styles.modalTitulo}>Reactivar Cuenta de Usuario</h2>
               <p className={styles.modalTexto}>
                 ¿Desea reactivar la cuenta de <strong>{usuarioAReactivar.nombreCompleto}</strong> ({usuarioAReactivar.correo})?
               </p>

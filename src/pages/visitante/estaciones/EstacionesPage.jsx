@@ -231,6 +231,8 @@ function EstacionesPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`boton boton--secundario ${styles.botonLlegar}`}
+                    aria-label="Cómo llegar (abre Google Maps en una pestaña nueva)"
+                    title="Cómo llegar (abre Google Maps en una pestaña nueva)"
                   >
                     <Icono nombre="flechaDerecha" />
                     <span>Cómo llegar</span>

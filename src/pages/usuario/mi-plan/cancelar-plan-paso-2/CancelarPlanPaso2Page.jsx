@@ -1,6 +1,6 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import { IconoCheck, IconoFlecha, IconoTarjeta } from '../../../../components/Iconos/Iconos.jsx';
+import { IconoCheck, IconoFlecha, IconoFlechaIzquierda, IconoTarjeta } from '../../../../components/Iconos/Iconos.jsx';
 import { formatearFechaBogota } from '../../../../utils/formatoMoneda.js';
 import styles from './CancelarPlanPaso2Page.module.css';
 
@@ -25,7 +25,7 @@ function CancelarPlanPaso2Page() {
     { etiqueta: 'ESTADO DEL PLAN', valor: suscripcion.estado, tipo: 'estado' },
     { etiqueta: 'REEMBOLSO', valor: '$0 COP', nota: '(Sin reembolso)' },
   ];
-  if (plan) resumen.push({ etiqueta: 'DÍAS RESTANTES NO UTILIZADOS', valor: `${plan.diasRestantes} días` });
+  if (plan) resumen.push({ etiqueta: 'DÍAS RESTANTES NO UTILIZADOS', valor: `${plan.diasRestantes} ${plan.diasRestantes === 1 ? 'día' : 'días'}` });
 
   return (
     <UsuarioLayout itemActivo="Mi plan">
@@ -84,7 +84,7 @@ function CancelarPlanPaso2Page() {
 
           <section className={styles.acciones}>
             <button type="button" className={`boton ${styles.botonVolver}`} onClick={() => navegar('/billetera')}>
-              <IconoFlecha /> Ir a Mi billetera
+              <IconoFlechaIzquierda /> Ir a Mi billetera
             </button>
             <button type="button" className={`boton ${styles.botonCatalogo}`} onClick={() => navegar('/plan')}>
               <IconoTarjeta /> Ver catálogo de planes

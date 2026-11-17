@@ -95,6 +95,13 @@ function ViajeEnCurso({ viaje, segundos, estaciones, onReportar }) {
           )}
         </div>
 
+        {/* Anuncio accesible al comenzar el exceso de tiempo (RQ-11 / WCAG 4.1.3) */}
+        <div role="status" aria-live="polite" className="sr-only">
+          {minutosExceso > 0
+            ? `Tiempo excedido, se cobrarán ${formatearPesos(viaje.valorMinutoExceso)} por minuto.`
+            : ''}
+        </div>
+
         <BarraProgreso
           valor={Math.min(segundos, minutosIncluidos * 60)}
           maximo={minutosIncluidos * 60}

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './RegistroForm.module.css';
 import { registrar } from '../../../../utils/auth.js';
-import { validarRegistro } from '../../../../utils/validaciones.js';
+import { validarCamposRegistro } from '../../../../utils/validaciones.js';
 import { textoError } from '../../../../utils/mensajesError.js';
+import { IconoOjo } from '../../../../components/Iconos/Iconos.jsx';
 import SelectorFechaNacimiento from './SelectorFechaNacimiento.jsx';
 import ModalTerminos from './ModalTerminos.jsx';
 
@@ -17,6 +18,7 @@ function IconoOcultar() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      style={{ width: '1.25rem', height: '1.25rem' }}
     >
       <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
       <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
@@ -41,6 +43,7 @@ function RegistroForm() {
   const [datos, setDatos] = useState(CAMPOS_VACIOS);
   const [mostrar, setMostrar] = useState({ contrasena: false, confirmacion: false });
   const [error, setError] = useState('');
+  const [erroresCampos, setErroresCampos] = useState({});
   const [enviando, setEnviando] = useState(false);
   const [modalTerminosAbierto, setModalTerminosAbierto] = useState(false);
 
@@ -55,17 +58,15 @@ function RegistroForm() {
   const contrasenasNoCoinciden =
     confLimpia.length > 0 && pwdLimpia !== confLimpia;
 
-  useEffect(() => {
-    if (!error) return undefined;
-    const temporizador = setTimeout(() => {
-      setError('');
-    }, 4000);
-    return () => clearTimeout(temporizador);
-  }, [error]);
-
-
   function cambiar(campo, valor) {
     if (error) setError('');
+    if (erroresCampos[campo]) {
+      setErroresCampos((anterior) => {
+        const copia = { ...anterior };
+        delete copia[campo];
+        return copia;
+      });
+    }
     setDatos((anterior) => ({ ...anterior, [campo]: valor }));
   }
 
@@ -77,21 +78,21 @@ function RegistroForm() {
     evento.preventDefault();
     setError('');
 
-    const errorLocal = validarRegistro(datos);
-    if (errorLocal) {
-      setError(errorLocal);
+    const errs = validarCamposRegistro(datos);
+    setErroresCampos(errs);
 
-      if (!datos.nombreCompleto.trim()) {
+    if (Object.keys(errs).length > 0) {
+      if (errs.nombreCompleto) {
         document.getElementById('nombre')?.focus();
-      } else if (!datos.fechaNacimiento.trim()) {
+      } else if (errs.fechaNacimiento) {
         document.getElementById('nacimiento-dia')?.focus();
-      } else if (!datos.correo.trim()) {
+      } else if (errs.correo) {
         document.getElementById('correo')?.focus();
-      } else if (!datos.telefono.trim()) {
+      } else if (errs.telefono) {
         document.getElementById('telefono')?.focus();
-      } else if (!datos.contrasena.trim()) {
+      } else if (errs.contrasena) {
         document.getElementById('password')?.focus();
-      } else if (!datos.confirmacion.trim()) {
+      } else if (errs.confirmacion) {
         document.getElementById('confirmar')?.focus();
       }
       return;
@@ -113,18 +114,23 @@ function RegistroForm() {
         state: { mensaje: respuesta?.mensaje ?? 'CUENTA CREADA CON ÉXITO' },
       });
     } catch (e) {
-      setError(textoError(e));
+      const msg = textoError(e);
+      setError(msg);
+      if (msg.toLowerCase().includes('correo')) {
+        setErroresCampos((prev) => ({ ...prev, correo: msg }));
+      }
       setEnviando(false);
     }
   }
 
   return (
     <form className={styles.raiz} onSubmit={enviar} noValidate>
-      <h1 className={styles.titulo}>Crea tu cuenta</h1>
+      <h2 className={styles.titulo}>Crea tu cuenta</h2>
       <p className={styles.subtitulo}>Debes ser mayor de edad para registrarte</p>
 
       {error && (
         <div
+          id="registro-error-general"
           className="mensaje-error"
           role="alert"
           style={{
@@ -157,7 +163,9 @@ function RegistroForm() {
       )}
 
       <div className={`campo ${styles.campo}`}>
-        <label htmlFor="nombre" className={styles.etiqueta}>Nombre completo</label>
+        <label htmlFor="nombre" className={styles.etiqueta}>
+          Nombre completo <span aria-hidden="true">*</span>
+        </label>
         <input
           id="nombre"
           type="text"
@@ -165,23 +173,39 @@ function RegistroForm() {
           placeholder="Escribe tu nombre completo"
           value={datos.nombreCompleto}
           onChange={(e) => cambiar('nombreCompleto', e.target.value)}
-          onFocus={() => { if (error) setError(''); }}
           autoComplete="name"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(erroresCampos.nombreCompleto)}
+          aria-describedby={erroresCampos.nombreCompleto ? 'error-nombre' : undefined}
         />
+        {erroresCampos.nombreCompleto && (
+          <p id="error-nombre" className="mensaje-error" role="alert" style={{ marginTop: 'var(--espacio-1)', fontSize: 'var(--texto-xs)' }}>
+            {erroresCampos.nombreCompleto}
+          </p>
+        )}
       </div>
 
       <div className={`campo ${styles.campo}`}>
-        <label htmlFor="nacimiento-dia" className={styles.etiqueta}>Fecha de nacimiento</label>
+        <label htmlFor="nacimiento-dia" className={styles.etiqueta}>
+          Fecha de nacimiento <span aria-hidden="true">*</span>
+        </label>
         <SelectorFechaNacimiento
           id="nacimiento"
           valor={datos.fechaNacimiento}
           onChange={(fecha) => cambiar('fechaNacimiento', fecha)}
-          onFocus={() => { if (error) setError(''); }}
         />
+        {erroresCampos.fechaNacimiento && (
+          <p id="error-fecha" className="mensaje-error" role="alert" style={{ marginTop: 'var(--espacio-1)', fontSize: 'var(--texto-xs)' }}>
+            {erroresCampos.fechaNacimiento}
+          </p>
+        )}
       </div>
 
       <div className={`campo ${styles.campo}`}>
-        <label htmlFor="correo" className={styles.etiqueta}>Correo electrónico</label>
+        <label htmlFor="correo" className={styles.etiqueta}>
+          Correo electrónico <span aria-hidden="true">*</span>
+        </label>
         <input
           id="correo"
           type="email"
@@ -189,13 +213,23 @@ function RegistroForm() {
           placeholder="nombre@correo.com"
           value={datos.correo}
           onChange={(e) => cambiar('correo', e.target.value)}
-          onFocus={() => { if (error) setError(''); }}
           autoComplete="email"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(erroresCampos.correo)}
+          aria-describedby={erroresCampos.correo ? 'error-correo' : undefined}
         />
+        {erroresCampos.correo && (
+          <p id="error-correo" className="mensaje-error" role="alert" style={{ marginTop: 'var(--espacio-1)', fontSize: 'var(--texto-xs)' }}>
+            {erroresCampos.correo}
+          </p>
+        )}
       </div>
 
       <div className={`campo ${styles.campo}`}>
-        <label htmlFor="telefono" className={styles.etiqueta}>Teléfono celular</label>
+        <label htmlFor="telefono" className={styles.etiqueta}>
+          Teléfono celular <span aria-hidden="true">*</span>
+        </label>
         <input
           id="telefono"
           type="tel"
@@ -203,13 +237,23 @@ function RegistroForm() {
           placeholder="Ej: 3001234567"
           value={datos.telefono}
           onChange={(e) => cambiar('telefono', e.target.value)}
-          onFocus={() => { if (error) setError(''); }}
           autoComplete="tel"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(erroresCampos.telefono)}
+          aria-describedby={erroresCampos.telefono ? 'error-telefono' : undefined}
         />
+        {erroresCampos.telefono && (
+          <p id="error-telefono" className="mensaje-error" role="alert" style={{ marginTop: 'var(--espacio-1)', fontSize: 'var(--texto-xs)' }}>
+            {erroresCampos.telefono}
+          </p>
+        )}
       </div>
 
       <div className={`campo ${styles.campo}`}>
-        <label htmlFor="password" className={styles.etiqueta}>Contraseña</label>
+        <label htmlFor="password" className={styles.etiqueta}>
+          Contraseña <span aria-hidden="true">*</span>
+        </label>
         <div className={styles.control}>
           <input
             id="password"
@@ -218,8 +262,15 @@ function RegistroForm() {
             placeholder="Crea una contraseña"
             value={datos.contrasena}
             onChange={(e) => cambiar('contrasena', e.target.value)}
-            onFocus={() => { if (error) setError(''); }}
             autoComplete="new-password"
+            required
+            aria-required="true"
+            aria-invalid={Boolean(erroresCampos.contrasena)}
+            aria-describedby={
+              erroresCampos.contrasena
+                ? 'error-contrasena requisitos-contrasena'
+                : 'requisitos-contrasena'
+            }
           />
           <button
             type="button"
@@ -227,11 +278,17 @@ function RegistroForm() {
             aria-label={mostrar.contrasena ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             onClick={() => alternarOjo('contrasena')}
           >
-            <IconoOcultar />
+            {mostrar.contrasena ? <IconoOcultar /> : <IconoOjo />}
           </button>
         </div>
 
-        <div className={styles.cajaRequisitos}>
+        {erroresCampos.contrasena && (
+          <p id="error-contrasena" className="mensaje-error" role="alert" style={{ marginTop: 'var(--espacio-1)', fontSize: 'var(--texto-xs)' }}>
+            {erroresCampos.contrasena}
+          </p>
+        )}
+
+        <div id="requisitos-contrasena" className={styles.cajaRequisitos} aria-live="polite">
           <span className={styles.tituloRequisitos}>Requisitos de la contraseña:</span>
           <div className={styles.itemRequisito}>
             <span className={tiene8Caracteres ? styles.iconoCheck : styles.iconoPunto}>
@@ -261,7 +318,9 @@ function RegistroForm() {
       </div>
 
       <div className={`campo ${styles.campo}`}>
-        <label htmlFor="confirmar" className={styles.etiqueta}>Confirmar contraseña</label>
+        <label htmlFor="confirmar" className={styles.etiqueta}>
+          Confirmar contraseña <span aria-hidden="true">*</span>
+        </label>
         <div className={styles.control}>
           <input
             id="confirmar"
@@ -270,8 +329,11 @@ function RegistroForm() {
             placeholder="Repite tu contraseña"
             value={datos.confirmacion}
             onChange={(e) => cambiar('confirmacion', e.target.value)}
-            onFocus={() => { if (error) setError(''); }}
             autoComplete="new-password"
+            required
+            aria-required="true"
+            aria-invalid={Boolean(erroresCampos.confirmacion)}
+            aria-describedby={erroresCampos.confirmacion ? 'error-confirmar' : undefined}
           />
           <button
             type="button"
@@ -279,9 +341,14 @@ function RegistroForm() {
             aria-label={mostrar.confirmacion ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             onClick={() => alternarOjo('confirmacion')}
           >
-            <IconoOcultar />
+            {mostrar.confirmacion ? <IconoOcultar /> : <IconoOjo />}
           </button>
         </div>
+        {erroresCampos.confirmacion && (
+          <p id="error-confirmar" className="mensaje-error" role="alert" style={{ marginTop: 'var(--espacio-1)', fontSize: 'var(--texto-xs)' }}>
+            {erroresCampos.confirmacion}
+          </p>
+        )}
         {contrasenasCoinciden && (
           <div className={styles.itemRequisito} style={{ marginTop: 'var(--espacio-1)' }}>
             <span className={styles.iconoCheck}>✓</span>
@@ -302,6 +369,10 @@ function RegistroForm() {
           className={styles.casilla}
           checked={datos.aceptaTerminos}
           onChange={(e) => cambiar('aceptaTerminos', e.target.checked)}
+          required
+          aria-required="true"
+          aria-invalid={Boolean(erroresCampos.aceptaTerminos)}
+          aria-describedby={erroresCampos.aceptaTerminos ? 'error-terminos' : undefined}
         />
         <span>
           Acepto los{' '}
@@ -328,6 +399,11 @@ function RegistroForm() {
           </button>
         </span>
       </label>
+      {erroresCampos.aceptaTerminos && (
+        <p id="error-terminos" className="mensaje-error" role="alert" style={{ marginTop: '-0.5rem', marginBottom: 'var(--espacio-3)', fontSize: 'var(--texto-xs)' }}>
+          {erroresCampos.aceptaTerminos}
+        </p>
+      )}
 
       <ModalTerminos
         abierto={modalTerminosAbierto}

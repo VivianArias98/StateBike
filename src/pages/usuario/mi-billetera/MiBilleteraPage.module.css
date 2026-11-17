@@ -6,6 +6,20 @@
   width: 100%;
 }
 
+.contenedorSincronizar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--espacio-1);
+}
+
+.textoConfirmacion {
+  font-size: var(--texto-xs);
+  color: var(--color-exito-texto, var(--color-exito));
+  font-weight: 600;
+  margin: 0;
+}
+
 .botonSincronizar {
   display: inline-flex;
   align-items: center;

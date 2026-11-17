@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioLayout from '../../../../layouts/UsuarioLayout/UsuarioLayout.jsx';
-import { IconoAlerta, IconoFlecha, IconoCerrar } from '../../../../components/Iconos/Iconos.jsx';
+import { IconoAlerta, IconoFlechaIzquierda, IconoCerrar } from '../../../../components/Iconos/Iconos.jsx';
 import { formatearFechaBogota } from '../../../../utils/formatoMoneda.js';
 import { useUsuario } from '../../context/UsuarioContext.jsx';
 import styles from './CancelarPlanPaso1Page.module.css';
@@ -72,7 +72,7 @@ function CancelarPlanPaso1Page() {
           <div className="tarjeta" style={{ textAlign: 'center', padding: 'var(--espacio-6)' }}>
             <p style={{ fontSize: 'var(--texto-l)', fontWeight: 'bold' }}>No tienes ningún plan activo para cancelar</p>
             <button type="button" className={`boton ${styles.botonVolver}`} onClick={volver} style={{ marginTop: 'var(--espacio-3)' }}>
-              <IconoFlecha /> Volver a Mi plan
+              <IconoFlechaIzquierda /> Volver a Mi plan
             </button>
           </div>
         ) : (
@@ -88,7 +88,7 @@ function CancelarPlanPaso1Page() {
               </div>
               <div className={styles.tarjeta}>
                 <p className={styles.etiqueta}>VIGENCIA RESTANTE</p>
-                <p className={styles.valor}>{planActivo.diasRestantes} días restantes</p>
+                <p className={styles.valor}>{planActivo.diasRestantes} {planActivo.diasRestantes === 1 ? 'día restante' : 'días restantes'}</p>
                 <p className={styles.alerta}>SIN REEMBOLSO</p>
               </div>
             </div>
@@ -114,7 +114,7 @@ function CancelarPlanPaso1Page() {
 
             <div className={styles.acciones}>
               <button type="button" className={`boton ${styles.botonVolver}`} onClick={volver} disabled={cancelando}>
-                <IconoFlecha /> No cancelar, mantener plan activo
+                <IconoFlechaIzquierda /> No cancelar, mantener plan activo
               </button>
               <button type="button" className={`boton ${styles.botonCancelar}`} onClick={confirmar} disabled={cancelando}>
                 <IconoCerrar /> {cancelando ? 'Cancelando...' : 'Confirmar cancelación del plan'}

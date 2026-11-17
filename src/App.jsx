@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom';
 
 import RutaProtegida from './components/RutaProtegida/RutaProtegida.jsx';
@@ -40,11 +39,13 @@ import AdminTarjetasPage from './pages/administrador/tarjetas/TarjetasPage.jsx';
 import AdminIncidenciasPage from './pages/administrador/incidencias/IncidenciasPage.jsx';
 import AdminCuentasPage from './pages/administrador/cuentas/CuentasPage.jsx';
 import AdminBilleteraPage from './pages/administrador/billetera/AdminBilleteraPage.jsx';
+import ManejadorNavegacionA11y from './components/ManejadorNavegacionA11y/ManejadorNavegacionA11y.jsx';
 
 function App() {
   return (
     <TemaProvider>
       <BrowserRouter>
+        <ManejadorNavegacionA11y />
         <Routes>
           {/* Rutas públicas / Visitante */}
           <Route path="/" element={<EstacionesPage />} />

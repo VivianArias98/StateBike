@@ -33,7 +33,9 @@ function MiPlanPage() {
             plan.tienePlan && plan.planActivo ? (
               <span className={styles.badgePlanActivo}>
                 <span className="punto-vivo" aria-hidden="true" />
-                Plan {plan.planActivo.nombre}
+                {plan.planActivo.nombre?.toLowerCase().startsWith('plan ')
+                  ? plan.planActivo.nombre
+                  : `Plan ${plan.planActivo.nombre}`}
               </span>
             ) : (
               <span className={styles.badgeSinPlan}>

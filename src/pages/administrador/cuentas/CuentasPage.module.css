@@ -43,12 +43,15 @@
 /* Tabla con anchos dedicados para evitar solapamientos */
 .tablaContenedor {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: var(--radio-l);
   border: 1px solid var(--color-borde);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-borde-suave) transparent;
 }
 
 .tablaCuentas table {
-  min-width: 60rem;
+  min-width: 80rem;
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
@@ -59,26 +62,26 @@
 }
 
 .colNombre {
-  width: 13rem;
+  width: 12rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .colCorreo {
-  width: 15rem;
+  width: 14rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .colRol {
-  width: 7.5rem;
+  width: 6.5rem;
   text-align: center;
 }
 
 .colTelefono {
-  width: 8rem;
+  width: 8.5rem;
   white-space: nowrap;
 }
 
@@ -88,12 +91,12 @@
 }
 
 .colAcceso {
-  width: 10rem;
+  width: 14.5rem;
   white-space: nowrap;
 }
 
 .colAcciones {
-  width: 12.5rem;
+  width: 13rem;
   text-align: right;
 }
 
@@ -103,11 +106,13 @@
   align-items: center;
   justify-content: flex-end;
   white-space: nowrap;
+  flex-wrap: nowrap;
+  min-width: max-content;
 }
 
 .botonAccion {
   font-size: var(--texto-xs) !important;
-  padding: 0 var(--espacio-3) !important;
+  padding: 0 var(--espacio-2) !important;
   height: 2rem !important;
   min-width: auto !important;
   white-space: nowrap !important;
@@ -115,13 +120,14 @@
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  flex-shrink: 0 !important;
 }
 
 /* Modales */
 .modalFondo {
   position: fixed;
   inset: 0;
-  background-color: rgba(5, 6, 7, 0.7);
+  background-color: var(--color-fondo-bloqueo);
   display: flex;
   align-items: center;
   justify-content: center;

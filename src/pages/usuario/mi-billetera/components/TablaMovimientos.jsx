@@ -137,13 +137,14 @@ function TablaMovimientos({ movimientos = [], perfil = {}, saldo = 0 }) {
       ) : (
         <div className={`tabla ${styles.tabla}`}>
           <table>
+            <caption className="sr-only">Historial de movimientos de la billetera</caption>
             <thead>
               <tr>
-                <th>Tipo</th>
-                <th>Concepto</th>
-                <th>Fecha y hora</th>
-                <th className={styles.derecha}>Monto</th>
-                <th className={styles.derecha}>Saldo resultante</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Concepto</th>
+                <th scope="col">Fecha y hora</th>
+                <th scope="col" className={styles.derecha}>Monto</th>
+                <th scope="col" className={styles.derecha}>Saldo resultante</th>
               </tr>
             </thead>
             <tbody>

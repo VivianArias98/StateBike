@@ -74,6 +74,15 @@
   color: var(--color-texto-inverso);
 }
 
+.iconoActivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-inverso);
+}
+
 .puntoEstado {
   display: inline-block;
   width: 0.5rem;

@@ -40,7 +40,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
     <header className={`contexto-oscuro ${styles.raiz}`}>
       <div className={styles.barra}>
         <div className={styles.marca}>
-          <NavLink to="/inicio" aria-label="Ir al inicio de StateBike">
+          <NavLink to="/inicio" aria-label="Ir al inicio de StationBike">
             <Logo altura="3.5rem" variante="oscuro" />
           </NavLink>
         </div>

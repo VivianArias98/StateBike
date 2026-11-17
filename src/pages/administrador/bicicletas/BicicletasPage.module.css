@@ -22,7 +22,7 @@
   grid-area: formulario;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1536px) {
   .contenido {
     grid-template-columns: minmax(0, 1fr) var(--ancho-panel-lateral);
     grid-template-areas:

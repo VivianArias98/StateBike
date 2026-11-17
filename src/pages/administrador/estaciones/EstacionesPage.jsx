@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoUbicacion, IconoPlus } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
+import EstadoCarga from '../../usuario/components/EstadoCarga.jsx';
 import EstacionesTable from './components/EstacionesTable.jsx';
 import RegistrarEstacionPage from './RegistrarEstacionPage.jsx';
 import EditarEstacionPage from './EditarEstacionPage.jsx';
@@ -28,6 +30,21 @@ function EstacionesPage() {
   const [reubicando, setReubicando] = useState(false);
   // Modal de confirmación para activar
   const [estacionAActivar, setEstacionAActivar] = useState(null);
+
+  const modalInactivarRef = useRef(null);
+  const modalActivarRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(estacionAInactivar),
+    onCerrar: () => setEstacionAInactivar(null),
+    contenedorRef: modalInactivarRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(estacionAActivar),
+    onCerrar: () => setEstacionAActivar(null),
+    contenedorRef: modalActivarRef,
+  });
 
   const cargarEstaciones = async () => {
     try {
@@ -292,7 +309,7 @@ function EstacionesPage() {
       </div>
 
       {cargando ? (
-        <p style={{ color: 'var(--color-texto-suave)', padding: '1rem 0' }}>Cargando estaciones...</p>
+        <EstadoCarga cargando />
       ) : estaciones.length === 0 ? (
         <p style={{ color: 'var(--color-texto-suave)', padding: '1rem 0' }}>No hay estaciones registradas</p>
       ) : estacionesFiltradas.length === 0 ? (
@@ -318,8 +335,18 @@ function EstacionesPage() {
         );
 
         return (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-inactivar-titulo">
-            <div className={styles.modalCaja}>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-inactivar-titulo"
+            onClick={() => setEstacionAInactivar(null)}
+          >
+            <div
+              ref={modalInactivarRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
               <h2 id="modal-inactivar-titulo" className={styles.modalTitulo}>
                 Inactivar estación
               </h2>
@@ -448,8 +475,18 @@ function EstacionesPage() {
 
       {/* Modal de confirmación para activar estación */}
       {estacionAActivar && (
-        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-activar-titulo">
-          <div className={styles.modalCaja}>
+        <div
+          className={styles.modalFondo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-activar-titulo"
+          onClick={() => setEstacionAActivar(null)}
+        >
+          <div
+            ref={modalActivarRef}
+            className={styles.modalCaja}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 id="modal-activar-titulo" className={styles.modalTitulo}>
               Activar estación
             </h2>
@@ -484,4 +521,4 @@ function EstacionesPage() {
   );
 }
 
-export default EstacionesPage;
+export default EstacionesPage;

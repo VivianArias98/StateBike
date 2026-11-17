@@ -107,5 +107,6 @@
 
 .enlace:hover {
   background: var(--color-input-fondo);
-  color: var(--color-primario);
+  color: var(--color-secundario);
+  text-decoration: underline;
 }

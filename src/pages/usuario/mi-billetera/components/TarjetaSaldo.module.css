@@ -23,6 +23,12 @@
   gap: var(--espacio-3);
 }
 
+.infoSaldoCabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
 .iconoBilletera {
   display: grid;
   place-items: center;

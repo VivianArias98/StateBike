@@ -6,10 +6,10 @@ import PasoActivacion from './components/PasoActivacion.jsx';
 import styles from './AdquirirPlanPaso4Page.module.css';
 
 const BARRAS = [
-  { etiqueta: 'Hito 01', titulo: 'Verificación NFC', estado: 'completado' },
-  { etiqueta: 'Hito 02', titulo: 'Selección de Plan', estado: 'completado' },
-  { etiqueta: 'Hito 03', titulo: 'Resumen y Pago', estado: 'completado' },
-  { etiqueta: 'Activo', titulo: 'Activación Exitosa', estado: 'activo' },
+  { etiqueta: 'Paso 1', titulo: 'Verificación NFC', estado: 'completado' },
+  { etiqueta: 'Paso 2', titulo: 'Selección de Plan', estado: 'completado' },
+  { etiqueta: 'Paso 3', titulo: 'Resumen y Pago', estado: 'completado' },
+  { etiqueta: 'Paso 4', titulo: 'Activación Exitosa', estado: 'activo' },
 ];
 
 // Adquirir plan, paso 4 de 4 (HU_2): confirmación con la respuesta del backend.
@@ -26,6 +26,7 @@ function AdquirirPlanPaso4Page() {
     <UsuarioLayout itemActivo="Mi plan">
       <div className={styles.raiz}>
         <CabeceraAdquirir
+          etiqueta="Paso 4 de 4"
           titulo="Adquirir Plan"
           insignia="Paso 4: Plan activado"
           subtitulo="Activación inmediata de tu suscripción"

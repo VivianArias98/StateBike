@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoBicicleta } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
 import BicicletasTable from './components/BicicletasTable.jsx';
 import BicicletaForm from './components/BicicletaForm.jsx';
 import styles from './BicicletasPage.module.css';
@@ -29,6 +30,28 @@ function BicicletasPage() {
   const [bicicletaAReubicar, setBicicletaAReubicar] = useState(null);
   const [estacionSeleccionada, setEstacionSeleccionada] = useState('');
   const [estacionDestinoReubicar, setEstacionDestinoReubicar] = useState('');
+
+  const modalInactivarRef = useRef(null);
+  const modalActivarRef = useRef(null);
+  const modalReubicarRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(bicicletaAInactivar),
+    onCerrar: () => setBicicletaAInactivar(null),
+    contenedorRef: modalInactivarRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(bicicletaAActivar),
+    onCerrar: () => setBicicletaAActivar(null),
+    contenedorRef: modalActivarRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(bicicletaAReubicar),
+    onCerrar: () => setBicicletaAReubicar(null),
+    contenedorRef: modalReubicarRef,
+  });
 
   const cargarBicicletas = async (termino = '') => {
     try {
@@ -321,7 +344,7 @@ function BicicletasPage() {
         <input
           type="search"
           className={`input ${styles.buscador}`}
-          placeholder="Buscar bicicleta por código (ej. BICI-001)..."
+          placeholder="Buscar bicicleta por código (ej. BIC-010)..."
           aria-label="Buscar bicicleta por código"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
@@ -348,8 +371,18 @@ function BicicletasPage() {
 
       {/* Modal de confirmación para inactivar bicicleta (HU_20) */}
       {bicicletaAInactivar && (
-        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-inactivar-bici-titulo">
-          <div className={styles.modalCaja}>
+        <div
+          className={styles.modalFondo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-inactivar-bici-titulo"
+          onClick={() => setBicicletaAInactivar(null)}
+        >
+          <div
+            ref={modalInactivarRef}
+            className={styles.modalCaja}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 id="modal-inactivar-bici-titulo" className={styles.modalTitulo}>
               Inactivar bicicleta
             </h2>
@@ -381,8 +414,18 @@ function BicicletasPage() {
 
       {/* Modal de confirmación para activar bicicleta */}
       {bicicletaAActivar && (
-        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-activar-bici-titulo">
-          <div className={styles.modalCaja}>
+        <div
+          className={styles.modalFondo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-activar-bici-titulo"
+          onClick={() => setBicicletaAActivar(null)}
+        >
+          <div
+            ref={modalActivarRef}
+            className={styles.modalCaja}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 id="modal-activar-bici-titulo" className={styles.modalTitulo}>
               Activar bicicleta
             </h2>
@@ -440,8 +483,18 @@ function BicicletasPage() {
 
       {/* Modal para reubicar bicicleta */}
       {bicicletaAReubicar && (
-        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-reubicar-bici-titulo">
-          <div className={styles.modalCaja}>
+        <div
+          className={styles.modalFondo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-reubicar-bici-titulo"
+          onClick={() => setBicicletaAReubicar(null)}
+        >
+          <div
+            ref={modalReubicarRef}
+            className={styles.modalCaja}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 id="modal-reubicar-bici-titulo" className={styles.modalTitulo}>
               Reubicar bicicleta
             </h2>

@@ -20,6 +20,14 @@
   text-align: center;
 }
 
+.cabeceraAlerta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-3);
+  text-align: center;
+}
+
 .iconoExito {
   display: grid;
   place-items: center;
@@ -30,6 +38,19 @@
   color: var(--color-exito);
   font-size: 2rem;
   border: 2px solid var(--color-exito);
+  box-shadow: 0 4px 12px var(--color-pista);
+}
+
+.iconoAlertaCabecera {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radio-circulo);
+  background: var(--color-error-fondo);
+  color: var(--color-error-texto);
+  font-size: 2rem;
+  border: 2px solid var(--color-error-borde);
   box-shadow: 0 4px 12px var(--color-pista);
 }
 
@@ -142,6 +163,12 @@
   font-size: var(--texto-lg, 1.125rem);
   font-weight: 800;
   color: var(--color-exito);
+}
+
+.metricaValorPendiente {
+  font-size: var(--texto-lg, 1.125rem);
+  font-weight: 800;
+  color: var(--color-error-texto);
 }
 
 .valorExceso {

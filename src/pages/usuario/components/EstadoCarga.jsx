@@ -5,7 +5,7 @@ import styles from './EstadoCarga.module.css';
 function EstadoCarga({ cargando, error, vacio, onReintentar }) {
   if (cargando) {
     return (
-      <p className={`tarjeta ${styles.raiz}`} role="status">
+      <p className={`tarjeta ${styles.raiz}`} role="status" aria-live="polite">
         Cargando...
       </p>
     );

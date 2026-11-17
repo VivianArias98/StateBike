@@ -1,0 +1,825 @@
+StationBike
+Equipo 3
+Integrantes
+Jenifer Pamela Nossa Gómez
+Joel Esteban Báez Torres
+Francy Daniela Olmos Vaca
+Paula Selene Becerra Morales
+Michael Steven Chavarro Nope
+Michael Steedwar Parra Daza
+Andres Felipe Plazas Mendivelso
+Informe BPU y BPA — StateBike
+Introducción y criterios
+Este informe evalúa las 31 pantallas del frontend de StateBike (React, rama dev, commit 3b510ca) frente a Buenas Prácticas de Usabilidad (BPU) y Buenas Prácticas de Accesibilidad (BPA). Para cada pantalla se revisó el código fuente y se tomó una captura con la aplicación en ejecución, recorriendo los flujos reales con una cuenta de prueba. No incluye pruebas con usuarios ni con lector de pantalla.
+Cada pantalla se marca con Cumple, Parcial o No cumple en cada criterio.
+BPU — basadas en las 10 heurísticas de Nielsen:
+Código
+Criterio
+U1
+Visibilidad del estado del sistema (carga, éxito, error)
+U2
+Lenguaje del usuario y coherencia con el mundo real
+U3
+Control y libertad (volver, cancelar, deshacer)
+U4
+Consistencia y estándares entre pantallas
+U5
+Prevención de errores (validación, confirmaciones)
+U6
+Reconocer antes que recordar (pasos, etiquetas visibles)
+U7
+Diseño minimalista y jerarquía visual
+U8
+Mensajes de error claros y con solución
+U9
+Diseño adaptable (móvil y escritorio)
+BPA — basadas en WCAG 2.1 nivel AA:
+Código
+Criterio WCAG
+A1
+1.1.1 Texto alternativo en imágenes e íconos
+A2
+1.3.1 Estructura semántica (encabezados, landmarks, tablas)
+A3
+1.4.3 Contraste mínimo 4.5:1 en texto
+A4
+2.1.1 Todo operable con teclado
+A5
+2.4.7 Foco visible
+A6
+3.3.1 / 3.3.2 Etiquetas e identificación de errores en formularios
+A7
+4.1.2 Nombre, rol y valor (ARIA en controles personalizados)
+A8
+4.1.3 Mensajes de estado anunciados (aria-live)
+A9
+3.1.1 Idioma de la página
+Leyes de UX citadas en cada pantalla:
+Ley
+Qué dice
+Ley de Jakob
+Las personas esperan que un sitio funcione como los que ya conocen
+Ley de Fitts
+Un objetivo es más fácil de alcanzar cuanto más grande y cercano está
+Ley de Hick
+Más opciones hacen más lenta la decisión
+Ley de Miller
+La memoria de trabajo retiene unos 7 (± 2) elementos; conviene agrupar
+Ley de Tesler
+La complejidad que no se puede eliminar debe asumirla el sistema, no el usuario
+Ley de Doherty
+La respuesta del sistema en menos de 400 ms mantiene la atención
+Efecto Von Restorff
+El elemento distinto a los demás es el que se recuerda
+Regla pico-final
+La experiencia se juzga por su momento más intenso y por el final
+Efecto gradiente de objetivo
+El esfuerzo aumenta cuando se ve cerca la meta (barras de pasos)
+Efecto de usabilidad estética
+Lo que se ve bien se percibe como más fácil de usar
+Ley de proximidad y Ley de similitud (Gestalt)
+Lo cercano o parecido se percibe como un grupo
+Normas colombianas citadas (StationBike se presenta como "Sistema Oficial de Bicicletas Compartidas de Tunja", un servicio público):
+Norma
+Qué exige
+Ley 1618 de 2013
+Derechos de las personas con discapacidad; el artículo 14 exige acceso a la información y las comunicaciones
+Ley 1712 de 2014
+Transparencia: información pública accesible y comprensible
+Resolución 1519 de 2020 (MinTIC), anexo 1
+Directrices de accesibilidad web: WCAG 2.1 nivel AA para sitios de entidades públicas
+NTC 5854
+Norma técnica colombiana de accesibilidad para páginas web
+Ley 1480 de 2011 (Estatuto del Consumidor)
+Información clara, veraz y suficiente sobre precios, cobros y condiciones
+Ley 1581 de 2012 (Habeas Data)
+Tratamiento y protección de datos personales
+Resumen general
+En usabilidad, 5 de 31 pantallas cumplen, 17 cumplen parcialmente y 9 no cumplen. En accesibilidad, 5 cumplen, 21 cumplen parcialmente y 5 no cumplen. Las capturas sumaron problemas que el código no dejaba ver: tablas del administrador que esconden sus botones de acción, una pantalla de recarga sin acceso, un resumen de viaje que dice "con éxito" y "cobrado" cuando el cobro quedó pendiente, y plurales y nombres de marca inconsistentes.
+La nota de cada pantalla mide solo sus fallas propias. Los transversales RT-01 a RT-10 aplican aparte; RT-08 (título de página y foco al navegar) afecta a las 31.
+Pantalla
+Ruta
+BPU
+BPA
+Requerimientos
+V1 Estaciones
+/
+Parcial
+Parcial
+RQ-01, RQ-02, RT-09
+V2 Planes y tarifas
+/planes
+Parcial
+Parcial
+RQ-03, RQ-26
+V3 Acerca de nosotros
+/acerca
+Parcial
+Cumple
+RQ-04
+V4 Cómo usar el servicio
+/como-usar
+Cumple
+Cumple
+—
+V5 Inicio de sesión
+/login
+No cumple
+Parcial
+RQ-05, RQ-27
+V6 Registro
+/registro
+No cumple
+No cumple
+RQ-05 a RQ-09
+U1 Inicio
+/inicio
+Cumple
+Parcial
+RQ-10
+U2 Viajes
+/viajes
+No cumple
+Parcial
+RQ-11, RQ-28
+U3 Mi perfil
+/perfil
+Cumple
+Parcial
+RT-03
+U4 Mi billetera
+/billetera
+No cumple
+Parcial
+RQ-12, RQ-29, RQ-30
+U5 Recargar saldo, paso 1
+/billetera/recargar
+Parcial
+Parcial
+RQ-13, RQ-34
+U6 Recargar saldo, paso 2
+/billetera/recargar/comprobante
+Parcial
+Parcial
+RQ-34
+U7 Pagar cobro, paso 1
+/billetera/pagar
+Parcial
+Parcial
+RQ-29, RQ-32
+U8 Pagar cobro, paso 2
+/billetera/pagar/comprobante
+Cumple
+Parcial
+RT-08
+U9 Mi plan
+/plan
+Parcial
+Cumple
+RQ-31
+U10–U13 Adquirir plan, pasos 1 a 4
+/plan/adquirir/…
+Parcial
+Parcial
+RQ-14, RQ-32
+U14–U15 Cancelar plan, pasos 1 y 2
+/plan/cancelar/…
+Parcial
+Cumple
+RQ-33, RQ-34
+U16 Historial
+/historial
+Parcial
+Parcial
+RQ-26, RT-09
+U17 Reportar incidencia
+/incidencias
+Cumple
+Parcial
+RQ-15
+A1 Panel de control
+/admin
+No cumple
+No cumple
+RQ-16 a RQ-18, RQ-36
+A2 Estaciones
+/admin/estaciones
+Parcial
+Parcial
+RQ-36, RT-07
+A3 Bicicletas
+/admin/bicicletas
+No cumple
+No cumple
+RQ-19, RQ-35
+A4 Planes y tarifas
+/admin/planes
+No cumple
+Parcial
+RQ-20, RQ-21, RQ-35
+A5 Tarjetas NFC
+/admin/tarjetas
+Parcial
+Parcial
+RQ-22, RQ-37
+A6 Incidencias
+/admin/incidencias
+No cumple
+No cumple
+RQ-22, RQ-23, RQ-35
+A7 Cuentas
+/admin/cuentas
+No cumple
+Parcial
+RQ-22, RQ-35, RQ-36
+A8 Billetera / taquilla
+/admin/billetera
+Parcial
+No cumple
+RQ-24, RQ-25, RQ-36
+Todo el sitio sí cumple con el idioma declarado (<html lang="es">, A9), un indicador de foco global con :focus-visible, el respeto a prefers-reduced-motion y el tema claro/oscuro.
+Informe por pantalla
+Cada pantalla tiene su captura (tomada el 16 de noviembre de 2026 con la app en ejecución, 1366 × 860 px, tema claro), lo que cumple y la lista de cambios. Cada cambio indica el problema, qué hacer y su requerimiento (RQ/RT) de la tabla final. Las capturas de usuario se hicieron con una cuenta de prueba creada para este informe; en las de administrador se ocultaron nombres, correos y teléfonos de personas reales.
+Rol visitante
+V1. Estaciones (/)
+Figura 1. Pantalla Estaciones del visitante: buscador, aviso de GPS, resumen de la red, lista de estaciones y mapa de Tunja
+Lo que cumple: estados de carga y lista vacía, tarjetas de estación como botones con aria-pressed, buscador con nombre accesible, mapa con lista equivalente al lado.
+Qué se cambia:
+Plural incorrecto. Las tarjetas dicen "1 bicicletas disponibles". Cambio: usar singular cuando el valor es 1 ("1 bicicleta disponible"). RT-09.
+Marcadores del mapa sin nombre accesible (MapaTunja.jsx:28). Cambio: dar a cada marcador title/alt con nombre y bicicletas. RQ-01.
+"Cómo llegar" abre otra pestaña sin avisar. Cambio: añadir "(abre Google Maps)" al texto o aria-label. RQ-02.
+Etiquetas del resumen a 10–11 px ("ESTACIONES", "BICIS ACTIVAS"). Cambio: subir a 12 px mínimo. RT-05.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Jakob (lista + mapa, como en otras apps de movilidad); Ley de Fitts (tarjeta completa clicable y botón "Cómo llegar" grande); Ley de proximidad (bicicletas, anclajes y distancia juntos en cada tarjeta).
+Normas: Resolución 1519 de 2020 (WCAG 1.1.1 en los marcadores del mapa, 3.2.5 en la pestaña nueva); NTC 5854; Ley 1618 de 2013, art. 14.
+V2. Planes y tarifas (/planes)
+Figura 2. Pantalla Planes y tarifas: cuatro tarjetas de plan con precio, vigencia, viajes y botón Adquirir Plan
+Lo que cumple: precio, vigencia, viajes por día, minutos y valor de exceso visibles; plan recomendado destacado; acceso a registro e inicio de sesión.
+Qué se cambia:
+Nombre de marca distinto. El título dice "Catálogo de Planes Tunja Bici" y la etiqueta "TUNJA 2040", mientras el resto del sitio usa StationBike. Cambio: usar un solo nombre. RQ-26.
+Beneficios sin título de sección. Las tarjetas de beneficios usan h3 sin un h2 encima. Cambio: añadir un h2 "Beneficios". RQ-03.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Hick (solo 4 planes); Efecto Von Restorff (el plan recomendado se destaca); Ley de similitud (las 4 tarjetas tienen la misma estructura y se comparan fácil); Ley de Jakob (un solo nombre de marca en todo el sitio).
+Normas: Ley 1480 de 2011 (precios y condiciones claros); Ley 1712 de 2014 (tarifas públicas comprensibles); Resolución 1519 de 2020 (WCAG 1.3.1 en los encabezados).
+V3. Acerca de nosotros (/acerca)
+Figura 3. Pantalla Acerca de nosotros: foto de la plaza de Tunja y tarjetas Quiénes somos y Por qué existimos
+Lo que cumple: fotos con texto alternativo, portada decorativa con alt vacío, un solo h1, bloques cortos.
+Qué se cambia:
+Valor mal descrito. "Accesibilidad" se explica como "precios claros para el bolsillo" (AcercaNosotros.jsx:21). Cambio: renombrarlo "Precios accesibles" o hablar de acceso para todas las personas. RQ-04.
+Leyes y normas aplicadas:
+Leyes de UX: Efecto de usabilidad estética (fotografía y diseño cuidados); Ley de Miller (contenido en bloques cortos).
+Normas: Resolución 1519 de 2020 (WCAG 1.1.1, texto alternativo); NTC 5854; Ley 1618 de 2013 (el valor "Accesibilidad" debe referirse a las personas, no al precio).
+V4. Cómo usar el servicio (/como-usar)
+Figura 4. Pantalla Cómo usar el servicio: encabezado con datos clave y los primeros cuatro pasos numerados
+Lo que cumple: pasos numerados con fase, reglas y preguntas frecuentes separadas, encabezados ordenados, respeta la reducción de movimiento.
+Qué se cambia:
+Solo los cambios transversales (RT-08 título de página, RT-10 botón de tema).
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Miller (8 pasos agrupados en tarjetas numeradas); Ley de Jakob (preguntas frecuentes con formato conocido); Efecto gradiente de objetivo (etapas numeradas con su fase).
+Normas: Resolución 1519 de 2020 (WCAG 1.3.1, encabezados ordenados); Ley 1712 de 2014 (reglas del servicio públicas y comprensibles).
+V5. Inicio de sesión (/login)
+Figura 5. Pantalla Iniciar sesión: panel de bienvenida y formulario con correo, contraseña y botón Ingresar
+Lo que cumple: etiquetas visibles, autocomplete, botón "Ingresando…" durante el envío, enlace a crear cuenta, foco al primer campo vacío.
+Qué se cambia:
+El error desaparece solo a los 4 s y también al enfocar un campo (LoginForm.jsx:41-47). Cambio: mantenerlo hasta que el usuario corrija o lo cierre. RQ-05 (Alta).
+El ícono del ojo siempre aparece tachado, aunque la contraseña esté oculta. Cambio: mostrar ojo abierto para "Mostrar" y tachado para "Ocultar". RQ-27.
+El error no se asocia al campo. Cambio: aria-invalid y aria-describedby en el campo con error. RT-03.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Jakob (formulario de acceso estándar; el ícono del ojo debe comportarse como en otros sitios); Ley de Fitts (botón "Ingresar" a todo el ancho); Ley de Tesler (autocomplete le ahorra escritura al usuario).
+Normas: Resolución 1519 de 2020 (WCAG 2.2.1, el error no debe desaparecer por tiempo; 3.3.1; 1.3.5); NTC 5854; Ley 1618 de 2013.
+V6. Registro (/registro)
+Figura 6. Pantalla Registro: formulario oscuro con nombre, fecha, correo, teléfono, contraseña y requisitos
+Lo que cumple: requisitos de contraseña en vivo, aviso si la confirmación no coincide, bloqueo de menores, selector de fecha con teclado, modal de términos con Escape.
+Qué se cambia:
+Dos `h1` en la página ("Muévete por Tunja…" y "Crea tu cuenta"). Cambio: pasar "Crea tu cuenta" a h2, como en el login. RQ-06.
+Error temporal y único. El error se borra a los 4 s y hay un solo mensaje para todo el formulario. Cambio: error fijo y uno por campo, debajo de cada uno. RQ-05, RQ-07.
+Requisitos poco legibles. Se ven en la captura: texto de 11 px y viñetas en blanco al 40 % sobre fondo oscuro (aprox. 3:1). Cambio: 12 px mínimo y opacidad ≥ 0.7. RQ-08, RT-05.
+Los requisitos no se anuncian. Cambio: vincularlos al campo con aria-describedby y usar aria-live="polite". RQ-09.
+El modal de términos no retiene el foco. Cambio: foco inicial y trampa de foco. RT-01.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Miller (3 requisitos de contraseña); Ley de Tesler (validación en vivo); Ley de proximidad (los requisitos van junto al campo; el error también debería ir junto a su campo).
+Normas: Resolución 1519 de 2020 (WCAG 1.3.1, 1.4.3, 2.1.2, 2.2.1, 3.3.1 y 4.1.3); NTC 5854; Ley 1581 de 2012 (autorización de tratamiento de datos en el registro); Ley 1618 de 2013.
+Rol usuario
+U1. Inicio (/inicio)
+Figura 7. Pantalla Inicio del usuario con viaje en curso: banner del viaje, tarjetas de plan, viajes restantes y tarjeta NFC, mapa y lista de estaciones
+Lo que cumple: el banner de viaje en curso con acceso directo, el resumen de plan, viajes restantes y tarjeta NFC, y el buscador con botón para borrar. El foco del buscador se ve bien.
+Qué se cambia:
+Tarjetas de estación como `<article role="button">` con un h3 dentro (InicioPage.jsx:342-350). Cambio: usar <button type="button"> con aria-pressed. RQ-10.
+Texto de 11 px (InicioPage.module.css:472). Cambio: 12 px mínimo. RT-05.
+Leyes y normas aplicadas:
+Leyes de UX: Efecto Von Restorff (el banner del viaje en curso se destaca); Ley de Fitts (botón "Ver viaje en curso" grande); Ley de Miller (3 tarjetas de resumen).
+Normas: Resolución 1519 de 2020 (WCAG 4.1.2, rol de las tarjetas); NTC 5854.
+U2. Viajes (/viajes)
+La pantalla tiene cuatro estados; se muestran los cuatro.
+Figura 8. Viajes, estado 1: esperando tótem NFC, con aviso "No tiene un plan activo"
+Figura 9. Viajes, estado 2: viaje en curso con cronómetro, datos del viaje y mapa
+Figura 10. Viajes, estado 3: viaje con 42 minutos y aviso de exceso de 13 minutos por 1.300 pesos
+Figura 11. Viajes, estado 4: resumen del viaje finalizado con cobro pendiente
+Lo que cumple: el estado se ve claro en cada momento, el cronómetro tiene role="timer" y el exceso se marca en rojo con su valor. Al terminar se puede pagar el cobro o ir al historial.
+Qué se cambia:
+El resumen dice "VIAJE FINALIZADO CON ÉXITO" y "Valor cobrado $1.300", aunque el cobro quedó pendiente (estado 4). Cambio: título neutro ("Viaje finalizado") y "Valor pendiente de pago" cuando el cobro no se pudo hacer. RQ-28 (Alta).
+El inicio del exceso no se anuncia. La etiqueta "Exceso: +13 min" aparece sin aviso para lector de pantalla (ViajeEnCurso.jsx:91-95). Cambio: región role="status" que lo anuncie una vez. RQ-11 (Alta).
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Doherty (el cronómetro responde en tiempo real); Efecto Von Restorff (el exceso en rojo); Regla pico-final (el resumen es el final de la experiencia y debe ser veraz: no puede decir "con éxito" ni "cobrado" si quedó pendiente).
+Normas: Ley 1480 de 2011 (información veraz sobre cobros); Resolución 1519 de 2020 (WCAG 4.1.3, anuncio del exceso).
+U3. Mi perfil (/perfil)
+Figura 12. Pantalla Mi perfil: datos del usuario, campos de solo lectura, contraseña oculta y tarjeta NFC con botón Bloquear
+Lo que cumple: correo y fecha marcados "Solo lectura", bloqueo de tarjeta con confirmación y explicación de sus efectos, botón Cancelar al editar.
+Qué se cambia:
+Errores del formulario sin asociar al campo. Cambio: aria-invalid y aria-describedby. RT-03.
+Texto de unos 10 px (FormularioDatos.module.css:56). Cambio: 12 px mínimo. RT-05.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de proximidad (datos agrupados en tarjetas); Ley de Tesler (los campos que no se pueden cambiar se muestran como solo lectura).
+Normas: Ley 1581 de 2012 (el titular consulta y actualiza sus datos); Resolución 1519 de 2020 (WCAG 3.3.1).
+U4. Mi billetera (/billetera)
+Figura 13. Pantalla Mi billetera: saldo 0, alerta de cobro pendiente de 1.300 pesos con botón Pagar, e historial de movimientos
+Lo que cumple: saldo y cobro pendiente destacados con su acción, concepto del cobro, descarga de movimientos en PDF y CSV.
+Qué se cambia:
+La recarga no tiene acceso. Existe la pantalla /billetera/recargar (U5), pero ningún botón lleva a ella. Esta pantalla y la de elegir plan dicen que las recargas solo se hacen en taquilla, y el aviso "Recargue su saldo para continuar" no ofrece cómo. Cambio: decidir el flujo. Si el usuario puede recargar, añadir un botón "Recargar saldo" y corregir los textos; si no, quitar la pantalla. RQ-29 (Alta).
+Falta espacio entre "SALDO DISPONIBLE" y "Billetera activa". Cambio: separar los dos textos. RQ-30.
+"Actualizar saldo" simula 500 ms y no confirma el resultado. Cambio: mostrar "Saldo actualizado a las hh:mm". RQ-12.
+Tabla sin `caption` ni `scope`. RT-02.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Jakob (en una billetera se espera un botón "Recargar"); Efecto Von Restorff (alerta de cobro pendiente); Ley de Doherty ("Actualizar saldo" debe confirmar el resultado).
+Normas: Ley 1480 de 2011 (saldo, cobros y movimientos claros); Resolución 1519 de 2020 (WCAG 1.3.1 en la tabla).
+U5. Recargar saldo, paso 1 (/billetera/recargar)
+Figura 14. Pantalla Recargar saldo paso 1: saldo actual, campo de monto con 4000, ayuda de rangos y montos sugeridos
+Lo que cumple: rango y saldo máximo explicados, montos sugeridos, Cancelar y Volver, validación antes de enviar.
+Qué se cambia:
+Se recarga sin confirmar. "Recargar" ejecuta la operación de inmediato. Cambio: mostrar un resumen (monto y saldo resultante) con Confirmar y Volver. RQ-13.
+Título más pequeño que el de las demás pantallas. "Recargar Saldo" se ve a unos 20 px, frente a los 32 px de "Mi Billetera". Cambio: usar el encabezado común EncabezadoPagina. RQ-34.
+Ayuda y error sin vincular al campo; el asterisco no tiene texto accesible. RT-03.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Hick (4 montos sugeridos); Ley de Fitts (botones de monto grandes); Ley de Tesler (el sistema explica el rango y el cupo disponible).
+Normas: Resolución 1519 de 2020 (WCAG 3.3.4, una operación con dinero debe poder revisarse y confirmarse; 3.3.1); Ley 1480 de 2011.
+U6. Recargar saldo, paso 2 (/billetera/recargar/comprobante)
+Figura 15. Pantalla Recargar saldo paso 2: Recarga exitosa y detalle del movimiento con saldo anterior, monto y nuevo saldo
+Lo que cumple: confirmación clara, detalle con saldo anterior, monto y nuevo saldo.
+Qué se cambia:
+Título pequeño, igual que en el paso 1. RQ-34.
+Al llegar, el foco no va al mensaje de éxito. RT-08.
+Leyes y normas aplicadas:
+Leyes de UX: Regla pico-final (comprobante claro al cerrar la operación); Ley de Jakob (formato de comprobante conocido).
+Normas: Ley 1480 de 2011 (constancia de la transacción); Resolución 1519 de 2020 (WCAG 2.4.2 y 2.4.3).
+U7. Pagar cobro, paso 1 (/billetera/pagar)
+Figura 16. Pantalla Pagar cobro paso 1 sin saldo: saldo 0 y detalle del cobro pendiente de 1.300 pesos
+Lo que cumple: detalle del cobro (viaje, recorrido, minutos), aclaración de que no hay pagos parciales y botón de pago deshabilitado sin saldo, con aviso.
+Qué se cambia:
+Sin saldo, el usuario no tiene cómo seguir. Cambio: junto al aviso de saldo insuficiente, enlazar a la recarga o explicar dónde recargar. Depende de RQ-29.
+Indicador de paso con otro formato. Aquí dice "Paso 1 de 2" y en la recarga "PASO 1 / 2". Cambio: un solo formato. RQ-32.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Tesler (el sistema calcula el total y avisa si falta saldo); Efecto Von Restorff (total a pagar destacado); Ley de Jakob (mismo formato de paso que la recarga).
+Normas: Resolución 1519 de 2020 (WCAG 3.3.4, el pago se confirma antes de ejecutarse); Ley 1480 de 2011.
+U8. Pagar cobro, paso 2 (/billetera/pagar/comprobante)
+Figura 17. Pantalla Pagar cobro paso 2: cobro pagado correctamente, monto 1.300, saldo anterior 5.000 y nuevo saldo 3.700
+Lo que cumple: comprobante completo (concepto, método, fecha, saldos) y acciones siguientes.
+Qué se cambia:
+Al llegar, el foco no va al mensaje. RT-08.
+Leyes y normas aplicadas:
+Leyes de UX: Regla pico-final (cierre con comprobante y saldo nuevo).
+Normas: Ley 1480 de 2011 (constancia del pago); Resolución 1519 de 2020 (WCAG 2.4.3).
+U9. Mi plan (/plan)
+Figura 18. Mi plan sin suscripción: aviso No tienes un plan activo, flujo de activación y catálogo de planes
+Figura 19. Mi plan con plan activo: Plan Diario, pago debitado, vigencia y tarjeta asociada
+Lo que cumple: los dos estados (sin plan y con plan) son claros; el plan activo muestra vigencia, consumo, tarjeta y condiciones; "Cancelar plan" lleva a un flujo con confirmación.
+Qué se cambia:
+Palabra repetida. La etiqueta superior dice "PLAN PLAN DIARIO". Cambio: mostrar "PLAN DIARIO" o "Plan: Diario". RQ-31.
+Plural incorrecto: "1 días" en días restantes. RT-09.
+Leyes y normas aplicadas:
+Leyes de UX: Efecto Von Restorff (plan recomendado y estado activo destacados); Ley de Hick (catálogo corto); Ley de proximidad (vigencia, tarjeta y condiciones en paneles separados).
+Normas: Ley 1480 de 2011 (condiciones del plan contratado visibles); Resolución 1519 de 2020.
+U10–U13. Adquirir plan, pasos 1 a 4 (/plan/adquirir, /elegir, /resumen, /activado)
+Figura 20. Adquirir plan paso 1: barra de cuatro pasos y verificación de tarjeta NFC vinculada y activa
+Figura 21. Adquirir plan paso 2: selección de plan y método de pago; la página aparece desplazada y la barra de pasos cortada arriba
+Figura 22. Adquirir plan paso 3: resumen de compra y confirmación de pago con casilla de autorización
+Figura 23. Adquirir plan paso 4: plan adquirido con éxito y cómo retirar la bicicleta
+Lo que cumple: barra de pasos con aria-current="step", verificación de la tarjeta antes de elegir, saldo proyectado antes de pagar, casilla de autorización obligatoria, aviso de que no hay reembolso e instrucciones para el primer retiro.
+Qué se cambia:
+La barra de pasos cambia de nombres en cada paso. El paso 2 se llama "Elegir Plan", "Plan y pago" o "Selección de Plan" según la pantalla, y el 4 "Activación Exitosa" o "Confirmación". Cambio: usar los mismos cuatro nombres en todo el flujo. RQ-32.
+Al pasar de paso, la página conserva el desplazamiento anterior. En los pasos 2, 3 y 4 la barra aparece cortada arriba. Cambio: volver al inicio de la página y llevar el foco al título en cada cambio de ruta. RT-08 (Alta).
+"< Volver al paso 1" usa el carácter `<`, que el lector de pantalla lee como "menor que" (PasoElegirPlan.jsx:104). Cambio: un ícono con aria-hidden y el texto "Volver al paso 1". RQ-14.
+Plural incorrecto: "Vigencia 1 días" en el paso 4. RT-09.
+Leyes y normas aplicadas:
+Leyes de UX: Efecto gradiente de objetivo (la barra muestra cuánto falta); Ley de Miller (4 pasos); Ley de Jakob (un asistente por pasos debe mantener los mismos nombres); Ley de Tesler (el sistema calcula el saldo proyectado).
+Normas: Resolución 1519 de 2020 (WCAG 3.2.4 identificación consistente de los pasos, 2.4.3 orden del foco, 3.3.4 confirmación del pago); Ley 1480 de 2011 (aviso de que no hay reembolso).
+U14–U15. Cancelar plan, pasos 1 y 2 (/plan/cancelar, /plan/cancelar/listo)
+Figura 24. Cancelar plan paso 1: condiciones, efectos de la cancelación y botones No cancelar y Confirmar cancelación
+Figura 25. Cancelar plan paso 2: plan cancelado correctamente y resumen con reembolso 0
+Lo que cumple: advierte en rojo que se pierden los días y no hay reembolso, la acción destructiva va en rojo y separada, la opción segura va primero, y el paso 2 resume la cancelación.
+Qué se cambia:
+Flechas en sentido contrario. "No cancelar, mantener plan activo" e "Ir a Mi billetera" llevan una flecha › hacia la derecha, que sugiere "siguiente". Cambio: flecha hacia la izquierda para volver, o sin ícono. RQ-33.
+Título "Cancelar Plan" más pequeño que el de las demás pantallas. RQ-34.
+Plural incorrecto: "1 días restantes". RT-09.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Fitts (acción destructiva separada de la segura); Efecto Von Restorff (advertencia en rojo); Ley de Jakob (la flecha a la izquierda significa volver).
+Normas: Resolución 1519 de 2020 (WCAG 3.3.4, confirmación antes de cancelar); Ley 1480 de 2011 (informar la pérdida de días y la falta de reembolso).
+U16. Historial (/historial)
+Figura 26. Pantalla Historial de viajes: filtros Desde y Hasta, totales, tabla con un viaje y botones de descarga
+Lo que cumple: pestañas Viajes/Pagos, filtro de fechas con etiquetas, filtro activo visible, totales del período, cobro por exceso destacado y descargas en PDF y CSV.
+Qué se cambia:
+Plurales incorrectos: "1 viajes registrados" y "Mostrando 1 recorridos". RT-09.
+Otro nombre de marca: el subtítulo dice "Tunja Bici". RQ-26.
+Tablas sin `caption` ni `scope`. RT-02.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Miller (3 métricas de resumen); Ley de proximidad (filtros, totales y tabla en bloques); Ley de Jakob (un solo nombre de marca).
+Normas: Resolución 1519 de 2020 (WCAG 1.3.1 en las tablas); Ley 1480 de 2011 (historial de cobros y pagos consultable).
+U17. Reportar incidencia (/incidencias)
+Figura 27. Pantalla Reportar daño o incidencia: tipo de incidencia como opciones, selección de bicicleta, estación y componentes dañados
+Lo que cumple: es el mejor formulario del sistema. Tiene opciones de radio grandes, campos opcionales marcados, aria-invalid y un error por campo, ayuda bajo los campos y componentes de selección rápida.
+Qué se cambia:
+Los `select` tienen dos nombres distintos, el label visible y un aria-label diferente. Cambio: quitar el aria-label. RQ-15.
+Ícono informativo en verde sobre fondo claro, con bajo contraste (ReportarIncidenciaPage.module.css:177). RT-04.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Hick (4 tipos de incidencia); Ley de Fitts (opciones de radio grandes); Ley de Tesler (componentes de selección rápida en vez de escribir).
+Normas: Resolución 1519 de 2020 (WCAG 2.5.3 nombre en la etiqueta, 3.3.1, 3.3.2 y 1.4.11); NTC 5854.
+Rol administrador
+Las ocho pantallas comparten el menú lateral. Su botón de tema muestra "Modo Claro", pero el lector de pantalla anuncia "Cambiar a modo oscuro" (BotonTema.jsx:58-65): el texto visible no dice lo que hace el botón. Ver RT-10.
+A1. Panel de control (/admin)
+Figura 28. Panel de control: indicadores de estaciones, bicicletas, viajes e incidencias, ocupación de anclajes e incidencias recientes
+Lo que cumple: cuatro indicadores con enlace a su módulo, hora de última actualización, barras de ocupación con role="progressbar".
+Qué se cambia:
+Si la API falla, los indicadores quedan en 0 como si fueran datos reales (PanelControlPage.jsx:43-47). Cambio: aviso de error con "Reintentar". RQ-16 (Alta).
+Botón de pruebas visible: "Simular Rol No-Admin". Cambio: quitarlo de la interfaz. RQ-18.
+"Modo: En vivo" parece un selector, pero solo recarga. Cambio: llamarlo "Actualizar ahora". RQ-17.
+La columna "Detalle" de Incidencias recientes es muy estrecha y el texto queda partido palabra por palabra. Cambio: más ancho y fuente normal, o recortar con "…" y ver el detalle al abrir. RQ-36.
+Enlaces en verde sobre blanco al pasar el mouse (1.9:1). RT-04.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Miller (4 indicadores clave); Ley de Doherty (actualización periódica con hora visible); Efecto Von Restorff (incidencias pendientes en amarillo); Ley de Jakob (un botón de actualizar debe decir "Actualizar", no "Modo").
+Normas: Resolución 1519 de 2020 (WCAG 1.4.3 contraste del enlace, 4.1.3 mensajes de estado); NTC 5854.
+A2. Estaciones (/admin/estaciones)
+Figura 29. Gestión de estaciones: buscador y tabla con nombre, dirección, capacidad, estado y acciones Editar e Inactivar
+Lo que cumple: la tabla cabe completa, inactivar y activar piden confirmación, el formulario tiene etiquetas y el botón "Registrar Estación" está a la vista.
+Qué se cambia:
+Columna "Capacidad / Disponibilidad" difícil de leer. Mezcla íconos pequeños, números y texto en dos líneas ("0 bicis · 4 anclajes"). Cambio: dos columnas, "Bicicletas" y "Anclajes libres". RQ-36.
+El motivo de un botón deshabilitado solo está en `title`. RT-07.
+"Cargando estaciones..." no se anuncia. RT-06.
+Los modales no gestionan el foco. RT-01.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Jakob (tabla con acciones Editar/Inactivar al final de la fila); Ley de proximidad (bicicletas y anclajes deben separarse en columnas); Ley de Fitts (botón "Registrar Estación" grande y visible).
+Normas: Resolución 1519 de 2020 (WCAG 2.1.2 foco en los modales, 4.1.3 estado de carga, 1.3.1 tabla); NTC 5854.
+A3. Bicicletas (/admin/bicicletas)
+Figura 30. Gestión de bicicletas: tabla cortada a la derecha, con los botones de acción ocultos, y formulario Registrar bicicleta sin etiquetas
+Lo que cumple: inactivar pide confirmación, activar exige una estación con anclajes libres y no se puede inactivar una bicicleta en uso.
+Qué se cambia:
+La tabla se corta a 1366 px: la columna Acciones no se ve y "Mantenimiento" queda partido. Cambio: que la tabla use el ancho disponible, o poner el formulario debajo, y que las acciones siempre se vean. RQ-35 (Alta).
+Formulario sin etiquetas visibles: solo placeholder ("Código (ej. BIC-010)") y aria-label (BicicletaForm.jsx:50-62). Cambio: label visible para cada campo. RQ-19 (Alta).
+Ejemplos de código distintos: el buscador dice "BICI-001" y el formulario "BIC-010". Cambio: un mismo formato. RQ-37.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Fitts (un botón fuera de la pantalla no se puede alcanzar sin desplazar); Ley de Jakob (formato de código de ejemplo igual en todo el sistema).
+Normas: Resolución 1519 de 2020 (WCAG 3.3.2 etiquetas visibles, 1.3.1); NTC 5854.
+A4. Planes y tarifas (/admin/planes)
+Figura 31. Gestión de planes: tabla de planes cortada sin columnas de exceso, estado ni acciones, y formulario Registrar plan
+Lo que cumple: el formulario tiene etiquetas con su regla ("COP, mín. $100", "días enteros") y aclara que los cambios no afectan los planes ya adquiridos.
+Qué se cambia:
+La tabla se corta: no se ven las columnas de exceso, estado ni los botones Editar e Inactivar. RQ-35 (Alta).
+"Inactivar" un plan no pide confirmación (PlanesTable.jsx:67-73). Cambio: modal de confirmación como en estaciones. RQ-20 (Alta).
+Al pulsar "Editar", el foco se queda en la tabla. Cambio: llevar el foco al primer campo. RQ-21.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Fitts (acciones de la tabla ocultas); Ley de Tesler (cada campo explica su regla); Ley de Jakob (inactivar debe pedir confirmación, como en estaciones y bicicletas).
+Normas: Resolución 1519 de 2020 (WCAG 3.3.4 confirmación de cambios en los datos, 2.4.3 foco al editar); Ley 1480 de 2011 (las tarifas publicadas deben ser coherentes).
+A5. Tarjetas NFC (/admin/tarjetas)
+Figura 32. Gestión de tarjetas NFC: buscador y tabla con estado, últimos dígitos y acciones Vincular o Desvincular
+Lo que cumple: la tabla cabe completa, el estado se distingue por texto y no solo por color (ACTIVA / SIN VINCULAR), la acción cambia según el estado y desvincular pide confirmación.
+Qué se cambia:
+Los modales no enlazan su título con aria-labelledby (TarjetasPage.jsx:303, 362). RQ-22.
+El buscador tiene botón "Buscar", aunque ya busca mientras se escribe. Cambio: quitar el botón o quitar la búsqueda en vivo, para que el comportamiento sea uno solo. RQ-37.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de similitud (estados con forma y texto iguales); Ley de Jakob (una sola forma de buscar).
+Normas: Resolución 1519 de 2020 (WCAG 1.4.1, el estado no depende solo del color, que se cumple; 4.1.2 nombre de los modales); Ley 1581 de 2012 (solo se muestran los últimos dígitos de la tarjeta).
+A6. Incidencias (/admin/incidencias)
+Figura 33. Gestión de incidencias: filtro por estado con contadores y tabla cortada a la derecha en la columna Estado
+Lo que cumple: filtro por estado con contador de cada tipo y datos de quién reportó y cuándo.
+Qué se cambia:
+La tabla se corta: "Estado" queda a medias y las acciones (Atender, Cerrar) no se ven. RQ-35 (Alta).
+El filtro activo solo se distingue por color, sin aria-pressed (IncidenciasPage.jsx:179-184). RQ-23.
+Modales sin `aria-labelledby`. RQ-22.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Hick (4 filtros con contador); Efecto Von Restorff (estado abierta en amarillo); Ley de Fitts (acciones Atender y Cerrar ocultas).
+Normas: Resolución 1519 de 2020 (WCAG 1.4.1 filtro activo sin depender del color, 4.1.2); NTC 5854.
+A7. Cuentas (/admin/cuentas)
+Figura 34. Gestión de cuentas: tabla de usuarios cortada en la columna Último acceso, sin acciones visibles. Datos personales ocultos
+Lo que cumple: búsqueda por correo o nombre, rol visible, inactivar y reactivar con confirmación.
+Qué se cambia:
+La tabla se corta: "Último acceso" queda a medias y las acciones Inactivar/Reactivar no se ven. RQ-35 (Alta).
+Fechas en formato técnico ("2026-11-15 01:5…"), mientras el resto del sistema usa "16 de nov de 2026, 10:39 a. m.". Cambio: el mismo formato de fecha. RQ-36.
+Modales sin `aria-labelledby`. RQ-22.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Jakob (el mismo formato de fecha que en el resto del sistema); Ley de Fitts (acciones ocultas fuera de la tabla).
+Normas: Ley 1581 de 2012 (la tabla muestra correo y teléfono completos: aplicar el principio de mínima exposición y enmascararlos como los dígitos de la tarjeta); Resolución 1519 de 2020 (WCAG 4.1.2 nombre de los modales).
+A8. Billetera / taquilla (/admin/billetera)
+Figura 35. Billetera y recarga en taquilla: buscador y tabla de usuarios con botón Recargar saldo
+Lo que cumple: la tabla cabe completa y la acción "Recargar saldo" está a la vista en cada fila.
+Qué se cambia:
+El modal de recarga no es un diálogo accesible: es un div sin role="dialog" (AdminBilleteraPage.jsx:306). RQ-24 (Alta).
+El campo de monto no muestra el foco (outline: none, AdminBilleteraPage.module.css:306). RQ-25 (Alta).
+La tabla no muestra el saldo actual de cada usuario: hay que abrir el modal para verlo. Cambio: añadir la columna "Saldo". RQ-36.
+Textos de 10–11 px en el modal. RT-05.
+Leyes y normas aplicadas:
+Leyes de UX: Ley de Fitts (botón "Recargar saldo" en cada fila); Ley de Tesler (mostrar el saldo en la tabla evita abrir el modal para consultarlo).
+Normas: Resolución 1519 de 2020 (WCAG 2.4.7 foco visible, 4.1.2 diálogo accesible); Ley 1480 de 2011 (constancia de la recarga presencial).
+Requerimientos específicos
+Se proponen 47 requerimientos: 10 transversales (RT) y 37 de pantalla (RQ). Cada uno se puede verificar con su criterio de aceptación. Prioridad Alta = bloquea a usuarios de teclado o lector de pantalla, oculta una acción, o puede causar un error con dinero o datos.
+Transversales
+ID
+Alcance
+Requerimiento
+Criterio de aceptación
+Base
+Prioridad
+RT-01
+Todos los modales (registro, estaciones, bicicletas, tarjetas, incidencias, cuentas, billetera admin)
+Gestionar el foco en los modales
+Al abrir, el foco va al primer control; Tab no sale del modal; Escape lo cierra; al cerrar, el foco vuelve al botón que lo abrió
+WCAG 2.1.2, 2.4.3
+Alta
+RT-02
+11 tablas (historial, billetera, todas las del admin)
+Dar nombre y estructura a las tablas
+Cada <table> tiene <caption> (puede estar oculto visualmente) y cada <th> tiene scope="col"
+WCAG 1.3.1
+Media
+RT-03
+Todos los formularios menos Reportar incidencia
+Asociar errores y ayudas al campo
+El campo con error tiene aria-invalid="true" y aria-describedby apunta al mensaje y a la ayuda; los obligatorios tienen aria-required
+WCAG 3.3.1, 1.3.1
+Alta
+RT-04
+Hojas de estilo con color: var(--color-primario) o --color-acento
+No usar verde primario ni lima como texto o ícono sobre fondo claro
+Texto con contraste ≥ 4.5:1 e íconos ≥ 3:1; en tema claro se usa --color-secundario (#153019)
+WCAG 1.4.3, 1.4.11
+Alta
+RT-05
+18 reglas CSS con 10–11 px
+Fijar un tamaño mínimo de texto
+Ningún texto por debajo de var(--texto-xs) (12 px)
+BPU U7
+Media
+RT-06
+Estados "Cargando…" del administrador
+Anunciar los estados de carga
+Reutilizar EstadoCarga con role="status"; sin estilos en línea
+WCAG 4.1.3
+Baja
+RT-07
+Botones deshabilitados de las tablas del admin
+Explicar por qué una acción no está disponible
+El motivo se ve como texto o se enlaza con aria-describedby; no depende solo de title
+BPU U8
+Media
+RT-08
+Las 31 rutas
+Título, desplazamiento y foco al navegar
+Cada ruta cambia document.title (p. ej. "Mi billetera · StationBike"), vuelve al inicio de la página y lleva el foco al h1. Hoy todas usan el mismo título y los pasos de un flujo abren desplazados
+WCAG 2.4.2, 2.4.3
+Alta
+RT-09
+V1, U9, U13, U14, U15, U16
+Pluralizar según la cantidad
+Con valor 1 se usa singular ("1 bicicleta", "1 día", "1 viaje registrado") mediante una función común de formato
+BPU U2
+Baja
+RT-10
+Botón de tema (barra de usuario y menú del administrador)
+El texto visible del botón de tema dice su acción
+El botón muestra "Cambiar a modo oscuro", o su aria-label contiene el texto visible
+WCAG 2.5.3
+Media
+Por pantalla
+ID
+Pantalla
+Requerimiento
+Criterio de aceptación
+Base
+Prioridad
+RQ-01
+V1 Estaciones
+Nombre accesible en los marcadores del mapa
+Cada marcador tiene title/alt con nombre de estación y bicicletas disponibles
+WCAG 1.1.1
+Media
+RQ-02
+V1 Estaciones
+Avisar que "Cómo llegar" abre otra pestaña
+Texto o aria-label incluye "abre Google Maps en una pestaña nueva"
+WCAG 3.2.5
+Baja
+RQ-03
+V2 Planes y tarifas
+Título visible para la sección de beneficios
+Existe un h2 "Beneficios" antes de las tarjetas h3
+WCAG 1.3.1
+Baja
+RQ-04
+V3 Acerca de nosotros
+Corregir el texto del valor "Accesibilidad"
+El texto habla de acceso para todas las personas, o el valor se renombra a "Precios accesibles"
+BPU U2
+Baja
+RQ-05
+V5 Login, V6 Registro
+No ocultar los errores automáticamente
+El error permanece hasta que el usuario corrige o lo cierra; se elimina el temporizador de 4 s
+WCAG 2.2.1, U8
+Alta
+RQ-06
+V6 Registro
+Un solo h1 por página
+El título "Crea tu cuenta" pasa a h2, igual que en el login
+WCAG 1.3.1
+Media
+RQ-07
+V6 Registro
+Errores por campo
+Cada campo muestra su propio error debajo, además del resumen
+BPU U8
+Media
+RQ-08
+V6 Registro
+Contraste de las viñetas de requisitos
+La viñeta pendiente usa opacidad ≥ 0.7 (≥ 4.5:1 sobre el fondo oscuro)
+WCAG 1.4.3
+Media
+RQ-09
+V6 Registro
+Anunciar los requisitos de contraseña
+La caja de requisitos se enlaza con aria-describedby y sus cambios se anuncian con aria-live="polite"
+WCAG 4.1.3
+Media
+RQ-10
+U1 Inicio
+Usar <button> en las tarjetas de estación
+Las tarjetas son <button type="button"> con aria-pressed, sin role="button" sobre article
+WCAG 4.1.2
+Media
+RQ-11
+U2 Viajes
+Anunciar el inicio del exceso de tiempo
+Al empezar el exceso, una región role="status" anuncia "Tiempo excedido, se cobrarán X por minuto" una sola vez
+WCAG 4.1.3
+Alta
+RQ-12
+U4 Mi billetera
+Confirmar el resultado de "Actualizar saldo"
+Tras actualizar se muestra "Saldo actualizado a las hh:mm" o el error; sin espera simulada de 500 ms
+BPU U1
+Baja
+RQ-13
+U5 Recargar saldo
+Confirmar el monto antes de recargar
+Antes de ejecutar se muestra un resumen (monto, saldo resultante) con Confirmar y Volver
+BPU U5
+Media
+RQ-14
+U11 Adquirir plan, paso 2
+Quitar el símbolo "<" del botón Volver
+El botón dice "Volver al paso 1" y la flecha es un ícono con aria-hidden
+BPU U2
+Baja
+RQ-15
+U17 Reportar incidencia
+No duplicar el nombre de los select
+Se elimina el aria-label y queda solo el label visible
+WCAG 2.5.3
+Baja
+RQ-16
+A1 Panel de control
+Mostrar errores de carga
+Si la API falla, se muestra un aviso con "Reintentar" y los indicadores no aparecen en 0
+BPU U1, U8
+Alta
+RQ-17
+A1 Panel de control
+Renombrar el botón "Modo: En vivo"
+El botón se llama "Actualizar ahora"
+BPU U2
+Baja
+RQ-18
+A1 Panel de control
+Quitar el botón "Simular Rol No-Admin"
+El botón no aparece en producción
+BPU U7
+Media
+RQ-19
+A3 Bicicletas
+Etiquetas visibles en el formulario
+Código y estación tienen label visible asociado con htmlFor
+WCAG 3.3.2
+Alta
+RQ-20
+A4 Planes y tarifas
+Confirmar antes de inactivar un plan
+"Inactivar" abre un modal de confirmación como en estaciones y bicicletas
+BPU U5
+Alta
+RQ-21
+A4 Planes y tarifas
+Mover el foco al formulario al editar
+Al pulsar "Editar", el foco va al primer campo del formulario
+WCAG 2.4.3
+Media
+RQ-22
+A5 Tarjetas, A6 Incidencias, A7 Cuentas
+Enlazar el título de cada modal
+Cada role="dialog" tiene aria-labelledby con el id de su h2
+WCAG 4.1.2
+Media
+RQ-23
+A6 Incidencias
+Indicar el filtro activo sin depender del color
+Cada botón de filtro tiene aria-pressed y el activo se distingue también por forma o ícono
+WCAG 1.4.1, 4.1.2
+Media
+RQ-24
+A8 Billetera admin
+Convertir el modal de recarga en un diálogo accesible
+Tiene role="dialog", aria-modal="true", aria-labelledby y cierre con Escape
+WCAG 4.1.2
+Alta
+RQ-25
+A8 Billetera admin
+Foco visible en el campo de monto
+Se quita outline: none o el contenedor usa :focus-within con borde de 2 px
+WCAG 2.4.7
+Alta
+RQ-26
+V2, U16 y navegación del usuario
+Usar un solo nombre de marca
+Toda la interfaz dice "StationBike": se corrigen el aria-label "Ir al inicio de StateBike" (NavbarUsuario.jsx:43) y los textos "Tunja Bici" y "TUNJA 2040"
+BPU U4, WCAG 2.5.3
+Baja
+RQ-27
+V5 Inicio de sesión
+El ícono del ojo refleja el estado
+Ojo abierto = "Mostrar contraseña"; ojo tachado = "Ocultar contraseña"
+BPU U2
+Baja
+RQ-28
+U2 Viajes (resumen)
+No presentar como éxito un viaje con cobro pendiente
+Si el cobro queda pendiente, el título es "Viaje finalizado" y el valor se rotula "Pendiente de pago", no "Valor cobrado"
+BPU U1, U2
+Alta
+RQ-29
+U4 Mi billetera, U7 Pagar cobro
+Definir y enlazar la recarga del usuario
+O hay un botón "Recargar saldo" que lleva a /billetera/recargar y los textos dejan de decir "solo en taquilla", o se elimina esa ruta; el aviso de saldo insuficiente indica cómo recargar
+BPU U3, U4
+Alta
+RQ-30
+U4 Mi billetera
+Separar "SALDO DISPONIBLE" y "Billetera activa"
+Hay espacio o separador visible entre los dos textos
+BPU U7
+Baja
+RQ-31
+U9 Mi plan
+Quitar la palabra repetida en la etiqueta del plan
+La etiqueta dice "PLAN DIARIO", no "PLAN PLAN DIARIO"
+BPU U2
+Baja
+RQ-32
+U5, U7, U10–U13
+Indicador de pasos consistente
+Mismos nombres de paso en todo el flujo de adquirir plan y un único formato "Paso X de N" en recarga y pago
+BPU U4, U6
+Media
+RQ-33
+U14–U15 Cancelar plan
+Flechas en la dirección correcta
+Los botones que vuelven o mantienen el plan usan flecha a la izquierda o ninguna
+BPU U2
+Baja
+RQ-34
+U5–U8, U14–U15
+Mismo tamaño de título en todas las pantallas
+Las pantallas de flujo usan EncabezadoPagina; el h1 mide lo mismo que en Mi billetera (32 px)
+BPU U4
+Media
+RQ-35
+A3 Bicicletas, A4 Planes, A6 Incidencias, A7 Cuentas
+Las tablas no esconden columnas ni acciones
+A 1366 px de ancho se ven todas las columnas y botones sin desplazar; en pantallas menores las acciones quedan fijas a la derecha
+BPU U6, U9
+Alta
+RQ-36
+A1, A2, A7, A8
+Tablas del administrador legibles
+Detalle de incidencias sin cortes por palabra (A1); bicicletas y anclajes en columnas separadas (A2); fechas con el formato del sistema (A7); columna de saldo en taquilla (A8)
+BPU U7
+Media
+RQ-37
+A3 Bicicletas, A5 Tarjetas
+Buscadores consistentes
+El ejemplo de código es el mismo en buscador y formulario (BIC-010); la búsqueda funciona de una sola forma (en vivo o con botón)
+BPU U4
+Baja
+Conclusiones y próximos pasos
+StateBike tiene una base de usabilidad sólida, pero todavía no alcanza WCAG 2.1 AA. Para llegar, conviene resolver primero los 14 requerimientos de prioridad Alta: RT-01, RT-03, RT-04, RT-08, RQ-05, RQ-11, RQ-16, RQ-19, RQ-20, RQ-24, RQ-25, RQ-28, RQ-29 y RQ-35. Los más visibles son RQ-35 (tablas del administrador que esconden sus acciones), RQ-29 (recarga sin acceso) y RQ-28 (viaje con cobro pendiente presentado como éxito).
+Crear un componente Modal común con gestión de foco y Escape, y usarlo en las 8 pantallas con modales (RT-01, RQ-22, RQ-24).
+Añadir título de página y foco al h1 en EncabezadoPagina, AdminEncabezado y CabeceraAdquirir (RT-08).
+Unificar la validación de formularios con aria-invalid y aria-describedby, tomando como modelo Reportar incidencia (RT-03, RQ-05, RQ-07).
+Revisar los tokens de color de texto en tema claro (RT-04) y el tamaño mínimo de texto (RT-05).
+Validar los cambios con Lighthouse o axe DevTools y una prueba de navegación solo con teclado y NVDA.
+Este informe se basa en una revisión del código. Los contrastes se calcularon a partir de los colores de src/index.css; no se hicieron pruebas con usuarios ni con lector de pantalla.

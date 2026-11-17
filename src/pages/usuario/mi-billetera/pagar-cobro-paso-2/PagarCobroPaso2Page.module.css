@@ -26,8 +26,9 @@
 
 .titulo {
   margin: 0;
-  font-size: var(--texto-2xl);
-  font-weight: 800;
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+  line-height: 1.15;
 }
 
 .pasoBadge {
@@ -118,7 +119,7 @@
 
 @media (min-width: 768px) {
   .titulo {
-    font-size: var(--texto-3xl);
+    font-size: var(--texto-4xl);
   }
 
   .botonesFila {

@@ -30,6 +30,63 @@ export function validarLogin({ correo, contrasena }) {
   return null;
 }
 
+export function validarCamposRegistro(datos = {}) {
+  const errores = {};
+  const nombreCompleto = typeof datos.nombreCompleto === 'string' ? datos.nombreCompleto.trim().replace(/\s+/g, ' ') : '';
+  const fechaNacimiento = typeof datos.fechaNacimiento === 'string' ? datos.fechaNacimiento.trim() : '';
+  const correo = typeof datos.correo === 'string' ? datos.correo.trim().toLowerCase() : '';
+  const telefono = typeof datos.telefono === 'string' || typeof datos.telefono === 'number' ? String(datos.telefono).trim().replace(/\s+/g, '') : '';
+  const contrasena = typeof datos.contrasena === 'string' ? datos.contrasena.trim() : '';
+  const confirmacion = typeof datos.confirmacion === 'string' ? datos.confirmacion.trim() : '';
+  const aceptaTerminos = datos.aceptaTerminos;
+
+  if (!nombreCompleto) {
+    errores.nombreCompleto = 'El nombre completo es obligatorio';
+  }
+
+  if (!fechaNacimiento) {
+    errores.fechaNacimiento = 'La fecha de nacimiento es obligatoria';
+  } else if (!esFechaValida(fechaNacimiento)) {
+    errores.fechaNacimiento = 'La fecha de nacimiento no es válida';
+  } else if (!esMayorDeEdad(fechaNacimiento)) {
+    errores.fechaNacimiento = 'Debe ser mayor de edad para poder registrarse';
+  }
+
+  if (!correo) {
+    errores.correo = 'El correo electrónico es obligatorio';
+  } else if (correo.length > LARGO_MAX_CORREO || !FORMATO_CORREO.test(correo)) {
+    errores.correo = 'Correo electrónico inválido';
+  }
+
+  if (!telefono) {
+    errores.telefono = 'El teléfono celular es obligatorio';
+  } else if (!/^\+?\d{7,15}$/.test(telefono)) {
+    errores.telefono = 'El número de teléfono o celular no es válido';
+  }
+
+  if (!contrasena) {
+    errores.contrasena = 'La contraseña es obligatoria';
+  } else if (
+    contrasena.length < LARGO_MIN_CONTRASENA ||
+    !TIENE_LETRAS.test(contrasena) ||
+    !TIENE_NUMEROS.test(contrasena)
+  ) {
+    errores.contrasena = 'La contraseña debe tener mínimo 8 caracteres e incluir letras y números';
+  }
+
+  if (!confirmacion) {
+    errores.confirmacion = 'Debe confirmar su contraseña';
+  } else if (contrasena !== confirmacion) {
+    errores.confirmacion = 'Las contraseñas no coinciden';
+  }
+
+  if (aceptaTerminos !== true) {
+    errores.aceptaTerminos = 'Debe aceptar los términos y condiciones para registrarse';
+  }
+
+  return errores;
+}
+
 export function validarRegistro(datos = {}) {
   const nombreCompleto = typeof datos.nombreCompleto === 'string' ? datos.nombreCompleto.trim().replace(/\s+/g, ' ') : '';
   const fechaNacimiento = typeof datos.fechaNacimiento === 'string' ? datos.fechaNacimiento.trim() : '';

@@ -78,7 +78,7 @@ export const MENSAJES = {
     monto_fuera_rango: "El monto debe estar entre $100 y $500.000",
     recarga_supera_maximo: "La recarga supera el saldo máximo permitido de $2.000.000",
     sin_cobros_pendientes: "No tiene cobros pendientes",
-    saldo_insuficiente: "Saldo insuficiente. Le faltan $X. Recargue su saldo",
+    saldo_insuficiente: "Saldo insuficiente. Le faltan $X. Recargue su saldo en taquilla con el administrador",
     sin_movimientos: "No hay movimientos registrados",
       // Incidencias (HU_6, HU_19)
     reporte_enviado: "REPORTE ENVIADO CON ÉXITO",

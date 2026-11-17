@@ -5,12 +5,13 @@ function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar, 
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
+        <caption className="sr-only">Listado de bicicletas de la flota</caption>
         <thead>
           <tr>
-            <th>Código</th>
-            <th>Estación</th>
-            <th>Estado</th>
-            <th>Acciones</th>
+            <th scope="col">Código</th>
+            <th scope="col">Estación</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -44,9 +45,15 @@ function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar, 
                         disabled={deshabilitado}
                         onClick={() => onCambiarEstado(bicicleta.id, nuevoEstado)}
                         title={enUso ? 'La bicicleta está en uso' : inactiva ? 'No se puede alternar el estado de una bicicleta inactiva' : undefined}
+                        aria-describedby={deshabilitado ? `motivo-estado-${bicicleta.id}` : undefined}
                       >
                         {textoBotonEstado}
                       </button>
+                      {deshabilitado && (
+                        <span id={`motivo-estado-${bicicleta.id}`} className="sr-only">
+                          {enUso ? 'No disponible: La bicicleta está en uso' : 'No disponible: No se puede alternar el estado de una bicicleta inactiva'}
+                        </span>
+                      )}
                       {!inactiva && !enUso && (
                         <button
                           type="button"
@@ -67,15 +74,23 @@ function BicicletasTable({ bicicletas, onCambiarEstado, onInactivar, onActivar, 
                           Activar
                         </button>
                       ) : (
-                        <button
-                          type="button"
-                          className={`boton ${styles.botonAccion}`}
-                          disabled={enUso}
-                          onClick={() => onInactivar(bicicleta)}
-                          title={enUso ? 'La bicicleta está en uso' : 'Inactivar bicicleta y liberar su anclaje'}
-                        >
-                          Inactivar
-                        </button>
+                        <>
+                          <button
+                            type="button"
+                            className={`boton ${styles.botonAccion}`}
+                            disabled={enUso}
+                            onClick={() => onInactivar(bicicleta)}
+                            title={enUso ? 'La bicicleta está en uso' : 'Inactivar bicicleta y liberar su anclaje'}
+                            aria-describedby={enUso ? `motivo-inactivar-${bicicleta.id}` : undefined}
+                          >
+                            Inactivar
+                          </button>
+                          {enUso && (
+                            <span id={`motivo-inactivar-${bicicleta.id}`} className="sr-only">
+                              No disponible: La bicicleta está en uso y no se puede inactivar
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
                   </td>

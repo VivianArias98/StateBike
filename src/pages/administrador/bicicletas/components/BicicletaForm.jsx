@@ -11,13 +11,21 @@ function BicicletaForm({ estacionesDisponibles = [], onRegistrar, cargando = fal
     setErrorLocal('');
 
     const codigoLimpio = codigo.trim();
-    if (!codigoLimpio || !estacionId) {
-      setErrorLocal('Campos obligatorios vacíos');
+    if (!codigoLimpio) {
+      setErrorLocal('El código de la bicicleta es obligatorio');
+      document.getElementById('bicicleta-codigo')?.focus();
+      return;
+    }
+
+    if (!estacionId) {
+      setErrorLocal('Debe seleccionar una estación con anclajes libres');
+      document.getElementById('bicicleta-estacion')?.focus();
       return;
     }
 
     if (codigoLimpio.length > 20) {
       setErrorLocal('Código de bicicleta inválido (máximo 20 caracteres)');
+      document.getElementById('bicicleta-codigo')?.focus();
       return;
     }
 
@@ -33,6 +41,9 @@ function BicicletaForm({ estacionesDisponibles = [], onRegistrar, cargando = fal
     }
   };
 
+  const esErrorCodigo = Boolean(errorLocal && (!codigo.trim() || errorLocal.toLowerCase().includes('código')));
+  const esErrorEstacion = Boolean(errorLocal && (!estacionId || errorLocal.toLowerCase().includes('estación')));
+
   return (
     <section className="tarjeta" aria-labelledby="bicicleta-form-titulo">
       <h2 id="bicicleta-form-titulo" className={styles.titulo}>
@@ -40,39 +51,63 @@ function BicicletaForm({ estacionesDisponibles = [], onRegistrar, cargando = fal
       </h2>
 
       {errorLocal && (
-        <div className={styles.error} role="alert">
+        <div id="bicicleta-error" className={styles.error} role="alert">
           {errorLocal}
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className={styles.campos}>
-          <input
-            type="text"
-            className="input"
-            placeholder="Código (ej. BIC-010)"
-            aria-label="Código de la bicicleta"
-            maxLength={20}
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
-          />
+          <div className={styles.campoGrupo}>
+            <label htmlFor="bicicleta-codigo" className={styles.etiquetaCampo}>
+              Código de la bicicleta <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="bicicleta-codigo"
+              type="text"
+              className="input"
+              placeholder="Ej. BIC-010"
+              maxLength={20}
+              required
+              aria-required="true"
+              aria-invalid={esErrorCodigo}
+              aria-describedby={errorLocal ? 'bicicleta-error' : undefined}
+              value={codigo}
+              onChange={(e) => {
+                if (errorLocal) setErrorLocal('');
+                setCodigo(e.target.value);
+              }}
+            />
+          </div>
 
-          <select
-            className="input"
-            aria-label="Estación con anclajes libres"
-            value={estacionId}
-            onChange={(e) => setEstacionId(e.target.value)}
-          >
-            <option value="">Seleccione estación con anclajes libres...</option>
-            {estacionesDisponibles.map((est) => {
-              const libres = est.anclajesLibres ?? (est.anclajes - (est.anclajesOcupados || 0));
-              return (
-                <option key={est.id} value={est.id}>
-                  {est.nombre} ({libres} {libres === 1 ? 'anclaje libre' : 'anclajes libres'})
-                </option>
-              );
-            })}
-          </select>
+          <div className={styles.campoGrupo}>
+            <label htmlFor="bicicleta-estacion" className={styles.etiquetaCampo}>
+              Estación inicial <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="bicicleta-estacion"
+              className="input"
+              required
+              aria-required="true"
+              aria-invalid={esErrorEstacion}
+              aria-describedby={errorLocal ? 'bicicleta-error' : undefined}
+              value={estacionId}
+              onChange={(e) => {
+                if (errorLocal) setErrorLocal('');
+                setEstacionId(e.target.value);
+              }}
+            >
+              <option value="">Seleccione estación con anclajes libres...</option>
+              {estacionesDisponibles.map((est) => {
+                const libres = est.anclajesLibres ?? (est.anclajes - (est.anclajesOcupados || 0));
+                return (
+                  <option key={est.id} value={est.id}>
+                    {est.nombre} ({libres} {libres === 1 ? 'anclaje libre' : 'anclajes libres'})
+                  </option>
+                );
+              })}
+            </select>
+          </div>
         </div>
 
         <button

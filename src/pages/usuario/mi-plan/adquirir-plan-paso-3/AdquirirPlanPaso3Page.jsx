@@ -9,9 +9,9 @@ import styles from './AdquirirPlanPaso3Page.module.css';
 
 const BARRAS = [
   { etiqueta: 'Paso 1', titulo: 'Verificación NFC', estado: 'completado' },
-  { etiqueta: 'Paso 2', titulo: 'Elegir Plan', estado: 'completado' },
-  { etiqueta: 'Activo', titulo: 'Pagar / Resumen', estado: 'activo' },
-  { etiqueta: 'Paso 4', titulo: 'Confirmación', estado: 'pendiente' },
+  { etiqueta: 'Paso 2', titulo: 'Selección de Plan', estado: 'completado' },
+  { etiqueta: 'Paso 3', titulo: 'Resumen y Pago', estado: 'activo' },
+  { etiqueta: 'Paso 4', titulo: 'Activación Exitosa', estado: 'pendiente' },
 ];
 
 function AdquirirPlanPaso3Page() {
@@ -60,6 +60,7 @@ function AdquirirPlanPaso3Page() {
     <UsuarioLayout itemActivo="Mi plan">
       <div className={styles.raiz}>
         <CabeceraAdquirir
+          etiqueta="Paso 3 de 4"
           titulo="Adquirir Plan"
           subtitulo="Paso 3: Resumen y Pago"
           chip={`NFC: ${perfil?.tarjeta?.estado ?? 'ACTIVA'}`}
