@@ -17,6 +17,10 @@ export function crear(
   ).run(usuarioId, fechaNacimiento, correo, nombre, telefono);
 }
 
+export function asignarRol(usuarioId, rol) {
+  db.prepare("UPDATE perfiles SET rol = ? WHERE usuario_id = ?").run(rol, usuarioId);
+}
+
 //Usuarios creados desde otro proyecto no tienen perfil local todavía
 export function obtenerOCrear(usuarioId) {
   crear(usuarioId);

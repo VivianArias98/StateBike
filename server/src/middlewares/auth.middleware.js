@@ -22,7 +22,14 @@ export async function autenticar(req, res, next) {
   const usuarioTunja = await tunja("/auth/me", { token: acceso });
   if (!usuarioTunja.activo) throw new AppError(403, "usuario_inactivo");
 
-  req.usuario = armarUsuario(usuarioTunja, perfiles.obtenerOCrear(usuarioTunja.id));
+  const perfil = perfiles.obtenerOCrear(usuarioTunja.id);
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  if (adminEmail && usuarioTunja.email?.trim().toLowerCase() === adminEmail && perfil.rol !== "ADMINISTRADOR") {
+    perfiles.asignarRol(usuarioTunja.id, "ADMINISTRADOR");
+    perfil.rol = "ADMINISTRADOR";
+  }
+
+  req.usuario = armarUsuario(usuarioTunja, perfil);
 
   if (cache.size > 500) cache.clear();
   cache.set(acceso, { usuario: req.usuario, vence: Date.now() + VIGENCIA_MS });

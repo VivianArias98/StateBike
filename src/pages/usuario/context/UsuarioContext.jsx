@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { leerSesion, guardarSesion, borrarSesion } from '../../../utils/sesion.js';
+import { ESTACIONES_DEFECTO, PLANES_DEFECTO } from '../../../utils/catalogo.js';
 
 const UsuarioContext = createContext(null);
 const INTERVALO_VIAJE_MS = 5000; // cada cuánto se consulta si hay un viaje en curso
@@ -110,10 +111,17 @@ export function UsuarioProvider({ children }) {
         fetch('/api/planes').then((r) => r.json()).catch(() => ({ planes: [] })),
       ]);
 
-      const listaEstaciones = Array.isArray(estacionesRes)
+      let listaEstaciones = Array.isArray(estacionesRes)
         ? estacionesRes
         : estacionesRes?.estaciones || [];
-      const listaPlanes = Array.isArray(planesRes) ? planesRes : planesRes?.planes || [];
+      let listaPlanes = Array.isArray(planesRes) ? planesRes : planesRes?.planes || [];
+
+      if (!listaEstaciones.length) {
+        listaEstaciones = ESTACIONES_DEFECTO;
+      }
+      if (!listaPlanes.length) {
+        listaPlanes = PLANES_DEFECTO;
+      }
 
       setEstaciones(listaEstaciones);
       setPlanesCatalogo(listaPlanes);
