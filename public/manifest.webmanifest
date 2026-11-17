@@ -1,0 +1,54 @@
+{
+  "id": "/",
+  "name": "StationBike Tunja - Bicicletas Públicas",
+  "short_name": "StationBike",
+  "description": "Sistema de bicicletas públicas compartidas y movilidad sostenible en Tunja con tecnología NFC.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1b14",
+  "theme_color": "#1b4332",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver Estaciones",
+      "url": "/estaciones",
+      "description": "Mapa y disponibilidad de bicicletas en Tunja"
+    },
+    {
+      "name": "Mi Plan",
+      "url": "/usuario/mi-plan",
+      "description": "Estado y gestión de suscripción activa"
+    }
+  ],
+  "categories": [
+    "travel",
+    "navigation",
+    "transportation"
+  ],
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ]
+}

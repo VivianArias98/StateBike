@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="claro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sin Conexión - StationBike Tunja</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta name="theme-color" content="#1b4332" />
+  <style>
+    :root {
+      --color-fondo: #f4fbf7;
+      --color-superficie: #ffffff;
+      --color-primario: #1b4332;
+      --color-primario-hover: #143527;
+      --color-texto: #172a21;
+      --color-texto-secundario: #496356;
+      --color-borde: #c8e6d9;
+      --radio: 1rem;
+      --sombra: 0 10px 25px -5px rgba(27, 67, 50, 0.1), 0 8px 10px -6px rgba(27, 67, 50, 0.05);
+    }
+
+    [data-tema="oscuro"] {
+      --color-fondo: #0a1711;
+      --color-superficie: #11261d;
+      --color-primario: #40916c;
+      --color-primario-hover: #52b788;
+      --color-texto: #e8f5ee;
+      --color-texto-secundario: #a3c9b7;
+      --color-borde: #1e3d30;
+      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--color-fondo);
+      color: var(--color-texto);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .tarjeta {
+      background: var(--color-superficie);
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio);
+      padding: 2.5rem 2rem;
+      max-width: 28rem;
+      width: 100%;
+      box-shadow: var(--sombra);
+    }
+
+    .icono-contenedor {
+      width: 5rem;
+      height: 5rem;
+      background: rgba(27, 67, 50, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem auto;
+      color: var(--color-primario);
+    }
+
+    [data-tema="oscuro"] .icono-contenedor {
+      background: rgba(64, 145, 108, 0.2);
+    }
+
+    .marca {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-primario);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--color-texto-secundario);
+      line-height: 1.5;
+      margin-bottom: 1.75rem;
+    }
+
+    .boton {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--color-primario);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.85rem 1.75rem;
+      border-radius: 0.75rem;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      width: 100%;
+    }
+
+    .boton:hover {
+      background: var(--color-primario-hover);
+    }
+
+    .boton:active {
+      transform: scale(0.98);
+    }
+
+    .boton:focus-visible {
+      outline: 3px solid #74c69d;
+      outline-offset: 2px;
+    }
+
+    .pie {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--color-texto-secundario);
+    }
+  </style>
+</head>
+<body>
+  <main class="tarjeta" role="main">
+    <div class="icono-contenedor" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+    
+    <div class="marca">StationBike Tunja</div>
+    <h1>Sin conexión a internet</h1>
+    <p>
+      No es posible comunicarse con los servidores en este momento. Verifica tu conexión a datos móviles o Wi-Fi para actualizar el estado del servicio.
+    </p>
+
+    <button type="button" class="boton" onclick="location.reload()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+      </svg>
+      Reintentar conexión
+    </button>
+
+    <div class="pie">Sistema de Bicicletas Públicas de Tunja</div>
+  </main>
+
+  <script>
+    // Respetar tema guardado en localStorage si existe
+    try {
+      const temaGuardado = localStorage.getItem("tema") || localStorage.getItem("theme");
+      if (temaGuardado === "oscuro" || temaGuardado === "dark") {
+        document.documentElement.setAttribute("data-tema", "oscuro");
+      }
+    } catch (_) {}
+  </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 import Logo from '../../../components/Logo/Logo.jsx';
 import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
+import BotonInstalarPWA from '../../../components/BotonInstalarPWA/BotonInstalarPWA.jsx';
 import { Icono } from './IconosVisitante.jsx';
 import { leerSesion, rutaInicio } from '../../../utils/sesion.js';
 import styles from './NavbarVisitante.module.css';
@@ -26,6 +27,7 @@ function NavbarVisitante({ itemActivo, menuAbierto, onAlternarMenu }) {
         </a>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--espacio-2)' }}>
+          <BotonInstalarPWA compacto />
           <BotonTema compacto />
           <button
             type="button"

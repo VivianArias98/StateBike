@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../components/Logo/Logo.jsx';
 import BotonTema from '../../../components/BotonTema/BotonTema.jsx';
+import BotonInstalarPWA from '../../../components/BotonInstalarPWA/BotonInstalarPWA.jsx';
 import {
   IconoUsuario,
   IconoMapa,
@@ -57,6 +58,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
               <span>{viajeActivo.bicicleta || 'EN VIAJE'}</span>
             </NavLink>
           )}
+          <BotonInstalarPWA compacto />
           <BotonTema compacto />
           <button
             type="button"
@@ -96,6 +98,7 @@ function NavbarUsuario({ menuAbierto, onAlternarMenu }) {
 
           <div className={styles.derecha}>
             <div className={styles.ocultarEnMovil}>
+              <BotonInstalarPWA compacto />
               <BotonTema compacto />
             </div>
 

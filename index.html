@@ -2,12 +2,36 @@
 <html lang="es" data-tema="claro">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>StationBike - Sistema de Bicicletas NFC Tunja</title>
+    <meta name="description" content="Sistema de bicicletas públicas compartidas y movilidad sostenible en Tunja con tecnología NFC." />
+
+    <!-- PWA Web App Manifest & Metadatos Móviles -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1b4332" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="StationBike" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Registro del Service Worker para PWA y soporte offline
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then((reg) => {
+              console.log('StationBike PWA: Service Worker registrado con éxito en ámbito:', reg.scope);
+            })
+            .catch((err) => {
+              console.error('StationBike PWA: Error al registrar Service Worker:', err);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
