@@ -146,6 +146,13 @@ export async function iniciarSesion(datos = {}) {
   const perfil = perfiles.obtenerOCrear(sesion.usuario.id);
   perfiles.actualizarContacto(sesion.usuario.id, sesion.usuario.email, sesion.usuario.nombre);
   perfiles.registrarAcceso(sesion.usuario.id);
+
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  if (adminEmail && sesion.usuario.email?.trim().toLowerCase() === adminEmail) {
+    perfiles.asignarRol(sesion.usuario.id, "ADMINISTRADOR");
+    perfil.rol = "ADMINISTRADOR";
+  }
+
   return respuestaSesion(sesion, perfil);
 }
 
