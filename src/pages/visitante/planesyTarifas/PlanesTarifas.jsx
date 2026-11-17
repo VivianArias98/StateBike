@@ -112,10 +112,10 @@ function PlanesTarifas() {
           <div className={styles.encabezadoTexto}>
             <span className={styles.eyebrow}>
               <span className={styles.punto} aria-hidden="true" />
-              {planes ? `${planes.length} OPCIONES DISPONIBLES · TUNJA 2040` : 'TUNJA 2040'}
+              {planes ? `${planes.length} OPCIONES DISPONIBLES · STATIONBIKE TUNJA` : 'STATIONBIKE TUNJA'}
             </span>
 
-            <h1 className={`titulo-pagina ${styles.titulo}`}>Catálogo de Planes Tunja Bici</h1>
+            <h1 className={`titulo-pagina ${styles.titulo}`}>Catálogo de Planes StationBike</h1>
 
             <p className={styles.subtitulo}>
               Elige la modalidad que mejor responda a tu ritmo de movilidad por la ciudad.
@@ -130,10 +130,15 @@ function PlanesTarifas() {
 
         <BannerAcceso />
 
-        <section className={styles.beneficios} aria-label="Beneficios del servicio">
-          {BENEFICIOS.map((beneficio) => (
-            <TarjetaBeneficio key={beneficio.titulo} {...beneficio} />
-          ))}
+        <section className={styles.seccionBeneficios} aria-labelledby="titulo-beneficios">
+          <h2 id="titulo-beneficios" className={styles.tituloBeneficios}>
+            Beneficios del servicio
+          </h2>
+          <div className={styles.beneficios}>
+            {BENEFICIOS.map((beneficio) => (
+              <TarjetaBeneficio key={beneficio.titulo} {...beneficio} />
+            ))}
+          </div>
         </section>
 
         <footer className={styles.franja}>

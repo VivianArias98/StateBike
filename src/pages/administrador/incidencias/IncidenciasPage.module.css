@@ -74,6 +74,15 @@
   color: var(--color-texto-inverso);
 }
 
+.iconoActivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--texto-xs);
+  color: var(--color-texto-inverso);
+}
+
 .puntoEstado {
   display: inline-block;
   width: 0.5rem;
@@ -120,24 +129,54 @@
   -webkit-overflow-scrolling: touch;
   border-radius: var(--radio-l);
   border: 1px solid var(--color-borde);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-borde-suave) transparent;
+}
+
+.tablaContenedor::-webkit-scrollbar {
+  height: 8px;
+}
+
+.tablaContenedor::-webkit-scrollbar-track {
+  background: var(--color-fondo-pagina);
+  border-radius: var(--radio-pastilla);
+}
+
+.tablaContenedor::-webkit-scrollbar-thumb {
+  background: var(--color-borde);
+  border-radius: var(--radio-pastilla);
+}
+
+.tablaContenedor::-webkit-scrollbar-thumb:hover {
+  background: var(--color-texto-suave);
 }
 
 .tablaIncidencias table {
-  min-width: 88rem !important;
+  min-width: 114rem !important;
   width: 100% !important;
-  table-layout: auto !important;
+  table-layout: fixed !important;
   border-collapse: collapse !important;
 }
 
-.colId { min-width: 4rem; width: 4.5rem; white-space: nowrap; }
-.colTipo { min-width: 14rem; white-space: normal; word-break: break-word; }
-.colRecurso { min-width: 13rem; white-space: normal; word-break: break-word; }
-.colUsuario { min-width: 13rem; word-break: break-word; }
-.colFecha { min-width: 11.5rem; white-space: nowrap; }
-.colEstado { min-width: 8rem; text-align: center; white-space: nowrap; }
-.colDescripcion { min-width: 18rem; }
-.colObservacion { min-width: 16rem; }
-.colAcciones { min-width: 11rem; text-align: right; white-space: nowrap; }
+.colId { width: 4.5rem; min-width: 4.5rem; white-space: nowrap; }
+.colTipo { width: 13rem; min-width: 13rem; white-space: normal; word-break: break-word; }
+.colRecurso { width: 12.5rem; min-width: 12.5rem; white-space: normal; word-break: break-word; }
+.colUsuario { width: 13rem; min-width: 13rem; word-break: break-word; }
+.colFecha { width: 11rem; min-width: 11rem; white-space: nowrap; }
+.colEstado { width: 9.5rem; min-width: 9.5rem; text-align: center; white-space: nowrap; }
+.colEstado :global(.insignia) { white-space: nowrap; flex-shrink: 0; }
+.colDescripcion { width: 20rem; min-width: 18rem; }
+.colObservacion { width: 18rem; min-width: 16rem; }
+.colAcciones { width: 12.5rem; min-width: 12.5rem; text-align: right; white-space: nowrap; }
+
+.accionesGrupo {
+  display: flex;
+  gap: var(--espacio-2);
+  justify-content: flex-end;
+  align-items: center;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
 
 .descripcionTexto {
   font-size: var(--texto-s);
@@ -163,6 +202,7 @@
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  flex-shrink: 0 !important;
 }
 
 /* Modales */

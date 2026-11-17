@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoUbicacion, IconoPlus } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
+import EstadoCarga from '../../usuario/components/EstadoCarga.jsx';
 import EstacionesTable from './components/EstacionesTable.jsx';
 import RegistrarEstacionPage from './RegistrarEstacionPage.jsx';
 import EditarEstacionPage from './EditarEstacionPage.jsx';
@@ -23,8 +25,26 @@ function EstacionesPage() {
 
   // Modal de confirmación para inactivar (HU_13)
   const [estacionAInactivar, setEstacionAInactivar] = useState(null);
+  // Destino y estado para reubicación de bicicletas al inactivar
+  const [estacionDestinoReubicacion, setEstacionDestinoReubicacion] = useState('');
+  const [reubicando, setReubicando] = useState(false);
   // Modal de confirmación para activar
   const [estacionAActivar, setEstacionAActivar] = useState(null);
+
+  const modalInactivarRef = useRef(null);
+  const modalActivarRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(estacionAInactivar),
+    onCerrar: () => setEstacionAInactivar(null),
+    contenedorRef: modalInactivarRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(estacionAActivar),
+    onCerrar: () => setEstacionAActivar(null),
+    contenedorRef: modalActivarRef,
+  });
 
   const cargarEstaciones = async () => {
     try {
@@ -123,6 +143,19 @@ function EstacionesPage() {
     const estacion = estaciones.find((e) => e.id === id);
     if (!estacion || estacion.estado !== 'ACTIVE') return;
     setEstacionAInactivar(estacion);
+
+    const bicisOcupadas = Number(estacion.anclajesOcupados || 0);
+    const candidatas = estaciones.filter(
+      (e) =>
+        e.id !== estacion.id &&
+        e.estado === 'ACTIVE' &&
+        (e.anclajesLibres ?? (e.anclajes - (e.anclajesOcupados || 0))) >= bicisOcupadas
+    );
+    if (candidatas.length > 0) {
+      setEstacionDestinoReubicacion(String(candidatas[0].id));
+    } else {
+      setEstacionDestinoReubicacion('');
+    }
   };
 
   const handleConfirmarInactivar = async () => {
@@ -146,6 +179,45 @@ function EstacionesPage() {
       }
     } finally {
       setEstacionAInactivar(null);
+    }
+  };
+
+  const handleReubicarEInactivar = async (soloReubicar = false) => {
+    if (!estacionAInactivar || !estacionDestinoReubicacion) return;
+
+    setReubicando(true);
+    try {
+      // 1. Reubicar todas las bicicletas hacia la estación de destino
+      await pedirAutenticado(`/admin/bicicletas/estacion/${estacionAInactivar.id}/reubicar-todas`, {
+        metodo: 'PATCH',
+        cuerpo: {
+          estacionDestinoId: Number(estacionDestinoReubicacion),
+        },
+      });
+
+      if (soloReubicar) {
+        setAviso('Bicicletas reubicadas correctamente');
+        await cargarEstaciones();
+        setEstacionAInactivar(null);
+        return;
+      }
+
+      // 2. Inactivar la estación una vez reubicadas las bicicletas
+      await pedirAutenticado(`/admin/estaciones/${estacionAInactivar.id}/inactivar`, {
+        metodo: 'PATCH',
+      });
+
+      setAviso('Bicicletas reubicadas y estación inactivada de forma correcta');
+      await cargarEstaciones();
+      setEstacionAInactivar(null);
+    } catch (err) {
+      if (err.status === 401 || err.status === 403) {
+        navigate('/login');
+        return;
+      }
+      setAviso(err.mensaje || 'Error al procesar la reubicación');
+    } finally {
+      setReubicando(false);
     }
   };
 
@@ -237,7 +309,7 @@ function EstacionesPage() {
       </div>
 
       {cargando ? (
-        <p style={{ color: 'var(--color-texto-suave)', padding: '1rem 0' }}>Cargando estaciones...</p>
+        <EstadoCarga cargando />
       ) : estaciones.length === 0 ? (
         <p style={{ color: 'var(--color-texto-suave)', padding: '1rem 0' }}>No hay estaciones registradas</p>
       ) : estacionesFiltradas.length === 0 ? (
@@ -251,43 +323,170 @@ function EstacionesPage() {
         />
       )}
 
-      {/* Modal de confirmación para inactivar estación (HU_13) */}
-      {estacionAInactivar && (
-        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-inactivar-titulo">
-          <div className={styles.modalCaja}>
-            <h2 id="modal-inactivar-titulo" className={styles.modalTitulo}>
-              Inactivar estación
-            </h2>
-            <p className={styles.modalTexto}>
-              ¿Está seguro de que desea inactivar la estación <strong>{estacionAInactivar.nombre}</strong>?
-            </p>
-            <p className={styles.modalTexto}>
-              Esta acción deshabilitará la estación para nuevos retiros y devoluciones en el sistema.
-            </p>
-            <div className={styles.modalAcciones}>
-              <button
-                type="button"
-                className="boton boton--secundario"
-                onClick={() => setEstacionAInactivar(null)}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                className={`boton ${styles.botonPeligro}`}
-                onClick={handleConfirmarInactivar}
-              >
-                Confirmar inactivación
-              </button>
+      {/* Modal de confirmación para inactivar estación (HU_13) con soporte para reubicación */}
+      {estacionAInactivar && (() => {
+        const bicisEnEstacion = Number(estacionAInactivar.anclajesOcupados || 0);
+        const tieneBicis = bicisEnEstacion > 0;
+        const candidatas = estaciones.filter(
+          (e) =>
+            e.id !== estacionAInactivar.id &&
+            e.estado === 'ACTIVE' &&
+            (e.anclajesLibres ?? (e.anclajes - (e.anclajesOcupados || 0))) >= bicisEnEstacion
+        );
+
+        return (
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-inactivar-titulo"
+            onClick={() => setEstacionAInactivar(null)}
+          >
+            <div
+              ref={modalInactivarRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-inactivar-titulo" className={styles.modalTitulo}>
+                Inactivar estación
+              </h2>
+              <p className={styles.modalTexto}>
+                ¿Está seguro de que desea inactivar la estación <strong>{estacionAInactivar.nombre}</strong>?
+              </p>
+
+              {tieneBicis ? (
+                <>
+                  <div className={styles.alertaReubicacion}>
+                    <strong>Atención:</strong> Esta estación tiene{' '}
+                    <strong>
+                      {bicisEnEstacion} {bicisEnEstacion === 1 ? 'bicicleta asignada' : 'bicicletas asignadas'}
+                    </strong>
+                    . Para poder inactivarla, debe reubicarlas a otra estación activa con anclajes disponibles.
+                  </div>
+
+                  {candidatas.length > 0 ? (
+                    <div>
+                      <label
+                        htmlFor="estacion-destino-reubicar"
+                        style={{ display: 'block', fontWeight: 700, fontSize: 'var(--texto-s)', marginBottom: 'var(--espacio-2)' }}
+                      >
+                        Estación de destino para las bicicletas:
+                      </label>
+                      <select
+                        id="estacion-destino-reubicar"
+                        className="input"
+                        value={estacionDestinoReubicacion}
+                        onChange={(e) => setEstacionDestinoReubicacion(e.target.value)}
+                        disabled={reubicando}
+                      >
+                        {candidatas.map((est) => {
+                          const libres = est.anclajesLibres ?? (est.anclajes - (est.anclajesOcupados || 0));
+                          return (
+                            <option key={est.id} value={est.id}>
+                              {est.nombre} ({libres} anclajes libres)
+                            </option>
+                          );
+                        })}
+                      </select>
+
+                      <div className={styles.modalAcciones} style={{ flexWrap: 'wrap' }}>
+                        <button
+                          type="button"
+                          className="boton boton--secundario"
+                          onClick={() => setEstacionAInactivar(null)}
+                          disabled={reubicando}
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="button"
+                          className="boton boton--secundario"
+                          onClick={() => handleReubicarEInactivar(true)}
+                          disabled={reubicando || !estacionDestinoReubicacion}
+                          title="Mover las bicicletas sin inactivar la estación"
+                        >
+                          {reubicando ? 'Reubicando...' : 'Solo reubicar'}
+                        </button>
+                        <button
+                          type="button"
+                          className={`boton ${styles.botonPeligro}`}
+                          onClick={() => handleReubicarEInactivar(false)}
+                          disabled={reubicando || !estacionDestinoReubicacion}
+                          title="Reubicar bicicletas e inactivar la estación de inmediato"
+                        >
+                          {reubicando ? 'Procesando...' : 'Reubicar e inactivar'}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className={styles.modalTexto} style={{ color: 'var(--color-error-texto)', fontSize: 'var(--texto-s)' }}>
+                        Ninguna otra estación activa cuenta con suficientes anclajes libres simultáneos ({bicisEnEstacion}) para recibir toda la flota junta. Puede reubicarlas individualmente desde la gestión de bicicletas.
+                      </p>
+                      <div className={styles.modalAcciones}>
+                        <button
+                          type="button"
+                          className="boton boton--secundario"
+                          onClick={() => setEstacionAInactivar(null)}
+                        >
+                          Cerrar
+                        </button>
+                        <button
+                          type="button"
+                          className="boton boton--primario"
+                          onClick={() => {
+                            setEstacionAInactivar(null);
+                            navigate('/admin/bicicletas');
+                          }}
+                        >
+                          Ir a Bicicletas
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p className={styles.modalTexto}>
+                    Esta acción deshabilitará la estación para nuevos retiros y devoluciones en el sistema.
+                  </p>
+                  <div className={styles.modalAcciones}>
+                    <button
+                      type="button"
+                      className="boton boton--secundario"
+                      onClick={() => setEstacionAInactivar(null)}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      className={`boton ${styles.botonPeligro}`}
+                      onClick={handleConfirmarInactivar}
+                    >
+                      Confirmar inactivación
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Modal de confirmación para activar estación */}
       {estacionAActivar && (
-        <div className={styles.modalFondo} role="dialog" aria-modal="true" aria-labelledby="modal-activar-titulo">
-          <div className={styles.modalCaja}>
+        <div
+          className={styles.modalFondo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-activar-titulo"
+          onClick={() => setEstacionAActivar(null)}
+        >
+          <div
+            ref={modalActivarRef}
+            className={styles.modalCaja}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 id="modal-activar-titulo" className={styles.modalTitulo}>
               Activar estación
             </h2>

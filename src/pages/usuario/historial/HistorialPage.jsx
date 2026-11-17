@@ -152,9 +152,8 @@ function HistorialPage() {
       : 'Todos los registros históricos';
 
   const handleDescargarPagosCSV = () => {
-    const encabezados = ['ID', 'Fecha y hora', 'Concepto / Detalle', 'Tipo de pago', 'Monto (COP)', 'Estado'];
+    const encabezados = ['Fecha y hora', 'Concepto / Detalle', 'Tipo de pago', 'Monto (COP)', 'Estado'];
     const filas = pagosFiltrados.map((p) => [
-      `#${p.id}`,
       p.fechaHora,
       p.concepto,
       p.tipo,
@@ -177,9 +176,8 @@ function HistorialPage() {
         { etiqueta: 'Total debitado / pagado', valor: `${formatearPesos(totalPagado)} COP` },
         { etiqueta: 'Saldo actual billetera', valor: `${formatearPesos(billetera.saldo)} COP` },
       ],
-      columnas: ['ID Transacción', 'Fecha y hora', 'Concepto / Detalle', 'Tipo de movimiento', 'Monto (COP)', 'Estado'],
+      columnas: ['Fecha y hora', 'Concepto / Detalle', 'Tipo de movimiento', 'Monto (COP)', 'Estado'],
       filas: pagosFiltrados.map((p) => [
-        `#${p.id}`,
         p.fechaHora,
         p.concepto,
         p.tipo,
@@ -193,7 +191,6 @@ function HistorialPage() {
 
   const handleDescargarViajesCSV = () => {
     const encabezados = [
-      'ID Viaje',
       'Fecha y hora inicio',
       'Origen',
       'Fecha y hora fin',
@@ -203,7 +200,6 @@ function HistorialPage() {
       'Costo exceso (COP)',
     ];
     const filas = viajesFiltrados.map((v) => [
-      `#${v.id}`,
       v.fechaHoraInicio || v.fechaHora,
       v.origen,
       v.fechaHoraFin || '—',
@@ -233,7 +229,6 @@ function HistorialPage() {
         { etiqueta: 'Minutos de exceso', valor: `${totalMinutosExceso} min` },
       ],
       columnas: [
-        'ID Viaje',
         'Fecha y hora inicio',
         'Origen',
         'Fecha y hora fin',
@@ -243,7 +238,6 @@ function HistorialPage() {
         'Costo Exceso',
       ],
       filas: viajesFiltrados.map((v) => [
-        `#${v.id}`,
         v.fechaHoraInicio || v.fechaHora,
         v.origen,
         v.fechaHoraFin || '—',
@@ -265,7 +259,7 @@ function HistorialPage() {
           titulo={tabActivo === 'viajes' ? 'Historial de Viajes' : 'Historial de Pagos y Billetera'}
           subtitulo={
             tabActivo === 'viajes'
-              ? 'Consulta de recorridos realizados, tiempos acumulados y detalle de estaciones en Tunja Bici.'
+              ? 'Consulta de recorridos realizados, tiempos acumulados y detalle de estaciones en StationBike.'
               : 'Registro detallado de recargas de saldo, planes adquiridos y cobros por exceso.'
           }
           acciones={
@@ -315,7 +309,7 @@ function HistorialPage() {
 
               <div className={styles.pie}>
                 <p className={styles.resumen}>
-                  Mostrando <strong>{viajesFiltrados.length}</strong> recorridos en el rango seleccionado
+                  Mostrando <strong>{viajesFiltrados.length}</strong> {viajesFiltrados.length === 1 ? 'recorrido' : 'recorridos'} en el rango seleccionado
                 </p>
                 <div className={styles.descargas}>
                   <button type="button" className="boton" onClick={handleDescargarViajesPDF}>

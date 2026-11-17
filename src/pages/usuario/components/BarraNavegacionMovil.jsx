@@ -41,6 +41,7 @@ function BarraNavegacionMovil() {
     elemY: 0,
     haMovido: false,
   });
+  const bloquearClickRef = useRef(false);
 
   // Cerrar el menú si cambia de ruta
   useEffect(() => {
@@ -135,16 +136,35 @@ function BarraNavegacionMovil() {
     } catch (_) {}
 
     if (estadoArrastreRef.current.haMovido) {
-      setTimeout(() => setArrastrando(false), 50);
+      bloquearClickRef.current = true;
+      setTimeout(() => {
+        bloquearClickRef.current = false;
+        setArrastrando(false);
+      }, 80);
     } else {
       setArrastrando(false);
-      setAbierto((prev) => !prev);
     }
   };
 
   const handlePointerCancel = () => {
     estadoArrastreRef.current.activo = false;
     setArrastrando(false);
+  };
+
+  // Soporte de accesibilidad para teclado (WCAG 2.1.1): Enter, Espacio y clics estándar
+  const handleClick = (e) => {
+    if (bloquearClickRef.current) {
+      e.preventDefault();
+      return;
+    }
+    setAbierto((prev) => !prev);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setAbierto((prev) => !prev);
+    }
   };
 
   // Posición dinámica asignada a variables CSS locales conforme a Guía CSS
@@ -221,7 +241,7 @@ function BarraNavegacionMovil() {
         </div>
       )}
 
-      {/* Botón flotante disparador (FAB movible/arrastrable) */}
+      {/* Botón flotante disparador (FAB movible/arrastrable con soporte de teclado WCAG 2.1.1) */}
       <button
         ref={botonRef}
         type="button"
@@ -229,11 +249,14 @@ function BarraNavegacionMovil() {
         className={`${styles.botonFlotante} ${abierto ? styles.botonFlotanteActivo : ''} ${
           posicion ? styles.posicionManual : ''
         } ${arrastrando ? styles.arrastrando : ''}`}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
         aria-expanded={abierto}
+        aria-haspopup="dialog"
         aria-label={abierto ? 'Cerrar menú' : 'Abrir menú de navegación (arrastrable)'}
       >
         <span className={styles.iconoFab} aria-hidden="true">

@@ -53,15 +53,15 @@ function PlanActivo({ plan, onCancelar, onVerHistorial }) {
           <div className={styles.celdas}>
             <Celda etiqueta="Fecha de inicio" valor={formatearFechaBogota(plan.fechaInicio)} />
             <Celda etiqueta="Fecha de fin" valor={formatearFechaBogota(plan.fechaFin)} />
-            <Celda etiqueta="Días de uso" valor={`${plan.diasUsados} días`} />
-            <Celda etiqueta="Días restantes" valor={`${plan.diasRestantes} días`} destacada />
+            <Celda etiqueta="Días de uso" valor={`${plan.diasUsados} ${plan.diasUsados === 1 ? 'día' : 'días'}`} />
+            <Celda etiqueta="Días restantes" valor={`${plan.diasRestantes} ${plan.diasRestantes === 1 ? 'día' : 'días'}`} destacada />
           </div>
 
           <BarraProgreso valor={plan.diasUsados} maximo={plan.vigenciaDias} etiqueta="Consumo del plan" />
           <div className={styles.leyendaBarra}>
-            <span>{plan.diasUsados} días usados</span>
+            <span>{plan.diasUsados} {plan.diasUsados === 1 ? 'día usado' : 'días usados'}</span>
             <span className={styles.pastillaConsumo}>Consumo actual [{plan.porcentajeConsumo}%]</span>
-            <span>{plan.diasRestantes} días restantes</span>
+            <span>{plan.diasRestantes} {plan.diasRestantes === 1 ? 'día restante' : 'días restantes'}</span>
           </div>
         </section>
 

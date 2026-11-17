@@ -12,6 +12,19 @@
   margin-bottom: var(--espacio-5);
 }
 
+.campoGrupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.etiquetaCampo {
+  display: block;
+  font-size: var(--texto-s);
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
 .nota {
   margin-top: var(--espacio-5);
   font-size: var(--texto-s);

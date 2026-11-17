@@ -18,14 +18,15 @@ function TablaViajes({ viajes, hayFiltro = false }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
+        <caption className="sr-only">Historial de viajes realizados</caption>
         <thead>
           <tr>
-            <th className={styles.colInicio}>Fecha y hora inicio</th>
-            <th className={styles.colOrigen}>Origen</th>
-            <th className={styles.colFin}>Fecha y hora fin</th>
-            <th className={styles.colDestino}>Destino</th>
-            <th className={styles.colDuracion}>Duración</th>
-            <th className={styles.colExceso}>Cobro por exceso</th>
+            <th scope="col" className={styles.colInicio}>Fecha y hora inicio</th>
+            <th scope="col" className={styles.colOrigen}>Origen</th>
+            <th scope="col" className={styles.colFin}>Fecha y hora fin</th>
+            <th scope="col" className={styles.colDestino}>Destino</th>
+            <th scope="col" className={styles.colDuracion}>Duración</th>
+            <th scope="col" className={styles.colExceso}>Cobro por exceso</th>
           </tr>
         </thead>
         <tbody>

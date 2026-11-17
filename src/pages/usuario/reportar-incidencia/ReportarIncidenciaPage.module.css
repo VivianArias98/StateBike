@@ -174,7 +174,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--color-primario);
+  color: var(--color-secundario);
 }
 
 @media (min-width: 768px) {

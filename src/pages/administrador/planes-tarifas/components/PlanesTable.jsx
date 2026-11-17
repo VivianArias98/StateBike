@@ -2,20 +2,21 @@ import React from 'react';
 import { formatearCOP } from '../../../../utils/formatoMoneda.js';
 import styles from './PlanesTable.module.css';
 
-function PlanesTable({ planes = [], onEditar, onCambiarEstado }) {
+function PlanesTable({ planes = [], onEditar, onCambiarEstado, onSolicitarInactivar }) {
   return (
     <div className={`tabla ${styles.raiz}`}>
       <table>
+        <caption className="sr-only">Catálogo de planes y tarifas del servicio</caption>
         <thead>
           <tr>
-            <th className={styles.colPlan}>Plan</th>
-            <th className={styles.colCosto}>Costo base</th>
-            <th className={styles.colVigencia}>Vigencia</th>
-            <th className={styles.colViajes}>Viajes/día</th>
-            <th className={styles.colTiempo}>Tiempo máx</th>
-            <th className={styles.colExceso}>Min. exceso</th>
-            <th className={styles.colEstado}>Estado</th>
-            <th className={styles.colAcciones}>Acciones</th>
+            <th scope="col" className={styles.colPlan}>Plan</th>
+            <th scope="col" className={styles.colCosto}>Costo base</th>
+            <th scope="col" className={styles.colVigencia}>Vigencia</th>
+            <th scope="col" className={styles.colViajes}>Viajes/día</th>
+            <th scope="col" className={styles.colTiempo}>Tiempo máx</th>
+            <th scope="col" className={styles.colExceso}>Min. exceso</th>
+            <th scope="col" className={styles.colEstado}>Estado</th>
+            <th scope="col" className={styles.colAcciones}>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +68,17 @@ function PlanesTable({ planes = [], onEditar, onCambiarEstado }) {
                       <button
                         type="button"
                         className={`boton ${styles.botonAccion}`}
-                        onClick={() => onCambiarEstado(plan.id, activo ? 'INACTIVO' : 'ACTIVO')}
+                        onClick={() => {
+                          if (activo) {
+                            if (onSolicitarInactivar) {
+                              onSolicitarInactivar(plan);
+                            } else {
+                              onCambiarEstado(plan.id, 'INACTIVO');
+                            }
+                          } else {
+                            onCambiarEstado(plan.id, 'ACTIVO');
+                          }
+                        }}
                         title={activo ? 'Inactivar plan' : 'Activar plan'}
                       >
                         {activo ? 'Inactivar' : 'Activar'}

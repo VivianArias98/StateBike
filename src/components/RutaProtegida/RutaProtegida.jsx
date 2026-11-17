@@ -63,7 +63,7 @@ function RutaProtegida({ rol, children }) {
         }}
       >
         <span className="punto-vivo" style={{ width: '1.25rem', height: '1.25rem' }} aria-hidden="true" />
-        <p style={{ fontSize: 'var(--texto-s)', fontWeight: 600 }}>Cargando...</p>
+        <p role="status" aria-live="polite" style={{ fontSize: 'var(--texto-s)', fontWeight: 600 }}>Cargando...</p>
       </div>
     );
   }

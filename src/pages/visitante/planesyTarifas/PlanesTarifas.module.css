@@ -89,6 +89,19 @@
   color: var(--color-texto);
 }
 
+.seccionBeneficios {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.tituloBeneficios {
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  color: var(--color-texto);
+  margin: 0;
+}
+
 .beneficios {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -144,6 +157,10 @@
 
   .grilla {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tituloBeneficios {
+    font-size: var(--texto-2xl);
   }
 
   .beneficios {

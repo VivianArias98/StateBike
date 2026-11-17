@@ -31,6 +31,7 @@ function PanelControlPage() {
   const [estaciones, setEstaciones] = useState([]);
   const [incidencias, setIncidencias] = useState([]);
   const [actualizado, setActualizado] = useState('Actualizando...');
+  const [errorCarga, setErrorCarga] = useState('');
 
   const cargarDatos = async () => {
     try {
@@ -47,7 +48,7 @@ function PanelControlPage() {
           navigate('/login');
           return;
         }
-        return;
+        throw new Error('No se pudo cargar el resumen del sistema');
       }
 
       const datos = await res.json();
@@ -57,8 +58,10 @@ function PanelControlPage() {
 
       const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       setActualizado(`Actualizado a las ${hora}`);
+      setErrorCarga('');
     } catch {
       setActualizado('Sin conexión');
+      setErrorCarga('No se pudo conectar con el servidor para obtener los datos en tiempo real.');
     }
   };
 
@@ -79,24 +82,38 @@ function PanelControlPage() {
   const totalOcupados = estaciones.reduce((suma, e) => suma + (e.ocupados || 0), 0);
   const capacidadTotal = estaciones.reduce((suma, e) => suma + (e.capacidad || 0), 0);
 
-  const cambiarModo = () => {
-    cargarDatos();
-  };
-
-  const simularRolNoAdmin = () => {
-    navigate('/inicio');
-  };
-
   return (
     <AdminLayout itemActivo="Panel de control">
       <div className={styles.raiz}>
         <PanelEncabezado
           titulo="Panel de control"
           actualizado={actualizado}
-          modo="En vivo"
-          onCambiarModo={cambiarModo}
-          onSimularRol={simularRolNoAdmin}
+          onActualizar={cargarDatos}
         />
+
+        {errorCarga && (
+          <div
+            className="mensaje-error"
+            role="alert"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 'var(--espacio-4)',
+              padding: 'var(--espacio-3) var(--espacio-4)',
+              borderRadius: 'var(--radio-m)',
+            }}
+          >
+            <span>{errorCarga}</span>
+            <button
+              type="button"
+              className="boton boton--s"
+              onClick={cargarDatos}
+            >
+              Reintentar
+            </button>
+          </div>
+        )}
 
         <div className={styles.indicadores}>
           <TarjetaIndicador

@@ -235,7 +235,6 @@ function ReportarIncidenciaPage() {
                 </label>
                 <select
                   id="incidencia-bicicleta"
-                  aria-label="Bicicleta involucrada"
                   className={`input ${styles.select}`}
                   value={bicicleta}
                   onChange={(e) => {
@@ -316,7 +315,6 @@ function ReportarIncidenciaPage() {
                 </label>
                 <select
                   id="incidencia-estacion"
-                  aria-label="Estación afectada"
                   className={`input ${styles.select}`}
                   value={estacion}
                   onChange={(e) => {

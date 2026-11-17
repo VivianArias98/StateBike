@@ -20,14 +20,19 @@
   
   /* Se usa junto a la clase global "tabla": la tabla es más angosta que las demás */
   .tabla table {
-    min-width: 20rem;
+    min-width: 28rem;
   }
   
-  .tabla th:nth-child(1) { width: 45%; }
-  .tabla th:nth-child(2) { width: 25%; }
+  .tabla th:nth-child(1) { width: 22%; }
+  .tabla th:nth-child(2) { width: 58%; }
+  .tabla th:nth-child(3) { width: 20%; }
   
   .detalle {
-    font-family: var(--fuente-mono);
+    font-family: inherit;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-height: 1.4;
   }
   
   .pie {

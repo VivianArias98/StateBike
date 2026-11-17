@@ -7,10 +7,10 @@ import PasoNfc from './components/PasoNfc.jsx';
 import styles from './AdquirirPlanPaso1Page.module.css';
 
 const BARRAS = [
-  { etiqueta: 'Paso 01 (activo)', titulo: 'Verificación NFC', estado: 'activo' },
-  { etiqueta: 'Paso 02 (pendiente)', titulo: 'Elegir Plan', estado: 'pendiente' },
-  { etiqueta: 'Paso 03 (pendiente)', titulo: 'Resumen y Pago', estado: 'pendiente' },
-  { etiqueta: 'Paso 04 (pendiente)', titulo: 'Activación Exitosa', estado: 'pendiente' },
+  { etiqueta: 'Paso 1', titulo: 'Verificación NFC', estado: 'activo' },
+  { etiqueta: 'Paso 2', titulo: 'Selección de Plan', estado: 'pendiente' },
+  { etiqueta: 'Paso 3', titulo: 'Resumen y Pago', estado: 'pendiente' },
+  { etiqueta: 'Paso 4', titulo: 'Activación Exitosa', estado: 'pendiente' },
 ];
 
 const SIN_TARJETA_ACTIVA = 'Debe tener una tarjeta NFC activa para adquirir un plan';
@@ -30,6 +30,7 @@ function AdquirirPlanPaso1Page() {
     <UsuarioLayout itemActivo="Mi plan">
       <div className={styles.raiz}>
         <CabeceraAdquirir
+          etiqueta="Paso 1 de 4"
           titulo="Adquirir Plan"
           subtitulo="Paso 1: Verificación de Tarjeta NFC"
           chip={tarjeta ? `NFC: ${tarjeta.estado}` : 'NFC: SIN VINCULAR'}

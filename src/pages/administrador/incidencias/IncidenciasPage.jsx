@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoAlerta } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
 import { leerSesion } from '../../../utils/sesion.js';
 import { formatearFechaBogota } from '../../../utils/formatoMoneda.js';
 import styles from './IncidenciasPage.module.css';
@@ -30,6 +31,21 @@ function IncidenciasPage() {
   const [guardando, setGuardando] = useState(false);
 
   const [incidenciaACerrar, setIncidenciaACerrar] = useState(null);
+
+  const modalAtenderRef = useRef(null);
+  const modalCerrarRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(incidenciaAAtender),
+    onCerrar: () => setIncidenciaAAtender(null),
+    contenedorRef: modalAtenderRef,
+  });
+
+  useModalA11y({
+    abierto: Boolean(incidenciaACerrar),
+    onCerrar: () => setIncidenciaACerrar(null),
+    contenedorRef: modalCerrarRef,
+  });
 
   const cargarIncidencias = async (estado = filtroEstado) => {
     setCargando(true);
@@ -179,11 +195,16 @@ function IncidenciasPage() {
                 <button
                   key={opcion.id}
                   type="button"
+                  aria-pressed={filtroEstado === opcion.id}
                   className={`${styles.filtroBoton} ${filtroEstado === opcion.id ? styles.filtroActivo : ''}`}
                   onClick={() => setFiltroEstado(opcion.id)}
                   title={`Filtrar por ${opcion.label}`}
                 >
-                  {opcion.clasePunto && <span className={`${styles.puntoEstado} ${opcion.clasePunto}`} aria-hidden="true" />}
+                  {filtroEstado === opcion.id ? (
+                    <span className={styles.iconoActivo} aria-hidden="true">✓</span>
+                  ) : (
+                    opcion.clasePunto && <span className={`${styles.puntoEstado} ${opcion.clasePunto}`} aria-hidden="true" />
+                  )}
                   <span>{opcion.label}</span>
                   <span className={styles.conteoPill}>{conteos[opcion.id] ?? 0}</span>
                 </button>
@@ -201,17 +222,18 @@ function IncidenciasPage() {
         <section className="tarjeta" aria-label="Listado de incidencias registradas" style={{ padding: 0, overflow: 'hidden' }}>
           <div className={`tabla ${styles.tablaContenedor} ${styles.tablaIncidencias}`}>
             <table>
+              <caption className="sr-only">Listado de incidencias registradas</caption>
               <thead>
                 <tr>
-                  <th className={styles.colId}>#ID</th>
-                  <th className={styles.colTipo}>Tipo</th>
-                  <th className={styles.colRecurso}>Recurso Afectado</th>
-                  <th className={styles.colUsuario}>Reportado Por</th>
-                  <th className={styles.colFecha}>Fecha</th>
-                  <th className={styles.colEstado}>Estado</th>
-                  <th className={styles.colDescripcion}>Descripción del Usuario</th>
-                  <th className={styles.colObservacion}>Observación Admin</th>
-                  <th className={styles.colAcciones}>Acciones</th>
+                  <th scope="col" className={styles.colId}>#ID</th>
+                  <th scope="col" className={styles.colTipo}>Tipo</th>
+                  <th scope="col" className={styles.colRecurso}>Recurso Afectado</th>
+                  <th scope="col" className={styles.colUsuario}>Reportado Por</th>
+                  <th scope="col" className={styles.colFecha}>Fecha</th>
+                  <th scope="col" className={styles.colEstado}>Estado</th>
+                  <th scope="col" className={styles.colDescripcion}>Descripción del Usuario</th>
+                  <th scope="col" className={styles.colObservacion}>Observación Admin</th>
+                  <th scope="col" className={styles.colAcciones}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -280,7 +302,7 @@ function IncidenciasPage() {
                           )}
                         </td>
                         <td className={styles.colAcciones}>
-                          <div style={{ display: 'flex', gap: 'var(--espacio-2)', justifyContent: 'flex-end', whiteSpace: 'nowrap' }}>
+                          <div className={styles.accionesGrupo}>
                             {esAbierta && (
                               <button
                                 type="button"
@@ -328,9 +350,19 @@ function IncidenciasPage() {
 
         {/* Modal para Atender Incidencia */}
         {incidenciaAAtender && (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true">
-            <div className={styles.modalCaja}>
-              <h2 className={styles.modalTitulo}>Atender Incidencia #{incidenciaAAtender.id}</h2>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-atender-titulo"
+            onClick={() => setIncidenciaAAtender(null)}
+          >
+            <div
+              ref={modalAtenderRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-atender-titulo" className={styles.modalTitulo}>Atender Incidencia #{incidenciaAAtender.id}</h2>
               <p className={styles.modalTexto}>
                 <strong>Tipo:</strong> {MAPA_TIPOS[incidenciaAAtender.tipo] || incidenciaAAtender.tipo}
                 <br />
@@ -387,9 +419,19 @@ function IncidenciasPage() {
 
         {/* Modal de Confirmación para Cerrar Incidencia */}
         {incidenciaACerrar && (
-          <div className={styles.modalFondo} role="dialog" aria-modal="true">
-            <div className={styles.modalCaja}>
-              <h2 className={styles.modalTitulo}>Confirmar Cierre de Incidencia</h2>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-cerrar-titulo"
+            onClick={() => setIncidenciaACerrar(null)}
+          >
+            <div
+              ref={modalCerrarRef}
+              className={styles.modalCaja}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 id="modal-cerrar-titulo" className={styles.modalTitulo}>Confirmar Cierre de Incidencia</h2>
               <p className={styles.modalTexto}>
                 ¿Confirma que la incidencia <strong>#{incidenciaACerrar.id}</strong> ha sido resuelta en su totalidad?
               </p>

@@ -289,7 +289,6 @@ export function generarComprobantePDF({
     <div class="info-bloque">
       <p><span>Titular de la cuenta:</span> <strong>${usuario.nombreCompleto || 'Ciudadano Registrado'}</strong></p>
       <p><span>Correo electrónico:</span> ${usuario.correo || 'No especificado'}</p>
-      <p><span>Identificador único:</span> ID #${usuario.id || 'N/A'}</p>
     </div>
     <div class="info-bloque">
       <p><span>Periodo consultado:</span> <strong>${periodo || 'Histórico completo'}</strong></p>

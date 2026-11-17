@@ -154,7 +154,7 @@ export async function adquirirPlan(usuarioId, planId, token) {
           const faltante = plan.costoBase - billetera.saldo;
           throw new AppError(400, "saldo_insuficiente", {
             faltante,
-            mensaje: `Saldo insuficiente para adquirir el plan. Le faltan $${faltante.toLocaleString("es-CO")}. Recargue su saldo en MI BILLETERA`,
+            mensaje: `Saldo insuficiente para adquirir el plan. Le faltan $${faltante.toLocaleString("es-CO")}. Recargue su saldo en taquilla con el administrador`,
           });
         }
         await tunja("/wallet/charge", {

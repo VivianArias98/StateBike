@@ -10,7 +10,7 @@ function TarjetaSaldo({ saldo }) {
         <div className={styles.iconoBilletera} aria-hidden="true">
           <IconoBilletera />
         </div>
-        <div>
+        <div className={styles.infoSaldoCabecera}>
           <span className={styles.etiqueta}>SALDO DISPONIBLE</span>
           <div className={styles.badgeEnVivo}>
             <span className="punto-vivo" aria-hidden="true" />

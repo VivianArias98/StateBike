@@ -101,7 +101,7 @@ function PasoElegirPlan({ planes, planElegido, saldo, onElegir, onVolver, onCont
           </div>
 
           <button type="button" className={`boton ${styles.volver}`} onClick={onVolver}>
-            &lt; Volver al paso 1
+            <span aria-hidden="true">←</span> Volver al paso 1
           </button>
         </section>
 

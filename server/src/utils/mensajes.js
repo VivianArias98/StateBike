@@ -78,7 +78,7 @@ export const MENSAJES = {
     monto_fuera_rango: "El monto debe estar entre $100 y $500.000",
     recarga_supera_maximo: "La recarga supera el saldo máximo permitido de $2.000.000",
     sin_cobros_pendientes: "No tiene cobros pendientes",
-    saldo_insuficiente: "Saldo insuficiente. Le faltan $X. Recargue su saldo",
+    saldo_insuficiente: "Saldo insuficiente. Le faltan $X. Recargue su saldo en taquilla con el administrador",
     sin_movimientos: "No hay movimientos registrados",
       // Incidencias (HU_6, HU_19)
     reporte_enviado: "REPORTE ENVIADO CON ÉXITO",
@@ -102,12 +102,12 @@ export const MENSAJES = {
     tarjeta_no_vinculada_o_bloqueada: "Tarjeta no vinculada o bloqueada",
     no_se_pudo_leer_tarjeta: "No se pudo leer la tarjeta. Intente de nuevo",
     limite_viajes_alcanzado: "Alcanzó el límite de viajes de su plan por hoy",
-    cobro_pendiente_bloquea: "Tiene un pago pendiente por exceso de tiempo. Recargue su saldo para continuar",
+    cobro_pendiente_bloquea: "Tiene un pago pendiente por exceso de tiempo. Recargue su saldo en taquilla con el administrador para continuar",
     ya_tiene_viaje_en_curso: "Ya tiene un viaje en curso",
     bicicleta_no_disponible: "La bicicleta no está disponible",
     bloqueo_no_detectado: "No se detectó el bloqueo de la bicicleta. Verifique que esté bien encajada",
     tarjeta_no_corresponde: "La tarjeta no corresponde al viaje en curso",
-    cobro_exceso_pendiente: "El cobro por exceso quedó pendiente. Recargue su saldo para volver a usar el servicio",
+    cobro_exceso_pendiente: "El cobro por exceso quedó pendiente. Recargue su saldo en taquilla con el administrador para volver a usar el servicio",
     sin_viaje_en_curso: "No tiene un viaje en curso",
     devolucion_sin_anclajes: "La estación no tiene anclajes libres, busque otra estación",
     };

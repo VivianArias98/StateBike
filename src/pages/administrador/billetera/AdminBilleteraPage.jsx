@@ -4,6 +4,7 @@ import AdminLayout from '../../../layouts/AdminLayout/AdminLayout.jsx';
 import AdminEncabezado from '../components/AdminEncabezado.jsx';
 import { IconoBilletera } from '../../../components/Iconos/Iconos.jsx';
 import Aviso from '../../../components/Avisos/Aviso.jsx';
+import useModalA11y from '../../../hooks/useModalA11y.js';
 import { pedirAutenticado } from '../../../utils/auth.js';
 import { textoError } from '../../../utils/mensajesError.js';
 import { leerSesion } from '../../../utils/sesion.js';
@@ -39,6 +40,17 @@ function AdminBilleteraPage() {
 
   const peticionIdRef = useRef(0);
   const primeraCargaRef = useRef(true);
+  const modalRecargaRef = useRef(null);
+
+  useModalA11y({
+    abierto: Boolean(usuarioSeleccionado),
+    onCerrar: () => {
+      setUsuarioSeleccionado(null);
+      setMontoTexto('');
+      setErrorMonto('');
+    },
+    contenedorRef: modalRecargaRef,
+  });
 
   const cargarCuentas = async (termino = '') => {
     const miPeticionId = ++peticionIdRef.current;
@@ -237,20 +249,22 @@ function AdminBilleteraPage() {
 
         <div className={styles.contenedorTabla}>
           <table className={styles.tabla}>
+            <caption className="sr-only">Listado de usuarios para recarga de saldo en taquilla</caption>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Nombre completo</th>
-                <th>Correo electrónico</th>
-                <th>Rol</th>
-                <th>Tarjeta NFC</th>
-                <th style={{ textAlign: 'right' }}>Acción</th>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre completo</th>
+                <th scope="col">Correo electrónico</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Tarjeta NFC</th>
+                <th scope="col" style={{ textAlign: 'right' }}>Saldo</th>
+                <th scope="col" style={{ textAlign: 'right' }}>Acción</th>
               </tr>
             </thead>
             <tbody>
               {usuarios.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: 'var(--espacio-6)' }}>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: 'var(--espacio-6)' }}>
                     {cargando
                       ? 'Consultando cuentas de usuario...'
                       : busqueda.trim()
@@ -283,6 +297,9 @@ function AdminBilleteraPage() {
                           <span style={{ opacity: 0.5, fontSize: 'var(--texto-xs)' }}>Sin vincular</span>
                         )}
                       </td>
+                      <td style={{ textAlign: 'right', fontWeight: 700, fontFamily: 'var(--fuente-mono)' }}>
+                        {formatearPesos(u.saldo ?? 0)}
+                      </td>
                       <td style={{ textAlign: 'right' }}>
                         <button
                           type="button"
@@ -301,12 +318,24 @@ function AdminBilleteraPage() {
           </table>
         </div>
 
-        {/* Modal interactivo de Recarga en Taquilla */}
+        {/* Modal interactivo de Recarga en Taquilla (RQ-24, RQ-25, RT-01) */}
         {usuarioSeleccionado && (
-          <div className={styles.modalFondo} onClick={cerrarModal}>
-            <div className={styles.modalTarjeta} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.modalFondo}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-recarga-taquilla-titulo"
+            onClick={cerrarModal}
+          >
+            <div
+              ref={modalRecargaRef}
+              className={styles.modalTarjeta}
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className={styles.modalCabecera}>
-                <h2 className={styles.modalTitulo}>Recargar Saldo en Taquilla</h2>
+                <h2 id="modal-recarga-taquilla-titulo" className={styles.modalTitulo}>
+                  Recargar Saldo en Taquilla
+                </h2>
                 <button
                   type="button"
                   className={styles.modalCerrar}

@@ -13,6 +13,7 @@ function MiBilleteraPage() {
   const navegar = useNavigate();
   const { billetera, actualizarBilletera, perfil } = useUsuario();
   const [sincronizando, setSincronizando] = useState(false);
+  const [mensajeActualizacion, setMensajeActualizacion] = useState('');
 
   // 1. Sincronizar inmediatamente al entrar a la página
   useEffect(() => {
@@ -38,8 +39,18 @@ function MiBilleteraPage() {
 
   const handleRefrescarManual = async () => {
     setSincronizando(true);
-    await actualizarBilletera();
-    setTimeout(() => setSincronizando(false), 500);
+    setMensajeActualizacion('');
+    try {
+      await actualizarBilletera();
+      const ahora = new Date();
+      const horas = ahora.getHours().toString().padStart(2, '0');
+      const minutos = ahora.getMinutes().toString().padStart(2, '0');
+      setMensajeActualizacion(`Saldo actualizado a las ${horas}:${minutos}`);
+    } catch {
+      setMensajeActualizacion('Error al actualizar el saldo');
+    } finally {
+      setSincronizando(false);
+    }
   };
 
   return (
@@ -50,16 +61,23 @@ function MiBilleteraPage() {
           titulo="Mi Billetera"
           subtitulo="Consulta tu saldo disponible, cobros pendientes y registro de movimientos de tu cuenta."
           acciones={
-            <button
-              type="button"
-              className={styles.botonSincronizar}
-              onClick={handleRefrescarManual}
-              disabled={sincronizando}
-              title="Sincronizar saldo con TunjaAPI en vivo"
-            >
-              <span className={sincronizando ? styles.girando : ''} aria-hidden="true">↻</span>
-              <span>{sincronizando ? 'Sincronizando...' : 'Actualizar saldo'}</span>
-            </button>
+            <div className={styles.contenedorSincronizar}>
+              <button
+                type="button"
+                className={styles.botonSincronizar}
+                onClick={handleRefrescarManual}
+                disabled={sincronizando}
+                title="Actualizar saldo"
+              >
+                <span className={sincronizando ? styles.girando : ''} aria-hidden="true">↻</span>
+                <span>{sincronizando ? 'Actualizando...' : 'Actualizar saldo'}</span>
+              </button>
+              {mensajeActualizacion && (
+                <p className={styles.textoConfirmacion} role="status" aria-live="polite">
+                  {mensajeActualizacion}
+                </p>
+              )}
+            </div>
           }
         />
 

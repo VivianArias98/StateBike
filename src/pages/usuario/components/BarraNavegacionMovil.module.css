@@ -55,6 +55,11 @@
   border-color: var(--color-acento);
 }
 
+.botonFlotante:focus-visible {
+  outline: 3px solid var(--color-foco);
+  outline-offset: 3px;
+}
+
 .botonFlotante:active {
   transform: scale(0.95);
 }

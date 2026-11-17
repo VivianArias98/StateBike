@@ -1,22 +1,15 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
+import useModalA11y from '../../../../hooks/useModalA11y.js';
 import styles from './ModalTerminos.module.css';
 
 function ModalTerminos({ abierto, onCerrar, onAceptar }) {
- 
-  useEffect(() => {
-    function manejarTecla(e) {
-      if (e.key === 'Escape') onCerrar();
-    }
-    if (abierto) {
-      document.addEventListener('keydown', manejarTecla);
-     
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', manejarTecla);
-      document.body.style.overflow = '';
-    };
-  }, [abierto, onCerrar]);
+  const tarjetaRef = useRef(null);
+
+  useModalA11y({
+    abierto,
+    onCerrar,
+    contenedorRef: tarjetaRef,
+  });
 
   if (!abierto) return null;
 
@@ -30,7 +23,11 @@ function ModalTerminos({ abierto, onCerrar, onAceptar }) {
       aria-modal="true"
       aria-labelledby="titulo-terminos"
     >
-      <div className={styles.tarjeta}>
+      <div
+        ref={tarjetaRef}
+        className={styles.tarjeta}
+        onClick={(e) => e.stopPropagation()}
+      >
         <header className={styles.cabecera}>
           <div>
             <h2 id="titulo-terminos" className={styles.titulo}>

@@ -22,3 +22,11 @@ export function inactivar(req, res) {
 export function activar(req, res) {
   res.json(bicicletas.activar(idDe(req), req.body));
 }
+
+export function reubicar(req, res) {
+  res.json(bicicletas.reubicar(idDe(req), req.body));
+}
+
+export function reubicarTodas(req, res) {
+  res.json(bicicletas.reubicarTodas(Number(req.params.estacionId), req.body));
+}

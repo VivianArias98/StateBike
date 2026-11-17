@@ -8,10 +8,10 @@ import PasoElegirPlan from './components/PasoElegirPlan.jsx';
 import styles from './AdquirirPlanPaso2Page.module.css';
 
 const BARRAS = [
-  { etiqueta: '1. NFC', titulo: 'Verificada', estado: 'completado' },
-  { etiqueta: '2. Plan y pago', titulo: 'En curso', estado: 'activo' },
-  { etiqueta: '3. Resumen', titulo: 'Pendiente', estado: 'pendiente' },
-  { etiqueta: '4. Confirmación', titulo: 'Pendiente', estado: 'pendiente' },
+  { etiqueta: 'Paso 1', titulo: 'Verificación NFC', estado: 'completado' },
+  { etiqueta: 'Paso 2', titulo: 'Selección de Plan', estado: 'activo' },
+  { etiqueta: 'Paso 3', titulo: 'Resumen y Pago', estado: 'pendiente' },
+  { etiqueta: 'Paso 4', titulo: 'Activación Exitosa', estado: 'pendiente' },
 ];
 
 function AdquirirPlanPaso2Page() {

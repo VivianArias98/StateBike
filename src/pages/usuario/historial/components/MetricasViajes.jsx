@@ -7,7 +7,7 @@ function MetricasViajes({ total, minutos, horas, periodo }) {
       <div className={styles.celda}>
         <p className={styles.etiqueta}>Total recorridos</p>
         <p className={styles.valor}>
-          {total} <span className={styles.unidad}>viajes registrados</span>
+          {total} <span className={styles.unidad}>{total === 1 ? 'viaje registrado' : 'viajes registrados'}</span>
         </p>
       </div>
 

@@ -68,7 +68,7 @@ function PasoActivacion({ mensaje, suscripcion, plan, saldoRestante, onVerMapa }
             <div className={styles.fila}>
               <dt>Vigencia</dt>
               <dd className={styles.vigencia}>
-                <span>{suscripcion.vigenciaDias} días</span>
+                <span>{suscripcion.vigenciaDias} {suscripcion.vigenciaDias === 1 ? 'día' : 'días'}</span>
                 <span className={styles.fechas}>
                   {formatearFechaBogota(suscripcion.fechaInicio)} – {formatearFechaBogota(suscripcion.fechaFin)}
                 </span>

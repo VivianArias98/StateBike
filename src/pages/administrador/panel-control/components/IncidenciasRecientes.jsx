@@ -16,18 +16,19 @@ function IncidenciasRecientes({ incidencias, filtro }) {
 
       <div className={`tabla ${styles.tabla}`}>
         <table>
+          <caption className="sr-only">Incidencias recientes reportadas</caption>
           <thead>
             <tr>
-              <th>Tipo</th>
-              <th>Detalle</th>
-              <th>Estado</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Detalle</th>
+              <th scope="col">Estado</th>
             </tr>
           </thead>
           <tbody>
             {incidencias.map((incidencia) => (
               <tr key={incidencia.id}>
                 <td>{incidencia.tipo}</td>
-                <td className={styles.detalle}>{incidencia.detalle}</td>
+                <td className={styles.detalle} title={incidencia.detalle}>{incidencia.detalle}</td>
                 <td>
                   <span className="insignia insignia--activa">{incidencia.estado}</span>
                 </td>

@@ -9,14 +9,29 @@ import styles from './ResumenViaje.module.css';
 
 // Resumen de HU_4 al devolver la bicicleta en el tótem
 function ResumenViaje({ mensaje, aviso, viaje, onCerrar, onHistorial, onPagarCobro }) {
+  // RQ-28: No presentar como éxito un viaje con cobro pendiente
+  const esCobroPendiente = Boolean(
+    aviso ||
+    viaje?.estadoCobro === 'PENDIENTE' ||
+    (viaje?.valorCobrado > 0 && viaje?.estadoCobro !== 'PAGADO')
+  );
+
+  const titulo = esCobroPendiente
+    ? 'Viaje finalizado'
+    : (mensaje || 'Viaje finalizado con éxito');
+
+  const etiquetaValor = esCobroPendiente
+    ? 'Valor pendiente de pago'
+    : 'Valor cobrado';
+
   return (
     <section className={`tarjeta ${styles.raiz}`} aria-labelledby="resumen-viaje-titulo">
-      <div className={styles.cabeceraExito}>
-        <div className={styles.iconoExito} aria-hidden="true">
-          <IconoCheck />
+      <div className={esCobroPendiente ? styles.cabeceraAlerta : styles.cabeceraExito}>
+        <div className={esCobroPendiente ? styles.iconoAlertaCabecera : styles.iconoExito} aria-hidden="true">
+          {esCobroPendiente ? <IconoAlerta /> : <IconoCheck />}
         </div>
         <h2 id="resumen-viaje-titulo" className={styles.titulo}>
-          {mensaje || 'Viaje finalizado con éxito'}
+          {titulo}
         </h2>
       </div>
 
@@ -62,8 +77,8 @@ function ResumenViaje({ mensaje, aviso, viaje, onCerrar, onHistorial, onPagarCob
         </div>
 
         <div className={styles.metricaItem}>
-          <span className={styles.metricaEtiqueta}>Valor cobrado</span>
-          <span className={styles.metricaValorDestacado}>
+          <span className={styles.metricaEtiqueta}>{etiquetaValor}</span>
+          <span className={esCobroPendiente ? styles.metricaValorPendiente : styles.metricaValorDestacado}>
             {formatearPesos(viaje.valorCobrado)}
           </span>
         </div>

@@ -1,7 +1,7 @@
 import * as cuentas from "../services/cuentas.service.js";
 
-export function listar(req, res) {
-  res.json(cuentas.listarCuentas(req.query));
+export async function listar(req, res) {
+  res.json(await cuentas.listarCuentas(req.query));
 }
 
 export async function inactivar(req, res) {

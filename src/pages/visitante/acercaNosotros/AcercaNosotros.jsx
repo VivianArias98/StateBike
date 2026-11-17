@@ -18,7 +18,7 @@ import fotoJenifer from './img/QA.jpeg';
 
 // Contenido institucional
 const VALORES = [
-  { titulo: 'Accesibilidad', texto: 'Planes con precios claros para el bolsillo.', icono: <IconoUsuario /> },
+  { titulo: 'Precios accesibles', texto: 'Planes económicos con tarifas claras para el bolsillo.', icono: <IconoUsuario /> },
   { titulo: 'Sostenibilidad', texto: 'Menos trayectos en vehículo, más movilidad limpia.', icono: <IconoBicicleta /> },
   { titulo: 'Transparencia', texto: 'Sin cobros ocultos.', icono: <IconoUbicacion /> },
   { titulo: 'Confianza', texto: 'Bicicletas y estaciones en buen estado, con reportes atendidos por el equipo.', icono: <IconoNfc /> },

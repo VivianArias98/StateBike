@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';
 import { iniciarSesion } from '../../../../utils/auth.js';
 import { validarLogin } from '../../../../utils/validaciones.js';
 import { textoError } from '../../../../utils/mensajesError.js';
 import { rutaInicio } from '../../../../utils/sesion.js';
+import { IconoOjo } from '../../../../components/Iconos/Iconos.jsx';
 
 function IconoOcultar() {
   return (
@@ -16,6 +17,7 @@ function IconoOcultar() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      style={{ width: '1.25rem', height: '1.25rem' }}
     >
       <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
       <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
@@ -36,14 +38,6 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [enviando, setEnviando] = useState(false);
 
-  useEffect(() => {
-    if (!error) return undefined;
-    const temporizador = setTimeout(() => {
-      setError('');
-    }, 4000);
-    return () => clearTimeout(temporizador);
-  }, [error]);
-
   function limpiarError() {
     if (error) setError('');
   }
@@ -57,7 +51,7 @@ function LoginForm() {
       setError(errorLocal);
       if (!correo.trim()) {
         document.getElementById('correo')?.focus();
-      } else if (!contrasena) {
+      } else if (!contrasena.trim()) {
         document.getElementById('password')?.focus();
       }
       return;
@@ -65,7 +59,7 @@ function LoginForm() {
 
     setEnviando(true);
     try {
-      const usuario = await iniciarSesion(correo.trim(), contrasena);
+      const usuario = await iniciarSesion(correo.trim(), contrasena.trim());
       navegar(ubicacion.state?.desde ?? rutaInicio(usuario.rol), { replace: true });
     } catch (e) {
       console.error('Error al iniciar sesión:', e);
@@ -73,6 +67,9 @@ function LoginForm() {
       setEnviando(false);
     }
   }
+
+  const esErrorCorreo = Boolean(error && (!correo.trim() || error.toLowerCase().includes('correo') || error.toLowerCase().includes('credenciales')));
+  const esErrorContrasena = Boolean(error && (!contrasena.trim() || error.toLowerCase().includes('contraseña') || error.toLowerCase().includes('credenciales')));
 
   return (
     <form className={styles.raiz} onSubmit={enviar} noValidate>
@@ -83,6 +80,7 @@ function LoginForm() {
 
       {error && (
         <div
+          id="login-error"
           className="mensaje-error"
           role="alert"
           style={{
@@ -126,8 +124,11 @@ function LoginForm() {
             limpiarError();
             setCorreo(e.target.value);
           }}
-          onFocus={limpiarError}
           autoComplete="email"
+          required
+          aria-required="true"
+          aria-invalid={esErrorCorreo}
+          aria-describedby={error ? "login-error" : undefined}
         />
       </div>
 
@@ -144,8 +145,11 @@ function LoginForm() {
               limpiarError();
               setContrasena(e.target.value);
             }}
-            onFocus={limpiarError}
             autoComplete="current-password"
+            required
+            aria-required="true"
+            aria-invalid={esErrorContrasena}
+            aria-describedby={error ? "login-error" : undefined}
           />
           <button
             type="button"
@@ -153,7 +157,7 @@ function LoginForm() {
             aria-label={mostrarContrasena ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             onClick={() => setMostrarContrasena(!mostrarContrasena)}
           >
-            <IconoOcultar />
+            {mostrarContrasena ? <IconoOcultar /> : <IconoOjo />}
           </button>
         </div>
       </div>

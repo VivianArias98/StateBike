@@ -1,6 +1,6 @@
 import styles from './PanelEncabezado.module.css';
 
-function PanelEncabezado({ titulo, actualizado, modo, onCambiarModo, onSimularRol }) {
+function PanelEncabezado({ titulo, actualizado, onActualizar }) {
   return (
     <header className={`contexto-oscuro ${styles.raiz}`}>
       <h1 className={styles.titulo}>
@@ -10,11 +10,8 @@ function PanelEncabezado({ titulo, actualizado, modo, onCambiarModo, onSimularRo
 
       <div className={styles.acciones}>
         <span className={styles.actualizado}>{actualizado}</span>
-        <button type="button" className="boton boton--s" onClick={onCambiarModo}>
-          Modo: <span className={styles.modo}>{modo}</span>
-        </button>
-        <button type="button" className="boton boton--s" onClick={onSimularRol}>
-          Simular Rol No-Admin
+        <button type="button" className="boton boton--s" onClick={onActualizar}>
+          Actualizar ahora
         </button>
       </div>
     </header>

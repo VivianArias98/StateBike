@@ -3,21 +3,30 @@
   border-radius: var(--radio-l);
   border: 1px solid var(--color-borde);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .raiz table {
-  min-width: 54rem;
+  min-width: 66rem;
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-.raiz th:nth-child(1) { width: 22%; }
-.raiz th:nth-child(2) { width: 26%; }
-.raiz th:nth-child(3) { width: 18%; }
-.raiz th:nth-child(4) { width: 14%; text-align: center; }
-.raiz th:nth-child(5) { width: 20%; text-align: right; }
+.raiz th:nth-child(1) { width: 15rem; }
+.raiz th:nth-child(2) { width: 16rem; }
+.raiz th:nth-child(3) { width: 6.5rem; text-align: center; }
+.raiz th:nth-child(4) { width: 7.5rem; text-align: center; }
+.raiz th:nth-child(5) { width: 8.5rem; text-align: center; }
+.raiz th:nth-child(6) { width: 12.5rem; text-align: right; }
+
+.numeroCelda {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  text-align: center;
+}
 
 .nombreCelda {
   font-weight: 700;
@@ -42,8 +51,11 @@
 .acciones {
   display: flex;
   gap: var(--espacio-2);
+  align-items: center;
   justify-content: flex-end;
   white-space: nowrap;
+  flex-wrap: nowrap;
+  min-width: max-content;
 }
 
 .botonAccion {
@@ -56,4 +68,5 @@
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  flex-shrink: 0 !important;
 }

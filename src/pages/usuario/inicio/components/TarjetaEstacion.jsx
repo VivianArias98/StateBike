@@ -15,7 +15,9 @@ function TarjetaEstacion({ nombre, direccion, bicicletas, anclajesLibres, onAbri
           <IconoUbicacion /> {direccion}
         </span>
         <span className={styles.disponibilidad}>
-          <strong className={styles.bicicletas}>{bicicletas} bicicletas</strong> · {anclajesLibres} anclajes libres
+          <strong className={styles.bicicletas}>
+            {bicicletas} {bicicletas === 1 ? 'bicicleta' : 'bicicletas'}
+          </strong> · {anclajesLibres} {anclajesLibres === 1 ? 'anclaje libre' : 'anclajes libres'}
         </span>
       </span>
 
