@@ -17,9 +17,16 @@ export async function consultarPerfil(usuarioId, token) {
   const tarjeta = tarjetasRepo.buscarPorUsuario(usuarioId);
 
   let usuarioTunja = null;
-  if (token) {
+  if (token && !token.startsWith("sbt_")) {
     try {
       usuarioTunja = await tunja("/auth/me", { token });
+    } catch {
+      usuarioTunja = null;
+    }
+  }
+  if (!usuarioTunja) {
+    try {
+      usuarioTunja = await tunja(`/users/${usuarioId}`);
     } catch {
       usuarioTunja = null;
     }

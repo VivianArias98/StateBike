@@ -7,7 +7,7 @@ export async function tunja(camino, { metodo = "GET", cuerpo, token } = {}) {
   try {
     respuesta = await fetch(env.tunjaApi + camino, {
       method: metodo,
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(3500),
       headers: {
         ...(cuerpo && { "Content-Type": "application/json" }),
         "X-API-Key": env.tunjaClave,

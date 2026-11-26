@@ -14,6 +14,15 @@ export async function iniciarSesion(correo, contrasena) {
   return datos.usuario;
 }
 
+export async function iniciarSesionTarjeta(uid) {
+  const datos = await pedir('/auth/login-tarjeta', {
+    metodo: 'POST',
+    cuerpo: { uid },
+  });
+  guardarSesion(datos);
+  return datos.usuario;
+}
+
 // Pide un nuevo acceso con el refresco guardado. El refresco rota: se guarda el nuevo.
 export async function refrescarSesion() {
   const sesion = leerSesion();

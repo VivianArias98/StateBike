@@ -103,3 +103,77 @@
   font-size: var(--texto-s);
   font-weight: 700;
 }
+
+.pestanas {
+  display: flex;
+  gap: var(--espacio-2);
+  margin-bottom: var(--espacio-5);
+  background: rgba(0, 0, 0, 0.06);
+  padding: 4px;
+  border-radius: var(--radio-m);
+  border: 1px solid var(--color-borde);
+}
+
+:global([data-tema="oscuro"]) .pestanas {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pestana {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--radio-s);
+  color: var(--color-texto);
+  font-size: var(--texto-s);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pestana:hover {
+  opacity: 0.9;
+}
+
+.pestanaActiva {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.tarjetaArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.iconoOndas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--espacio-3);
+  color: var(--color-primario);
+}
+
+.ayudaNfc {
+  text-align: center;
+  font-size: var(--texto-s);
+  margin-bottom: var(--espacio-4);
+  color: var(--color-texto-suave, inherit);
+}
+
+.badgeBridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--espacio-2);
+  margin-bottom: var(--espacio-2);
+  padding: var(--espacio-1) var(--espacio-2);
+  background: rgba(95, 211, 74, 0.12);
+  border-radius: var(--radio-s);
+  font-size: var(--texto-xs, 0.75rem);
+  color: var(--color-texto);
+}

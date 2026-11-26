@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/register", controlador.registrar);
 router.post("/login", controlador.iniciarSesion);
+router.post("/login-tarjeta", controlador.iniciarSesionTarjeta);
 router.post("/refresh", controlador.refrescar);
 router.post("/logout", controlador.cerrarSesion);
 router.get("/me", autenticar, controlador.yo);

@@ -7,6 +7,11 @@ export function buscar(usuarioId) {
   return db.prepare("SELECT * FROM perfiles WHERE usuario_id = ?").get(usuarioId);
 }
 
+export function buscarPorCorreo(correo) {
+  if (!correo) return null;
+  return db.prepare("SELECT * FROM perfiles WHERE lower(correo) = lower(?)").get(correo.trim());
+}
+
 // INSERT OR IGNORE: si el perfil ya existe no pasa nada
 export function crear(
   usuarioId,

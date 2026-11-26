@@ -8,6 +8,10 @@ export async function iniciarSesion(req, res) {
   res.json(await auth.iniciarSesion(req.body));
 }
 
+export async function iniciarSesionTarjeta(req, res) {
+  res.json(await auth.iniciarSesionTarjeta(req.body?.uid));
+}
+
 export async function refrescar(req, res) {
   res.json(await auth.refrescar(req.body?.refresco));
 }

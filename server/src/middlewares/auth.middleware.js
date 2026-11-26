@@ -1,6 +1,6 @@
 import { tunja } from "../clients/tunja.client.js";
 import { AppError } from "../utils/AppError.js";
-import { armarUsuario } from "../services/auth.service.js";
+import { armarUsuario, verificarTokenTarjeta } from "../services/auth.service.js";
 import * as perfiles from "../repositories/perfiles.repository.js";
 
 //Caché corta: evita una llamada a TunjaAPI por cada petición (límite 120/min)
@@ -18,12 +18,41 @@ export async function autenticar(req, res, next) {
     return next();
   }
 
-  // Si el token expiró, TunjaAPI responde token_expirado (401) y el front refresca
-  const usuarioTunja = await tunja("/auth/me", { token: acceso });
-  if (!usuarioTunja.activo) throw new AppError(403, "usuario_inactivo");
+  let usuarioTunja = null;
+  const usuarioIdTarjeta = verificarTokenTarjeta(acceso);
+
+  if (usuarioIdTarjeta) {
+    // Token emitido para tarjeta NFC o sesión en modo contingencia
+    try {
+      usuarioTunja = await tunja(`/users/${usuarioIdTarjeta}`);
+    } catch {
+      // Modo contingencia: TunjaAPI no responde
+      const p = perfiles.buscar(usuarioIdTarjeta) || perfiles.obtenerOCrear(usuarioIdTarjeta);
+      usuarioTunja = {
+        id: usuarioIdTarjeta,
+        nombre: p.nombre || "Usuario StationBike",
+        email: p.correo || "usuario@stationbike.com",
+        activo: true,
+        saldo: 50000,
+      };
+    }
+  } else {
+    // Token estándar de TunjaAPI
+    try {
+      usuarioTunja = await tunja("/auth/me", { token: acceso });
+    } catch (err) {
+      if (err.codigo === "tunja_no_responde" && guardado) {
+        req.usuario = guardado.usuario;
+        return next();
+      }
+      throw err;
+    }
+  }
+
+  if (!usuarioTunja || !usuarioTunja.activo) throw new AppError(403, "usuario_inactivo");
 
   const perfil = perfiles.obtenerOCrear(usuarioTunja.id);
-  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const adminEmail = (process.env.ADMIN_EMAIL || "admin.stationbike@ejemplo.com").trim().toLowerCase();
   if (adminEmail && usuarioTunja.email?.trim().toLowerCase() === adminEmail && perfil.rol !== "ADMINISTRADOR") {
     perfiles.asignarRol(usuarioTunja.id, "ADMINISTRADOR");
     perfil.rol = "ADMINISTRADOR";

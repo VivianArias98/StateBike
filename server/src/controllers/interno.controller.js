@@ -6,12 +6,12 @@ export function consultarAnclajes(req, res) {
 }
 
 // Retiro de bicicleta desde estación física / simulador (HU_3)
-export function retirar(req, res) {
+export async function retirar(req, res) {
   const datos = {
     ...req.body,
     ...(req.params.id && { estacionId: Number(req.params.id) }),
   };
-  res.json(viajes.iniciarViaje(datos));
+  res.json(await viajes.iniciarViaje(datos));
 }
 
 // Devolución de bicicleta en estación física / simulador (HU_4)
